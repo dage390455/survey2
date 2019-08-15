@@ -102,7 +102,9 @@ class FlutterProjectListViewController: FlutterBaseViewController {
             if ("navBack" == call.method) {
                 self.navigationController?.popViewController(animated: true);
             }
-                
+            else if ("showCalendar" == call.method) {
+                self.showCalendar();
+            }
             else {
                 result(FlutterMethodNotImplemented);
             }
@@ -116,9 +118,7 @@ class FlutterProjectListViewController: FlutterBaseViewController {
         if str == "getList"{
             
         }
-        if str == "showCalendar"{
-            
-        }
+        
         events("我来自native222")
         return nil
     }
