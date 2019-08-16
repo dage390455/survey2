@@ -1,5 +1,5 @@
 //
-//  FlutterProjectListViewController.swift
+//  FlutterPointListViewController.swift
 //  Runner
 //
 //  Created by sensoro on 2019/7/22.
@@ -12,7 +12,7 @@ import CityBase
 import UIComponents
 import Flutter
 
-class FlutterProjectListViewController: FlutterBaseViewController {
+class FlutterPointListViewController: FlutterBaseViewController {
     
     var eventSink: FlutterEventSink?;
     var beginTime          : TimeInterval = 0.0
@@ -106,10 +106,6 @@ class FlutterProjectListViewController: FlutterBaseViewController {
                 self.navigationController?.popViewController(animated: true);
             }
             else if ("showCalendar" == call.method) {
-                if let arguments:NSDictionary = call.arguments as! NSDictionary{
-                    self.beginTime = arguments["beginTime"] as! TimeInterval;
-                    self.endTime = arguments["endTime"] as! TimeInterval;
-                }
                 self.showCalendar();
             }
             else {

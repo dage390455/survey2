@@ -48,3 +48,7 @@ let FLUTTER_PROJECT_LIST = FlutterPageModel.init(routeName: "projectList",
                                                      methodChannel: "com.pages.your/project_list",
                                                      methods: nil, events:nil);
 
+let FLUTTER_POINT_LIST = FlutterPageModel.init(routeName: "pointList",
+                                                 eventChannel: "App/Event/Channel",
+                                                 methodChannel: "com.pages.your/point_list",
+                                                 methods: nil, events:nil);

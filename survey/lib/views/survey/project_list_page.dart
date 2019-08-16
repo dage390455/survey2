@@ -18,6 +18,8 @@ import 'package:sensoro_survey/views/survey/survey_point_information.dart';
 import 'package:sensoro_survey/widgets/progressHud.dart';
 import 'package:sensoro_survey/generated/easyRefresh/easy_refresh.dart';
 import 'package:sensoro_survey/views/survey/point_list_page.dart';
+import 'package:sensoro_survey/views/survey/add_project_page.dart';
+import 'package:sensoro_survey/model/project_info_model.dart';
 
 class ProjectListPage extends StatefulWidget {
   _ProjectListPageState createState() => _ProjectListPageState();
@@ -36,6 +38,8 @@ class _ProjectListPageState extends State<ProjectListPage> {
   bool _calendaring = false;
   String beginTimeStr = "";
   String endTimeStr = "";
+  int beginTime = 0;
+  int endTime = 0;
   FocusNode _focusNode = FocusNode();
   bool isFrist = true;
 
@@ -74,10 +78,34 @@ class _ProjectListPageState extends State<ProjectListPage> {
       if (!_focusNode.hasFocus) {}
     });
 
+    //测试用
+    this.initDetailList();
+
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
         //or set color with: Color(0xFF0000FF)
         // statusBarColor: Colors.blue,
         ));
+  }
+
+  void initDetailList() {
+    for (int index = 0; index < 1000; index++) {
+      var name = "测试设备 $index";
+      name = "FAGJKJVXOE63S";
+      if (index % 3 == 0) name = "项目1118888";
+      if (index % 3 == 1) name = "项目222";
+      if (index % 3 == 2) name = "项目333";
+
+      var des = "状态 $index ��常";
+      des = "11:04:12";
+      if (index == 1) des = "2019-07-03 10:54";
+      if (index == 2) des = "2019-07-06 15:24";
+      if (index == 3) des = "2019-07-22 02:14:09";
+
+      projectInfoModel model = projectInfoModel(name, des, index);
+      dataList.add(model);
+      // var a = 'dd';
+      // a = cityDetailArrays[index].name;
+    }
   }
 
   void _onEvent(Object value) {
@@ -90,8 +118,8 @@ class _ProjectListPageState extends State<ProjectListPage> {
         // _startLoading();
         setState(() {
           _calendaring = true;
-          var beginTime = dic["beginTime"].toInt();
-          var endTime = dic["endTime"].toInt();
+          beginTime = dic["beginTime"].toInt();
+          endTime = dic["endTime"].toInt();
           if (beginTime > 10000 && endTime > 10000) {
             DateTime date1 = new DateTime.fromMillisecondsSinceEpoch(beginTime);
             beginTimeStr = date1.toString();
@@ -116,12 +144,12 @@ class _ProjectListPageState extends State<ProjectListPage> {
   // 错误处理
   void _onError(dynamic) {}
 
-  void _addProject() async {
+  void _addProject() {
     Map<String, dynamic> aa = {"dd": 5};
-    Navigator.push(context,
-        new MaterialPageRoute(builder: (BuildContext context) {
-      return PointListPage();
-    }));
+    Navigator.push(
+      context,
+      new MaterialPageRoute(builder: (context) => new PointListPage()),
+    );
   }
 
   _navBack() async {
@@ -134,8 +162,8 @@ class _ProjectListPageState extends State<ProjectListPage> {
 
   _showCalendar() async {
     Map<String, dynamic> map = {
-      "code": "200",
-      "data": [1, 2, 3]
+      "beginTime": beginTime > 10000 ? beginTime / 1000 : 0,
+      "endTime": endTime > 10000 ? endTime / 1000 : 0,
     };
     await methodChannel.invokeMethod('showCalendar', map);
   }
@@ -149,10 +177,10 @@ class _ProjectListPageState extends State<ProjectListPage> {
 
     Widget searchbar = TextField(
       //文本输入控件
-      // onSubmitted: (String str) {
-      //   //提交监听
-      //   print('用户提交变更');
-      // }
+      onSubmitted: (String str) {
+        //提交监听
+        print('用户提交变更');
+      },
       cursorWidth: 0,
       cursorColor: Colors.white,
       keyboardType: TextInputType.text, //设置输入框文本类型
@@ -222,24 +250,6 @@ class _ProjectListPageState extends State<ProjectListPage> {
       ],
     );
 
-    Widget bottomButton = Container(
-      color: prefix0.LIGHT_LINE_COLOR,
-      height: 60,
-      width: prefix0.screen_width,
-      child: new MaterialButton(
-        color: prefix0.GREEN_COLOR,
-        textColor: Colors.white,
-        child: new Text('新建项目',
-            style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.normal,
-                fontSize: 20)),
-        onPressed: () {
-          _addProject();
-        },
-      ),
-    );
-
     Widget myListView = new ListView.builder(
         physics: new AlwaysScrollableScrollPhysics()
             .applyTo(new BouncingScrollPhysics()), // 这个是用来控制能否在不满屏的状态下滚动的属性
@@ -273,28 +283,11 @@ class _ProjectListPageState extends State<ProjectListPage> {
           //   return emptyContainer;
           // }
 
-          // Map dic = dataList[index];
-          // var scheduleNo =
-          //     dic["scheduleNo"] == null ? "" : dic["scheduleNo"];
-          // var contact = dic["contact"];
-          // var name = contact["name"] == null ? "" : contact["name"];
-          // var total = "0";
-          // var successTotal = "0";
-          // if (dic["complete"] != null) {
-          //   successTotal = dic["complete"].toString();
-          // }
-          // if (dic["total"] != null) {
-          //   total = dic["total"].toString();
-          // }
-          // var totalStr = "$successTotal/$total";
-          // var updatedTimeStr = dic["updatedTime"].toString();
-          // var updatedTime = dic["updatedTime"].toInt();
-          // var type = dic["type"] == null ? "" : dic["type"];
-          // var content = dic["content"] == null ? "" : dic["content"];
-          // var rules = dic["rules"];
-          // var typeStr = "";
-          // var contentStr = "";
+          projectInfoModel model = dataList[index];
+          var name = model.projectName;
+          var time = model.createTime;
 
+          Map<String, dynamic> dic = {"projectName": name, "createTime": time};
           // DateTime date =
           //     new DateTime.fromMillisecondsSinceEpoch(updatedTime);
           // updatedTimeStr = date.toString();
@@ -303,12 +296,6 @@ class _ProjectListPageState extends State<ProjectListPage> {
 
           return new Container(
             color: Colors.white,
-            // decoration: const BoxDecoration(
-            //   border: Border(
-            //  bottom:
-            //   ),
-            // ),
-            // height: 140, //高度不填会自适应
             padding:
                 const EdgeInsets.only(top: 0.0, bottom: 0, left: 0, right: 0),
             child: new Column(
@@ -338,13 +325,13 @@ class _ProjectListPageState extends State<ProjectListPage> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: <Widget>[
                               //这个位置用ListTile就会报错
-                              Text("批次号",
+                              Text(name,
                                   textAlign: TextAlign.start,
                                   style: TextStyle(
                                       color: prefix0.BLACK_TEXT_COLOR,
                                       fontWeight: FontWeight.normal,
                                       fontSize: 17)),
-                              Text("2019-09-29",
+                              Text(time,
                                   textAlign: TextAlign.start,
                                   style: TextStyle(
                                       color: prefix0.BLACK_TEXT_COLOR,
@@ -366,7 +353,13 @@ class _ProjectListPageState extends State<ProjectListPage> {
                                 textColor: Colors.white,
                                 child: new Text('编辑'),
                                 onPressed: () {
-                                  _addProject();
+                                  // _addProject();
+                                  Navigator.push(
+                                    context,
+                                    new MaterialPageRoute(
+                                        builder: (context) =>
+                                            new AddProjectPage(title1: "dd")),
+                                  );
                                 },
                               ),
                               new RaisedButton(
@@ -459,29 +452,89 @@ class _ProjectListPageState extends State<ProjectListPage> {
       ),
     );
 
-    final navigatorKey = GlobalKey<NavigatorState>();
+    Widget bottomButton = Container(
+      color: prefix0.LIGHT_LINE_COLOR,
+      height: 60,
+      width: prefix0.screen_width,
+      child: new RaisedButton(
+        color: prefix0.GREEN_COLOR,
+        textColor: Colors.white,
+        child: new Text('新建项目',
+            style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.normal,
+                fontSize: 20)),
+        onPressed: () {
+          Navigator.push(
+            context,
+            new MaterialPageRoute(builder: (context) => new PointListPage()),
+          );
+        },
+      ),
+    );
+
     return MaterialApp(
-        navigatorKey: navigatorKey,
         debugShowCheckedModeBanner: false,
         // title: Text("Flutter Layout Demo"),
         title: "Flutter Layout Demo",
         home: Scaffold(
-            appBar: NavBar,
-            body: Container(
-              color: Colors.white,
-              // height: 140, //高度不填会自适应
-              padding:
-                  const EdgeInsets.only(top: 0.0, bottom: 0, left: 0, right: 0),
-              child: myListView,
+          appBar: NavBar,
+          body: Container(
+            color: Colors.white,
+            // height: 140, //高度不填会自适应
+            padding:
+                const EdgeInsets.only(top: 0.0, bottom: 0, left: 0, right: 0),
+            child: Column(
+              //这行决定了左对齐
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                !_calendaring
+                    ? emptyContainer
+                    : Container(
+                        color: Colors.white,
+                        // height: 140, //高度不填会自适应
+                        padding: const EdgeInsets.only(
+                            top: 3.0, bottom: 3, left: 20, right: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text(
+                              "$beginTimeStr ~ $endTimeStr",
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                  color: prefix0.BLACK_TEXT_COLOR,
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 12),
+                            ),
+                            IconButton(
+                              icon: Image.asset(
+                                "assets/images/close_black.png",
+                                color: Colors.black,
+                              ),
+                              onPressed: () {
+                                // dataList.clear();
+                                // _getListNetCall();
+                                setState(() {
+                                  // params.remove("beginTime");
+                                  // params.remove("endTime");
+                                  _calendaring = false;
+                                });
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                Expanded(
+                  child: myListView,
+                ),
+                bottomButton,
+              ],
             ),
-            bottomSheet: Builder(builder: (context) {
-              return GestureDetector(
-                onTap: () {
-                  _addProject(); //自己封装的跳转方法，忽略
-                },
-                child: bottomButton,
-              );
-            })) // This trailing comma makes auto-formatting nicer for build methods.
+          ),
+          // bottomSheet: bottomButton,
+          // bottomSheet: bottomButton,
+        ) // This trailing comma makes auto-formatting nicer for build methods.
         );
   }
 }

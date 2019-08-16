@@ -33,6 +33,7 @@
 		EE65BD5B22FD8C5500C7C340 /* RootNavController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE65BD4922FD8C5500C7C340 /* RootNavController.swift */; };
 		EE866CF92305003300F757D0 /* FlutterElectricInstallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE866CF82305003300F757D0 /* FlutterElectricInstallViewController.swift */; };
 		EE866CFB23052A1000F757D0 /* FlutterProjectListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE866CFA23052A1000F757D0 /* FlutterProjectListViewController.swift */; };
+		EE866CFD2306832500F757D0 /* FlutterPointListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE866CFC2306832500F757D0 /* FlutterPointListViewController.swift */; };
 		EE9F3EDC230280B800536CC1 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = EE9F3EDB230280B800536CC1 /* GeneratedPluginRegistrant.m */; };
 /* End PBXBuildFile section */
 
@@ -84,6 +85,7 @@
 		EE65BD4922FD8C5500C7C340 /* RootNavController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootNavController.swift; sourceTree = "<group>"; };
 		EE866CF82305003300F757D0 /* FlutterElectricInstallViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlutterElectricInstallViewController.swift; sourceTree = "<group>"; };
 		EE866CFA23052A1000F757D0 /* FlutterProjectListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlutterProjectListViewController.swift; sourceTree = "<group>"; };
+		EE866CFC2306832500F757D0 /* FlutterPointListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlutterPointListViewController.swift; sourceTree = "<group>"; };
 		EE9F3EDA230280B800536CC1 /* GeneratedPluginRegistrant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeneratedPluginRegistrant.h; sourceTree = "<group>"; };
 		EE9F3EDB230280B800536CC1 /* GeneratedPluginRegistrant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeneratedPluginRegistrant.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -200,6 +202,7 @@
 				EE65BD4822FD8C5500C7C340 /* FlutterPageConfig.swift */,
 				EE866CF82305003300F757D0 /* FlutterElectricInstallViewController.swift */,
 				EE866CFA23052A1000F757D0 /* FlutterProjectListViewController.swift */,
+				EE866CFC2306832500F757D0 /* FlutterPointListViewController.swift */,
 			);
 			path = FlutterInterface;
 			sourceTree = "<group>";
@@ -428,6 +431,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EE65BD5122FD8C5500C7C340 /* AlertConfimConst.swift in Sources */,
+				EE866CFD2306832500F757D0 /* FlutterPointListViewController.swift in Sources */,
 				EE65BD5A22FD8C5500C7C340 /* FlutterPageConfig.swift in Sources */,
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,
 				EE65BD4E22FD8C5500C7C340 /* ButtonWithImageAndTitleExtension.swift in Sources */,
