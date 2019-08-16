@@ -18,6 +18,8 @@ import 'package:sensoro_survey/generated/easyRefresh/easy_refresh.dart';
 
 class PointListPage extends StatefulWidget {
   _PointListPageState createState() => _PointListPageState();
+  // final Map<String, dynamic> todo;
+  // PointListPage({Key key, @required this.todo}) : super(key: key);
 }
 
 class _PointListPageState extends State<PointListPage> {
@@ -112,9 +114,7 @@ class _PointListPageState extends State<PointListPage> {
   // 错误处理
   void _onError(dynamic) {}
 
-  void _addProject() async {
-    ;
-  }
+  void _addProject() async {}
 
   _navBack() async {
     Map<String, dynamic> map = {
@@ -251,7 +251,7 @@ class _PointListPageState extends State<PointListPage> {
                   height: 120,
                   // fit: BoxFit.fitWidth,
                 ),
-                Text("没找到任何已创建的项目，请添加一个新项目",
+                Text("没找到任何已创建的项目，请添加���个新项目",
                     textAlign: TextAlign.start,
                     style: TextStyle(
                         color: prefix0.LIGHT_TEXT_COLOR,
@@ -354,9 +354,9 @@ class _PointListPageState extends State<PointListPage> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: <Widget>[
                               new RaisedButton(
-                                color: Colors.blue,
+                                color: Colors.orange,
                                 textColor: Colors.white,
-                                child: new Text('详情'),
+                                child: new Text('编辑'),
                                 onPressed: () {},
                               ),
                               new RaisedButton(
@@ -452,7 +452,7 @@ class _PointListPageState extends State<PointListPage> {
         appBar: NavBar,
         body: Container(
           color: Colors.white,
-          // height: 140, //高度不填会自适应
+          // height: 140, //高��不填会自适应
           padding:
               const EdgeInsets.only(top: 0.0, bottom: 0, left: 0, right: 0),
           child: myListView,
