@@ -14,6 +14,7 @@ import 'package:flutter/services.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 import 'package:sensoro_survey/views/survey/const.dart';
 import 'package:sensoro_survey/views/survey/summary_construction_page.dart';
+import 'package:sensoro_survey/views/survey/survey_point_information.dart';
 import 'package:sensoro_survey/widgets/progressHud.dart';
 import 'package:sensoro_survey/generated/easyRefresh/easy_refresh.dart';
 import 'package:sensoro_survey/views/survey/point_list_page.dart';
@@ -373,7 +374,7 @@ class _ProjectListPageState extends State<ProjectListPage> {
 
                                   Navigator.push(
                                     context,
-                                    new MaterialPageRoute(builder: (context) => new SummaryConstructionPage()),
+                                    new MaterialPageRoute(builder: (context) => new SurveyPointInformationPage()),
                                   );
                                 },
                               ),

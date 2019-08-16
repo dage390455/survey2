@@ -3,8 +3,20 @@
 //现场情况
 import 'package:flutter/material.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
+import 'package:sensoro_survey/views/survey/survey_point_information.dart';
 
 import 'Electric_box_information_page.dart';
+import 'editPage/edit_address_page.dart';
+import 'editPage/edit_boss_person_page.dart';
+import 'editPage/edit_boss_person_phone_page.dart';
+import 'editPage/edit_head_person_page.dart';
+import 'editPage/edit_head_person_phone_page.dart';
+import 'editPage/edit_loction_page.dart';
+import 'editPage/edit_name_page.dart';
+import 'editPage/edit_purpose_page.dart';
+import 'editPage/survey_point_area.dart';
+import 'editPage/survey_point_structure.dart';
+
 
  class SummaryConstructionPage extends StatefulWidget {
    @override
@@ -14,6 +26,19 @@ import 'Electric_box_information_page.dart';
  class _State extends State<SummaryConstructionPage> {
 
    var isCheack = false;
+
+   var name = "";
+   var purpose = "";
+   var address = "";
+   var location = "";
+
+   var structure = "";
+   var area = "";
+
+   var headName = "";
+   var headPhone = "";
+   var bossName = "";
+   var bossPhone = "";
 
    @override
    Widget build(BuildContext context) {
@@ -25,7 +50,7 @@ import 'Electric_box_information_page.dart';
        backgroundColor: Colors.white,
 
        title: Text(
-         "现场情况",
+         "勘察点信息",
          style: TextStyle(
              color: Colors.black
          ),
@@ -63,93 +88,567 @@ import 'Electric_box_information_page.dart';
            if (this.isCheack){
              Navigator.push(
                context,
-               new MaterialPageRoute(builder: (context) => new ElectricboxinformationPage()),
+               new MaterialPageRoute(builder: (context) => new SurveyPointInformationPage()),
              );
            }
          },
        ),
      );
 
+     editName() async {
+       final result = await Navigator.push(
+         context,
+              new MaterialPageRoute(builder: (context) => new EditNamePage(name: this.name,)),
+       );
 
+       if (result!=null){
+         String name = result as String;
+
+         this.name = name;
+         updateNextButton();
+         setState(() {
+
+         });
+       }
+     }
+
+     editPurpose() async {
+       final result = await Navigator.push(
+         context,
+         new MaterialPageRoute(builder: (context) => new EditPurposePage(name: this.purpose,)),
+       );
+
+       if (result!=null){
+         String name = result as String;
+
+         this.purpose = name;
+         updateNextButton();
+         setState(() {
+
+         });
+       }
+     }
+
+     editAddress() async {
+       final result = await Navigator.push(
+         context,
+         new MaterialPageRoute(builder: (context) => new EditAdressPage(name: this.address,)),
+       );
+
+       if (result!=null){
+         String name = result as String;
+
+         this.address = name;
+         updateNextButton();
+         setState(() {
+
+         });
+       }
+     }
+
+     editLoction() async {
+       final result = await Navigator.push(
+         context,
+         new MaterialPageRoute(builder: (context) => new EditLoctionPage(name: this.location,)),
+       );
+
+       if (result!=null){
+         String name = result as String;
+
+         this.location = name;
+         updateNextButton();
+         setState(() {
+
+         });
+       }
+     }
+
+
+
+     editStructure() async {
+       final result = await Navigator.push(
+         context,
+         new MaterialPageRoute(builder: (context) => new SurveyPointStructureEditPage(name: this.structure,)),
+       );
+
+       if (result!=null){
+         String name = result as String;
+
+         this.structure = name;
+         updateNextButton();
+         setState(() {
+
+         });
+       }
+     }
+
+     editAre() async {
+       final result = await Navigator.push(
+         context,
+         new MaterialPageRoute(builder: (context) => new SurveyPointAreaEditPage(name: this.area,)),
+       );
+
+       if (result!=null){
+         String name = result as String;
+
+         this.area = name;
+         updateNextButton();
+         setState(() {
+
+         });
+       }
+     }
+
+
+     editheadName() async {
+       final result = await Navigator.push(
+         context,
+         new MaterialPageRoute(builder: (context) => new EditHeadPersonPage(name: this.headName,)),
+       );
+
+       if (result!=null){
+         String name = result as String;
+
+         this.headName = name;
+         updateNextButton();
+         setState(() {
+
+         });
+       }
+     }
+
+     editheadPhone() async {
+       final result = await Navigator.push(
+         context,
+         new MaterialPageRoute(builder: (context) => new EditHeadPersonPhonePage(name: this.headPhone,)),
+       );
+
+       if (result!=null){
+         String name = result as String;
+
+         this.headPhone = name;
+         updateNextButton();
+         setState(() {
+
+         });
+       }
+     }
+
+     editBossName() async {
+       final result = await Navigator.push(
+         context,
+         new MaterialPageRoute(builder: (context) => new EditBossPersonPage(name: this.bossName,)),
+       );
+
+       if (result!=null){
+         String name = result as String;
+
+         this.bossName = name;
+         updateNextButton();
+         setState(() {
+
+         });
+       }
+     }
+
+     editBossPhone() async {
+       final result = await Navigator.push(
+         context,
+         new MaterialPageRoute(builder: (context) => new EditBossPersonPhonePage(name: this.bossPhone,)),
+       );
+
+       if (result!=null){
+         String name = result as String;
+
+         this.bossPhone = name;
+         updateNextButton();
+         setState(() {
+
+         });
+       }
+     }
 
 
      Widget container = Container(
-        color: prefix0.LIGHT_LINE_COLOR,
-        padding:  EdgeInsets.all(20),
+        color: Colors.white,
+        padding:  new EdgeInsets.fromLTRB(20, 0, 20, 0),
         child: Column(
 //           mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Container (
-                child: Text("指导说明书") ,
-                alignment: Alignment.center,
-              )
+              GestureDetector(
+                onTap: editName,//写入方法名称就可以了，但是是无参的
+                child: Container (
+                  alignment: Alignment.center,
+                  height: 60,
+                  child: new Row(
+                    children: <Widget>[
+                      Text("勘察点名称"),
+                      Expanded (
+                        child: Text(
+                          this.name.length>0?this.name:"必填",
+                          textAlign: TextAlign.right,
+                        ),
+                      )
+                      ,
+                      Image.asset(
+                        "assets/images/right_arrar.png",
+                        width: 20,
 
-            ,
+                      )
+                    ],
+                  ) ,
+                ),
+              ),
 
-             new Padding(
-               padding: new EdgeInsets.fromLTRB(0, 20, 0, 20),
-               child:  Text("请先根据以下问题了解现场环境，整理需要检测的电箱位置。"),
+
+
+             Container(
+                 color: prefix0.LINE_COLOR,
+                 height: 1,
              ),
 
-             new Padding(
-               padding: new EdgeInsets.fromLTRB(0, 0, 0, 20),
-               child:  Text("1.了解总电箱和分电箱层级结构"),
-             ),
-             new Padding(
-               padding: new EdgeInsets.fromLTRB(0, 0, 0, 20),
-               child:  Text("2.哪些电箱危险/风险系数高"),
-             ),
-             new Padding(
-               padding: new EdgeInsets.fromLTRB(0, 0, 0, 20),
-               child:  Text("3.哪些电箱经常出现负载过高的情况？"),
-             ),
-             new Padding(
-               padding: new EdgeInsets.fromLTRB(0, 0, 0, 20),
-               child:  Text("4.哪些电箱如果出现问题，影响范围很大？"),
-             ),
-             new Padding(
-               padding: new EdgeInsets.fromLTRB(0, 0, 0, 20),
-               child:  Text("5.哪些电箱如果出现问题，将造成很大的财产损失？"),
-             ),
-             new Padding(
-               padding: new EdgeInsets.fromLTRB(0, 0, 0, 20),
-               child:  Text("6.是否有重要设备需要监测？"),
-             ),
+              GestureDetector(
+                  onTap: editPurpose,//写入方法名称就可以了，但是是无参的
+                  child: Container (
+
+                    alignment: Alignment.center,
+                    height: 60,
+                    child: new Row(
+                      children: <Widget>[
+                        Text("勘察点用途"),
+                        Expanded (
+                          child: Text(
+                            this.purpose.length>0?this.purpose:"选填",
+                            textAlign: TextAlign.right,
+                          ),
+                        )
+                        ,
+                        Image.asset(
+                          "assets/images/right_arrar.png",
+                          width: 20,
+
+                        )
+                      ],
+                    ) ,
+                  ),
+              ),
+
+
+
+
+              Container(
+                color: prefix0.LINE_COLOR,
+                height: 1,
+              ),
+
+
+              GestureDetector(
+                  onTap: editAddress,//写入方法名称就可以了，但是是无参的
+                  child:Container (
+
+                    alignment: Alignment.center,
+                    height: 60,
+                    child: new Row(
+                      children: <Widget>[
+                        Text("具体地址"),
+                        Expanded (
+                          child: Text(
+                            this.address.length>0?this.address: "选填",
+                            textAlign: TextAlign.right,
+                          ),
+                        )
+                        ,
+                        Image.asset(
+                          "assets/images/right_arrar.png",
+                          width: 20,
+
+                        )
+                      ],
+                    ) ,
+                  ),
+              ),
+
+
+
+
+
+              Container(
+                color: prefix0.LINE_COLOR,
+                height: 1,
+              ),
+
+              GestureDetector(
+                  onTap: editLoction,//写入方法名称就可以了，但是是无参的
+                  child: Container (
+
+                    alignment: Alignment.center,
+                    height: 60,
+                    child: new Row(
+                      children: <Widget>[
+                        Text("定位地址"),
+                        Expanded (
+                          child: Text(
+                            this.location.length>0?this.location:"选填",
+                            textAlign: TextAlign.right,
+                          ),
+                        )
+                        ,
+                        Image.asset(
+                          "assets/images/right_arrar.png",
+                          width: 20,
+
+                        )
+                      ],
+                    ) ,
+                  ),
+              ),
+
+
 
 
             ],
         ),
      );
 
-     Widget bigContainer = Container(
-       color: prefix0.LIGHT_LINE_COLOR,
 
+     Widget container2 = Container(
+       color: Colors.white,
+       padding:  new EdgeInsets.fromLTRB(20, 0, 20, 0),
        child: Column(
+//           mainAxisAlignment: MainAxisAlignment.start,
          crossAxisAlignment: CrossAxisAlignment.start,
-
          children: <Widget>[
 
-           container,
+           GestureDetector(
+               onTap: editStructure,//写入方法名称就可以了，但是是无参的
+               child: Container (
 
-           new Row (
+                 alignment: Alignment.center,
+                 height: 60,
+                 child: new Row(
+                   children: <Widget>[
+                     Text("勘察点结构"),
+                     Expanded (
+                       child: Text(
+                         this.structure.length>0?this.structure: "选填",
+                         textAlign: TextAlign.right,
+                       ),
+                     )
+                     ,
+                     Image.asset(
+                       "assets/images/right_arrar.png",
+                       width: 20,
 
-             mainAxisAlignment: MainAxisAlignment.start,
-             children: <Widget>[
-
-               Checkbox(
-                 value: this.isCheack,
-                 onChanged: (bool value) {
-                   setState(() {
-                     this.isCheack = value;
-                   });
-                 },
+                     )
+                   ],
+                 ) ,
                ),
-               Text("我已阅读完说明"),
+           ),
 
+
+
+
+
+           Container(
+             color: prefix0.LINE_COLOR,
+             height: 1,
+           ),
+
+           GestureDetector(
+               onTap: editAre,//写入方法名称就可以了，但是是无参的
+               child:  Container (
+
+                 alignment: Alignment.center,
+                 height: 60,
+                 child: new Row(
+                   children: <Widget>[
+                     Text("勘察点面积"),
+                     Expanded (
+                       child: Text(
+                         this.area.length>0?this.area: "选填",
+                         textAlign: TextAlign.right,
+                       ),
+                     )
+                     ,
+                     Image.asset(
+                       "assets/images/right_arrar.png",
+                       width: 20,
+
+                     )
+                   ],
+                 ) ,
+               ),
+
+           ),
+
+
+
+
+
+         ],
+       ),
+     );
+
+     Widget container3 = Container(
+       color: Colors.white,
+       padding:  new EdgeInsets.fromLTRB(20, 0, 20, 0),
+       child: Column(
+//           mainAxisAlignment: MainAxisAlignment.start,
+         crossAxisAlignment: CrossAxisAlignment.start,
+         children: <Widget>[
+
+
+           GestureDetector(
+               onTap: editheadName,//写入方法名称就可以了，但是是无参的
+               child:  Container (
+
+                 alignment: Alignment.center,
+                 height: 60,
+                 child: new Row(
+                   children: <Widget>[
+                     Text("现场负责人姓名"),
+                     Expanded (
+                       child: Text(
+                         this.headName.length>0?this.headName:  "必填",
+                         textAlign: TextAlign.right,
+                       ),
+                     )
+                     ,
+                     Image.asset(
+                       "assets/images/right_arrar.png",
+                       width: 20,
+
+                     )
+                   ],
+                 ) ,
+               ),
+           ),
+
+
+           Container(
+             color: prefix0.LINE_COLOR,
+             height: 1,
+           ),
+
+           GestureDetector(
+               onTap: editheadPhone,//写入方法名称就可以了，但是是无参的
+               child: Container (
+
+                 alignment: Alignment.center,
+                 height: 60,
+                 child: new Row(
+                   children: <Widget>[
+                     Text("现在负责人电话"),
+                     Expanded (
+                       child: Text(
+                         this.headPhone.length>0?this.headPhone: "必填",
+                         textAlign: TextAlign.right,
+                       ),
+                     )
+                     ,
+                     Image.asset(
+                       "assets/images/right_arrar.png",
+                       width: 20,
+
+                     )
+                   ],
+                 ) ,
+               ),
+           ),
+
+
+           Container(
+             color: prefix0.LINE_COLOR,
+             height: 1,
+           ),
+
+       GestureDetector(
+         onTap: editBossName,//写入方法名称就可以了，但是是无参的
+         child:Container (
+
+           alignment: Alignment.center,
+           height: 60,
+           child: new Row(
+             children: <Widget>[
+               Text("老板姓名"),
+               Expanded (
+                 child: Text(
+                   this.bossName.length>0?this.bossName:"选填",
+                   textAlign: TextAlign.right,
+                 ),
+               )
+               ,
+               Image.asset(
+                 "assets/images/right_arrar.png",
+                 width: 20,
+
+               )
              ],
+           ) ,
+         ),
+       ),
 
-           )
+           Container(
+             color: prefix0.LINE_COLOR,
+             height: 1,
+           ),
+
+           GestureDetector(
+               onTap: editBossPhone,//写入方法名称就可以了，但是是无参的
+               child:
+               Container (
+
+                 alignment: Alignment.center,
+                 height: 60,
+                 child: new Row(
+                   children: <Widget>[
+                     Text("老板电话"),
+                     Expanded (
+                       child: Text(
+                         this.bossPhone.length>0?this.bossPhone:"选填",
+                         textAlign: TextAlign.right,
+                       ),
+                     )
+                     ,
+                     Image.asset(
+                       "assets/images/right_arrar.png",
+                       width: 20,
+
+                     )
+                   ],
+                 ) ,
+               ),
+           ),
+
+
+         ],
+       ),
+     );
+
+
+
+     Widget bigContainer = Container(
+       color: prefix0.LIGHT_LINE_COLOR,
+       padding:  new EdgeInsets.fromLTRB(0, 0, 0, 60),
+       child: new ListView(
+         scrollDirection:Axis.vertical,
+
+         children: <Widget>[
+           new Padding(
+             padding: new EdgeInsets.fromLTRB(0, 0, 0, 0),
+             child: container,
+           ),
+
+
+           new Padding(
+             padding: new EdgeInsets.fromLTRB(0, 20, 0, 0),
+             child: container2,
+           ),
+           new Padding(
+             padding: new EdgeInsets.fromLTRB(0, 20, 0, 0),
+             child: container3,
+           ),
 
          ],
 
@@ -165,6 +664,14 @@ import 'Electric_box_information_page.dart';
      );
 
    }
+   updateNextButton(){
+     if (name.length>0 &&headName.length>0&&headPhone.length>0){
+       this.isCheack = true;
+     }else{
+       this.isCheack = false;
+     }
+   }
+
 
 
 
