@@ -16,16 +16,16 @@ import 'package:sensoro_survey/widgets/progressHud.dart';
 import 'package:sensoro_survey/model/project_info_model.dart';
 
 class AddProjectPage extends StatefulWidget {
-  final projectInfoModel todo;
-  AddProjectPage({Key key, @required this.todo}) : super(key: key);
-  _AddProjectPageState createState() => _AddProjectPageState();
+  projectInfoModel input;
+  AddProjectPage({Key key, @required this.input}) : super(key: key);
+
+  @override
+  _AddProjectPageState createState() => _AddProjectPageState(input: this.input);
 }
 
 class _AddProjectPageState extends State<AddProjectPage> {
-  _AddProjectPageState() {
-    final eventBus = new EventBus();
-    // ApplicationEvent.event = eventBus;
-  }
+  projectInfoModel input;
+  _AddProjectPageState({this.input});
 
   String name = "";
   String time = "";
@@ -42,6 +42,9 @@ class _AddProjectPageState extends State<AddProjectPage> {
       height: 0,
       width: 0,
     );
+
+    name = this.input.projectName;
+    time = this.input.createTime;
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -69,27 +72,90 @@ class _AddProjectPageState extends State<AddProjectPage> {
             },
           ),
         ),
-        body: new Column(
-            //这行决定了左对齐
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            //占满剩���空间
-            children: <Widget>[
-              Container(
-                padding: const EdgeInsets.only(
-                    top: 0.0, bottom: 0, left: 20, right: 20),
-                child: Column(
+        body: Container(
+          padding:
+              const EdgeInsets.only(top: 20.0, bottom: 0, left: 20, right: 20),
+          child: Column(
+              //这行决定了左对齐
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              //占满剩���空间
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Text("项目名称",
                         textAlign: TextAlign.start,
                         style: TextStyle(
                             color: prefix0.BLACK_TEXT_COLOR,
                             fontWeight: FontWeight.normal,
-                            fontSize: 17)),
+                            fontSize: 15)),
+                    Text(name.length > 0 ? name : "必填",
+                        textAlign: TextAlign.end,
+                        style: TextStyle(
+                            color: name.length > 0
+                                ? prefix0.BLACK_TEXT_COLOR
+                                : prefix0.LIGHT_TEXT_COLOR,
+                            fontWeight: FontWeight.normal,
+                            fontSize: 15)),
+                    IconButton(
+                      icon: Image.asset(
+                        "assets/images/right_arrar.png",
+                        // height: 20,
+                      ),
+                      onPressed: () {},
+                    ),
                   ],
                 ),
-              ),
-            ]),
+
+                new SizedBox(
+                  height: 10,
+                ),
+                //分割线
+                Container(
+                    width: prefix0.screen_width - 40,
+                    height: 1.0,
+                    color: FENGE_LINE_COLOR),
+
+                new SizedBox(
+                  height: 10,
+                ),
+                Text("备注",
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                        color: prefix0.LIGHT_TEXT_COLOR,
+                        fontWeight: FontWeight.normal,
+                        fontSize: 17)),
+                new SizedBox(
+                  height: 15,
+                ),
+
+                Container(
+                  height: 200,
+                  decoration: BoxDecoration(
+                    border: new Border.all(color: LIGHT_TEXT_COLOR, width: 0.5),
+                  ),
+                  child: TextField(
+                    textAlign: TextAlign.start,
+                    minLines: 1,
+                    maxLines: 10,
+                    style: new TextStyle(
+                      fontSize: 13.0,
+                      color: prefix0.BLACK_TEXT_COLOR,
+                    ),
+                    decoration: new InputDecoration(
+                      border: InputBorder.none,
+                      // border: new Border.all(color: LIGHT_TEXT_COLOR, width: 0.5),
+                      hintText: "点击输入",
+
+                      contentPadding: EdgeInsets.fromLTRB(
+                          20.0, 20.0, 10.0, 10.0), //设置显示文本的一个内边距
+// //                border: InputBorder.none,//取消默认的下划线边框
+                    ),
+                  ),
+                ),
+              ]),
+        ),
       ),
     );
   }

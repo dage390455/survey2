@@ -17,16 +17,20 @@ import 'package:sensoro_survey/widgets/progressHud.dart';
 import 'package:sensoro_survey/generated/easyRefresh/easy_refresh.dart';
 
 class PointListPage extends StatefulWidget {
-  _PointListPageState createState() => _PointListPageState();
-  // final Map<String, dynamic> todo;
-  // PointListPage({Key key, @required this.todo}) : super(key: key);
+  // _PointListPageState createState() => _PointListPageState();
+  Map<String, dynamic> todo;
+  PointListPage({Key key, @required this.todo}) : super(key: key);
+
+  var name = "";
+  // EditLoctionPage({this.name});
+  @override
+  _PointListPageState createState() => _PointListPageState(todo: this.todo);
+  // _State createState() => _State(name: this.name);
 }
 
 class _PointListPageState extends State<PointListPage> {
-  _PointListPageState() {
-    final eventBus = new EventBus();
-    // ApplicationEvent.event = eventBus;
-  }
+  Map<String, dynamic> todo;
+  _PointListPageState({this.todo});
 
   static List dataList = new List(); //static才能在build里使用
   static int listTotalCount = 0;

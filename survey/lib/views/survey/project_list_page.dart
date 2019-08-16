@@ -42,6 +42,7 @@ class _ProjectListPageState extends State<ProjectListPage> {
   int endTime = 0;
   FocusNode _focusNode = FocusNode();
   bool isFrist = true;
+  String searchStr = "";
 
   static Map<String, dynamic> headers = {};
   // 创建一个给native的channel (类似iOS的通知）
@@ -152,6 +153,35 @@ class _ProjectListPageState extends State<ProjectListPage> {
     );
   }
 
+  gotoPointList2() {
+    Map<String, dynamic> input;
+    Navigator.push(
+      context,
+      new MaterialPageRoute(
+          builder: (context) => new PointListPage(
+                todo: input,
+              )),
+    );
+  }
+
+  gotoPointList() async {
+    print("gotoPointList");
+    Map<String, dynamic> todo;
+    final result = await Navigator.push(
+      context,
+      new MaterialPageRoute(
+          builder: (context) => new PointListPage(
+                todo: todo,
+              )),
+    );
+
+    if (result != null) {
+      String name = result as String;
+
+      setState(() {});
+    }
+  }
+
   _navBack() async {
     Map<String, dynamic> map = {
       "code": "200",
@@ -179,7 +209,12 @@ class _ProjectListPageState extends State<ProjectListPage> {
       //文本输入控件
       onSubmitted: (String str) {
         //提交监听
-        print('用户提交变更');
+        // searchStr = val;
+        // print('用户提交变更');
+      },
+      onChanged: (val) {
+        searchStr = val;
+        setState(() {});
       },
       cursorWidth: 0,
       cursorColor: Colors.white,
@@ -252,7 +287,7 @@ class _ProjectListPageState extends State<ProjectListPage> {
 
     Widget myListView = new ListView.builder(
         physics: new AlwaysScrollableScrollPhysics()
-            .applyTo(new BouncingScrollPhysics()), // 这个是用来控制能否在不满屏的状态下滚动的属性
+            .applyTo(new BouncingScrollPhysics()), // 这个是用来控制能否在不�����屏的状态下滚动的属性
         itemCount: dataList.length == 0 ? 5 : 3,
         // separatorBuilder: (BuildContext context, int index) =>
         // Divider(height: 1.0, color: Colors.grey, indent: 20), // 添加分割线
@@ -287,6 +322,10 @@ class _ProjectListPageState extends State<ProjectListPage> {
           var name = model.projectName;
           var time = model.createTime;
 
+          if (!name.contains(searchStr) && searchStr.length > 0) {
+            return emptyContainer;
+          }
+
           Map<String, dynamic> dic = {"projectName": name, "createTime": time};
           // DateTime date =
           //     new DateTime.fromMillisecondsSinceEpoch(updatedTime);
@@ -294,7 +333,7 @@ class _ProjectListPageState extends State<ProjectListPage> {
           // updatedTimeStr = updatedTimeStr.substring(0, 19);
           // print("updatedTimeStr = $updatedTimeStr");
 
-          return new Container(
+          return Container(
             color: Colors.white,
             padding:
                 const EdgeInsets.only(top: 0.0, bottom: 0, left: 0, right: 0),
@@ -358,7 +397,7 @@ class _ProjectListPageState extends State<ProjectListPage> {
                                     context,
                                     new MaterialPageRoute(
                                         builder: (context) =>
-                                            new AddProjectPage(title1: "dd")),
+                                            new AddProjectPage(input: model)),
                                   );
                                 },
                               ),
@@ -369,8 +408,10 @@ class _ProjectListPageState extends State<ProjectListPage> {
                                 onPressed: () {
                                   Navigator.push(
                                     context,
-//<<<<<<< HEAD
-                                    new MaterialPageRoute(builder: (context) => new SurveyPointInformationPage()),
+
+                                    new MaterialPageRoute(
+                                        builder: (context) =>
+                                            new SurveyPointInformationPage()),
 //=======
 //                                    new MaterialPageRoute(
 //                                        builder: (context) =>

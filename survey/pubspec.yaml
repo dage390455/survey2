@@ -51,7 +51,7 @@ dependencies:
   permission_handler: ^3.0.0
   open_file: ^2.0.1+2
   package_info: ^0.4.0+3
-  flutter_map: any # or the latest version on Pub
+  #flutter_map: any # or the latest version on Pub
   # flutter_easyrefresh: ^1.2.7
   # fluttertoast: ^2.1.1
 
