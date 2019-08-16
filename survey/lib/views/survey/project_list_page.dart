@@ -373,10 +373,11 @@ class _ProjectListPageState extends State<ProjectListPage> {
                                 textColor: Colors.white,
                                 child: new Text('导出'),
                                 onPressed: () {
-
                                   Navigator.push(
                                     context,
-                                    new MaterialPageRoute(builder: (context) => new SummaryConstructionPage()),
+                                    new MaterialPageRoute(
+                                        builder: (context) =>
+                                            new SummaryConstructionPage()),
                                   );
                                 },
                               ),
