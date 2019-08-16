@@ -117,6 +117,7 @@ class _ProjectListPageState extends State<ProjectListPage> {
   void _onError(dynamic) {}
 
   void _addProject() async {
+    Map<String, dynamic> aa = {"dd": 5};
     Navigator.push(context,
         new MaterialPageRoute(builder: (BuildContext context) {
       return PointListPage();
@@ -361,20 +362,27 @@ class _ProjectListPageState extends State<ProjectListPage> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: <Widget>[
                               new RaisedButton(
-                                color: Colors.blue,
+                                color: Colors.orange,
                                 textColor: Colors.white,
-                                child: new Text('详情'),
-                                onPressed: () {},
+                                child: new Text('编辑'),
+                                onPressed: () {
+                                  _addProject();
+                                },
                               ),
                               new RaisedButton(
                                 color: prefix0.LIGHT_TEXT_COLOR,
                                 textColor: Colors.white,
                                 child: new Text('导出'),
                                 onPressed: () {
-
                                   Navigator.push(
                                     context,
+//<<<<<<< HEAD
                                     new MaterialPageRoute(builder: (context) => new SurveyPointInformationPage()),
+//=======
+//                                    new MaterialPageRoute(
+//                                        builder: (context) =>
+//                                            new SummaryConstructionPage()),
+//>>>>>>> f6809553813ee7414472fb92cdee210d1128d705
                                   );
                                 },
                               ),
@@ -451,21 +459,29 @@ class _ProjectListPageState extends State<ProjectListPage> {
       ),
     );
 
+    final navigatorKey = GlobalKey<NavigatorState>();
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      // title: Text("Flutter Layout Demo"),
-      title: "Flutter Layout Demo",
-      home: Scaffold(
-        appBar: NavBar,
-        body: Container(
-          color: Colors.white,
-          // height: 140, //高度不填会自适应
-          padding:
-              const EdgeInsets.only(top: 0.0, bottom: 0, left: 0, right: 0),
-          child: myListView,
-        ),
-        bottomSheet: bottomButton,
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
+        navigatorKey: navigatorKey,
+        debugShowCheckedModeBanner: false,
+        // title: Text("Flutter Layout Demo"),
+        title: "Flutter Layout Demo",
+        home: Scaffold(
+            appBar: NavBar,
+            body: Container(
+              color: Colors.white,
+              // height: 140, //高度不填会自适应
+              padding:
+                  const EdgeInsets.only(top: 0.0, bottom: 0, left: 0, right: 0),
+              child: myListView,
+            ),
+            bottomSheet: Builder(builder: (context) {
+              return GestureDetector(
+                onTap: () {
+                  _addProject(); //自己封装的跳转方法，忽略
+                },
+                child: bottomButton,
+              );
+            })) // This trailing comma makes auto-formatting nicer for build methods.
+        );
   }
 }
