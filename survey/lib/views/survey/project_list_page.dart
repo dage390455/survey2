@@ -13,6 +13,7 @@ import 'package:event_bus/event_bus.dart';
 import 'package:flutter/services.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 import 'package:sensoro_survey/views/survey/const.dart';
+import 'package:sensoro_survey/views/survey/summary_construction_page.dart';
 import 'package:sensoro_survey/widgets/progressHud.dart';
 import 'package:sensoro_survey/generated/easyRefresh/easy_refresh.dart';
 import 'package:sensoro_survey/views/survey/point_list_page.dart';
@@ -117,7 +118,7 @@ class _ProjectListPageState extends State<ProjectListPage> {
   void _addProject() async {
     Navigator.push(context,
         new MaterialPageRoute(builder: (BuildContext context) {
-      return PointListPage(title: "传递的参数");
+      return PointListPage();
     }));
   }
 
@@ -368,7 +369,13 @@ class _ProjectListPageState extends State<ProjectListPage> {
                                 color: prefix0.LIGHT_TEXT_COLOR,
                                 textColor: Colors.white,
                                 child: new Text('导出'),
-                                onPressed: () {},
+                                onPressed: () {
+
+                                  Navigator.push(
+                                    context,
+                                    new MaterialPageRoute(builder: (context) => new SummaryConstructionPage()),
+                                  );
+                                },
                               ),
                             ],
                           ),
