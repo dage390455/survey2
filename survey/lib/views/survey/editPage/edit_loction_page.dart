@@ -2,7 +2,7 @@
 
 //现场情况
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
+
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 import 'package:sensoro_survey/views/survey/summary_construction_page.dart';
 
@@ -20,12 +20,20 @@ class _State extends State<EditLoctionPage> {
    var name = "";
 
   _State({this.name});
+   @override
+   void initState() {
+     // TODO: implement initState
+     locationController.text = this.name;
+     super.initState();
+   }
+
+
 
   TextEditingController locationController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    locationController.text = this.name;
+
     Widget NavBar = AppBar(
       elevation: 1.0,
       centerTitle:true,
@@ -114,18 +122,25 @@ class _State extends State<EditLoctionPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
 
         children: <Widget>[
-//          FlutterMap(
-//            options: MapOptions(
-//                center: LatLng(45.5231, -122.6765),
-//                zoom: 13.0,
-//                onTap: _handleTap),
-//            layers: [
-//              TileLayerOptions(
-//                urlTemplate:
-//                'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+//          Flexible(
+//            child: FlutterMap(
+//              options: MapOptions(
+//                center: LatLng(51.5, -0.09),
+//                zoom: 5.0,
+//                maxZoom: 5.0,
+//                minZoom: 3.0,
+//                //onPositionChanged: new Posi
 //              ),
-//              MarkerLayerOptions(markers: markers)
-//            ],
+//              layers: [
+//                TileLayerOptions(
+//                    urlTemplate:
+//                    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+//                    subdomains: ['a', 'b', 'c']),
+////                MarkerLayerOptions(markers: markers)
+//              ],
+//              mapController:mapController ,
+//
+//            ),
 //          ),
 
         ],

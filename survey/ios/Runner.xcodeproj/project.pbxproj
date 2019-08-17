@@ -18,6 +18,11 @@
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
+		EA86FB602307D06B00ED8C17 /* LocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA86FB5F2307D06B00ED8C17 /* LocationViewController.swift */; };
+		EA86FB622307D76300ED8C17 /* LocationEditController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA86FB612307D76300ED8C17 /* LocationEditController.swift */; };
+		EA86FB672307D7FB00ED8C17 /* CustomAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA86FB642307D7FB00ED8C17 /* CustomAnnotationView.swift */; };
+		EA86FB682307D7FB00ED8C17 /* CustomPointAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA86FB652307D7FB00ED8C17 /* CustomPointAnnotation.swift */; };
+		EA86FB692307D7FB00ED8C17 /* MapCalloutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA86FB662307D7FB00ED8C17 /* MapCalloutView.swift */; };
 		EE65BD4B22FD8C5500C7C340 /* ComponentManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE65BD3722FD8C5500C7C340 /* ComponentManager.swift */; };
 		EE65BD4D22FD8C5500C7C340 /* Station.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE65BD3922FD8C5500C7C340 /* Station.swift */; };
 		EE65BD4E22FD8C5500C7C340 /* ButtonWithImageAndTitleExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE65BD3A22FD8C5500C7C340 /* ButtonWithImageAndTitleExtension.swift */; };
@@ -69,6 +74,11 @@
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AB5D17741830B32B584DA7E3 /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB3CDBD2FE6CE168D56004BD /* Pods-Runner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"; sourceTree = "<group>"; };
+		EA86FB5F2307D06B00ED8C17 /* LocationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationViewController.swift; sourceTree = "<group>"; };
+		EA86FB612307D76300ED8C17 /* LocationEditController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationEditController.swift; sourceTree = "<group>"; };
+		EA86FB642307D7FB00ED8C17 /* CustomAnnotationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomAnnotationView.swift; sourceTree = "<group>"; };
+		EA86FB652307D7FB00ED8C17 /* CustomPointAnnotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomPointAnnotation.swift; sourceTree = "<group>"; };
+		EA86FB662307D7FB00ED8C17 /* MapCalloutView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapCalloutView.swift; sourceTree = "<group>"; };
 		EE65BD3722FD8C5500C7C340 /* ComponentManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComponentManager.swift; sourceTree = "<group>"; };
 		EE65BD3922FD8C5500C7C340 /* Station.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Station.swift; sourceTree = "<group>"; };
 		EE65BD3A22FD8C5500C7C340 /* ButtonWithImageAndTitleExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonWithImageAndTitleExtension.swift; sourceTree = "<group>"; };
@@ -145,6 +155,7 @@
 		97C146F01CF9000F007C117D /* Runner */ = {
 			isa = PBXGroup;
 			children = (
+				EA86FB632307D7C400ED8C17 /* MapView */,
 				97C146FA1CF9000F007C117D /* Main.storyboard */,
 				97C146FD1CF9000F007C117D /* Assets.xcassets */,
 				97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */,
@@ -153,10 +164,12 @@
 				EE65BD4222FD8C5500C7C340 /* FlutterInterface */,
 				EE65BD3522FD8C5500C7C340 /* Utility */,
 				74858FAE1ED2DC5600515810 /* AppDelegate.swift */,
+				EA86FB612307D76300ED8C17 /* LocationEditController.swift */,
 				EE65BD4922FD8C5500C7C340 /* RootNavController.swift */,
 				EE9F3EDA230280B800536CC1 /* GeneratedPluginRegistrant.h */,
 				EE9F3EDB230280B800536CC1 /* GeneratedPluginRegistrant.m */,
 				74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */,
+				EA86FB5F2307D06B00ED8C17 /* LocationViewController.swift */,
 			);
 			path = Runner;
 			sourceTree = "<group>";
@@ -166,6 +179,16 @@
 			children = (
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		EA86FB632307D7C400ED8C17 /* MapView */ = {
+			isa = PBXGroup;
+			children = (
+				EA86FB642307D7FB00ED8C17 /* CustomAnnotationView.swift */,
+				EA86FB652307D7FB00ED8C17 /* CustomPointAnnotation.swift */,
+				EA86FB662307D7FB00ED8C17 /* MapCalloutView.swift */,
+			);
+			path = MapView;
 			sourceTree = "<group>";
 		};
 		EE65BD3522FD8C5500C7C340 /* Utility */ = {
@@ -431,14 +454,19 @@
 				EE65BD5A22FD8C5500C7C340 /* FlutterPageConfig.swift in Sources */,
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,
 				EE65BD4E22FD8C5500C7C340 /* ButtonWithImageAndTitleExtension.swift in Sources */,
+				EA86FB602307D06B00ED8C17 /* LocationViewController.swift in Sources */,
 				EE65BD5922FD8C5500C7C340 /* FlutterSplashViewController.swift in Sources */,
+				EA86FB682307D7FB00ED8C17 /* CustomPointAnnotation.swift in Sources */,
 				EE866CF92305003300F757D0 /* FlutterElectricInstallViewController.swift in Sources */,
 				EE9F3EDC230280B800536CC1 /* GeneratedPluginRegistrant.m in Sources */,
+				EA86FB622307D76300ED8C17 /* LocationEditController.swift in Sources */,
+				EA86FB672307D7FB00ED8C17 /* CustomAnnotationView.swift in Sources */,
 				EE65BD5622FD8C5500C7C340 /* FlutterTestViewController.swift in Sources */,
 				EE65BD5722FD8C5500C7C340 /* NetworkManager-Flutter.swift in Sources */,
 				EE866CFB23052A1000F757D0 /* FlutterProjectListViewController.swift in Sources */,
 				EE65BD4F22FD8C5500C7C340 /* Utility.swift in Sources */,
 				EE65BD5822FD8C5500C7C340 /* FlutterBaseViewController.swift in Sources */,
+				EA86FB692307D7FB00ED8C17 /* MapCalloutView.swift in Sources */,
 				EE65BD4D22FD8C5500C7C340 /* Station.swift in Sources */,
 				EE65BD4B22FD8C5500C7C340 /* ComponentManager.swift in Sources */,
 				EE65BD5522FD8C5500C7C340 /* FlutterTaskListViewController.swift in Sources */,
@@ -535,7 +563,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.sensoro.survey;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sensoro.SensoroCity;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
@@ -666,7 +694,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.sensoro.survey;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sensoro.SensoroCity;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -696,7 +724,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.sensoro.survey;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sensoro.SensoroCity;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;

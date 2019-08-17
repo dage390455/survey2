@@ -10,6 +10,8 @@ import java.util.Map;
 import java.util.Set;
 
 import io.flutter.app.FlutterActivity;
+import io.flutter.plugin.common.BasicMessageChannel;
+import io.flutter.plugin.common.StringCodec;
 import io.flutter.plugins.GeneratedPluginRegistrant;
 import io.flutter.view.FlutterNativeView;
 import io.flutter.view.FlutterView;
@@ -18,7 +20,7 @@ public class MainActivity extends FlutterActivity {
 
 
   private String routeStr = "projectList";  //首页路径
-
+  BasicMessageChannel channel1;
   @Override
   public FlutterView createFlutterView(Context context) {
 
@@ -29,8 +31,25 @@ public class MainActivity extends FlutterActivity {
     flutterView.setLayoutParams(matchParent);
     flutterView.enableTransparentBackground();
     this.setContentView(flutterView);
+      final BasicMessageChannel channel = new BasicMessageChannel<String> (flutterView, "BasicMessageChannelPlugin", StringCodec.INSTANCE);
+      channel.setMessageHandler(new BasicMessageChannel.MessageHandler() {
+          @Override
+          public void onMessage(Object o, BasicMessageChannel.Reply reply) {
+              sendMessageToFlutter();
+              reply.reply("我来自 " +" !! 使用的是 BasicMessageChannel 方式");
+          }
+      });
+     channel1 = channel;
+
+
     return flutterView;
   }
+
+
+  public void sendMessageToFlutter(){
+     channel1.send("哈哈哈");
+  }
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);

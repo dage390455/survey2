@@ -2,6 +2,7 @@
 
 //现场情况
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 import 'package:sensoro_survey/views/survey/survey_point_information.dart';
 
@@ -24,7 +25,8 @@ import 'editPage/survey_point_structure.dart';
  }
 
  class _State extends State<SummaryConstructionPage> {
-
+   BasicMessageChannel<String> _basicMessageChannel =
+   BasicMessageChannel("BasicMessageChannelPlugin", StringCodec());
    var isCheack = false;
 
    var name = "";
@@ -39,6 +41,32 @@ import 'editPage/survey_point_structure.dart';
    var headPhone = "";
    var bossName = "";
    var bossPhone = "";
+
+   @override
+  void initState() {
+
+     _basicMessageChannel.setMessageHandler((message) => Future<String>(() {
+       print(message);
+       //message为native传递的数据
+       setState(() {
+         location = message;
+       });
+       //给Android端的返回值
+       return "========================收到Native消息：" + message;
+     }));
+
+     super.initState();
+   }
+
+   //向native发送消息
+   void _sendToNative() {
+     Future<String> future = _basicMessageChannel.send(location);
+     future.then((message) {
+        print("========================"+message);
+     });
+
+    super.initState();
+  }
 
    @override
    Widget build(BuildContext context) {
@@ -147,20 +175,21 @@ import 'editPage/survey_point_structure.dart';
      }
 
      editLoction() async {
-       final result = await Navigator.push(
-         context,
-         new MaterialPageRoute(builder: (context) => new EditLoctionPage(name: this.location,)),
-       );
-
-       if (result!=null){
-         String name = result as String;
-
-         this.location = name;
-         updateNextButton();
-         setState(() {
-
-         });
-       }
+//       final result = await Navigator.push(
+//         context,
+//         new MaterialPageRoute(builder: (context) => new EditLoctionPage(name: this.location,)),
+//       );
+//
+//       if (result!=null){
+//         String name = result as String;
+//
+//         this.location = name;
+//         updateNextButton();
+//         setState(() {
+//
+//         });
+//       }
+          _sendToNative();
      }
 
 

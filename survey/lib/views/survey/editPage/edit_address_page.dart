@@ -22,9 +22,17 @@ class _State extends State<EditAdressPage> {
 
   TextEditingController locationController = TextEditingController();
 
-  @override
+   @override
+   void initState() {
+     // TODO: implement initState
+     locationController.text = this.name;
+     super.initState();
+   }
+
+
+   @override
   Widget build(BuildContext context) {
-    locationController.text = this.name;
+
     Widget NavBar = AppBar(
       elevation: 1.0,
       centerTitle:true,
