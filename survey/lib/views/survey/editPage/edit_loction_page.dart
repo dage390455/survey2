@@ -1,12 +1,8 @@
-
-
 //现场情况
 import 'package:flutter/material.dart';
 
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 import 'package:sensoro_survey/views/survey/summary_construction_page.dart';
-
-
 
 class EditLoctionPage extends StatefulWidget {
   var name = "";
@@ -16,8 +12,7 @@ class EditLoctionPage extends StatefulWidget {
 }
 
 class _State extends State<EditLoctionPage> {
-
-   var name = "";
+  var name = "";
 
   _State({this.name});
    @override
@@ -36,16 +31,12 @@ class _State extends State<EditLoctionPage> {
 
     Widget NavBar = AppBar(
       elevation: 1.0,
-      centerTitle:true,
+      centerTitle: true,
       brightness: Brightness.light,
       backgroundColor: Colors.white,
-
       title: Text(
         "定位位置",
-        style: TextStyle(
-            color: Colors.black
-        ),
-
+        style: TextStyle(color: Colors.black),
       ),
       leading: IconButton(
         icon: Image.asset(
@@ -59,16 +50,12 @@ class _State extends State<EditLoctionPage> {
       ),
     );
 
-
-
-
-
     Widget bottomButton = Container(
-      color:  prefix0.LIGHT_LINE_COLOR,
+      color: prefix0.LIGHT_LINE_COLOR,
       height: 60,
       width: prefix0.screen_width,
       child: new MaterialButton(
-        color: this.name.length>0? prefix0.GREEN_COLOR :Colors.grey,
+        color: this.name.length > 0 ? prefix0.GREEN_COLOR : Colors.grey,
         textColor: Colors.white,
         child: new Text('保存',
             style: TextStyle(
@@ -76,18 +63,16 @@ class _State extends State<EditLoctionPage> {
                 fontWeight: FontWeight.normal,
                 fontSize: 20)),
         onPressed: () {
-          if (this.name.length>0){
+          if (this.name.length > 0) {
             Navigator.of(context).pop(this.name);
           }
         },
       ),
     );
 
-
-
     Widget container = Container(
       color: prefix0.LIGHT_LINE_COLOR,
-      padding:  EdgeInsets.all(20),
+      padding: EdgeInsets.all(20),
       child: Column(
 //           mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -95,32 +80,23 @@ class _State extends State<EditLoctionPage> {
           TextField(
             controller: locationController,
             keyboardType: TextInputType.text,
-
             decoration: InputDecoration(
-
               labelText: '定位位置(选填)',
-
             ),
             autofocus: false,
-             onChanged: (val) {
+            onChanged: (val) {
               name = val;
-              setState(() {
-
-              });
+              setState(() {});
             },
           ),
-
         ],
       ),
     );
 
-
     Widget bigContainer = Container(
       color: prefix0.LIGHT_LINE_COLOR,
-
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-
         children: <Widget>[
 //          Flexible(
 //            child: FlutterMap(
@@ -142,21 +118,14 @@ class _State extends State<EditLoctionPage> {
 //
 //            ),
 //          ),
-
         ],
-
       ),
-
     );
 
     return Scaffold(
-
       appBar: NavBar,
       body: bigContainer,
       bottomSheet: bottomButton,
     );
-
   }
-
-
 }

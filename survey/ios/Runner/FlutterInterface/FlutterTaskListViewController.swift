@@ -144,6 +144,7 @@ class FlutterTaskListViewController: FlutterBaseViewController {
                 controller.endDate = Date(timeIntervalSince1970: self.endTime);
             }
             
+            
             controller.completion = { [weak self] (start,end) in
                 guard let weakSelf = self else {return;}
                 
@@ -151,17 +152,20 @@ class FlutterTaskListViewController: FlutterBaseViewController {
                 formatter.dateFormat = "yyyy.MM.dd"
                 //                weakSelf.dateTime.text = formatter.string(from: start) + " ~ " + formatter.string(from: end);
                 
-                weakSelf.beginTime = start.timeIntervalSince1970*1000;
-                weakSelf.endTime = end.timeIntervalSince1970*1000;
+                weakSelf.beginTime = start.timeIntervalSince1970;
+                weakSelf.endTime = end.timeIntervalSince1970;
+                
+                var beginTime = start.timeIntervalSince1970*1000
+                var endTime = end.timeIntervalSince1970*1000;
                 
                 let headers:[String: String]? = NetworkManager.shared.headers ;
                 let TaskLogURL = NetworkManager.TaskLogURL;
                 let baseURL = NetworkManager.baseURL;
                 let urlStr:String? = baseURL+TaskLogURL;
-                let parameters : Dictionary?  = ["finish" : "false","offset" : 0, "limit" : 10,"beginTime" : weakSelf.beginTime,"endTime" : weakSelf.endTime] as [String : Any];
+                let parameters : Dictionary?  = ["finish" : "false","offset" : 0, "limit" : 10,"beginTime" :  beginTime,"endTime" :  endTime] as [String : Any];
                 
                 if let urlStr = urlStr, let headers = headers,let parameters = parameters {
-                    weakSelf.mEventSink?(["name":"showCalendar","beginTime" : weakSelf.beginTime,"endTime" : weakSelf.endTime] )
+                    weakSelf.mEventSink?(["name":"showCalendar","beginTime" :  beginTime,"endTime" :  endTime] )
                     weakSelf.mEventSink?(["name":"getURL","urlStr":urlStr,"headers":headers,"params":parameters] )
                 }
                 

@@ -17,16 +17,20 @@ import 'package:sensoro_survey/widgets/progressHud.dart';
 import 'package:sensoro_survey/generated/easyRefresh/easy_refresh.dart';
 
 class PointListPage extends StatefulWidget {
-  _PointListPageState createState() => _PointListPageState();
-  // final Map<String, dynamic> todo;
-  // PointListPage({Key key, @required this.todo}) : super(key: key);
+  // _PointListPageState createState() => _PointListPageState();
+  Map<String, dynamic> todo;
+  PointListPage({Key key, @required this.todo}) : super(key: key);
+
+  var name = "";
+  // EditLoctionPage({this.name});
+  @override
+  _PointListPageState createState() => _PointListPageState(todo: this.todo);
+  // _State createState() => _State(name: this.name);
 }
 
 class _PointListPageState extends State<PointListPage> {
-  _PointListPageState() {
-    final eventBus = new EventBus();
-    // ApplicationEvent.event = eventBus;
-  }
+  Map<String, dynamic> todo;
+  _PointListPageState({this.todo});
 
   static List dataList = new List(); //static才能在build里使用
   static int listTotalCount = 0;
@@ -35,12 +39,18 @@ class _PointListPageState extends State<PointListPage> {
   bool _calendaring = false;
   String beginTimeStr = "";
   String endTimeStr = "";
+  int beginTime = 0;
+  int endTime = 0;
   FocusNode _focusNode = FocusNode();
   bool isFrist = true;
 
+  static bool isLeftSelect = true;
+  static bool isRightSelect = false;
+
   static Map<String, dynamic> headers = {};
   // 创建一个给native的channel (类似iOS的通知）
-  static const methodChannel = const MethodChannel('com.pages.your/point_list');
+  static const methodChannel =
+      const MethodChannel('com.pages.your/project_list');
   static int _itemCount = dataList.length;
 
   Timer _changeTimer;
@@ -57,6 +67,7 @@ class _PointListPageState extends State<PointListPage> {
   bool _loadMore = false;
   TimeOfDay _time = TimeOfDay.now();
 
+  //组件即将销毁时调用
   @override
   void dispose() {
     super.dispose();
@@ -88,8 +99,8 @@ class _PointListPageState extends State<PointListPage> {
         // _startLoading();
         setState(() {
           _calendaring = true;
-          var beginTime = dic["beginTime"].toInt();
-          var endTime = dic["endTime"].toInt();
+          beginTime = dic["beginTime"].toInt();
+          endTime = dic["endTime"].toInt();
           if (beginTime > 10000 && endTime > 10000) {
             DateTime date1 = new DateTime.fromMillisecondsSinceEpoch(beginTime);
             beginTimeStr = date1.toString();
@@ -126,8 +137,8 @@ class _PointListPageState extends State<PointListPage> {
 
   _showCalendar() async {
     Map<String, dynamic> map = {
-      "code": "200",
-      "data": [1, 2, 3]
+      "beginTime": beginTime > 10000 ? beginTime / 1000 : 0,
+      "endTime": endTime > 10000 ? endTime / 1000 : 0,
     };
     await methodChannel.invokeMethod('showCalendar', map);
   }
@@ -170,7 +181,7 @@ class _PointListPageState extends State<PointListPage> {
 
         contentPadding:
             EdgeInsets.fromLTRB(20.0, 20.0, 10.0, 10.0), //设置显示文本的一个内边距
-// //                border: InputBorder.none,//取消默认的下划线边框
+        // //                border: InputBorder.none,//取消默认的下划线边框
       ),
     );
 
@@ -178,11 +189,6 @@ class _PointListPageState extends State<PointListPage> {
       elevation: 1.0,
       brightness: Brightness.light,
       backgroundColor: Colors.white,
-      // title: Text(
-      //   "项目列表",
-      //   style: TextStyle(
-      //       color: BLACK_TEXT_COLOR, fontWeight: FontWeight.bold, fontSize: 16),
-      // ),
       title: Container(
         height: 40,
         width: 200,
@@ -195,6 +201,15 @@ class _PointListPageState extends State<PointListPage> {
         padding:
             const EdgeInsets.only(top: 0.0, bottom: 0, left: 20, right: 10),
         child: searchbar,
+      ),
+      leading: IconButton(
+        icon: Image.asset(
+          "assets/images/back.png",
+          // height: 20,
+        ),
+        onPressed: () {
+          Navigator.pop(context);
+        },
       ),
       actions: <Widget>[
         IconButton(
@@ -216,20 +231,105 @@ class _PointListPageState extends State<PointListPage> {
 
     Widget bottomButton = Container(
       color: prefix0.LIGHT_LINE_COLOR,
-      height: 60,
+      height: 130,
       width: prefix0.screen_width,
-      child: new MaterialButton(
-        color: prefix0.GREEN_COLOR,
-        textColor: Colors.white,
-        child: new Text('新建项目',
-            style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.normal,
-                fontSize: 20)),
-        onPressed: () {
-          _addProject();
-        },
-      ),
+      child: Column(
+          //这行决定了左对齐
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Container(
+              height: 60,
+              width: prefix0.screen_width,
+              child: new MaterialButton(
+                color: prefix0.GREEN_COLOR,
+                textColor: Colors.white,
+                child: new Text('新建勘查点',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.normal,
+                        fontSize: 20)),
+                onPressed: () {
+                  _addProject();
+                },
+              ),
+            ),
+            //分割线
+            // Container(
+            //     width: prefix0.screen_width - 40,
+            //     height: 1.0,
+            //     color: FENGE_LINE_COLOR),
+            Container(
+              height: 70,
+              width: prefix0.screen_width,
+              child: new Padding(
+                padding: new EdgeInsets.fromLTRB(20, 7, 20, 2),
+                child: Row(
+
+                    //Row 中mainAxisAlignment是水平的，Column中是垂直的
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //表示所有的子控件都是从左到右��序排列，这是默认值
+                    textDirection: TextDirection.ltr,
+                    children: <Widget>[
+                      new Column(children: <Widget>[
+                        Container(
+                          height: 42,
+                          width: 42,
+                          child: IconButton(
+                            icon: isLeftSelect
+                                ? Image.asset("assets/images/网络铺设（选中）.png")
+                                : Image.asset(
+                                    "assets/images/网络铺设.png",
+                                    // height: 20,
+                                  ),
+                            onPressed: () {
+                              setState(() {
+                                isRightSelect = false;
+                                isLeftSelect = true;
+                              });
+                            },
+                          ),
+                        ),
+                        Text("网络铺设",
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                                color: isLeftSelect
+                                    ? prefix0.BLACK_TEXT_COLOR
+                                    : prefix0.LIGHT_TEXT_COLOR,
+                                fontWeight: FontWeight.normal,
+                                fontSize: 13)),
+                      ]),
+                      new Column(children: <Widget>[
+                        Container(
+                          height: 42,
+                          width: 42,
+                          child: IconButton(
+                            icon: isRightSelect
+                                ? Image.asset("assets/images/终端安装（选中）.png")
+                                : Image.asset(
+                                    "assets/images/终端安装.png",
+                                  ),
+                            onPressed: () {
+                              setState(() {
+                                isRightSelect = true;
+                                isLeftSelect = false;
+                              });
+                            },
+                          ),
+                        ),
+                        Text("终端安装",
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                                color: isRightSelect
+                                    ? prefix0.BLACK_TEXT_COLOR
+                                    : prefix0.LIGHT_TEXT_COLOR,
+                                fontWeight: FontWeight.normal,
+                                fontSize: 13)),
+                      ]),
+                    ]),
+              ),
+            ),
+          ]),
     );
 
     Widget myListView = new ListView.builder(
@@ -251,7 +351,7 @@ class _PointListPageState extends State<PointListPage> {
                   height: 120,
                   // fit: BoxFit.fitWidth,
                 ),
-                Text("没找到任何已创建的项目，请添加���个新项目",
+                Text("没找到任何已创建的项目，请添加新项目",
                     textAlign: TextAlign.start,
                     style: TextStyle(
                         color: prefix0.LIGHT_TEXT_COLOR,
@@ -316,6 +416,7 @@ class _PointListPageState extends State<PointListPage> {
                   ),
 
                   Container(
+                    // height: 80,
                     padding: const EdgeInsets.only(
                         top: 0.0, bottom: 0, left: 20, right: 20),
                     child: Row(
@@ -324,25 +425,34 @@ class _PointListPageState extends State<PointListPage> {
                         //表示所有的子控件都是从左到右顺序排列，这是默认值
                         textDirection: TextDirection.ltr,
                         children: <Widget>[
+                          new Image(
+                            image: new AssetImage("assets/images/电气火灾.png"),
+                            width: 20,
+                            height: 20,
+                            // fit: BoxFit.fitWidth,
+                          ),
                           //这行决定了左对齐
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              //这个位置用ListTile就会报错
-                              Text("批次号",
-                                  textAlign: TextAlign.start,
-                                  style: TextStyle(
-                                      color: prefix0.BLACK_TEXT_COLOR,
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: 17)),
-                              Text("2019-09-29",
-                                  textAlign: TextAlign.start,
-                                  style: TextStyle(
-                                      color: prefix0.BLACK_TEXT_COLOR,
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: 17)),
-                            ],
+                          new Padding(
+                            padding: new EdgeInsets.fromLTRB(0, 20, 0, 20),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                //这个位置用ListTile就会报错
+                                Text("批次号",
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                        color: prefix0.BLACK_TEXT_COLOR,
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: 17)),
+                                Text("2019-09-29",
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                        color: prefix0.BLACK_TEXT_COLOR,
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: 17)),
+                              ],
+                            ),
                           ),
 
                           new SizedBox(
@@ -359,12 +469,12 @@ class _PointListPageState extends State<PointListPage> {
                                 child: new Text('编辑'),
                                 onPressed: () {},
                               ),
-                              new RaisedButton(
-                                color: prefix0.LIGHT_TEXT_COLOR,
-                                textColor: Colors.white,
-                                child: new Text('导出'),
-                                onPressed: () {},
-                              ),
+                              // new RaisedButton(
+                              //   color: prefix0.LIGHT_TEXT_COLOR,
+                              //   textColor: Colors.white,
+                              //   child: new Text('导出'),
+                              //   onPressed: () {},
+                              // ),
                             ],
                           ),
                         ]),
@@ -455,10 +565,61 @@ class _PointListPageState extends State<PointListPage> {
           // height: 140, //高��不填会自适应
           padding:
               const EdgeInsets.only(top: 0.0, bottom: 0, left: 0, right: 0),
-          child: myListView,
+          child: Column(
+            //这行决定了左对齐
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              !_calendaring
+                  ? emptyContainer
+                  : Container(
+                      color: Colors.white,
+                      // height: 140, //高度不填会自适应
+                      padding: const EdgeInsets.only(
+                          top: 3.0, bottom: 3, left: 20, right: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text(
+                            "$beginTimeStr ~ $endTimeStr",
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                                color: prefix0.BLACK_TEXT_COLOR,
+                                fontWeight: FontWeight.normal,
+                                fontSize: 12),
+                          ),
+                          IconButton(
+                            icon: Image.asset(
+                              "assets/images/close_black.png",
+                              color: Colors.black,
+                            ),
+                            onPressed: () {
+                              // dataList.clear();
+                              // _getListNetCall();
+                              setState(() {
+                                // params.remove("beginTime");
+                                // params.remove("endTime");
+                                _calendaring = false;
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+              Expanded(
+                child: myListView,
+              ),
+              bottomButton,
+              // Expanded(
+              //   child: bottomButton,
+              // ),
+            ],
+          ),
         ),
-        bottomSheet: bottomButton,
+        // bottomSheet: bottomButton,
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
+
+class staticbool {}
