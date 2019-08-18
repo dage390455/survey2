@@ -111,7 +111,7 @@ class _State extends State<SurveyPointAreaEditPage> {
         children: <Widget>[
           TextField(
             controller: locationController,
-            keyboardType: TextInputType.text,
+            keyboardType: TextInputType.number,
 
 
             decoration: InputDecoration(
@@ -119,7 +119,7 @@ class _State extends State<SurveyPointAreaEditPage> {
 
 
 //                  labelText: '备注',
-              hintText: '请输入该勘察点面积(㎡)',
+              hintText: '请输入该勘察点面积(㎡)。例如：33',
             ),
             autofocus: false,
             onChanged: (val) {
