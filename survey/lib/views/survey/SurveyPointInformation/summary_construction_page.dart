@@ -491,7 +491,7 @@ import 'package:sensoro_survey/views/survey/survey_point_information.dart';
                  height: 60,
                  child: new Row(
                    children: <Widget>[
-                     Text("勘察点面积"),
+                     Text("勘察点面积(㎡)"),
                      Expanded (
                        child: Text(
                          this.area.length>0?this.area: "选填",
