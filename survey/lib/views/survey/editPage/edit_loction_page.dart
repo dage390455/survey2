@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
-import 'package:sensoro_survey/views/survey/summary_construction_page.dart';
+
 
 class EditLoctionPage extends StatefulWidget {
   var name = "";

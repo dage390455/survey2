@@ -3,20 +3,19 @@
 //现场情况
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:sensoro_survey/views/survey/SurveyPointInformation/survay_electrical_fire.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
+import 'package:sensoro_survey/views/survey/editPage/edit_address_page.dart';
+import 'package:sensoro_survey/views/survey/editPage/edit_boss_person_page.dart';
+import 'package:sensoro_survey/views/survey/editPage/edit_boss_person_phone_page.dart';
+import 'package:sensoro_survey/views/survey/editPage/edit_head_person_page.dart';
+import 'package:sensoro_survey/views/survey/editPage/edit_head_person_phone_page.dart';
+import 'package:sensoro_survey/views/survey/editPage/edit_name_page.dart';
+import 'package:sensoro_survey/views/survey/editPage/edit_purpose_page.dart';
+import 'package:sensoro_survey/views/survey/editPage/survey_point_area.dart';
+import 'package:sensoro_survey/views/survey/editPage/survey_point_structure.dart';
 import 'package:sensoro_survey/views/survey/survey_point_information.dart';
 
-import 'Electric_box_information_page.dart';
-import 'editPage/edit_address_page.dart';
-import 'editPage/edit_boss_person_page.dart';
-import 'editPage/edit_boss_person_phone_page.dart';
-import 'editPage/edit_head_person_page.dart';
-import 'editPage/edit_head_person_phone_page.dart';
-import 'editPage/edit_loction_page.dart';
-import 'editPage/edit_name_page.dart';
-import 'editPage/edit_purpose_page.dart';
-import 'editPage/survey_point_area.dart';
-import 'editPage/survey_point_structure.dart';
 
 
  class SummaryConstructionPage extends StatefulWidget {
@@ -116,7 +115,7 @@ import 'editPage/survey_point_structure.dart';
            if (this.isCheack){
              Navigator.push(
                context,
-               new MaterialPageRoute(builder: (context) => new SurveyPointInformationPage()),
+               new MaterialPageRoute(builder: (context) => new SurvayElectricalFirePage()),
              );
            }
          },

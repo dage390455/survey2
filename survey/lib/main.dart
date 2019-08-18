@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/rendering.dart';
 import 'package:sensoro_survey/views/survey/const.dart';
-import 'package:sensoro_survey/views/survey/summary_construction_page.dart';
+
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:sensoro_survey/views/sensoro_city_page/task_detail_page.dart';

@@ -2,22 +2,26 @@
 
 //现场情况
 import 'package:flutter/material.dart';
+import 'package:sensoro_survey/views/survey/comment/SaveDataManger.dart';
+import 'package:sensoro_survey/views/survey/comment/history_page.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
-import 'package:sensoro_survey/views/survey/summary_construction_page.dart';
+
 
 
 
 class EditNamePage extends StatefulWidget {
   var name = "";
+  
+  
   EditNamePage({this.name});
   @override
   _State createState() => _State(name: this.name);
 }
 
 class _State extends State<EditNamePage> {
-
+   var historyKey = "histroySurveysitename";
    var name = "";
-
+   var isHighHistory = true;
   _State({this.name});
 
   TextEditingController locationController = TextEditingController();
@@ -26,6 +30,9 @@ class _State extends State<EditNamePage> {
   void initState() {
     // TODO: implement initState
     locationController.text = this.name;
+    locationController.addListener(() {
+      isHighHistory =false;
+    });
     super.initState();
   }
 
@@ -75,17 +82,30 @@ class _State extends State<EditNamePage> {
                 fontSize: 20)),
         onPressed: () {
           if (this.name.length>0){
+            SaveDataManger.addHistory(this.name, historyKey);
             Navigator.of(context).pop(this.name);
           }
         },
       ),
     );
 
+    _editParentText(editText) {
+      setState(() {
+        this.name = editText;
+        locationController.text = editText;
+//        locationController.selection(TextSelection.fromPosition(TextPosition(
+//            affinity: TextAffinity.downstream,
+//            offset: this.name.length)));
+//        locationController.selection(new TextSelection.fromPosition(new TextPosition()));
+      });
+
+      print(editText);
+    }
 
 
     Widget container = Container(
-      color: prefix0.LIGHT_LINE_COLOR,
-      padding:  EdgeInsets.all(20),
+      color: Colors.white,
+      padding:  new EdgeInsets.fromLTRB(20, 10, 0, 20),
       child: Column(
 //           mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -94,18 +114,24 @@ class _State extends State<EditNamePage> {
             controller: locationController,
             keyboardType: TextInputType.text,
 
+
             decoration: InputDecoration(
+              border: InputBorder.none,
 
-              labelText: '勘察点名称(必填)',
 
+//                  labelText: '备注',
+              hintText: '请输入勘察点名称。例如：望京soho',
             ),
             autofocus: false,
              onChanged: (val) {
               name = val;
+
               setState(() {
 
               });
             },
+
+
           ),
 
         ],
@@ -113,14 +139,26 @@ class _State extends State<EditNamePage> {
     );
 
 
+    Widget backContainer = Container(
+        color: Colors.white,
+        padding:  EdgeInsets.all(0),
+//        height: 70,
+        child:container
+    );
+
+
     Widget bigContainer = Container(
       color: prefix0.LIGHT_LINE_COLOR,
-
+      padding: new EdgeInsets.fromLTRB(0, 20, 0, 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
 
         children: <Widget>[
-          container
+          backContainer,
+         new Offstage(
+            offstage: isHighHistory,
+            child:  HistoryPage(hisoryKey: historyKey,editParentText: (editText) => _editParentText(editText)),
+          ),
 
         ],
 

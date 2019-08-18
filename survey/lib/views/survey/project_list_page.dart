@@ -13,7 +13,7 @@ import 'package:event_bus/event_bus.dart';
 import 'package:flutter/services.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 import 'package:sensoro_survey/views/survey/const.dart';
-import 'package:sensoro_survey/views/survey/summary_construction_page.dart';
+
 import 'package:sensoro_survey/views/survey/survey_point_information.dart';
 import 'package:sensoro_survey/widgets/progressHud.dart';
 import 'package:sensoro_survey/generated/easyRefresh/easy_refresh.dart';
