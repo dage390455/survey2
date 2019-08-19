@@ -51,8 +51,10 @@ class _AddProjectPageState extends State<AddProjectPage> {
     input.projectId = currentTimeMillis;
 
     String historyKey = 'projectList';
-    String json = input.toJson();
-    SaveDataManger.addHistory(json, historyKey);
+    Map<String, dynamic> map = input.toJson();
+    String jsonStr = json.encode(map);
+    jsonStr = jsonStr.replaceAll(',', ';');
+    SaveDataManger.addHistory(jsonStr, historyKey);
   }
 
   @override

@@ -16,7 +16,14 @@ class projectInfoModel {
         );
 
   @override
-  toJson() {
-    return 'projectName:$projectName,createTime:$createTime,remark:$remark,projectId:${projectId.toString()}';
+  toString() {
+    return 'projectName:$projectName;createTime:$createTime;remark:$remark;projectId:${projectId.toString()}';
   }
+
+  Map<String, dynamic> toJson() => {
+        'projectName': projectName,
+        'createTime': createTime,
+        'remark': remark,
+        'projectId': projectId,
+      };
 }
