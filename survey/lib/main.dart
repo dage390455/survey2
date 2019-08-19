@@ -18,8 +18,7 @@ import 'package:sensoro_survey/views/sensoro_city_page/task_test_page.dart';
 
 import 'package:sensoro_survey/views/survey/project_list_page.dart';
 import 'package:sensoro_survey/views/survey/electric_install_page.dart';
-
-//import 'views/welcome_page/index.dart';
+import 'package:sensoro_survey/views/survey/survey_point_information.dart';
 
 const int ThemeColor = 0xFFC91B3A;
 var db;
@@ -136,6 +135,8 @@ Widget _widgetForRoute(String route) {
       return new ElectricInstallPage();
     case 'projectList':
       return new ProjectListPage();
+    case 'surveyInformation':
+      return new SurveyPointInformationPage();
     default:
       return Center(
         child: Text('Unknown route: $route', textDirection: TextDirection.ltr),

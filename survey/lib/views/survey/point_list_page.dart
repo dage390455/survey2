@@ -15,22 +15,19 @@ import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 import 'package:sensoro_survey/views/survey/const.dart';
 import 'package:sensoro_survey/widgets/progressHud.dart';
 import 'package:sensoro_survey/generated/easyRefresh/easy_refresh.dart';
+import 'package:sensoro_survey/model/project_info_model.dart';
 
 class PointListPage extends StatefulWidget {
-  // _PointListPageState createState() => _PointListPageState();
-  Map<String, dynamic> todo;
-  PointListPage({Key key, @required this.todo}) : super(key: key);
+  projectInfoModel input;
+  PointListPage({Key key, @required this.input}) : super(key: key);
 
-  var name = "";
-  // EditLoctionPage({this.name});
   @override
-  _PointListPageState createState() => _PointListPageState(todo: this.todo);
-  // _State createState() => _State(name: this.name);
+  _PointListPageState createState() => _PointListPageState(input: this.input);
 }
 
 class _PointListPageState extends State<PointListPage> {
-  Map<String, dynamic> todo;
-  _PointListPageState({this.todo});
+  projectInfoModel input;
+  _PointListPageState({this.input});
 
   static List dataList = new List(); //static才能在build里使用
   static int listTotalCount = 0;

@@ -1,23 +1,22 @@
 class projectInfoModel {
+  int projectId;
   String projectName;
   String createTime;
-  int projectId;
+  String remark; //备注
 
-  projectInfoModel(this.projectName, this.createTime, this.projectId);
+  projectInfoModel(
+      this.projectName, this.createTime, this.projectId, this.remark);
 
-  // taskDetailModel.fromJson(Map<String, dynamic> json)
-  //     : this(
-  //         json['id'],
-  //         json['name'],
-  //         json['image'] != null
-  //             ? json['image']
-  //             : (json['images'] != null ? json['images'][0] : null),
-  //         json['time'] != null
-  //             ? json['time']
-  //             : (json['time'] != null ? json['time'][0] : null),
-  //       );
+  projectInfoModel.fromJson(Map<String, dynamic> json)
+      : this(
+          json['projectName'],
+          json['createTime'],
+          json['projectId'],
+          json['remark'],
+        );
 
-  // Map<String, dynamic> toJson() {
-  //   return {'id': id, 'title': name, 'image': image, 'time': time};
-  // }
+  @override
+  toJson() {
+    return 'projectName:$projectName,createTime:$createTime,remark:$remark,projectId:${projectId.toString()}';
+  }
 }

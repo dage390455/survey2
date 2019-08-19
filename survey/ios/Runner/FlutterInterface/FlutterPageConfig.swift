@@ -52,3 +52,8 @@ let FLUTTER_POINT_LIST = FlutterPageModel.init(routeName: "pointList",
                                                  eventChannel: "App/Event/Channel",
                                                  methodChannel: "com.pages.your/point_list",
                                                  methods: nil, events:nil);
+
+let FLUTTER_INFORMATION = FlutterPageModel.init(routeName: "surveyInformation",
+                                                 eventChannel: "App/Event/Channel",
+                                                 methodChannel: "com.pages.your/project_list",
+                                                 methods: nil, events:nil);

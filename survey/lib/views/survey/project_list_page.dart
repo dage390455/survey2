@@ -20,6 +20,8 @@ import 'package:sensoro_survey/generated/easyRefresh/easy_refresh.dart';
 import 'package:sensoro_survey/views/survey/point_list_page.dart';
 import 'package:sensoro_survey/views/survey/add_project_page.dart';
 import 'package:sensoro_survey/model/project_info_model.dart';
+import 'package:sensoro_survey/views/survey/SurveyPointInformation/summary_construction_page.dart';
+import 'package:sensoro_survey/views/survey/comment/SaveDataManger.dart';
 
 class ProjectListPage extends StatefulWidget {
   _ProjectListPageState createState() => _ProjectListPageState();
@@ -31,6 +33,31 @@ class _ProjectListPageState extends State<ProjectListPage> {
     // ApplicationEvent.event = eventBus;
   }
 
+  @override
+  Widget build(BuildContext context) {
+    //要使用路由，根控件就不能是MaterialApp，否则跳转都会无效，解决方法：将 MaterialApp 内容
+    // 再使用 StatelessWeight 或 StatefulWeight 包裹一层
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      // title: Text("Flutter Layout Demo"),
+      title: "Flutter Layout Demo",
+      // home: Scaffold(
+      //   appBar: NavBar,
+      //   body: new Home1(),
+      //   bottomSheet: bottomButton,
+      //   // bottomSheet: bottomButton,
+      // ) // This trailing comma makes auto-formatting nicer for build methods.
+      home: Home1(),
+    );
+  }
+}
+
+class Home1 extends StatefulWidget {
+  @override
+  _State createState() => _State();
+}
+
+class _State extends State<Home1> {
   static List dataList = new List(); //static才能在build里使用
   static int listTotalCount = 0;
   static const EventChannel eventChannel =
@@ -79,6 +106,8 @@ class _ProjectListPageState extends State<ProjectListPage> {
       if (!_focusNode.hasFocus) {}
     });
 
+    // this.loadLocalData();
+
     //测试用
     this.initDetailList();
 
@@ -86,6 +115,20 @@ class _ProjectListPageState extends State<ProjectListPage> {
         //or set color with: Color(0xFF0000FF)
         // statusBarColor: Colors.blue,
         ));
+  }
+
+  void loadLocalData() async {
+    String hisoryKey = "projectList";
+    List<String> tags = [];
+    tags = await SaveDataManger.getHistory(hisoryKey);
+    dataList.clear();
+    for (int i = 0; i < tags.length; i++) {
+      String jsonStr = tags[i];
+      Map<String, dynamic> map = json.decode(jsonStr);
+      projectInfoModel model = projectInfoModel.fromJson(map);
+      dataList.add(model);
+    }
+    setState(() {});
   }
 
   void initDetailList() {
@@ -102,7 +145,7 @@ class _ProjectListPageState extends State<ProjectListPage> {
       if (index == 2) des = "2019-07-06 15:24";
       if (index == 3) des = "2019-07-22 02:14:09";
 
-      projectInfoModel model = projectInfoModel(name, des, index);
+      projectInfoModel model = projectInfoModel(name, des, index, "备注11");
       dataList.add(model);
       // var a = 'dd';
       // a = cityDetailArrays[index].name;
@@ -145,43 +188,6 @@ class _ProjectListPageState extends State<ProjectListPage> {
   // 错误处理
   void _onError(dynamic) {}
 
-  void _addProject() {
-    Map<String, dynamic> aa = {"dd": 5};
-    Navigator.push(
-      context,
-      new MaterialPageRoute(builder: (context) => new PointListPage()),
-    );
-  }
-
-  gotoPointList2() {
-    Map<String, dynamic> input;
-    Navigator.push(
-      context,
-      new MaterialPageRoute(
-          builder: (context) => new PointListPage(
-                todo: input,
-              )),
-    );
-  }
-
-  gotoPointList() async {
-    print("gotoPointList");
-    Map<String, dynamic> todo;
-    final result = await Navigator.push(
-      context,
-      new MaterialPageRoute(
-          builder: (context) => new PointListPage(
-                todo: todo,
-              )),
-    );
-
-    if (result != null) {
-      String name = result as String;
-
-      setState(() {});
-    }
-  }
-
   _navBack() async {
     Map<String, dynamic> map = {
       "code": "200",
@@ -200,6 +206,24 @@ class _ProjectListPageState extends State<ProjectListPage> {
 
   @override
   Widget build(BuildContext context) {
+    void _addProject() async {
+      projectInfoModel model = projectInfoModel("", "", 1, "");
+      final result = await Navigator.push(
+        context,
+        new MaterialPageRoute(
+            builder: (context) => new PointListPage(input: model)),
+      );
+
+      if (result != null) {
+        String name = result as String;
+        if (name == "refreshList") {
+          loadLocalData();
+        }
+        // this.name = name;
+        setState(() {});
+      }
+    }
+
     Widget emptyContainer = Container(
       height: 0,
       width: 0,
@@ -262,7 +286,7 @@ class _ProjectListPageState extends State<ProjectListPage> {
           color: prefix0.FENGE_LINE_COLOR,
           borderRadius: BorderRadius.circular(20.0),
         ),
-        // height: 140, //高度不填会自适应
+        // height: 140, //高度不填会���适应
         padding:
             const EdgeInsets.only(top: 0.0, bottom: 0, left: 20, right: 10),
         child: searchbar,
@@ -326,13 +350,6 @@ class _ProjectListPageState extends State<ProjectListPage> {
             return emptyContainer;
           }
 
-          Map<String, dynamic> dic = {"projectName": name, "createTime": time};
-          // DateTime date =
-          //     new DateTime.fromMillisecondsSinceEpoch(updatedTime);
-          // updatedTimeStr = date.toString();
-          // updatedTimeStr = updatedTimeStr.substring(0, 19);
-          // print("updatedTimeStr = $updatedTimeStr");
-
           return Container(
             color: Colors.white,
             padding:
@@ -349,80 +366,84 @@ class _ProjectListPageState extends State<ProjectListPage> {
                     width: prefix0.screen_width,
                   ),
 
-                  Container(
-                    padding: const EdgeInsets.only(
-                        top: 0.0, bottom: 0, left: 20, right: 20),
-                    child: Row(
-                        //Row 中mainAxisAlignment是水平的，Column中是垂直的
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        //表示所有的子控件都是从左到右顺序排列，这是默认值
-                        textDirection: TextDirection.ltr,
-                        children: <Widget>[
-                          //这行决定了左对齐
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              //这个位置用ListTile就会报错
-                              Text(name,
-                                  textAlign: TextAlign.start,
-                                  style: TextStyle(
-                                      color: prefix0.BLACK_TEXT_COLOR,
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: 17)),
-                              Text(time,
-                                  textAlign: TextAlign.start,
-                                  style: TextStyle(
-                                      color: prefix0.BLACK_TEXT_COLOR,
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: 17)),
-                            ],
-                          ),
+                  GestureDetector(
+                    onTap: _addProject,
+                    child: Container(
+                      color: Colors.white,
+                      padding: const EdgeInsets.only(
+                          top: 0.0, bottom: 0, left: 20, right: 20),
+                      child: Row(
+                          //Row 中mainAxisAlignment是水平的，Column中是垂直的
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          //表示所有的子控件都是从左到右顺序排列，这是默认值
+                          textDirection: TextDirection.ltr,
+                          children: <Widget>[
+                            //这行决定了左对齐
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                //这个位置用ListTile就会报错
+                                Text(name,
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                        color: prefix0.BLACK_TEXT_COLOR,
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: 17)),
+                                Text(time,
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                        color: prefix0.BLACK_TEXT_COLOR,
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: 17)),
+                              ],
+                            ),
 
-                          new SizedBox(
-                            width: 10,
-                          ),
+                            new SizedBox(
+                              width: 10,
+                            ),
 
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              new RaisedButton(
-                                color: Colors.orange,
-                                textColor: Colors.white,
-                                child: new Text('编辑'),
-                                onPressed: () {
-                                  // _addProject();
-                                  Navigator.push(
-                                    context,
-                                    new MaterialPageRoute(
-                                        builder: (context) =>
-                                            new AddProjectPage(input: model)),
-                                  );
-                                },
-                              ),
-                              new RaisedButton(
-                                color: prefix0.LIGHT_TEXT_COLOR,
-                                textColor: Colors.white,
-                                child: new Text('导出'),
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                new RaisedButton(
+                                  color: Colors.orange,
+                                  textColor: Colors.white,
+                                  child: new Text('编辑'),
+                                  onPressed: () {
+                                    // _addProject();
+                                    Navigator.push(
+                                      context,
+                                      new MaterialPageRoute(
+                                          builder: (context) =>
+                                              new AddProjectPage(input: model)),
+                                    );
+                                  },
+                                ),
+                                new RaisedButton(
+                                  color: prefix0.LIGHT_TEXT_COLOR,
+                                  textColor: Colors.white,
+                                  child: new Text('导出'),
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
 
-                                    new MaterialPageRoute(
-                                        builder: (context) =>
-                                            new SurveyPointInformationPage()),
+                                      new MaterialPageRoute(
+                                          builder: (context) =>
+                                              new SurveyPointInformationPage()),
 //=======
 //                                    new MaterialPageRoute(
 //                                        builder: (context) =>
 //                                            new SummaryConstructionPage()),
 //>>>>>>> f6809553813ee7414472fb92cdee210d1128d705
-                                  );
-                                },
-                              ),
-                            ],
-                          ),
-                        ]),
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
+                          ]),
+                    ),
                   ),
                   //分割线
                   Container(
@@ -506,76 +527,73 @@ class _ProjectListPageState extends State<ProjectListPage> {
                 fontWeight: FontWeight.normal,
                 fontSize: 20)),
         onPressed: () {
+          projectInfoModel model = projectInfoModel("", "", 0, "");
           Navigator.push(
             context,
-            new MaterialPageRoute(builder: (context) => new PointListPage()),
+            new MaterialPageRoute(
+                builder: (context) => new AddProjectPage(input: model)),
           );
         },
       ),
     );
 
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        // title: Text("Flutter Layout Demo"),
-        title: "Flutter Layout Demo",
-        home: Scaffold(
-          appBar: NavBar,
-          body: Container(
-            color: Colors.white,
-            // height: 140, //高度不填会自适应
-            padding:
-                const EdgeInsets.only(top: 0.0, bottom: 0, left: 0, right: 0),
-            child: Column(
-              //这行决定了左对齐
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                !_calendaring
-                    ? emptyContainer
-                    : Container(
-                        color: Colors.white,
-                        // height: 140, //高度不填会自适应
-                        padding: const EdgeInsets.only(
-                            top: 3.0, bottom: 3, left: 20, right: 10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text(
-                              "$beginTimeStr ~ $endTimeStr",
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                  color: prefix0.BLACK_TEXT_COLOR,
-                                  fontWeight: FontWeight.normal,
-                                  fontSize: 12),
-                            ),
-                            IconButton(
-                              icon: Image.asset(
-                                "assets/images/close_black.png",
-                                color: Colors.black,
-                              ),
-                              onPressed: () {
-                                // dataList.clear();
-                                // _getListNetCall();
-                                setState(() {
-                                  // params.remove("beginTime");
-                                  // params.remove("endTime");
-                                  _calendaring = false;
-                                });
-                              },
-                            ),
-                          ],
-                        ),
+    Widget bodyContiner = new Container(
+      color: Colors.white,
+      // height: 140, //高度不填会自适应
+      padding: const EdgeInsets.only(top: 0.0, bottom: 0, left: 0, right: 0),
+      child: Column(
+        //这行决定了左对齐
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          !_calendaring
+              ? emptyContainer
+              : Container(
+                  color: Colors.white,
+                  // height: 140, //高度不填会自适应
+                  padding: const EdgeInsets.only(
+                      top: 3.0, bottom: 3, left: 20, right: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(
+                        "$beginTimeStr ~ $endTimeStr",
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            color: prefix0.BLACK_TEXT_COLOR,
+                            fontWeight: FontWeight.normal,
+                            fontSize: 12),
                       ),
-                Expanded(
-                  child: myListView,
+                      IconButton(
+                        icon: Image.asset(
+                          "assets/images/close_black.png",
+                          color: Colors.black,
+                        ),
+                        onPressed: () {
+                          // dataList.clear();
+                          // _getListNetCall();
+                          setState(() {
+                            // params.remove("beginTime");
+                            // params.remove("endTime");
+                            _calendaring = false;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
                 ),
-                bottomButton,
-              ],
-            ),
+          Expanded(
+            child: myListView,
           ),
-          // bottomSheet: bottomButton,
-          // bottomSheet: bottomButton,
-        ) // This trailing comma makes auto-formatting nicer for build methods.
-        );
+          // bottomButton,
+        ],
+      ),
+    );
+
+    return Scaffold(
+      appBar: NavBar,
+      body: bodyContiner,
+      bottomSheet: bottomButton,
+    );
   }
 }

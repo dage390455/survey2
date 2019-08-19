@@ -11,7 +11,6 @@ import MAMapKit
     AMapServices.shared().apiKey = "9ca1eb424c7ffcfe31888b98aa85ff48";
     AMapServices.shared().enableHTTPS = true
     
-    
     let flutterViewController = FlutterProjectListViewController.init(project: nil, nibName: nil, bundle: nil);
     if let flutterViewController = flutterViewController{
         flutterViewController.setModel(model: FLUTTER_PROJECT_LIST)//先设置页面，否则用到view会先进入viewDidLoad

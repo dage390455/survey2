@@ -70,6 +70,10 @@ void setIsEnglish(bool isEnglish) {
   }
 }
 
+int currentTimeMillis() {
+  return new DateTime.now().millisecondsSinceEpoch;
+}
+
 // public static let SELECTED_COLOR = UIColor.fromRGB(0x1DBB99); //原来29C093   替换为 1DBB99
 //     public static let TITLE_TEXT_COLOR = UIColor.fromRGB(0x252525);//原来为030303，统一替换为252525.
 //     public static let NORMAL_TEXT_COLOR = UIColor.fromRGB(0x252525);
