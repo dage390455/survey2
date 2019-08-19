@@ -11,19 +11,19 @@ class projectInfoModel {
       : this(
           json['projectName'],
           json['createTime'],
-          json['projectId'],
+          json['id'],
           json['remark'],
         );
 
   @override
   toString() {
-    return 'projectName:$projectName;createTime:$createTime;remark:$remark;projectId:${projectId.toString()}';
+    return 'projectName:$projectName;createTime:$createTime;remark:$remark;id:${projectId.toString()}';
   }
 
   Map<String, dynamic> toJson() => {
         'projectName': projectName,
         'createTime': createTime,
         'remark': remark,
-        'projectId': projectId,
+        'id': projectId,
       };
 }

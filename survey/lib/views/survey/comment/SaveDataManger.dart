@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -69,6 +71,28 @@ class SaveDataManger {
 
       SaveDataManger.saveHistory(history, historyKey);
     }
+  }
+
+  //修改已存储的内容，编辑模式
+  static replaceHistory(String tag, String historyKey, int id) async {
+    var history = await SaveDataManger.getHistory(historyKey);
+    for (String str in history) {
+      String str1 = str.replaceAll(';', ',');
+      Map<String, dynamic> map = json.decode(str1);
+      int id1 = map["id"].toInt();
+      //替换
+      if (id == id1) {
+        history.remove(str);
+        history.add(tag);
+        SaveDataManger.saveHistory(history, historyKey);
+      }
+    }
+
+    // if (!history.contains(tag)) {
+    //   history.add(tag);
+    //   SaveDataManger.saveHistory(history, historyKey);
+    // }
+  }
 
 //    var tagsString  = "";
 //
@@ -81,5 +105,5 @@ class SaveDataManger {
 //    }
 //
 //    prefs.setString(historyKey, tagsString);
-  }
+
 }
