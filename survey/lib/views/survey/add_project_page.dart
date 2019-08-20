@@ -32,13 +32,19 @@ class _AddProjectPageState extends State<AddProjectPage> {
 
   String name = "";
   String time = "";
+  int id = 0;
   String remark = "";
+  bool isEdit = false;
 
   @override
   void initState() {
     name = this.input.projectName;
     time = this.input.createTime;
+    id = this.input.projectId;
     super.initState();
+    if (name.length > 0 && id > 0) {
+      this.isEdit = true;
+    }
   }
 
   void saveInfoInLocal() {
@@ -48,11 +54,23 @@ class _AddProjectPageState extends State<AddProjectPage> {
         "${_dateTime.year}-${_dateTime.month}-${_dateTime.day} ${_dateTime.hour}:${_dateTime.minute}";
     input.createTime = datestr;
     input.projectName = this.name;
-    input.projectId = currentTimeMillis;
+    if (!isEdit) {
+      input.projectId = currentTimeMillis;
+    }
 
     String historyKey = 'projectList';
-    String json = input.toJson();
-    SaveDataManger.addHistory(json, historyKey);
+    Map<String, dynamic> map = input.toJson();
+    String jsonStr = json.encode(map);
+    jsonStr = jsonStr.replaceAll(',', ';');
+    if (isEdit) {
+      SaveDataManger.replaceHistory(
+        jsonStr,
+        historyKey,
+        input.projectId,
+      );
+    } else {
+      SaveDataManger.addHistory(jsonStr, historyKey);
+    }
   }
 
   @override

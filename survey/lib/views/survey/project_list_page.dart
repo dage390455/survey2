@@ -87,6 +87,8 @@ class _State extends State<Home1> {
   GlobalKey<RefreshHeaderState> _headerKey =
       new GlobalKey<RefreshHeaderState>();
 
+  projectInfoModel myModel = projectInfoModel("", "", 1, "");
+
   bool _loading = false;
   bool _loadMore = false;
   TimeOfDay _time = TimeOfDay.now();
@@ -106,10 +108,10 @@ class _State extends State<Home1> {
       if (!_focusNode.hasFocus) {}
     });
 
-    // this.loadLocalData();
+    loadLocalData();
 
     //测试用
-    this.initDetailList();
+    // this.initDetailList();
 
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
         //or set color with: Color(0xFF0000FF)
@@ -121,14 +123,17 @@ class _State extends State<Home1> {
     String hisoryKey = "projectList";
     List<String> tags = [];
     tags = await SaveDataManger.getHistory(hisoryKey);
-    dataList.clear();
-    for (int i = 0; i < tags.length; i++) {
-      String jsonStr = tags[i];
-      Map<String, dynamic> map = json.decode(jsonStr);
-      projectInfoModel model = projectInfoModel.fromJson(map);
-      dataList.add(model);
-    }
-    setState(() {});
+    setState(() {
+      dataList.clear();
+      for (int i = 0; i < tags.length; i++) {
+        String jsonStr = tags[i];
+        jsonStr = jsonStr.replaceAll(';', ',');
+
+        Map<String, dynamic> map = json.decode(jsonStr);
+        projectInfoModel model = projectInfoModel.fromJson(map);
+        dataList.add(model);
+      }
+    });
   }
 
   void initDetailList() {
@@ -206,12 +211,48 @@ class _State extends State<Home1> {
 
   @override
   Widget build(BuildContext context) {
+    void _gotoPoint() async {
+      // projectInfoModel model = projectInfoModel("", "", 1, "");
+      final result = await Navigator.push(
+        context,
+        new MaterialPageRoute(
+            builder: (context) => new PointListPage(input: myModel)),
+      );
+
+      if (result != null) {
+        String name = result as String;
+        if (name == "refreshList") {
+          loadLocalData();
+        }
+        // this.name = name;
+        setState(() {});
+      }
+    }
+
+    void _editProject(projectInfoModel model) async {
+      // projectInfoModel model = projectInfoModel("", "", 1, "");
+      final result = await Navigator.push(
+        context,
+        new MaterialPageRoute(
+            builder: (context) => new AddProjectPage(input: model)),
+      );
+
+      if (result != null) {
+        String name = result as String;
+        if (name == "refreshList") {
+          loadLocalData();
+        }
+        // this.name = name;
+        setState(() {});
+      }
+    }
+
     void _addProject() async {
       projectInfoModel model = projectInfoModel("", "", 1, "");
       final result = await Navigator.push(
         context,
         new MaterialPageRoute(
-            builder: (context) => new PointListPage(input: model)),
+            builder: (context) => new AddProjectPage(input: model)),
       );
 
       if (result != null) {
@@ -312,7 +353,7 @@ class _State extends State<Home1> {
     Widget myListView = new ListView.builder(
         physics: new AlwaysScrollableScrollPhysics()
             .applyTo(new BouncingScrollPhysics()), // 这个是用来控制能否在不�����屏的状态下滚动的属性
-        itemCount: dataList.length == 0 ? 5 : 3,
+        itemCount: dataList.length == 0 ? 5 : dataList.length,
         // separatorBuilder: (BuildContext context, int index) =>
         // Divider(height: 1.0, color: Colors.grey, indent: 20), // 添加分割线
         itemBuilder: (BuildContext context, int index) {
@@ -346,6 +387,9 @@ class _State extends State<Home1> {
           var name = model.projectName;
           var time = model.createTime;
 
+          projectInfoModel model1 = projectInfoModel("", "", 1, "");
+          this.myModel = model;
+
           if (!name.contains(searchStr) && searchStr.length > 0) {
             return emptyContainer;
           }
@@ -367,7 +411,7 @@ class _State extends State<Home1> {
                   ),
 
                   GestureDetector(
-                    onTap: _addProject,
+                    onTap: _gotoPoint,
                     child: Container(
                       color: Colors.white,
                       padding: const EdgeInsets.only(
@@ -412,13 +456,14 @@ class _State extends State<Home1> {
                                   textColor: Colors.white,
                                   child: new Text('编辑'),
                                   onPressed: () {
-                                    // _addProject();
-                                    Navigator.push(
-                                      context,
-                                      new MaterialPageRoute(
-                                          builder: (context) =>
-                                              new AddProjectPage(input: model)),
-                                    );
+                                    _editProject(model);
+
+                                    // Navigator.push(
+                                    //   context,
+                                    //   new MaterialPageRoute(
+                                    //       builder: (context) =>
+                                    //           new AddProjectPage(input: model)),
+                                    // );
                                   },
                                 ),
                                 new RaisedButton(
@@ -527,12 +572,13 @@ class _State extends State<Home1> {
                 fontWeight: FontWeight.normal,
                 fontSize: 20)),
         onPressed: () {
-          projectInfoModel model = projectInfoModel("", "", 0, "");
-          Navigator.push(
-            context,
-            new MaterialPageRoute(
-                builder: (context) => new AddProjectPage(input: model)),
-          );
+          _addProject();
+          // projectInfoModel model = projectInfoModel("", "", 0, "");
+          // Navigator.push(
+          //   context,
+          //   new MaterialPageRoute(
+          //       builder: (context) => new AddProjectPage(input: model)),
+          // );
         },
       ),
     );
