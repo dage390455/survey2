@@ -1,6 +1,7 @@
 package com.example.survey;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.WindowManager;
 
@@ -35,7 +36,11 @@ public class MainActivity extends FlutterActivity {
       channel.setMessageHandler(new BasicMessageChannel.MessageHandler() {
           @Override
           public void onMessage(Object o, BasicMessageChannel.Reply reply) {
-              sendMessageToFlutter();
+
+              Intent intent = new Intent(MainActivity.this,LocationEdtitActivtiy.class);
+              startActivity(intent);
+
+//              sendMessageToFlutter();
               reply.reply("我来自 " +" !! 使用的是 BasicMessageChannel 方式");
           }
       });
