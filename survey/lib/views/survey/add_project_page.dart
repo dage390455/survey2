@@ -13,6 +13,7 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 import 'package:sensoro_survey/views/survey/const.dart';
+import 'package:sensoro_survey/views/survey/editPage/edit_project_name_page.dart';
 import 'package:sensoro_survey/widgets/progressHud.dart';
 import 'package:sensoro_survey/model/project_info_model.dart';
 //import 'package:sensoro_survey/views/survey/editPage/edit_project_name_page.dart';
@@ -85,22 +86,22 @@ class _AddProjectPageState extends State<AddProjectPage> {
   @override
   Widget build(BuildContext context) {
     editName() async {
-//      final result = await Navigator.push(
-//        context,
-////        new MaterialPageRoute(
-////            builder: (context) => new EditProjectNamePage(
-////                  name: this.name,
-////                )),
-//      );
+      final result = await Navigator.push(
+        context,
+        new MaterialPageRoute(
+            builder: (context) => new EditProjectNamePage(
+                  name: this.name,
+                )),
+      );
 
-//      if (result != null) {
-//        String name = result as String;
-//
-//        // updateNextButton();
-//        setState(() {
-//          this.name = name;
-//        });
-//      }
+      if (result != null) {
+        String name = result as String;
+
+        // updateNextButton();
+        setState(() {
+          this.name = name;
+        });
+      }
     }
 
     Widget emptyContainer = Container(
