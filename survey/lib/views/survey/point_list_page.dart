@@ -16,6 +16,8 @@ import 'package:sensoro_survey/views/survey/const.dart';
 import 'package:sensoro_survey/widgets/progressHud.dart';
 import 'package:sensoro_survey/generated/easyRefresh/easy_refresh.dart';
 import 'package:sensoro_survey/model/project_info_model.dart';
+import 'package:sensoro_survey/views/survey/comment/SaveDataManger.dart';
+import 'package:sensoro_survey/views/survey/survey_type_page.dart';
 
 class PointListPage extends StatefulWidget {
   projectInfoModel input;
@@ -40,6 +42,7 @@ class _PointListPageState extends State<PointListPage> {
   int endTime = 0;
   FocusNode _focusNode = FocusNode();
   bool isFrist = true;
+  String searchStr = "";
 
   static bool isLeftSelect = true;
   static bool isRightSelect = false;
@@ -67,6 +70,7 @@ class _PointListPageState extends State<PointListPage> {
   //组件即将销毁时调用
   @override
   void dispose() {
+    dataList.clear();
     super.dispose();
   }
 
@@ -80,10 +84,51 @@ class _PointListPageState extends State<PointListPage> {
       if (!_focusNode.hasFocus) {}
     });
 
+    // loadLocalData();
+    // initDetailList();
+
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
         //or set color with: Color(0xFF0000FF)
         // statusBarColor: Colors.blue,
         ));
+  }
+
+  void loadLocalData() async {
+    String hisoryKey = "projectList";
+    List<String> tags = [];
+    tags = await SaveDataManger.getHistory(hisoryKey);
+    setState(() {
+      dataList.clear();
+      for (int i = 0; i < tags.length; i++) {
+        String jsonStr = tags[i];
+        jsonStr = jsonStr.replaceAll(';', ',');
+
+        Map<String, dynamic> map = json.decode(jsonStr);
+        projectInfoModel model = projectInfoModel.fromJson(map);
+        dataList.add(model);
+      }
+    });
+  }
+
+  void initDetailList() {
+    for (int index = 0; index < 1000; index++) {
+      var name = "测试设备 $index";
+      name = "FAGJKJVXOE63S";
+      if (index % 3 == 0) name = "项目1118888";
+      if (index % 3 == 1) name = "项目222";
+      if (index % 3 == 2) name = "项目333";
+
+      var des = "状态 $index ��常";
+      des = "11:04:12";
+      if (index == 1) des = "2019-07-03 10:54";
+      if (index == 2) des = "2019-07-06 15:24";
+      if (index == 3) des = "2019-07-22 02:14:09";
+
+      projectInfoModel model = projectInfoModel(name, des, index, "备注11");
+      dataList.add(model);
+      // var a = 'dd';
+      // a = cityDetailArrays[index].name;
+    }
   }
 
   void _onEvent(Object value) {
@@ -122,7 +167,12 @@ class _PointListPageState extends State<PointListPage> {
   // 错误处理
   void _onError(dynamic) {}
 
-  void _addProject() async {}
+  void _gotoSurveyType() {
+    Navigator.push(
+      context,
+      new MaterialPageRoute(builder: (context) => new SurveyTypePage()),
+    );
+  }
 
   _navBack() async {
     Map<String, dynamic> map = {
@@ -148,11 +198,10 @@ class _PointListPageState extends State<PointListPage> {
     );
 
     Widget searchbar = TextField(
-      //文本输入控件
-      // onSubmitted: (String str) {
-      //   //提交监听
-      //   print('用户提交变更');
-      // }
+      onChanged: (val) {
+        searchStr = val;
+        setState(() {});
+      },
       cursorWidth: 0,
       cursorColor: Colors.white,
       keyboardType: TextInputType.text, //设置输入框文本类型
@@ -247,7 +296,7 @@ class _PointListPageState extends State<PointListPage> {
                         fontWeight: FontWeight.normal,
                         fontSize: 20)),
                 onPressed: () {
-                  _addProject();
+                  _gotoSurveyType();
                 },
               ),
             ),
@@ -260,7 +309,7 @@ class _PointListPageState extends State<PointListPage> {
               height: 70,
               width: prefix0.screen_width,
               child: new Padding(
-                padding: new EdgeInsets.fromLTRB(20, 7, 20, 2),
+                padding: new EdgeInsets.fromLTRB(20, 5, 20, 2),
                 child: Row(
 
                     //Row 中mainAxisAlignment是水平的，Column中是垂直的
@@ -270,8 +319,8 @@ class _PointListPageState extends State<PointListPage> {
                     children: <Widget>[
                       new Column(children: <Widget>[
                         Container(
-                          height: 42,
-                          width: 42,
+                          height: 40,
+                          width: 40,
                           child: IconButton(
                             icon: isLeftSelect
                                 ? Image.asset("assets/images/网络铺设（选中）.png")
@@ -298,8 +347,8 @@ class _PointListPageState extends State<PointListPage> {
                       ]),
                       new Column(children: <Widget>[
                         Container(
-                          height: 42,
-                          width: 42,
+                          height: 40,
+                          width: 40,
                           child: IconButton(
                             icon: isRightSelect
                                 ? Image.asset("assets/images/终端安装（选中）.png")
@@ -332,12 +381,12 @@ class _PointListPageState extends State<PointListPage> {
     Widget myListView = new ListView.builder(
         physics: new AlwaysScrollableScrollPhysics()
             .applyTo(new BouncingScrollPhysics()), // 这个是用来控制能否在不满屏的状态下滚动的属性
-        itemCount: dataList.length == 0 ? 5 : 3,
+        itemCount: dataList.length == 0 ? 1 : dataList.length,
         // separatorBuilder: (BuildContext context, int index) =>
         // Divider(height: 1.0, color: Colors.grey, indent: 20), // 添加分割线
         itemBuilder: (BuildContext context, int index) {
           // print("rebuild index =$index");
-          if (dataList.length == 10) {
+          if (dataList.length == 0) {
             return new Container(
               padding: const EdgeInsets.only(
                   top: 150.0, bottom: 0, left: 0, right: 0),
@@ -348,7 +397,7 @@ class _PointListPageState extends State<PointListPage> {
                   height: 120,
                   // fit: BoxFit.fitWidth,
                 ),
-                Text("没找到任何已创建的项目，请添加新项目",
+                Text("没有已创建的勘查点，请创建勘查点",
                     textAlign: TextAlign.start,
                     style: TextStyle(
                         color: prefix0.LIGHT_TEXT_COLOR,
@@ -390,14 +439,14 @@ class _PointListPageState extends State<PointListPage> {
           // updatedTimeStr = updatedTimeStr.substring(0, 19);
           // print("updatedTimeStr = $updatedTimeStr");
 
+          var name = "勘查点11111";
+
+          if (!name.contains(searchStr) && searchStr.length > 0) {
+            return emptyContainer;
+          }
+
           return new Container(
             color: Colors.white,
-            // decoration: const BoxDecoration(
-            //   border: Border(
-            //  bottom:
-            //   ),
-            // ),
-            // height: 140, //高度不填会自适应
             padding:
                 const EdgeInsets.only(top: 0.0, bottom: 0, left: 0, right: 0),
             child: new Column(
@@ -436,7 +485,7 @@ class _PointListPageState extends State<PointListPage> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
                                 //这个位置用ListTile就会报错
-                                Text("批次号",
+                                Text(name,
                                     textAlign: TextAlign.start,
                                     style: TextStyle(
                                         color: prefix0.BLACK_TEXT_COLOR,

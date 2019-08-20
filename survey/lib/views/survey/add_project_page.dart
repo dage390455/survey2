@@ -50,8 +50,17 @@ class _AddProjectPageState extends State<AddProjectPage> {
   void saveInfoInLocal() {
     int currentTimeMillis = prefix0.currentTimeMillis();
     DateTime _dateTime = DateTime.now();
+    String monthStr =
+        _dateTime.month < 10 ? "0${_dateTime.month}" : "${_dateTime.month}";
+    String dayStr =
+        _dateTime.day < 10 ? "0${_dateTime.day}" : "${_dateTime.day}";
+    String hourStr =
+        _dateTime.hour < 10 ? "0${_dateTime.hour}" : "${_dateTime.hour}";
+    String minuteStr =
+        _dateTime.minute < 10 ? "0${_dateTime.minute}" : "${_dateTime.minute}";
+
     String datestr =
-        "${_dateTime.year}-${_dateTime.month}-${_dateTime.day} ${_dateTime.hour}:${_dateTime.minute}";
+        "${_dateTime.year}-${monthStr}-${dayStr} ${hourStr}:${minuteStr}";
     input.createTime = datestr;
     input.projectName = this.name;
     if (!isEdit) {
@@ -228,6 +237,7 @@ class _AddProjectPageState extends State<AddProjectPage> {
                     // searchStr = val;
                     // print('用户提交变更');
                   },
+
                   textAlign: TextAlign.start,
                   minLines: 1,
                   maxLines: 10,
@@ -239,7 +249,6 @@ class _AddProjectPageState extends State<AddProjectPage> {
                     border: InputBorder.none,
                     // border: new Border.all(color: LIGHT_TEXT_COLOR, width: 0.5),
                     hintText: "点击输入",
-
                     contentPadding: EdgeInsets.fromLTRB(
                         20.0, 20.0, 10.0, 10.0), //设置显示文本的一个内边距
 // //                border: InputBorder.none,//取消默认的下划线边框

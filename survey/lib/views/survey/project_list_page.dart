@@ -7,6 +7,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:flutter/material.dart';
 import 'package:event_bus/event_bus.dart';
@@ -70,6 +71,7 @@ class _State extends State<Home1> {
   FocusNode _focusNode = FocusNode();
   bool isFrist = true;
   String searchStr = "";
+  String btnStr = '新建项目';
 
   static Map<String, dynamic> headers = {};
   // 创建一个给native的channel (类似iOS的通知）
@@ -110,6 +112,9 @@ class _State extends State<Home1> {
 
     loadLocalData();
 
+    getData();
+    saveData();
+
     //测试用
     // this.initDetailList();
 
@@ -117,6 +122,22 @@ class _State extends State<Home1> {
         //or set color with: Color(0xFF0000FF)
         // statusBarColor: Colors.blue,
         ));
+  }
+
+  void saveData() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setInt('counter', 5);
+  }
+
+  void getData() async {
+    final prefs = await SharedPreferences.getInstance();
+    final counter = prefs.getInt('counter') ?? 0;
+    final counter1 = prefs.getInt('counter') ?? 0;
+    print("countet = $counter");
+    if (counter > 0) {
+      btnStr = "已有项目";
+      setState(() {});
+    }
   }
 
   void loadLocalData() async {
@@ -353,12 +374,12 @@ class _State extends State<Home1> {
     Widget myListView = new ListView.builder(
         physics: new AlwaysScrollableScrollPhysics()
             .applyTo(new BouncingScrollPhysics()), // 这个是用来控制能否在不�����屏的状态下滚动的属性
-        itemCount: dataList.length == 0 ? 5 : dataList.length,
+        itemCount: dataList.length == 0 ? 1 : dataList.length,
         // separatorBuilder: (BuildContext context, int index) =>
         // Divider(height: 1.0, color: Colors.grey, indent: 20), // 添加分割线
         itemBuilder: (BuildContext context, int index) {
           // print("rebuild index =$index");
-          if (dataList.length == 10) {
+          if (dataList.length == 0) {
             return new Container(
               padding: const EdgeInsets.only(
                   top: 150.0, bottom: 0, left: 0, right: 0),
@@ -369,7 +390,7 @@ class _State extends State<Home1> {
                   height: 120,
                   // fit: BoxFit.fitWidth,
                 ),
-                Text("没���到任何已创建的项目，请添加一个新项目",
+                Text("没有任何已创建的项目，请添加一个新项目",
                     textAlign: TextAlign.start,
                     style: TextStyle(
                         color: prefix0.LIGHT_TEXT_COLOR,
