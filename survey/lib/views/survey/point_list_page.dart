@@ -7,6 +7,8 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_custom_calendar/flutter_custom_calendar.dart';
+import 'package:flutter_custom_calendar/model/date_model.dart';
 
 import 'package:flutter/material.dart';
 import 'package:event_bus/event_bus.dart';
@@ -14,6 +16,7 @@ import 'package:flutter/services.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 import 'package:sensoro_survey/views/survey/const.dart';
 import 'package:sensoro_survey/widgets/progressHud.dart';
+import 'package:sensoro_survey/generated/customCalendar/multi_select_style_page.dart';
 import 'package:sensoro_survey/generated/easyRefresh/easy_refresh.dart';
 import 'package:sensoro_survey/model/project_info_model.dart';
 import 'package:sensoro_survey/views/survey/comment/SaveDataManger.dart';
@@ -43,9 +46,12 @@ class _PointListPageState extends State<PointListPage> {
   FocusNode _focusNode = FocusNode();
   bool isFrist = true;
   String searchStr = "";
+  TextEditingController searchController = TextEditingController();
+  String dateFilterStr = "";
+  List<String> dateFilterList = new List();
 
-  static bool isLeftSelect = true;
-  static bool isRightSelect = false;
+  static bool isLeftSelect = false;
+  static bool isRightSelect = true;
 
   static Map<String, dynamic> headers = {};
   // 创建一个给native的channel (类似iOS的通知）
@@ -183,6 +189,39 @@ class _PointListPageState extends State<PointListPage> {
   }
 
   _showCalendar() async {
+    //调用flutter日历控件
+    final result = await Navigator.push(
+      context,
+      new MaterialPageRoute(builder: (context) => new MultiSelectStylePage()),
+    );
+
+    if (result != null) {
+      if (result is Set) {
+        dateFilterList.clear();
+        for (DateModel model in result) {
+          int year = model.year;
+          int month = model.month;
+          int day = model.day;
+          String monthStr = month < 10 ? "0${month}" : "${month}";
+          String dayStr = day < 10 ? "0${day}" : "${day}";
+          String dateFilterStr = "${year}-${monthStr}-${dayStr}";
+          dateFilterList.add(dateFilterStr);
+          year = model.year;
+        }
+        if (dateFilterList.length == 1) {
+          dateFilterStr = dateFilterList[0];
+        }
+        if (dateFilterList.length == 2) {
+          dateFilterStr = "${dateFilterList[0]},${dateFilterList[1]}";
+        }
+        if (dateFilterList.length > 2) {
+          dateFilterStr = "${dateFilterList[0]},${dateFilterList[1]}等";
+        }
+        _calendaring = true;
+        setState(() {});
+      }
+    }
+    return;
     Map<String, dynamic> map = {
       "beginTime": beginTime > 10000 ? beginTime / 1000 : 0,
       "endTime": endTime > 10000 ? endTime / 1000 : 0,
@@ -202,6 +241,7 @@ class _PointListPageState extends State<PointListPage> {
         searchStr = val;
         setState(() {});
       },
+      controller: searchController,
       cursorWidth: 0,
       cursorColor: Colors.white,
       keyboardType: TextInputType.text, //设置输入框文本类型
@@ -225,8 +265,20 @@ class _PointListPageState extends State<PointListPage> {
           ),
         ),
 
+        suffixIcon: new IconButton(
+            icon: Image.asset(
+              "assets/images/close_black.png",
+              // height: 20,
+            ),
+            tooltip: '消除',
+            onPressed: () {
+              searchController.clear();
+              searchStr = "";
+              setState(() {});
+            }),
+
         contentPadding:
-            EdgeInsets.fromLTRB(20.0, 20.0, 10.0, 10.0), //设置显示文本的一个内边距
+            EdgeInsets.fromLTRB(3.0, 20.0, 3.0, 10.0), //设置显示文本的一个内边距
         // //                border: InputBorder.none,//取消默认的下划线边框
       ),
     );
@@ -247,6 +299,14 @@ class _PointListPageState extends State<PointListPage> {
         padding:
             const EdgeInsets.only(top: 0.0, bottom: 0, left: 20, right: 10),
         child: searchbar,
+        // Row(
+        //     //Row 中mainAxisAlignment是水平的，Column中是垂直的
+        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //     //表示所有的子控件都是从左到右��序排列，这是默认值
+        //     textDirection: TextDirection.ltr,
+        //     children: <Widget>[
+        //       searchbar,
+        //     ]),
       ),
       leading: IconButton(
         icon: Image.asset(
@@ -440,8 +500,23 @@ class _PointListPageState extends State<PointListPage> {
           // print("updatedTimeStr = $updatedTimeStr");
 
           var name = "勘查点11111";
+          var time = "2019-08-19";
 
           if (!name.contains(searchStr) && searchStr.length > 0) {
+            return emptyContainer;
+          }
+
+          bool flag = false;
+          if (dateFilterList.length > 0) {
+            for (String dateStr in dateFilterList) {
+              if (time.contains(dateStr)) {
+                flag = true;
+              }
+            }
+          } else {
+            flag = true;
+          }
+          if (!flag) {
             return emptyContainer;
           }
 
@@ -627,7 +702,8 @@ class _PointListPageState extends State<PointListPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           Text(
-                            "$beginTimeStr ~ $endTimeStr",
+                            // "$beginTimeStr ~ $endTimeStr",
+                            dateFilterStr.length > 0 ? dateFilterStr : "",
                             textAlign: TextAlign.start,
                             style: TextStyle(
                                 color: prefix0.BLACK_TEXT_COLOR,
@@ -640,18 +716,20 @@ class _PointListPageState extends State<PointListPage> {
                               color: Colors.black,
                             ),
                             onPressed: () {
-                              // dataList.clear();
-                              // _getListNetCall();
-                              setState(() {
-                                // params.remove("beginTime");
-                                // params.remove("endTime");
-                                _calendaring = false;
-                              });
+                              _calendaring = false;
+                              this.dateFilterList.clear();
+                              this.dateFilterStr = "";
+                              setState(() {});
                             },
                           ),
                         ],
                       ),
                     ),
+              //分割线
+              Container(
+                  width: prefix0.screen_width - 40,
+                  height: 1.0,
+                  color: FENGE_LINE_COLOR),
               Expanded(
                 child: myListView,
               ),

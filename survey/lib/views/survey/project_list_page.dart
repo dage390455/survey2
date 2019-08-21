@@ -8,6 +8,8 @@ import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_custom_calendar/flutter_custom_calendar.dart';
+import 'package:flutter_custom_calendar/model/date_model.dart';
 
 import 'package:flutter/material.dart';
 import 'package:event_bus/event_bus.dart';
@@ -18,6 +20,7 @@ import 'package:sensoro_survey/views/survey/const.dart';
 import 'package:sensoro_survey/views/survey/survey_point_information.dart';
 import 'package:sensoro_survey/widgets/progressHud.dart';
 import 'package:sensoro_survey/generated/easyRefresh/easy_refresh.dart';
+import 'package:sensoro_survey/generated/customCalendar/multi_select_style_page.dart';
 import 'package:sensoro_survey/views/survey/point_list_page.dart';
 import 'package:sensoro_survey/views/survey/add_project_page.dart';
 import 'package:sensoro_survey/model/project_info_model.dart';
@@ -70,8 +73,15 @@ class _State extends State<Home1> {
   int endTime = 0;
   FocusNode _focusNode = FocusNode();
   bool isFrist = true;
+  TextEditingController searchController = TextEditingController();
   String searchStr = "";
+  String dateFilterStr = "";
+  List<String> dateFilterList = new List();
   String btnStr = '新建项目';
+
+  CalendarController controller;
+  // String dateText = "${DateTime.now().year}年${DateTime.now().month}月";
+  // CalendarViewWidget({@required this.calendarController, this.boxDecoration});
 
   static Map<String, dynamic> headers = {};
   // 创建一个给native的channel (类似iOS的通知）
@@ -114,6 +124,20 @@ class _State extends State<Home1> {
 
     getData();
     saveData();
+
+    controller = new CalendarController();
+    controller.addMonthChangeListener(
+      (year, month) {
+        setState(() {
+          // dateText = "$year年$month月";
+        });
+      },
+    );
+
+    controller.addOnCalendarSelectListener((dateModel) {
+      //刷新选择的时间
+      setState(() {});
+    });
 
     //测试用
     // this.initDetailList();
@@ -223,6 +247,40 @@ class _State extends State<Home1> {
   }
 
   _showCalendar() async {
+    //调用flutter日历控件
+    final result = await Navigator.push(
+      context,
+      new MaterialPageRoute(builder: (context) => new MultiSelectStylePage()),
+    );
+
+    if (result != null) {
+      if (result is Set) {
+        dateFilterList.clear();
+        for (DateModel model in result) {
+          int year = model.year;
+          int month = model.month;
+          int day = model.day;
+          String monthStr = month < 10 ? "0${month}" : "${month}";
+          String dayStr = day < 10 ? "0${day}" : "${day}";
+          String dateFilterStr = "${year}-${monthStr}-${dayStr}";
+          dateFilterList.add(dateFilterStr);
+          year = model.year;
+        }
+        if (dateFilterList.length == 1) {
+          dateFilterStr = dateFilterList[0];
+        }
+        if (dateFilterList.length == 2) {
+          dateFilterStr = "${dateFilterList[0]},${dateFilterList[1]}";
+        }
+        if (dateFilterList.length > 2) {
+          dateFilterStr = "${dateFilterList[0]},${dateFilterList[1]}等";
+        }
+        _calendaring = true;
+        setState(() {});
+      }
+    }
+    return;
+    //调用IOS原生日历组件
     Map<String, dynamic> map = {
       "beginTime": beginTime > 10000 ? beginTime / 1000 : 0,
       "endTime": endTime > 10000 ? endTime / 1000 : 0,
@@ -302,6 +360,7 @@ class _State extends State<Home1> {
         searchStr = val;
         setState(() {});
       },
+      controller: searchController,
       cursorWidth: 0,
       cursorColor: Colors.white,
       keyboardType: TextInputType.text, //设置输入框文本类型
@@ -325,8 +384,20 @@ class _State extends State<Home1> {
           ),
         ),
 
+        suffixIcon: new IconButton(
+            icon: Image.asset(
+              "assets/images/close_black.png",
+              // height: 20,
+            ),
+            tooltip: '消除',
+            onPressed: () {
+              searchController.clear();
+              searchStr = "";
+              setState(() {});
+            }),
+
         contentPadding:
-            EdgeInsets.fromLTRB(20.0, 20.0, 10.0, 10.0), //设置显示文本的一个内边距
+            EdgeInsets.fromLTRB(3.0, 20.0, 3.0, 10.0), //设置显示文本的一个内边距
 // //                border: InputBorder.none,//取消默认的下划线边框
       ),
     );
@@ -408,6 +479,20 @@ class _State extends State<Home1> {
           var name = model.projectName;
           var time = model.createTime;
 
+          bool flag = false;
+          if (dateFilterList.length > 0) {
+            for (String dateStr in dateFilterList) {
+              if (time.contains(dateStr)) {
+                flag = true;
+              }
+            }
+          } else {
+            flag = true;
+          }
+          if (!flag) {
+            return emptyContainer;
+          }
+
           projectInfoModel model1 = projectInfoModel("", "", 1, "");
           this.myModel = model;
 
@@ -440,7 +525,7 @@ class _State extends State<Home1> {
                       child: Row(
                           //Row 中mainAxisAlignment是水平的，Column中是垂直的
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          //表示所有的子控件都是从左到右顺序排列，这是默认值
+                          //表示所有的子��件都是从左到��顺序排列，这是默认值
                           textDirection: TextDirection.ltr,
                           children: <Widget>[
                             //这行决定了左对齐
@@ -494,15 +579,9 @@ class _State extends State<Home1> {
                                   onPressed: () {
                                     Navigator.push(
                                       context,
-
                                       new MaterialPageRoute(
                                           builder: (context) =>
                                               new SurveyPointInformationPage()),
-//=======
-//                                    new MaterialPageRoute(
-//                                        builder: (context) =>
-//                                            new SummaryConstructionPage()),
-//>>>>>>> f6809553813ee7414472fb92cdee210d1128d705
                                     );
                                   },
                                 ),
@@ -624,7 +703,8 @@ class _State extends State<Home1> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Text(
-                        "$beginTimeStr ~ $endTimeStr",
+                        // "$beginTimeStr ~ $endTimeStr",
+                        dateFilterStr.length > 0 ? dateFilterStr : "",
                         textAlign: TextAlign.start,
                         style: TextStyle(
                             color: prefix0.BLACK_TEXT_COLOR,
@@ -637,18 +717,20 @@ class _State extends State<Home1> {
                           color: Colors.black,
                         ),
                         onPressed: () {
-                          // dataList.clear();
-                          // _getListNetCall();
-                          setState(() {
-                            // params.remove("beginTime");
-                            // params.remove("endTime");
-                            _calendaring = false;
-                          });
+                          _calendaring = false;
+                          this.dateFilterList.clear();
+                          this.dateFilterStr = "";
+                          setState(() {});
                         },
                       ),
                     ],
                   ),
                 ),
+          //分割线
+          Container(
+              width: prefix0.screen_width - 40,
+              height: 1.0,
+              color: FENGE_LINE_COLOR),
           Expanded(
             child: myListView,
           ),
