@@ -31,7 +31,7 @@ dependencies:
   flutter_markdown: ^0.2.0
   url_launcher: ^5.0.2
   # 本地存储、网络功能
-  shared_preferences: ^0.4.2
+  shared_preferences: ^0.4.3
   flutter_spinkit: "^3.1.0"
   dio: ^2.0.15
   dio_flutter_transformer: ^2.0.10 # latest version
