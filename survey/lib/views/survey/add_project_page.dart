@@ -18,6 +18,7 @@ import 'package:sensoro_survey/widgets/progressHud.dart';
 import 'package:sensoro_survey/model/project_info_model.dart';
 //import 'package:sensoro_survey/views/survey/editPage/edit_project_name_page.dart';
 import 'package:sensoro_survey/views/survey/comment/SaveDataManger.dart';
+import 'package:sensoro_survey/views/survey/comment/SqlSaveManager.dart';
 
 class AddProjectPage extends StatefulWidget {
   projectInfoModel input;
@@ -36,9 +37,13 @@ class _AddProjectPageState extends State<AddProjectPage> {
   int id = 0;
   String remark = "";
   bool isEdit = false;
+  BookSqlite bookSqlite = new BookSqlite();
+  var bookName = "完成";
 
   @override
   void initState() {
+    // insertData();
+
     name = this.input.projectName;
     time = this.input.createTime;
     id = this.input.projectId;
@@ -83,6 +88,27 @@ class _AddProjectPageState extends State<AddProjectPage> {
     }
   }
 
+  //启动先插入4条数据
+  void insertData() async {
+    await bookSqlite.openSqlite();
+    await bookSqlite.insert(new Book(0, "flutter大全0", "flutter", 0.1, "中国出版"));
+    await bookSqlite.insert(new Book(1, "flutter大全1", "flutter", 0.1, "中国出版"));
+    await bookSqlite.insert(new Book(2, "flutter大全2", "flutter", 0.1, "中国出版"));
+    await bookSqlite.insert(new Book(3, "flutter大全3", "flutter", 0.1, "中国出版"));
+    //切记用完就close
+    await bookSqlite.close();
+  }
+
+  //获取编号为1的书
+  void getBookName() async {
+    await bookSqlite.openSqlite();
+    Book book = await bookSqlite.getBook(1);
+    await bookSqlite.close();
+    setState(() {
+      bookName = book.name;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     editName() async {
@@ -116,20 +142,16 @@ class _AddProjectPageState extends State<AddProjectPage> {
       child: new MaterialButton(
         color: this.name.length > 0 ? prefix0.GREEN_COLOR : Colors.grey,
         textColor: Colors.white,
-        child: new Text('完成',
+        child: new Text(bookName,
             style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.normal,
                 fontSize: 20)),
         onPressed: () {
+          // getBookName;
           if (this.name.length > 0) {
             saveInfoInLocal();
             Navigator.of(context).pop("refreshList");
-            // Navigator.push(
-            //   context,
-            //   new MaterialPageRoute(
-            //       builder: (context) => new SurvayElectricalFirePage()),
-            // );
           }
         },
       ),

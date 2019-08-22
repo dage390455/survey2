@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/rendering.dart';
 import 'package:sensoro_survey/views/survey/const.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -150,7 +151,7 @@ void main() async {
   // runApp(new MyApp());
 
   print('进入了flutter');
-
+  SharedPreferences.setMockInitialValues({});
   //选择打开哪个页面
   runApp(_widgetForRoute(ui.window.defaultRouteName));
   // runApp(_widgetForRoute('myApp'));

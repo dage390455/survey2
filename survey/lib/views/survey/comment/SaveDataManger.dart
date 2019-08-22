@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -16,7 +17,7 @@ class SaveDataManger {
 
   Map<String, dynamic> testValues = <String, dynamic>{};
   static saveHistory(List<String> tags, String historyKey) async {
-//     SharedPreferences.setMockInitialValues({});
+    // SharedPreferences.setMockInitialValues({});
     // const MethodChannel('plugins.flutter.io/shared_preferences')
     //     .setMockMethodCallHandler((MethodCall methodCall) async {
     //   if (methodCall.method == 'getAll') {
@@ -46,6 +47,7 @@ class SaveDataManger {
   static Future<List<String>> getHistory(String historyKey) async {
     // SharedPreferences.setMockInitialValues({});
 
+    SharedPreferences.setMockInitialValues({});
     const MethodChannel('plugins.flutter.io/shared_preferences')
         .setMockMethodCallHandler((MethodCall methodCall) async {
       if (methodCall.method == 'getAll') {

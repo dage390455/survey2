@@ -26,6 +26,7 @@ import 'package:sensoro_survey/views/survey/add_project_page.dart';
 import 'package:sensoro_survey/model/project_info_model.dart';
 import 'package:sensoro_survey/views/survey/SurveyPointInformation/summary_construction_page.dart';
 import 'package:sensoro_survey/views/survey/comment/SaveDataManger.dart';
+import 'package:sensoro_survey/views/survey/comment/search_history.dart';
 
 class ProjectListPage extends StatefulWidget {
   _ProjectListPageState createState() => _ProjectListPageState();
@@ -39,6 +40,7 @@ class _ProjectListPageState extends State<ProjectListPage> {
 
   @override
   Widget build(BuildContext context) {
+    // initSearchHistory();
     //要使用路由，根控件就不能是MaterialApp，否则跳转都会无效，解决方法：将 MaterialApp 内容
     // 再使用 StatelessWeight 或 StatefulWeight 包裹一层
     return MaterialApp(
@@ -104,6 +106,32 @@ class _State extends State<Home1> {
   bool _loading = false;
   bool _loadMore = false;
   TimeOfDay _time = TimeOfDay.now();
+  SearchHistoryList searchHistoryList;
+
+  initSearchHistory() async {
+    var sp = await SpUtil.getInstance();
+    SharedPreferences.setMockInitialValues({});
+    String json = sp.getString(SharedPreferencesKeys.searchHistory);
+    print("json $json");
+    searchHistoryList = SearchHistoryList.fromJSON(json);
+    btnStr = json;
+
+    searchHistoryList.add(
+        SearchHistory(name: "targetName", targetRouter: '/category/error/404'));
+    setState(() {});
+  }
+
+  Future<String> get token async {
+    final sp = await SharedPreferences.getInstance();
+    var value = sp.get("token");
+    return sp.get("token") ?? "";
+  }
+
+  set token(value) {
+    SharedPreferences.getInstance().then((sp) {
+      sp.setString("token", value);
+    });
+  }
 
   @override
   void dispose() {
@@ -121,9 +149,10 @@ class _State extends State<Home1> {
     });
 
     loadLocalData();
-
     getData();
     saveData();
+    token = "aaa";
+    // initSearchHistory();
 
     controller = new CalendarController();
     controller.addMonthChangeListener(
@@ -286,6 +315,52 @@ class _State extends State<Home1> {
       "endTime": endTime > 10000 ? endTime / 1000 : 0,
     };
     await methodChannel.invokeMethod('showCalendar', map);
+  }
+
+  Widget _createDialog(
+      String _confirmContent, Function sureFunction, Function cancelFunction) {
+    return AlertDialog(
+      title: Text('Confirm'),
+      content: Text(_confirmContent),
+      actions: <Widget>[
+        FlatButton(onPressed: sureFunction, child: Text('确认')),
+        FlatButton(onPressed: cancelFunction, child: Text('删除')),
+      ],
+    );
+  }
+
+  _direction() async {
+    var _confirmContent;
+    var _alertDialog;
+    if (_direction == DismissDirection.endToStart) {
+      // 从右向左  也就是删除
+      _confirmContent = '确认删除 ？';
+      _alertDialog = _createDialog(
+        _confirmContent,
+        () {
+          // 展示 SnackBar
+          Scaffold.of(context).showSnackBar(SnackBar(
+            content: Text('确认删除 '),
+            duration: Duration(milliseconds: 400),
+          ));
+          Navigator.of(context).pop(true);
+        },
+        () {
+          // 展示 SnackBar
+          Scaffold.of(context).showSnackBar(SnackBar(
+            content: Text('不删除 '),
+            duration: Duration(milliseconds: 400),
+          ));
+          Navigator.of(context).pop(false);
+        },
+      );
+    }
+    var isDismiss = await showDialog(
+        context: context,
+        builder: (context) {
+          return _alertDialog;
+        });
+    return isDismiss;
   }
 
   @override
@@ -471,10 +546,6 @@ class _State extends State<Home1> {
             );
           }
 
-          // if (!(dataList[index - 1] is Map)) {
-          //   return emptyContainer;
-          // }
-
           projectInfoModel model = dataList[index];
           var name = model.projectName;
           var time = model.createTime;
@@ -492,8 +563,6 @@ class _State extends State<Home1> {
           if (!flag) {
             return emptyContainer;
           }
-
-          projectInfoModel model1 = projectInfoModel("", "", 1, "");
           this.myModel = model;
 
           if (!name.contains(searchStr) && searchStr.length > 0) {
@@ -506,7 +575,7 @@ class _State extends State<Home1> {
                 const EdgeInsets.only(top: 0.0, bottom: 0, left: 0, right: 0),
             child: new Column(
 
-                //这行决定了左对齐
+                //这行决定了�������对齐
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
@@ -563,13 +632,6 @@ class _State extends State<Home1> {
                                   child: new Text('编辑'),
                                   onPressed: () {
                                     _editProject(model);
-
-                                    // Navigator.push(
-                                    //   context,
-                                    //   new MaterialPageRoute(
-                                    //       builder: (context) =>
-                                    //           new AddProjectPage(input: model)),
-                                    // );
                                   },
                                 ),
                                 new RaisedButton(
@@ -585,11 +647,25 @@ class _State extends State<Home1> {
                                     );
                                   },
                                 ),
+                                new RaisedButton(
+                                  color: prefix0.LIGHT_TEXT_COLOR,
+                                  textColor: Colors.white,
+                                  child: new Text('入口'),
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      new MaterialPageRoute(
+                                          builder: (context) =>
+                                              new SurveyPointInformationPage()),
+                                    );
+                                  },
+                                ),
                               ],
                             ),
                           ]),
                     ),
                   ),
+
                   //分割线
                   Container(
                       width: prefix0.screen_width - 40,
@@ -666,7 +742,7 @@ class _State extends State<Home1> {
       child: new RaisedButton(
         color: prefix0.GREEN_COLOR,
         textColor: Colors.white,
-        child: new Text('新建项目',
+        child: new Text(this.btnStr,
             style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.normal,
