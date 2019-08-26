@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.survey">
+    package="com.sensoro.survey">
 
     <!--
          io.flutter.app.FlutterApplication is an android.app.Application that
@@ -28,14 +28,12 @@
         android:name="io.flutter.app.FlutterApplication"
         android:icon="@mipmap/ic_launcher"
         android:label="升哲稽查">
-        <meta-data
-            android:name="com.amap.api.v2.apikey"
-            android:value="223082ee8e171c2e60fe707d8bb48806" />
 
-        <service android:name="com.amap.api.location.APSService" />
+
+        <!--<service android:name="com.amap.api.location.APSService" />-->
 
         <activity
-            android:name=".MainActivity"
+            android:name="com.sensoro.survey.MainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
             android:launchMode="singleTop"
@@ -59,7 +57,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LocationEdtitActivtiy"
+        <activity android:name="com.sensoro.survey.LocationEdtitActivtiy"
             android:theme="@style/LaunchTheme"
             ></activity>
     </application>

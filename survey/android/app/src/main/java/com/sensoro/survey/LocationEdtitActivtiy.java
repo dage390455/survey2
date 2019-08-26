@@ -1,4 +1,4 @@
-package com.example.survey;
+package com.sensoro.survey;
 
 import android.app.Activity;
 import android.content.Context;
@@ -32,21 +32,17 @@ import com.amap.api.services.core.AMapException;
 import com.amap.api.services.core.LatLonPoint;
 import com.amap.api.services.core.PoiItem;
 import com.amap.api.services.core.SuggestionCity;
-import com.amap.api.services.geocoder.AoiItem;
-import com.amap.api.services.geocoder.BusinessArea;
 import com.amap.api.services.geocoder.GeocodeResult;
 import com.amap.api.services.geocoder.GeocodeSearch;
 import com.amap.api.services.geocoder.RegeocodeAddress;
 import com.amap.api.services.geocoder.RegeocodeQuery;
 import com.amap.api.services.geocoder.RegeocodeResult;
-import com.amap.api.services.geocoder.StreetNumber;
 import com.amap.api.services.poisearch.PoiResult;
 import com.amap.api.services.poisearch.PoiSearch;
 
 import java.util.List;
 
 import static com.tekartik.sqflite.Constant.TAG;
-import static java.security.AccessController.getContext;
 
 public class LocationEdtitActivtiy extends Activity implements AMap.OnMyLocationChangeListener, GeocodeSearch.OnGeocodeSearchListener, PoiSearch.OnPoiSearchListener{
     MapView mapView = null;
