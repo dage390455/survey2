@@ -16,12 +16,14 @@ import 'package:sensoro_survey/views/survey/const.dart';
 import 'package:sensoro_survey/views/survey/editPage/edit_project_name_page.dart';
 import 'package:sensoro_survey/widgets/progressHud.dart';
 import 'package:sensoro_survey/model/project_info_model.dart';
+
 //import 'package:sensoro_survey/views/survey/editPage/edit_project_name_page.dart';
 import 'package:sensoro_survey/views/survey/comment/SaveDataManger.dart';
 import 'package:sensoro_survey/views/survey/comment/SqlSaveManager.dart';
 
 class AddProjectPage extends StatefulWidget {
   projectInfoModel input;
+
   AddProjectPage({Key key, @required this.input}) : super(key: key);
 
   @override
@@ -30,6 +32,7 @@ class AddProjectPage extends StatefulWidget {
 
 class _AddProjectPageState extends State<AddProjectPage> {
   projectInfoModel input;
+
   _AddProjectPageState({this.input});
 
   String name = "";
@@ -199,14 +202,18 @@ class _AddProjectPageState extends State<AddProjectPage> {
                             color: prefix0.BLACK_TEXT_COLOR,
                             fontWeight: FontWeight.normal,
                             fontSize: 15)),
-                    Text(name.length > 0 ? name : "必填",
-                        textAlign: TextAlign.end,
-                        style: TextStyle(
-                            color: name.length > 0
-                                ? prefix0.BLACK_TEXT_COLOR
-                                : prefix0.LIGHT_TEXT_COLOR,
-                            fontWeight: FontWeight.normal,
-                            fontSize: 15)),
+
+                    Expanded(
+                        child: Text(name.length > 0 ? name : "必填",
+                            textAlign: TextAlign.end,
+                            overflow: TextOverflow.ellipsis,
+
+                            style: TextStyle(
+                                color: name.length > 0
+                                    ? prefix0.BLACK_TEXT_COLOR
+                                    : prefix0.LIGHT_TEXT_COLOR,
+                                fontWeight: FontWeight.normal,
+                                fontSize: 15))),
                     new Image(
                       image: new AssetImage("assets/images/right_arrar.png"),
                       width: 24,
