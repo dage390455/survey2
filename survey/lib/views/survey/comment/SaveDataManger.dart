@@ -15,6 +15,10 @@ class SaveDataManger {
   //   });
   // }
 
+  //shared_preferences 存在重启后清空的问题，考虑用自定义的methodChannel来实现userdefault存储
+  static const methodChannel =
+      const MethodChannel('com.pages.your/history_list');
+
   Map<String, dynamic> testValues = <String, dynamic>{};
   static saveHistory(List<String> tags, String historyKey) async {
     // SharedPreferences.setMockInitialValues({});
@@ -47,14 +51,14 @@ class SaveDataManger {
   static Future<List<String>> getHistory(String historyKey) async {
     // SharedPreferences.setMockInitialValues({});
 
-    SharedPreferences.setMockInitialValues({});
-    const MethodChannel('plugins.flutter.io/shared_preferences')
-        .setMockMethodCallHandler((MethodCall methodCall) async {
-      if (methodCall.method == 'getAll') {
-        return <String, dynamic>{}; // set initial values here if desired
-      }
-      return null;
-    });
+    // SharedPreferences.setMockInitialValues({});
+    // const MethodChannel('plugins.flutter.io/shared_preferences')
+    //     .setMockMethodCallHandler((MethodCall methodCall) async {
+    //   if (methodCall.method == 'getAll') {
+    //     return <String, dynamic>{}; // set initial values here if desired
+    //   }
+    //   return null;
+    // });
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
 

@@ -35,6 +35,19 @@
 		EE65BD5922FD8C5500C7C340 /* FlutterSplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE65BD4722FD8C5500C7C340 /* FlutterSplashViewController.swift */; };
 		EE65BD5A22FD8C5500C7C340 /* FlutterPageConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE65BD4822FD8C5500C7C340 /* FlutterPageConfig.swift */; };
 		EE65BD5B22FD8C5500C7C340 /* RootNavController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE65BD4922FD8C5500C7C340 /* RootNavController.swift */; };
+		EE843478230E407E0078082F /* DocumentManagerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE843477230E407E0078082F /* DocumentManagerViewController.m */; };
+		EE843491230E62BE0078082F /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = EE843482230E62BD0078082F /* README.txt */; };
+		EE843492230E62BE0078082F /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EE843484230E62BD0078082F /* libWeChatSDK.a */; };
+		EE843493230E62BE0078082F /* ShareSDKConnector.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE843486230E62BD0078082F /* ShareSDKConnector.framework */; };
+		EE843494230E62BE0078082F /* ShareSDK.bundle in Resources */ = {isa = PBXBuildFile; fileRef = EE843487230E62BD0078082F /* ShareSDK.bundle */; };
+		EE843495230E62BE0078082F /* ShareSDKUI.bundle in Resources */ = {isa = PBXBuildFile; fileRef = EE843489230E62BD0078082F /* ShareSDKUI.bundle */; };
+		EE843496230E62BE0078082F /* ShareSDKConfigFile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE84348A230E62BD0078082F /* ShareSDKConfigFile.framework */; };
+		EE843497230E62BE0078082F /* ShareSDKExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE84348B230E62BD0078082F /* ShareSDKExtension.framework */; };
+		EE843498230E62BE0078082F /* ShareSDKUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE84348C230E62BD0078082F /* ShareSDKUI.framework */; };
+		EE843499230E62BE0078082F /* ShareSDKConfigFile.bundle in Resources */ = {isa = PBXBuildFile; fileRef = EE84348D230E62BD0078082F /* ShareSDKConfigFile.bundle */; };
+		EE84349A230E62BE0078082F /* WechatConnector.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE84348F230E62BD0078082F /* WechatConnector.framework */; };
+		EE84349B230E62BE0078082F /* ShareSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE843490230E62BD0078082F /* ShareSDK.framework */; };
+		EE84349D230E62FA0078082F /* MOBFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE84349C230E62FA0078082F /* MOBFoundation.framework */; };
 		EE866CF92305003300F757D0 /* FlutterElectricInstallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE866CF82305003300F757D0 /* FlutterElectricInstallViewController.swift */; };
 		EE866CFB23052A1000F757D0 /* FlutterProjectListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE866CFA23052A1000F757D0 /* FlutterProjectListViewController.swift */; };
 		EE866CFD2306832500F757D0 /* FlutterPointListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE866CFC2306832500F757D0 /* FlutterPointListViewController.swift */; };
@@ -91,6 +104,23 @@
 		EE65BD4722FD8C5500C7C340 /* FlutterSplashViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlutterSplashViewController.swift; sourceTree = "<group>"; };
 		EE65BD4822FD8C5500C7C340 /* FlutterPageConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlutterPageConfig.swift; sourceTree = "<group>"; };
 		EE65BD4922FD8C5500C7C340 /* RootNavController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootNavController.swift; sourceTree = "<group>"; };
+		EE843476230E407E0078082F /* DocumentManagerViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DocumentManagerViewController.h; sourceTree = "<group>"; };
+		EE843477230E407E0078082F /* DocumentManagerViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DocumentManagerViewController.m; sourceTree = "<group>"; };
+		EE843480230E62BD0078082F /* WXApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApi.h; sourceTree = "<group>"; };
+		EE843481230E62BD0078082F /* WXApiObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApiObject.h; sourceTree = "<group>"; };
+		EE843482230E62BD0078082F /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
+		EE843483230E62BD0078082F /* WechatAuthSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WechatAuthSDK.h; sourceTree = "<group>"; };
+		EE843484230E62BD0078082F /* libWeChatSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libWeChatSDK.a; sourceTree = "<group>"; };
+		EE843486230E62BD0078082F /* ShareSDKConnector.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ShareSDKConnector.framework; sourceTree = "<group>"; };
+		EE843487230E62BD0078082F /* ShareSDK.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = ShareSDK.bundle; sourceTree = "<group>"; };
+		EE843489230E62BD0078082F /* ShareSDKUI.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = ShareSDKUI.bundle; sourceTree = "<group>"; };
+		EE84348A230E62BD0078082F /* ShareSDKConfigFile.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ShareSDKConfigFile.framework; sourceTree = "<group>"; };
+		EE84348B230E62BD0078082F /* ShareSDKExtension.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ShareSDKExtension.framework; sourceTree = "<group>"; };
+		EE84348C230E62BD0078082F /* ShareSDKUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ShareSDKUI.framework; sourceTree = "<group>"; };
+		EE84348D230E62BD0078082F /* ShareSDKConfigFile.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = ShareSDKConfigFile.bundle; sourceTree = "<group>"; };
+		EE84348F230E62BD0078082F /* WechatConnector.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = WechatConnector.framework; sourceTree = "<group>"; };
+		EE843490230E62BD0078082F /* ShareSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ShareSDK.framework; sourceTree = "<group>"; };
+		EE84349C230E62FA0078082F /* MOBFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MOBFoundation.framework; sourceTree = "<group>"; };
 		EE866CF82305003300F757D0 /* FlutterElectricInstallViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlutterElectricInstallViewController.swift; sourceTree = "<group>"; };
 		EE866CFA23052A1000F757D0 /* FlutterProjectListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlutterProjectListViewController.swift; sourceTree = "<group>"; };
 		EE866CFC2306832500F757D0 /* FlutterPointListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlutterPointListViewController.swift; sourceTree = "<group>"; };
@@ -104,8 +134,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				9705A1C61CF904A100538489 /* Flutter.framework in Frameworks */,
+				EE84349D230E62FA0078082F /* MOBFoundation.framework in Frameworks */,
+				EE843496230E62BE0078082F /* ShareSDKConfigFile.framework in Frameworks */,
 				3B80C3941E831B6300D905FE /* App.framework in Frameworks */,
+				EE843498230E62BE0078082F /* ShareSDKUI.framework in Frameworks */,
+				EE84349A230E62BE0078082F /* WechatConnector.framework in Frameworks */,
+				EE843493230E62BE0078082F /* ShareSDKConnector.framework in Frameworks */,
+				EE843497230E62BE0078082F /* ShareSDKExtension.framework in Frameworks */,
+				EE843492230E62BE0078082F /* libWeChatSDK.a in Frameworks */,
 				21C4CDF8D7AFC48F509E9EA3 /* Pods_Runner.framework in Frameworks */,
+				EE84349B230E62BE0078082F /* ShareSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -155,6 +193,7 @@
 		97C146F01CF9000F007C117D /* Runner */ = {
 			isa = PBXGroup;
 			children = (
+				EE84347C230E62BD0078082F /* ShareSDK */,
 				EA86FB632307D7C400ED8C17 /* MapView */,
 				97C146FA1CF9000F007C117D /* Main.storyboard */,
 				97C146FD1CF9000F007C117D /* Assets.xcassets */,
@@ -222,10 +261,82 @@
 				EE65BD4722FD8C5500C7C340 /* FlutterSplashViewController.swift */,
 				EE65BD4822FD8C5500C7C340 /* FlutterPageConfig.swift */,
 				EE866CF82305003300F757D0 /* FlutterElectricInstallViewController.swift */,
-				EE866CFA23052A1000F757D0 /* FlutterProjectListViewController.swift */,
 				EE866CFC2306832500F757D0 /* FlutterPointListViewController.swift */,
+				EE866CFA23052A1000F757D0 /* FlutterProjectListViewController.swift */,
+				EE843476230E407E0078082F /* DocumentManagerViewController.h */,
+				EE843477230E407E0078082F /* DocumentManagerViewController.m */,
 			);
 			path = FlutterInterface;
+			sourceTree = "<group>";
+		};
+		EE84347C230E62BD0078082F /* ShareSDK */ = {
+			isa = PBXGroup;
+			children = (
+				EE84349C230E62FA0078082F /* MOBFoundation.framework */,
+				EE84347D230E62BD0078082F /* Support */,
+				EE843490230E62BD0078082F /* ShareSDK.framework */,
+			);
+			path = ShareSDK;
+			sourceTree = "<group>";
+		};
+		EE84347D230E62BD0078082F /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				EE84347E230E62BD0078082F /* PlatformSDK */,
+				EE843485230E62BD0078082F /* Required */,
+				EE843488230E62BD0078082F /* Optional */,
+				EE84348E230E62BD0078082F /* PlatformConnector */,
+			);
+			path = Support;
+			sourceTree = "<group>";
+		};
+		EE84347E230E62BD0078082F /* PlatformSDK */ = {
+			isa = PBXGroup;
+			children = (
+				EE84347F230E62BD0078082F /* WeChatSDK */,
+			);
+			path = PlatformSDK;
+			sourceTree = "<group>";
+		};
+		EE84347F230E62BD0078082F /* WeChatSDK */ = {
+			isa = PBXGroup;
+			children = (
+				EE843480230E62BD0078082F /* WXApi.h */,
+				EE843481230E62BD0078082F /* WXApiObject.h */,
+				EE843482230E62BD0078082F /* README.txt */,
+				EE843483230E62BD0078082F /* WechatAuthSDK.h */,
+				EE843484230E62BD0078082F /* libWeChatSDK.a */,
+			);
+			path = WeChatSDK;
+			sourceTree = "<group>";
+		};
+		EE843485230E62BD0078082F /* Required */ = {
+			isa = PBXGroup;
+			children = (
+				EE843486230E62BD0078082F /* ShareSDKConnector.framework */,
+				EE843487230E62BD0078082F /* ShareSDK.bundle */,
+			);
+			path = Required;
+			sourceTree = "<group>";
+		};
+		EE843488230E62BD0078082F /* Optional */ = {
+			isa = PBXGroup;
+			children = (
+				EE843489230E62BD0078082F /* ShareSDKUI.bundle */,
+				EE84348A230E62BD0078082F /* ShareSDKConfigFile.framework */,
+				EE84348B230E62BD0078082F /* ShareSDKExtension.framework */,
+				EE84348C230E62BD0078082F /* ShareSDKUI.framework */,
+				EE84348D230E62BD0078082F /* ShareSDKConfigFile.bundle */,
+			);
+			path = Optional;
+			sourceTree = "<group>";
+		};
+		EE84348E230E62BD0078082F /* PlatformConnector */ = {
+			isa = PBXGroup;
+			children = (
+				EE84348F230E62BD0078082F /* WechatConnector.framework */,
+			);
+			path = PlatformConnector;
 			sourceTree = "<group>";
 		};
 		F33B5AB009DA9D04E22BB5D6 /* Pods */ = {
@@ -308,7 +419,11 @@
 				3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */,
 				EE65BD5022FD8C5500C7C340 /* iconfont.ttf in Resources */,
 				9740EEB41CF90195004384FC /* Debug.xcconfig in Resources */,
+				EE843494230E62BE0078082F /* ShareSDK.bundle in Resources */,
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
+				EE843491230E62BE0078082F /* README.txt in Resources */,
+				EE843495230E62BE0078082F /* ShareSDKUI.bundle in Resources */,
+				EE843499230E62BE0078082F /* ShareSDKConfigFile.bundle in Resources */,
 				97C146FC1CF9000F007C117D /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -466,6 +581,7 @@
 				EE65BD5622FD8C5500C7C340 /* FlutterTestViewController.swift in Sources */,
 				EE65BD5722FD8C5500C7C340 /* NetworkManager-Flutter.swift in Sources */,
 				EE866CFB23052A1000F757D0 /* FlutterProjectListViewController.swift in Sources */,
+				EE843478230E407E0078082F /* DocumentManagerViewController.m in Sources */,
 				EE65BD4F22FD8C5500C7C340 /* Utility.swift in Sources */,
 				EE65BD5822FD8C5500C7C340 /* FlutterBaseViewController.swift in Sources */,
 				EA86FB692307D7FB00ED8C17 /* MapCalloutView.swift in Sources */,
@@ -557,6 +673,10 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
+					"$(PROJECT_DIR)/Runner/ShareSDK/Support/Required",
+					"$(PROJECT_DIR)/Runner/ShareSDK/Support/Optional",
+					"$(PROJECT_DIR)/Runner/ShareSDK/Support/PlatformConnector",
+					"$(PROJECT_DIR)/Runner/ShareSDK",
 				);
 				INFOPLIST_FILE = Runner/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
@@ -564,9 +684,10 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
+					"$(PROJECT_DIR)/Runner/ShareSDK/Support/PlatformSDK/WeChatSDK",
 				);
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.sensoro.survey1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sensoro.survey;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
@@ -689,6 +810,10 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
+					"$(PROJECT_DIR)/Runner/ShareSDK/Support/Required",
+					"$(PROJECT_DIR)/Runner/ShareSDK/Support/Optional",
+					"$(PROJECT_DIR)/Runner/ShareSDK/Support/PlatformConnector",
+					"$(PROJECT_DIR)/Runner/ShareSDK",
 				);
 				INFOPLIST_FILE = Runner/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
@@ -696,9 +821,10 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
+					"$(PROJECT_DIR)/Runner/ShareSDK/Support/PlatformSDK/WeChatSDK",
 				);
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.sensoro.survey1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sensoro.survey;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -720,6 +846,10 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
+					"$(PROJECT_DIR)/Runner/ShareSDK/Support/Required",
+					"$(PROJECT_DIR)/Runner/ShareSDK/Support/Optional",
+					"$(PROJECT_DIR)/Runner/ShareSDK/Support/PlatformConnector",
+					"$(PROJECT_DIR)/Runner/ShareSDK",
 				);
 				INFOPLIST_FILE = Runner/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
@@ -727,9 +857,10 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
+					"$(PROJECT_DIR)/Runner/ShareSDK/Support/PlatformSDK/WeChatSDK",
 				);
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.sensoro.survey1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sensoro.survey;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;

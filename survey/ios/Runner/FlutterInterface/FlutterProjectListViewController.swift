@@ -12,7 +12,9 @@ import CityBase
 import UIComponents
 import Flutter
 
-class FlutterProjectListViewController: FlutterBaseViewController {
+
+var documentInteractoinController : UIDocumentInteractionController!
+class FlutterProjectListViewController: FlutterBaseViewController,UIDocumentInteractionControllerDelegate {
     
     var eventSink: FlutterEventSink?;
     var beginTime          : TimeInterval = 0.0
@@ -35,6 +37,13 @@ class FlutterProjectListViewController: FlutterBaseViewController {
         
         setMessageChannel(channelName:pageModel!.methodChannel);
         setEventChannel(channelName: pageModel!.eventChannel);
+        
+        //把数据发给flutter
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
+            self.loadLocalProjectList();
+        }
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(openFileAndSave), name: NSNotification.Name(rawValue:"flutter_open_file"), object: nil)
         // Do any additional setup after loading the view.
     }
     
@@ -56,6 +65,14 @@ class FlutterProjectListViewController: FlutterBaseViewController {
             return UIStatusBarStyle.default
         }
         return UIStatusBarStyle.default
+    }
+    
+    //读取本地flutter数据
+    func loadLocalProjectList() -> Void{
+        let userDefaults = UserDefaults.standard;
+        if let str = userDefaults.object(forKey: "projectListStr") {
+            self.mEventSink?(["name":"sendProjectList","projectListStr":str] )
+        }
     }
     
     func showCalendar() -> Void{
@@ -95,6 +112,48 @@ class FlutterProjectListViewController: FlutterBaseViewController {
         }
     }
     
+    @objc func openFileAndSave(nofi : Notification){
+        let urlstr = nofi.userInfo!["url"] as! NSString;
+        var url : NSURL? = NSURL(string: urlstr as String);
+        var data : Data?
+        do{
+            data = try Data(contentsOf: url as! URL);
+            if let newStr = String(data: data!, encoding: String.Encoding.utf8){
+                let str = newStr.replacingOccurrences(of: ",", with: ",");
+                //外部打开的文件做本地存储
+                let userDefaults = UserDefaults.standard;
+                userDefaults.set(str, forKey: "projectList")
+                //把数据发给flutter
+                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
+                    self.mEventSink?(["name":"sendProjectList","projectListStr":str] )
+                    //code
+                    print("1 秒后输出")
+                }
+                
+                
+                //写入userdefault
+            }
+        }catch{
+            return;
+        }
+    }
+    
+//    func openFileAndSave(url:NSURL) -> Void{
+    
+//        let dataFile:NSString = url.strin
+//
+//        NSString *dataFile = [NSString stringWithContentsOfURL:[NSURL URLWithString:filePath] encoding:NSUTF8StringEncoding error:nil];
+//        NSArray *dataarr = [dataFile componentsSeparatedByString:@";"];
+//        if(dataarr.count>0){
+//            NSString *str = dataarr[0];
+//            str = [str stringByReplacingOccurrencesOfString:@"," withString:@";"];
+//            [[NSUserDefaults standardUserDefaults] setObject:str forKey:@"histroySurveysiteProjectname"];
+//
+//        }
+        
+        
+//    }
+    
     
     //MARK: - flutter delegate
     //注册 messageChannel，用于接收flutter的数据
@@ -112,6 +171,17 @@ class FlutterProjectListViewController: FlutterBaseViewController {
                 }
                 self.showCalendar();
             }
+                
+            else if ("outputDocument" == call.method) {
+                if let arguments:NSDictionary = call.arguments as! NSDictionary{
+                    
+                    if  let json = arguments["json"] as? NSDictionary{
+                        let VC:DocumentManagerViewController = DocumentManagerViewController.init();
+                        VC.outputTxt( (json as NSDictionary) as! [AnyHashable : Any] );
+                    }
+                }
+//                self.showCalendar();
+            }
             else {
                 result(FlutterMethodNotImplemented);
             }
@@ -126,10 +196,49 @@ class FlutterProjectListViewController: FlutterBaseViewController {
             
         }
         
+        if str == "getList"{
+            
+        }
+        
         events("我来自native222")
         return nil
     }
     
+    
+    func openDocumentInteractionController(fileURL : URL) {
+        let url = Bundle.main.url(forResource: "SNSBack", withExtension: "png")
+        
+        documentInteractoinController = UIDocumentInteractionController.init(url: fileURL)
+        documentInteractoinController.delegate = self
+        let didShow : Bool = documentInteractoinController.presentOptionsMenu(from: self.view.bounds,
+                                                                              in: self.view,
+                                                                              animated: true)
+        
+        if didShow {
+            
+            print("SUCCESS")
+            
+        } else {
+            print("NO APPS")
+        }
+        
+    }
+    
+    public func documentInteractionControllerDidEndPreview(_ controller: UIDocumentInteractionController) {
+        
+    }
+    
+    public func documentInteractionControllerViewControllerForPreview(_ controller: UIDocumentInteractionController) -> UIViewController {
+        return self
+    }
+    
+    public func documentInteractionControllerViewForPreview(_ controller: UIDocumentInteractionController) -> UIView? {
+        return self.view
+    }
+    
+    public func documentInteractionControllerRectForPreview(_ controller: UIDocumentInteractionController) -> CGRect {
+        return self.view.frame
+    }
 }
 
 

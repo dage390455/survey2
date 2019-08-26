@@ -80,6 +80,7 @@ class _State extends State<Home1> {
   String dateFilterStr = "";
   List<String> dateFilterList = new List();
   String btnStr = '新建项目';
+  projectInfoModel selectModel = projectInfoModel("", "", 1, "");
 
   CalendarController controller;
   // String dateText = "${DateTime.now().year}年${DateTime.now().month}月";
@@ -100,8 +101,6 @@ class _State extends State<Home1> {
 
   GlobalKey<RefreshHeaderState> _headerKey =
       new GlobalKey<RefreshHeaderState>();
-
-  projectInfoModel myModel = projectInfoModel("", "", 1, "");
 
   bool _loading = false;
   bool _loadMore = false;
@@ -168,6 +167,9 @@ class _State extends State<Home1> {
       setState(() {});
     });
 
+    eventChannel
+        .receiveBroadcastStream("sendProjectList")
+        .listen(_onEvent, onError: _onError);
     //测试用
     // this.initDetailList();
 
@@ -259,6 +261,13 @@ class _State extends State<Home1> {
         });
       }
 
+      if (name == "sendProjectList") {
+        String projectListStr = dic["projectListStr"].toString();
+        Map<String, dynamic> map = json.decode(projectListStr);
+        projectInfoModel model = projectInfoModel.fromJson(map);
+        dataList.add(model);
+      }
+
       setState(() {});
       return;
     }
@@ -317,6 +326,15 @@ class _State extends State<Home1> {
     await methodChannel.invokeMethod('showCalendar', map);
   }
 
+//调用原生文件导出
+  _outputDocument() async {
+    Map<String, dynamic> json = selectModel.toJson();
+    Map<String, dynamic> map = {
+      "json": json,
+    };
+    await methodChannel.invokeMethod('outputDocument', map);
+  }
+
   Widget _createDialog(
       String _confirmContent, Function sureFunction, Function cancelFunction) {
     return AlertDialog(
@@ -370,7 +388,7 @@ class _State extends State<Home1> {
       final result = await Navigator.push(
         context,
         new MaterialPageRoute(
-            builder: (context) => new PointListPage(input: myModel)),
+            builder: (context) => new PointListPage(input: selectModel)),
       );
 
       if (result != null) {
@@ -563,7 +581,7 @@ class _State extends State<Home1> {
           if (!flag) {
             return emptyContainer;
           }
-          this.myModel = model;
+          this.selectModel = model;
 
           if (!name.contains(searchStr) && searchStr.length > 0) {
             return emptyContainer;
@@ -639,12 +657,7 @@ class _State extends State<Home1> {
                                   textColor: Colors.white,
                                   child: new Text('导出'),
                                   onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      new MaterialPageRoute(
-                                          builder: (context) =>
-                                              new SurveyPointInformationPage()),
-                                    );
+                                    _outputDocument();
                                   },
                                 ),
                                 new RaisedButton(
@@ -796,6 +809,7 @@ class _State extends State<Home1> {
                           _calendaring = false;
                           this.dateFilterList.clear();
                           this.dateFilterStr = "";
+                          loadLocalData();
                           setState(() {});
                         },
                       ),
