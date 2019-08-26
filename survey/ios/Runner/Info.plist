@@ -5,7 +5,7 @@
 	<key>Application CategoryPrivacy - Photo Library Usage Description</key>
 	<string>允许 City 访问相册中的图片，以便在部署和预警确认时选择相册中的图片</string>
 	<key>CFBundleDevelopmentRegion</key>
-	<string>en</string>
+	<string>cn</string>
 	<key>CFBundleDisplayName</key>
 	<string>升哲勘查</string>
 	<key>CFBundleExecutable</key>
@@ -20,8 +20,41 @@
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
 	<string>$(FLUTTER_BUILD_NAME)</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>wechat</string>
+		<string>weixin</string>
+		<string>baidumap</string>
+	</array>
+	<key>MOBAppSecret</key>
+	<string>03966e80c6ce1a956f97c53fff05be43</string>
+	<key>MOBAppKey</key>
+	<string>2337087078556</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>com.sensoro.survey</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>surveyt</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>weixin</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>wx10737ef55ada250d</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
@@ -53,5 +86,28 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>com.myapp.common-data</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>com.microsoft.powerpoint.ppt</string>
+				<string>public.item</string>
+				<string>com.microsoft.word.doc</string>
+				<string>com.adobe.pdf</string>
+				<string>com.microsoft.excel.xls</string>
+				<string>public.image</string>
+				<string>public.content</string>
+				<string>public.composite-content</string>
+				<string>public.archive</string>
+				<string>public.rtf</string>
+				<string>public.movie</string>
+				<string>public.text</string>
+				<string>public.data</string>
+			</array>
+		</dict>
+	</array>
 </dict>
 </plist>

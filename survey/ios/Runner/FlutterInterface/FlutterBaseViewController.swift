@@ -12,10 +12,8 @@ import Flutter
 import CityBase
 import Alamofire
 
-class FlutterBaseViewController: FlutterViewController,FlutterStreamHandler {
 
-    
-//    var items : [VideoSelectItemModel] = [];
+class FlutterBaseViewController: FlutterViewController,FlutterStreamHandler {
     
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -1,8 +1,9 @@
 import UIKit
 import Flutter
 import MAMapKit
+
 @UIApplicationMain
-@objc class AppDelegate: FlutterAppDelegate {
+@objc class AppDelegate: FlutterAppDelegate,UIDocumentInteractionControllerDelegate {
   override func application(
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?
@@ -45,6 +46,25 @@ import MAMapKit
     
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
+    
+    override func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
+        print(url.absoluteString)
+       
+        NotificationCenter.default.post(name: NSNotification.Name("flutter_open_file"), object: self, userInfo: ["url":url.absoluteString])
+        
+//        DocumentManagerViewController.openFileAndSave(url.absoluteString);
+        return true;
+        //file:///private/var/mobile/Containers/Data/Application/43D523A9-B4CC-4B79-819B-761666AD9413/Documents/Inbox/iOS%E9%9D%A2%E8%AF%95%E8%A6%81%E9%97%AE%E7%9A%84-1.txt
+        //打开文件，读取数据
+
+        let documentVC = UIDocumentInteractionController(url: url)
+        documentVC.delegate = self
+//        documentVC.presentOpenInMenu(from: CGRect.zero, in: (topVC?.view)!, animated: true)
+        return true
+    }
+    
+    
+ 
   
 }
 
