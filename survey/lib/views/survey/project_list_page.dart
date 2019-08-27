@@ -26,8 +26,7 @@ import 'package:sensoro_survey/views/survey/point_list_page.dart';
 import 'package:sensoro_survey/views/survey/add_project_page.dart';
 import 'package:sensoro_survey/model/project_info_model.dart';
 import 'package:sensoro_survey/views/survey/SurveyPointInformation/summary_construction_page.dart';
-import 'package:sensoro_survey/views/survey/comment/SaveDataManger.dart';
-import 'package:sensoro_survey/views/survey/comment/search_history.dart';
+import 'package:sensoro_survey/views/survey/comment/save_data_manager.dart';
 
 class ProjectListPage extends StatefulWidget {
   _ProjectListPageState createState() => _ProjectListPageState();
@@ -41,7 +40,6 @@ class _ProjectListPageState extends State<ProjectListPage> {
 
   @override
   Widget build(BuildContext context) {
-    // initSearchHistory();
     //要使用路由，根控件就不能是MaterialApp，否则跳转都会无效，解决方法：将 MaterialApp 内容
     // 再使用 StatelessWeight 或 StatefulWeight 包裹一层
     return MaterialApp(
@@ -106,20 +104,6 @@ class _State extends State<Home1> {
   bool _loading = false;
   bool _loadMore = false;
   TimeOfDay _time = TimeOfDay.now();
-  SearchHistoryList searchHistoryList;
-
-  initSearchHistory() async {
-    var sp = await SpUtil.getInstance();
-    SharedPreferences.setMockInitialValues({});
-    String json = sp.getString(SharedPreferencesKeys.searchHistory);
-    print("json $json");
-    searchHistoryList = SearchHistoryList.fromJSON(json);
-    btnStr = json;
-
-    searchHistoryList.add(
-        SearchHistory(name: "targetName", targetRouter: '/category/error/404'));
-    setState(() {});
-  }
 
   Future<String> get token async {
     final sp = await SharedPreferences.getInstance();
@@ -162,7 +146,6 @@ class _State extends State<Home1> {
     getData();
     saveData();
     token = "aaa";
-    // initSearchHistory();
 
     controller = new CalendarController();
     controller.addMonthChangeListener(
@@ -214,8 +197,10 @@ class _State extends State<Home1> {
       dataList.clear();
       for (int i = 0; i < tags.length; i++) {
         String jsonStr = tags[i];
+        if (jsonStr == null || jsonStr.length < 3) {
+          continue;
+        }
         String jsonStr1 = jsonStr.replaceAll(';', ',');
-
         Map<String, dynamic> map = json.decode(jsonStr1);
         projectInfoModel model = projectInfoModel.fromJson(map);
         dataList.add(model);
@@ -282,6 +267,9 @@ class _State extends State<Home1> {
         for (int i = 0; i < list.length; i++) {
           String str = list[i];
           if (str.length > 0) {
+            if (str == null || str.length < 3) {
+              continue;
+            }
             String str1 = str.replaceAll(';', ',');
             Map<String, dynamic> map = json.decode(str1);
             projectInfoModel model = projectInfoModel.fromJson(map);
