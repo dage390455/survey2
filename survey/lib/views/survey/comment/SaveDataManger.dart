@@ -99,6 +99,9 @@ class SaveDataManger {
     var history = await SaveDataManger.getHistory(historyKey);
     for (String str in history) {
       String str1 = str.replaceAll(';', ',');
+      if (str1.length < 10) {
+        continue;
+      }
       Map<String, dynamic> map = json.decode(str1);
       int id1 = map["id"].toInt();
       //替换
