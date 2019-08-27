@@ -19,7 +19,6 @@ import 'package:sensoro_survey/model/project_info_model.dart';
 
 //import 'package:sensoro_survey/views/survey/editPage/edit_project_name_page.dart';
 import 'package:sensoro_survey/views/survey/comment/SaveDataManger.dart';
-import 'package:sensoro_survey/views/survey/comment/SqlSaveManager.dart';
 
 class AddProjectPage extends StatefulWidget {
   projectInfoModel input;
@@ -40,7 +39,7 @@ class _AddProjectPageState extends State<AddProjectPage> {
   int id = 0;
   String remark = "";
   bool isEdit = false;
-  BookSqlite bookSqlite = new BookSqlite();
+
   var bookName = "完成";
 
   @override
@@ -89,27 +88,6 @@ class _AddProjectPageState extends State<AddProjectPage> {
     } else {
       SaveDataManger.addHistory(jsonStr, historyKey);
     }
-  }
-
-  //启动先插入4条数据
-  void insertData() async {
-    await bookSqlite.openSqlite();
-    await bookSqlite.insert(new Book(0, "flutter大全0", "flutter", 0.1, "中国出版"));
-    await bookSqlite.insert(new Book(1, "flutter大全1", "flutter", 0.1, "中国出版"));
-    await bookSqlite.insert(new Book(2, "flutter大全2", "flutter", 0.1, "中国出版"));
-    await bookSqlite.insert(new Book(3, "flutter大全3", "flutter", 0.1, "中国出版"));
-    //切记用完就close
-    await bookSqlite.close();
-  }
-
-  //获取编号为1的书
-  void getBookName() async {
-    await bookSqlite.openSqlite();
-    Book book = await bookSqlite.getBook(1);
-    await bookSqlite.close();
-    setState(() {
-      bookName = book.name;
-    });
   }
 
   @override
@@ -207,7 +185,6 @@ class _AddProjectPageState extends State<AddProjectPage> {
                         child: Text(name.length > 0 ? name : "必填",
                             textAlign: TextAlign.end,
                             overflow: TextOverflow.ellipsis,
-
                             style: TextStyle(
                                 color: name.length > 0
                                     ? prefix0.BLACK_TEXT_COLOR

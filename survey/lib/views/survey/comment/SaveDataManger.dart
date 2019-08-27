@@ -17,7 +17,10 @@ class SaveDataManger {
 
   //shared_preferences 存在重启后清空的问题，考虑用自定义的methodChannel来实现userdefault存储
   static const methodChannel =
-      const MethodChannel('com.pages.your/history_list');
+      const MethodChannel('com.pages.your/project_list');
+
+  static const EventChannel eventChannel =
+      const EventChannel("App/Event/Channel", const StandardMethodCodec());
 
   Map<String, dynamic> testValues = <String, dynamic>{};
   static saveHistory(List<String> tags, String historyKey) async {
@@ -45,6 +48,13 @@ class SaveDataManger {
 
     var f = await prefs.setString(historyKey, tagsString);
 
+    //用自定义methodChannel保存本地化数据，不是shared_preferences
+    Map<String, dynamic> map = {
+      "value": tagsString,
+      "key": historyKey,
+    };
+    await methodChannel.invokeMethod('saveHistoryList', map);
+
     print("---------------" + f.toString());
   }
 
@@ -59,6 +69,11 @@ class SaveDataManger {
     //   }
     //   return null;
     // });
+
+    //从原生userdefault拉取数据
+    // eventChannel
+    //     .receiveBroadcastStream("sendProjectList")
+    //     .listen(_onEvent, onError: _onError);
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
@@ -99,6 +114,20 @@ class SaveDataManger {
     //   SaveDataManger.saveHistory(history, historyKey);
     // }
   }
+
+  void _onEvent(Object value) {
+    if (value is Map) {
+      Map dic = value;
+      var name = dic["name"];
+
+      if (name == "showCalendar") {}
+
+      return;
+    }
+  }
+
+  // 错误处理
+  void _onError(dynamic) {}
 
 //    var tagsString  = "";
 //

@@ -17,8 +17,8 @@ import MAMapKit
         flutterViewController.setModel(model: FLUTTER_PROJECT_LIST)//先设置页面，否则用到view会先进入viewDidLoad
         flutterViewController.splashScreenView =  FlutterSplashViewController().view
         flutterViewController.view.frame = UIScreen.main.bounds;
-        let navigationC=RootNavController(rootViewController: flutterViewController)
-        self.window?.rootViewController=navigationC
+        let navigationC = RootNavController(rootViewController: flutterViewController)
+        self.window?.rootViewController = navigationC
         
         //暂时写这里  后面整合到管理类
         let bascChanal = FlutterBasicMessageChannel(name: "BasicMessageChannelPlugin", binaryMessenger: flutterViewController, codec: FlutterStringCodec.init());
@@ -38,10 +38,6 @@ import MAMapKit
             
         }
     }
-    
-   
-   
-    let VC=FlutterTestViewController()
     
     
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)

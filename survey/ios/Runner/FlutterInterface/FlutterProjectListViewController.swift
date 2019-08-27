@@ -38,10 +38,13 @@ class FlutterProjectListViewController: FlutterBaseViewController,UIDocumentInte
         setMessageChannel(channelName:pageModel!.methodChannel);
         setEventChannel(channelName: pageModel!.eventChannel);
         
+//         let userDefaults = UserDefaults.standard;
+//        userDefaults.removeObject(forKey: "projectList");
+        
         //把数据发给flutter
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
-            self.loadLocalProjectList();
-        }
+//        DispatchQueue.global().asyncAfter(deadline: DispatchTime.now() + 2)  {
+//            self.loadLocalProjectList();
+//        }
         
         NotificationCenter.default.addObserver(self, selector: #selector(openFileAndSave), name: NSNotification.Name(rawValue:"flutter_open_file"), object: nil)
         // Do any additional setup after loading the view.
@@ -67,10 +70,14 @@ class FlutterProjectListViewController: FlutterBaseViewController,UIDocumentInte
         return UIStatusBarStyle.default
     }
     
-    //读取本地flutter数据
+    //读取本地flutter数据 ，并发送给flutter
     func loadLocalProjectList() -> Void{
         let userDefaults = UserDefaults.standard;
-        if let str = userDefaults.object(forKey: "projectListStr") {
+//        for(key in userDefaults){
+//
+//        }
+//        let str = userDefaults.object(forKey: "projectList") ;
+        if let str = userDefaults.object(forKey: "projectList") {
             self.mEventSink?(["name":"sendProjectList","projectListStr":str] )
         }
     }
@@ -118,18 +125,24 @@ class FlutterProjectListViewController: FlutterBaseViewController,UIDocumentInte
         var data : Data?
         do{
             data = try Data(contentsOf: url as! URL);
-            if let newStr = String(data: data!, encoding: String.Encoding.utf8){
-                let str = newStr.replacingOccurrences(of: ",", with: ",");
-                //外部打开的文件做本地存储
-                let userDefaults = UserDefaults.standard;
-                userDefaults.set(str, forKey: "projectList")
+            let userDefaults = UserDefaults.standard;
+            if let txtStr = String(data: data!, encoding: String.Encoding.utf8){
+                let str = txtStr.replacingOccurrences(of: ",", with: ";");
+                var newStr:String?=str;
+                if let str1 = userDefaults.object(forKey: "projectList") as? String{
+                    //外部打开的文件做本地存储
+                    if(str1.count>0){
+                        newStr  = str1+","+str;
+                    }
+                }
+                
+                userDefaults.set(newStr, forKey: "projectList")
                 //把数据发给flutter
                 DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
                     self.mEventSink?(["name":"sendProjectList","projectListStr":str] )
                     //code
                     print("1 秒后输出")
                 }
-                
                 
                 //写入userdefault
             }
@@ -182,6 +195,16 @@ class FlutterProjectListViewController: FlutterBaseViewController,UIDocumentInte
                 }
 //                self.showCalendar();
             }
+            else if ("saveHistoryList" == call.method) {
+                if let arguments:NSDictionary = call.arguments as! NSDictionary{
+                    
+                    if  let str = arguments["value"] as? NSString,let key = arguments["key"] as? NSString{
+                        let userDefaults = UserDefaults.standard;
+                        userDefaults.set(str, forKey: key as String);
+
+                    }
+                }
+            }
             else {
                 result(FlutterMethodNotImplemented);
             }
@@ -196,8 +219,8 @@ class FlutterProjectListViewController: FlutterBaseViewController,UIDocumentInte
             
         }
         
-        if str == "getList"{
-            
+        if str == "sendProjectList"{
+            self.loadLocalProjectList();
         }
         
         events("我来自native222")
