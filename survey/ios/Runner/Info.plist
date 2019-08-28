@@ -78,15 +78,12 @@
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-<<<<<<< Updated upstream
-=======
 	<key>MOBAppKey</key>
 	<string>2337087078556</string>
 	<key>MOBAppSecret</key>
 	<string>03966e80c6ce1a956f97c53fff05be43</string>
 	<key>NSCameraUsageDescription</key>
 	<string>用于识别设备的二维码来快速获取设备信息，或在部署设备和确认报警情况时，拍摄相关图片</string>
->>>>>>> Stashed changes
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>在部署设备时，用来当前位置部署设备，或在巡检时，获取当前位置周边的设备</string>
 	<key>NSLocationAlwaysUsageDescription</key>
@@ -110,7 +107,7 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-<<<<<<< Updated upstream
+ 
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
@@ -145,7 +142,6 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
-=======
->>>>>>> Stashed changes
+ 
 </dict>
 </plist>
