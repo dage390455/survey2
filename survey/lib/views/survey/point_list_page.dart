@@ -19,7 +19,7 @@ import 'package:sensoro_survey/widgets/progressHud.dart';
 import 'package:sensoro_survey/generated/customCalendar/multi_select_style_page.dart';
 import 'package:sensoro_survey/generated/easyRefresh/easy_refresh.dart';
 import 'package:sensoro_survey/model/project_info_model.dart';
-import 'package:sensoro_survey/views/survey/comment/SaveDataManger.dart';
+import 'package:sensoro_survey/views/survey/comment/save_data_manager.dart';
 import 'package:sensoro_survey/views/survey/survey_type_page.dart';
 
 class PointListPage extends StatefulWidget {
@@ -108,7 +108,9 @@ class _PointListPageState extends State<PointListPage> {
       for (int i = 0; i < tags.length; i++) {
         String jsonStr = tags[i];
         jsonStr = jsonStr.replaceAll(';', ',');
-
+        if (jsonStr == null || jsonStr.length < 3) {
+          continue;
+        }
         Map<String, dynamic> map = json.decode(jsonStr);
         projectInfoModel model = projectInfoModel.fromJson(map);
         dataList.add(model);

@@ -10,6 +10,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_custom_calendar/flutter_custom_calendar.dart';
 import 'package:flutter_custom_calendar/model/date_model.dart';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:event_bus/event_bus.dart';
@@ -25,8 +26,7 @@ import 'package:sensoro_survey/views/survey/point_list_page.dart';
 import 'package:sensoro_survey/views/survey/add_project_page.dart';
 import 'package:sensoro_survey/model/project_info_model.dart';
 import 'package:sensoro_survey/views/survey/SurveyPointInformation/summary_construction_page.dart';
-import 'package:sensoro_survey/views/survey/comment/SaveDataManger.dart';
-import 'package:sensoro_survey/views/survey/comment/search_history.dart';
+import 'package:sensoro_survey/views/survey/comment/save_data_manager.dart';
 
 class ProjectListPage extends StatefulWidget {
   _ProjectListPageState createState() => _ProjectListPageState();
@@ -40,7 +40,6 @@ class _ProjectListPageState extends State<ProjectListPage> {
 
   @override
   Widget build(BuildContext context) {
-    // initSearchHistory();
     //要使用路由，根控件就不能是MaterialApp，否则跳转都会无效，解决方法：将 MaterialApp 内容
     // 再使用 StatelessWeight 或 StatefulWeight 包裹一层
     return MaterialApp(
@@ -105,20 +104,6 @@ class _State extends State<Home1> {
   bool _loading = false;
   bool _loadMore = false;
   TimeOfDay _time = TimeOfDay.now();
-  SearchHistoryList searchHistoryList;
-
-  initSearchHistory() async {
-    var sp = await SpUtil.getInstance();
-    SharedPreferences.setMockInitialValues({});
-    String json = sp.getString(SharedPreferencesKeys.searchHistory);
-    print("json $json");
-    searchHistoryList = SearchHistoryList.fromJSON(json);
-    btnStr = json;
-
-    searchHistoryList.add(
-        SearchHistory(name: "targetName", targetRouter: '/category/error/404'));
-    setState(() {});
-  }
 
   Future<String> get token async {
     final sp = await SharedPreferences.getInstance();
@@ -147,11 +132,20 @@ class _State extends State<Home1> {
       if (!_focusNode.hasFocus) {}
     });
 
+    //延时调用，重新获取window.physicalSize,因为release模式，不同机型有可能先显示页面后获取window.physicalSize
+    _changeTimer = new Timer(Duration(milliseconds: 300), () {
+      screen_height = window.physicalSize.height;
+      screen_width = window.physicalSize.width;
+      prefix0.screen_height = window.physicalSize.height;
+      prefix0.screen_width = window.physicalSize.width;
+      setState(() {});
+      // setState(() {});
+    });
+
     loadLocalData();
     getData();
     saveData();
     token = "aaa";
-    // initSearchHistory();
 
     controller = new CalendarController();
     controller.addMonthChangeListener(
@@ -167,6 +161,9 @@ class _State extends State<Home1> {
       setState(() {});
     });
 
+    eventChannel
+        .receiveBroadcastStream("sendHistory")
+        .listen(_onEvent, onError: _onError);
     eventChannel
         .receiveBroadcastStream("sendProjectList")
         .listen(_onEvent, onError: _onError);
@@ -203,9 +200,11 @@ class _State extends State<Home1> {
       dataList.clear();
       for (int i = 0; i < tags.length; i++) {
         String jsonStr = tags[i];
-        jsonStr = jsonStr.replaceAll(';', ',');
-
-        Map<String, dynamic> map = json.decode(jsonStr);
+        if (jsonStr == null || jsonStr.length < 3) {
+          continue;
+        }
+        String jsonStr1 = jsonStr.replaceAll(';', ',');
+        Map<String, dynamic> map = json.decode(jsonStr1);
         projectInfoModel model = projectInfoModel.fromJson(map);
         dataList.add(model);
       }
@@ -261,11 +260,38 @@ class _State extends State<Home1> {
         });
       }
 
+      if (name == "sendHistory") {
+        //把history历史写入share_preference
+        Map dic = value;
+        Map historyDic = dic["value"];
+
+        for (String key in historyDic.keys) {
+          String value = historyDic[key];
+          SaveDataManger.addHistory(value, key);
+        }
+      }
+
       if (name == "sendProjectList") {
         String projectListStr = dic["projectListStr"].toString();
-        Map<String, dynamic> map = json.decode(projectListStr);
-        projectInfoModel model = projectInfoModel.fromJson(map);
-        dataList.add(model);
+        List<String> list = projectListStr.split(',');
+        String historyKey = 'projectList';
+        String historyStr = '';
+        for (int i = 0; i < list.length; i++) {
+          String str = list[i];
+          if (str.length > 0) {
+            if (str == null || str.length < 3) {
+              continue;
+            }
+            String str1 = str.replaceAll(';', ',');
+            Map<String, dynamic> map = json.decode(str1);
+            projectInfoModel model = projectInfoModel.fromJson(map);
+            dataList.add(model);
+            //把native发来的数据发给share_preferences保存下来
+            //原来过来的数据存储share_preference
+            historyStr = historyStr + ',' + str;
+          }
+        }
+        SaveDataManger.addHistory(historyStr, historyKey);
       }
 
       setState(() {});
@@ -326,7 +352,7 @@ class _State extends State<Home1> {
     await methodChannel.invokeMethod('showCalendar', map);
   }
 
-//调用原生文件导出
+  //调用原生文件导出
   _outputDocument() async {
     Map<String, dynamic> json = selectModel.toJson();
     Map<String, dynamic> map = {
@@ -490,7 +516,7 @@ class _State extends State<Home1> {
             }),
 
         contentPadding:
-            EdgeInsets.fromLTRB(3.0, 20.0, 3.0, 10.0), //设置显示文本的一个内边距
+            EdgeInsets.fromLTRB(3.0, 20.0, 3.0, 10.0), //设置显示��本的一个内边距
 // //                border: InputBorder.none,//取消默认的下划线边框
       ),
     );
@@ -748,12 +774,12 @@ class _State extends State<Home1> {
       ),
     );
 
-    Widget bottomButton = Container(
-      color: prefix0.LIGHT_LINE_COLOR,
+    Widget bottomButton = new Container(
+      color: LIGHT_LINE_COLOR,
       height: 60,
-      width: prefix0.screen_width,
+      width: screen_width,
       child: new RaisedButton(
-        color: prefix0.GREEN_COLOR,
+        color: GREEN_COLOR,
         textColor: Colors.white,
         child: new Text(this.btnStr,
             style: TextStyle(
@@ -824,7 +850,7 @@ class _State extends State<Home1> {
           Expanded(
             child: myListView,
           ),
-          // bottomButton,
+          bottomButton,
         ],
       ),
     );
@@ -832,7 +858,7 @@ class _State extends State<Home1> {
     return Scaffold(
       appBar: NavBar,
       body: bodyContiner,
-      bottomSheet: bottomButton,
+      // bottomSheet: bottomButton,
     );
   }
 }

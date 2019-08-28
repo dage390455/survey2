@@ -12,7 +12,6 @@ class MultiSelectStylePage extends StatefulWidget {
 
 class _MultiSelectStylePageState extends State<MultiSelectStylePage> {
   String text;
-
   CalendarController controller;
 
   @override

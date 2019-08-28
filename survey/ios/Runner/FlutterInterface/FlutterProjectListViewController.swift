@@ -38,10 +38,13 @@ class FlutterProjectListViewController: FlutterBaseViewController,UIDocumentInte
         setMessageChannel(channelName:pageModel!.methodChannel);
         setEventChannel(channelName: pageModel!.eventChannel);
         
+//         let userDefaults = UserDefaults.standard;
+//        userDefaults.removeObject(forKey: "projectList");
+        
         //把数据发给flutter
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
-            self.loadLocalProjectList();
-        }
+//        DispatchQueue.global().asyncAfter(deadline: DispatchTime.now() + 2)  {
+//            self.loadLocalProjectList();
+//        }
         
         NotificationCenter.default.addObserver(self, selector: #selector(openFileAndSave), name: NSNotification.Name(rawValue:"flutter_open_file"), object: nil)
         // Do any additional setup after loading the view.
@@ -67,11 +70,31 @@ class FlutterProjectListViewController: FlutterBaseViewController,UIDocumentInte
         return UIStatusBarStyle.default
     }
     
-    //读取本地flutter数据
+    //MARK: - private method
+    //读取本地flutter数据 ，并发送给flutter
     func loadLocalProjectList() -> Void{
         let userDefaults = UserDefaults.standard;
-        if let str = userDefaults.object(forKey: "projectListStr") {
+        //勘查的项目列表本地存储
+        if let str = userDefaults.object(forKey: "projectList") {
             self.mEventSink?(["name":"sendProjectList","projectListStr":str] )
+        }
+    }
+    
+    func loadLocalHistoryList() -> Void{
+        let userDefaults = UserDefaults.standard;
+        let dic = userDefaults.dictionaryRepresentation();
+        var flag = false;
+        var historyDic : [NSString:Any] = [:];
+        for (key, value) in dic
+        {
+            let key1:NSString = key as NSString;
+            if(key1.contains("histroy")){
+                flag = true;
+                historyDic[key1] = value;
+            }
+        }
+        if(flag){
+            self.mEventSink?(["name":"sendHistory","value":historyDic] )
         }
     }
     
@@ -92,8 +115,8 @@ class FlutterProjectListViewController: FlutterBaseViewController,UIDocumentInte
                 weakSelf.beginTime = start.timeIntervalSince1970;
                 weakSelf.endTime = end.timeIntervalSince1970;
                 
-                var beginTime = start.timeIntervalSince1970*1000
-                var endTime = end.timeIntervalSince1970*1000;
+                let beginTime = start.timeIntervalSince1970*1000
+                let endTime = end.timeIntervalSince1970*1000;
                 
                 let headers:[String: String]? = NetworkManager.shared.headers ;
                 let TaskLogURL = NetworkManager.TaskLogURL;
@@ -118,11 +141,18 @@ class FlutterProjectListViewController: FlutterBaseViewController,UIDocumentInte
         var data : Data?
         do{
             data = try Data(contentsOf: url as! URL);
-            if let newStr = String(data: data!, encoding: String.Encoding.utf8){
-                let str = newStr.replacingOccurrences(of: ",", with: ",");
-                //外部打开的文件做本地存储
-                let userDefaults = UserDefaults.standard;
-                userDefaults.set(str, forKey: "projectList")
+            let userDefaults = UserDefaults.standard;
+            if let txtStr = String(data: data!, encoding: String.Encoding.utf8){
+                let str = txtStr.replacingOccurrences(of: ",", with: ";");
+                var newStr:String?=str;
+                if let str1 = userDefaults.object(forKey: "projectList") as? String{
+                    //外部打开的文件做本地存储
+                    if(str1.count>0){
+                        newStr  = str1+","+str;
+                    }
+                }
+                
+                userDefaults.set(newStr, forKey: "projectList")
                 //把数据发给flutter
                 DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
                     self.mEventSink?(["name":"sendProjectList","projectListStr":str] )
@@ -130,29 +160,12 @@ class FlutterProjectListViewController: FlutterBaseViewController,UIDocumentInte
                     print("1 秒后输出")
                 }
                 
-                
                 //写入userdefault
             }
         }catch{
             return;
         }
     }
-    
-//    func openFileAndSave(url:NSURL) -> Void{
-    
-//        let dataFile:NSString = url.strin
-//
-//        NSString *dataFile = [NSString stringWithContentsOfURL:[NSURL URLWithString:filePath] encoding:NSUTF8StringEncoding error:nil];
-//        NSArray *dataarr = [dataFile componentsSeparatedByString:@";"];
-//        if(dataarr.count>0){
-//            NSString *str = dataarr[0];
-//            str = [str stringByReplacingOccurrencesOfString:@"," withString:@";"];
-//            [[NSUserDefaults standardUserDefaults] setObject:str forKey:@"histroySurveysiteProjectname"];
-//
-//        }
-        
-        
-//    }
     
     
     //MARK: - flutter delegate
@@ -182,6 +195,16 @@ class FlutterProjectListViewController: FlutterBaseViewController,UIDocumentInte
                 }
 //                self.showCalendar();
             }
+            else if ("saveHistoryList" == call.method) {
+                if let arguments:NSDictionary = call.arguments as! NSDictionary{
+                    
+                    if  let str = arguments["value"] as? NSString,let key = arguments["key"] as? NSString{
+                        let userDefaults = UserDefaults.standard;
+                        userDefaults.set(str, forKey: key as String);
+
+                    }
+                }
+            }
             else {
                 result(FlutterMethodNotImplemented);
             }
@@ -196,15 +219,19 @@ class FlutterProjectListViewController: FlutterBaseViewController,UIDocumentInte
             
         }
         
-        if str == "getList"{
-            
+        if str == "sendProjectList"{
+            self.loadLocalProjectList();
+        }
+        
+        if str == "sendHistory"{
+            self.loadLocalHistoryList();
         }
         
         events("我来自native222")
         return nil
     }
     
-    
+    //MARK: - DocumentInteractionController
     func openDocumentInteractionController(fileURL : URL) {
         let url = Bundle.main.url(forResource: "SNSBack", withExtension: "png")
         
