@@ -60,7 +60,7 @@ target 'Runner' do
   
   
   pod 'CityBase'
-  pod 'UIComponents'
+  pod 'UIComponents', :git => 'git@gitlab.sensoro.com:ios/compnents/UIComponents.git', :tag => '0.0.3'
 #  use_modular_headers!
   use_frameworks!
   

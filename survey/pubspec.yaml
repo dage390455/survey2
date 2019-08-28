@@ -79,6 +79,7 @@ flutter:
   - assets/images/calendar_black.png
   - assets/images/back.png
   - assets/images/right_arrar.png
+  - assets/images/take_photo_prompt.png
 
   fonts:
   - family: FlamanteRoma

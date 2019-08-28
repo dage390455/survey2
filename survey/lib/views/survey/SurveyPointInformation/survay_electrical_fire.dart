@@ -1,6 +1,8 @@
 
 
 //现场情况
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -18,26 +20,144 @@ class SurvayElectricalFirePage extends StatefulWidget {
 }
 
 class _State extends State<SurvayElectricalFirePage> {
+  BasicMessageChannel<String> _basicMessageChannel =
+  BasicMessageChannel("BasicMessageChannelPluginPickImage", StringCodec());
+
+  static PageController _pageController = new PageController();
 
   var isCheack = false;
   var remark = "";
   var imgPath;
   var _groupValue=1;
+
+  @override
+  void initState() {
+    _basicMessageChannel.setMessageHandler((message) => Future<String>(() {
+      print(message);
+      //message为native传递的数据
+      setState(() {
+        imgPath = File(message);
+
+      });
+      //给Android端的返回值
+      return "========================收到Native消息：" + message;
+    }));
+
+    super.initState();
+  }
+
+  //向native发送消息
+  void _sendToNative() {
+    Future<String> future = _basicMessageChannel.send("");
+    future.then((message) {
+      print("========================" + message);
+    });
+
+    super.initState();
+  }
+
+
   /*拍照*/
   takePhoto() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.camera);
 
-    setState(() {
-      imgPath = image;
+    showDialog<Null>(
+      context: context,
+      builder: (BuildContext context) {
+        return new SimpleDialog(
+          title: new Text('电箱环境拍照示例',
+            textAlign: TextAlign.center,
+
+          ),
+
+          children: <Widget>[
+             Padding(
+               padding: new EdgeInsets.fromLTRB(20, 0, 20, 20),
+               child: new Text("需看到电箱四周墙面情况及离地高度"),
+             ),
+             Image.asset("assets/images/take_photo_prompt.png",
+               width: 150,
+               height: 150,
+
+             ),
+
+             Padding(
+               padding: new EdgeInsets.fromLTRB(0, 10, 0, 0),
+               child: new Row(
+                 children: <Widget>[
+                   new Radio(value: 7, groupValue: _groupValue, onChanged: null),
+                   Text("今日不再提示"),
+                 ],
+               ) ,
+             ),
+
+        new SimpleDialogOption(
+        child:Padding(
+        padding: new EdgeInsets.fromLTRB(20, 20, 20, 20),
+        child: GestureDetector(
+        onTap: null, //写入方法名称就可以了，但是是无参的
+        child: Container(
+
+        color: prefix0.TITLE_TEXT_COLOR,
+        alignment: Alignment.center,
+        height: 50,
+        child: new Text("拍照",
+        style: new TextStyle(color: Colors.white),
+        )
+        ),
+        ),
+        ),
+        onPressed: () {
+          Navigator.of(context).pop();
+          openGallery();
+        },
+        ),
+
+
+
+//            buildButton("拍照", () => {
+//                  openGallery()
+//            }),
+
+           ],
+
+         );
+       },
+     ).then((val) {
+      print(val);
     });
+//
+
+
+
   }
+
+
+  Widget buildButton(
+      String text,
+      Function onPressed, {
+        Color color = Colors.white,
+      }) {
+    return FlatButton(
+      color: prefix0.TITLE_TEXT_COLOR,
+      child: Text(text),
+      onPressed: onPressed,
+    );
+  }
+
 
   /*相册*/
   openGallery() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+//    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+//    setState(() {
+//      imgPath = image;
+//    });
+    _sendToNative();
+
+    var image = await ImagePicker.pickImage(source: ImageSource.camera);
     setState(() {
       imgPath = image;
     });
+
   }
 
   TextEditingController remarkController = TextEditingController();
@@ -217,32 +337,25 @@ class _State extends State<SurvayElectricalFirePage> {
 
     Widget step1 =  Container(
       color:  prefix0.LIGHT_LINE_COLOR,
-      child: new StickWidget(
-        ///header
-        stickHeader: new Container(
-          height: 50.0,
-          color: prefix0.LIGHT_LINE_COLOR,
-          padding: new EdgeInsets.only(left: 20.0),
-          alignment: Alignment.centerLeft,
-          child: new InkWell(
-            onTap: () {
-              print("header");
-            },
-            child: new Text(
-              electricalItems[0],
-              style: TextStyle(color:prefix0.TITLE_TEXT_COLOR),
-            ),
-          ),
-        ),
+      child: new Column(
+        children: <Widget>[
+        new Row(
 
-        ///content
-        stickContent: new InkWell(
-          onTap: () {
-            print("content");
-          },
-          child: container
-        ),
-      ),
+          children:<Widget>[
+            Padding(
+              child: new Text(
+                electricalItems[0],
+                style: TextStyle(color:prefix0.TITLE_TEXT_COLOR),
+              ),
+              padding:  new EdgeInsets.fromLTRB(20, 20, 20, 20),
+            )
+           ]
+          ),
+
+        container,
+
+        ],
+      )
     );
 
 
@@ -263,7 +376,7 @@ class _State extends State<SurvayElectricalFirePage> {
               padding: new EdgeInsets.fromLTRB(0, 0, 20, 0),
               child: Container(
                 alignment: Alignment.center,
-                child: imgPath == null ? Text('+总开关照片') : Image.file(imgPath),
+                child: imgPath == null ? Text('电箱整体照片') : Image.file(imgPath),
                 decoration: new BoxDecoration(
                   border: new Border.all(width: 1.0, color: prefix0.LINE_COLOR),
                   borderRadius: new BorderRadius.all(new Radius.circular(5.0)),
@@ -277,7 +390,7 @@ class _State extends State<SurvayElectricalFirePage> {
             padding: new EdgeInsets.fromLTRB(10, 0, 20, 0),
             child: Container(
               alignment: Alignment.center,
-              child: imgPath == null ? Text('+分开关照片') : Image.file(imgPath),
+              child: imgPath == null ? Text('总开关照片') : Image.file(imgPath),
               decoration: new BoxDecoration(
                 border: new Border.all(width: 1.0, color: prefix0.LINE_COLOR),
                 borderRadius: new BorderRadius.all(new Radius.circular(5.0)),
@@ -290,7 +403,33 @@ class _State extends State<SurvayElectricalFirePage> {
             padding: new EdgeInsets.fromLTRB(10, 0, 20, 0),
             child: Container(
               alignment: Alignment.center,
-              child: imgPath == null ? Text('+分开关照片') : Image.file(imgPath),
+              child: imgPath == null ? Text('+') : Image.file(imgPath),
+              decoration: new BoxDecoration(
+                border: new Border.all(width: 1.0, color: prefix0.LINE_COLOR),
+                borderRadius: new BorderRadius.all(new Radius.circular(5.0)),
+              ),
+              width: 150,
+              height: 150,
+            ),
+          ),
+          new Padding(
+            padding: new EdgeInsets.fromLTRB(10, 0, 20, 0),
+            child: Container(
+              alignment: Alignment.center,
+              child: imgPath == null ? Text('+') : Image.file(imgPath),
+              decoration: new BoxDecoration(
+                border: new Border.all(width: 1.0, color: prefix0.LINE_COLOR),
+                borderRadius: new BorderRadius.all(new Radius.circular(5.0)),
+              ),
+              width: 150,
+              height: 150,
+            ),
+          ),
+          new Padding(
+            padding: new EdgeInsets.fromLTRB(10, 0, 20, 0),
+            child: Container(
+              alignment: Alignment.center,
+              child: imgPath == null ? Text('+') : Image.file(imgPath),
               decoration: new BoxDecoration(
                 border: new Border.all(width: 1.0, color: prefix0.LINE_COLOR),
                 borderRadius: new BorderRadius.all(new Radius.circular(5.0)),
@@ -315,7 +454,7 @@ class _State extends State<SurvayElectricalFirePage> {
             padding: new EdgeInsets.fromLTRB(0, 0, 20, 0),
             child: Container(
               alignment: Alignment.center,
-              child: imgPath == null ? Text('+环境照片') : Image.file(imgPath),
+              child: imgPath == null ? Text('环境照片') : Image.file(imgPath),
               decoration: new BoxDecoration(
                 border: new Border.all(width: 1.0, color: prefix0.LINE_COLOR),
                 borderRadius: new BorderRadius.all(new Radius.circular(5.0)),
@@ -328,7 +467,7 @@ class _State extends State<SurvayElectricalFirePage> {
             padding: new EdgeInsets.fromLTRB(10, 0, 20, 0),
             child: Container(
               alignment: Alignment.center,
-              child: imgPath == null ? Text('+环境照片') : Image.file(imgPath),
+              child: imgPath == null ? Text('+') : Image.file(imgPath),
               decoration: new BoxDecoration(
                 border: new Border.all(width: 1.0, color: prefix0.LINE_COLOR),
                 borderRadius: new BorderRadius.all(new Radius.circular(5.0)),
@@ -341,7 +480,33 @@ class _State extends State<SurvayElectricalFirePage> {
             padding: new EdgeInsets.fromLTRB(10, 0, 20, 0),
             child: Container(
               alignment: Alignment.center,
-              child: imgPath == null ? Text('+环境照片') : Image.file(imgPath),
+              child: imgPath == null ? Text('+') : Image.file(imgPath),
+              decoration: new BoxDecoration(
+                border: new Border.all(width: 1.0, color: prefix0.LINE_COLOR),
+                borderRadius: new BorderRadius.all(new Radius.circular(5.0)),
+              ),
+              width: 150,
+              height: 150,
+            ),
+          ),
+          new Padding(
+            padding: new EdgeInsets.fromLTRB(10, 0, 20, 0),
+            child: Container(
+              alignment: Alignment.center,
+              child: imgPath == null ? Text('+') : Image.file(imgPath),
+              decoration: new BoxDecoration(
+                border: new Border.all(width: 1.0, color: prefix0.LINE_COLOR),
+                borderRadius: new BorderRadius.all(new Radius.circular(5.0)),
+              ),
+              width: 150,
+              height: 150,
+            ),
+          ),
+          new Padding(
+            padding: new EdgeInsets.fromLTRB(10, 0, 20, 0),
+            child: Container(
+              alignment: Alignment.center,
+              child: imgPath == null ? Text('+') : Image.file(imgPath),
               decoration: new BoxDecoration(
                 border: new Border.all(width: 1.0, color: prefix0.LINE_COLOR),
                 borderRadius: new BorderRadius.all(new Radius.circular(5.0)),
@@ -383,7 +548,7 @@ class _State extends State<SurvayElectricalFirePage> {
           ),
           new Padding(
             padding: new EdgeInsets.fromLTRB(20, 10, 20, 20),
-            child: Text("至少拍摄2张清晰的电箱及开关照片，能看清空开上面的数字及信息。"),
+            child: Text("至少拍摄2张清晰的电箱及空开照片，能看清空开上的数字及信息。"),
           ),
 
           Row(
@@ -404,44 +569,95 @@ class _State extends State<SurvayElectricalFirePage> {
             children: <Widget>[takepice2],
           ),
           new Padding(
-            padding: new EdgeInsets.fromLTRB(20, 10, 20, 20),
-            child: Text("至少拍摄正面，左侧，右侧等不同方向3张照片，距离至少5m以上。"),
+            padding: new EdgeInsets.fromLTRB(20, 10, 20, 100),
+            child: Text("至少拍摄1张环境照片，可以清楚的看到电箱周围的墙面情况和离地高度。"),
           ),
         ],
       ),
     );
 
+    ScrollController _controller2 =  TrackingScrollController();
 
+    bool dataNotification(ScrollNotification notification) {  if (notification is ScrollEndNotification) {    //下滑到最底部
+       if (notification.metrics.extentAfter == 0) {
+          _pageController.animateToPage(2,  duration: const Duration(milliseconds: 1), curve: Curves.ease);
+       }    //滑动到最顶部
+        if (notification.metrics.extentBefore == 0) {
+          _pageController.animateToPage(0,  duration: const Duration(milliseconds: 1), curve: Curves.ease);
+        }
+      }  return true;
+    }
 
     Widget step2 =  Container(
-      color:  prefix0.LIGHT_LINE_COLOR,
-      child: new StickWidget(
-        ///header
-        stickHeader: new Container(
-          height: 50.0,
-          color: prefix0.LIGHT_LINE_COLOR,
-          padding: new EdgeInsets.only(left: 20.0),
-          alignment: Alignment.centerLeft,
-          child: new InkWell(
-            onTap: () {
-              print("header");
-            },
-            child: new Text(
-              electricalItems[1],
-              style: TextStyle(color:prefix0.TITLE_TEXT_COLOR),
-            ),
-          ),
-        ),
+        color:  prefix0.LIGHT_LINE_COLOR,
+        padding: new EdgeInsets.fromLTRB(0, 0, 0, 60),
+        child: new NotificationListener(
 
-        ///content
-        stickContent: new InkWell(
-            onTap: () {
-              print("content");
-            },
-            child: takePhones
-        ),
-      ),
+            onNotification: dataNotification,
+
+            child:new ListView(
+//          physics: NeverScrollableScrollPhysics(),
+//          shrinkWrap: true,
+              controller: _controller2,
+              children: <Widget>[
+                new Column(
+                  children: <Widget>[
+                    new Row(
+
+                        children:<Widget>[
+                          Padding(
+                            child: new Text(
+                              electricalItems[1],
+                              style: TextStyle(color:prefix0.TITLE_TEXT_COLOR),
+                            ),
+                            padding:  new EdgeInsets.fromLTRB(20, 20, 20, 20),
+                          )
+                        ]
+                    ),
+
+                    takePhones,
+
+                  ],
+                )
+              ],
+
+            )
+
+        )
     );
+
+
+
+//
+//    Widget step2 =  Container(
+//      color:  prefix0.LIGHT_LINE_COLOR,
+//      child: new StickWidget(
+//        ///header
+//        stickHeader: new Container(
+//          height: 50.0,
+//          color: prefix0.LIGHT_LINE_COLOR,
+//          padding: new EdgeInsets.only(left: 20.0),
+//          alignment: Alignment.centerLeft,
+//          child: new InkWell(
+//            onTap: () {
+//              print("header");
+//            },
+//            child: new Text(
+//              electricalItems[1],
+//              style: TextStyle(color:prefix0.TITLE_TEXT_COLOR),
+//            ),
+//          ),
+//        ),
+//
+//        ///content
+//        stickContent: new InkWell(
+//            onTap: () {
+//              print("content");
+//            },
+//            child: takePhones
+//        ),
+//      ),
+//    );
 
 
 
@@ -460,9 +676,16 @@ class _State extends State<SurvayElectricalFirePage> {
               child: new Row(
                 children: <Widget>[
                   Text("配备外箱"),
-                  new Radio(value: 1, groupValue: _groupValue, onChanged: (int e)=>updateGroupValue(e)),
+
+                  Expanded (
+                    child: new Radio(value: 1, groupValue: _groupValue, onChanged: (int e)=>updateGroupValue(e)),
+                  ),
+
+
                   Text("不需要\n(电箱空间足够)"),
-                  new Radio(value: 2, groupValue: _groupValue, onChanged: (int e)=>updateGroupValue(e)),
+                Expanded (
+                    child: new Radio(value: 2, groupValue: _groupValue, onChanged: (int e)=>updateGroupValue(e)),
+                ),
                   Text("需要\n(电箱空间不够)"),
 
                 ],
@@ -602,40 +825,124 @@ class _State extends State<SurvayElectricalFirePage> {
             },
           ),
 
+          Padding(
+            padding:new EdgeInsets.fromLTRB(0, 0, 0, 100) ,
+          )
+
         ],
       ),
     );
 
+    ScrollController _controller3 =  TrackingScrollController();
 
+    bool dataNotification3(ScrollNotification notification) {  if (notification is ScrollEndNotification) {    //下滑到最底部
+      if (notification.metrics.extentAfter == 0.0) {      print('======下滑到最底部======');
+      _pageController.animateToPage(3,  duration: const Duration(milliseconds: 1), curve: Curves.ease);
+      }    //滑动到最顶部
+      if (notification.metrics.extentBefore == 0.0) {      print('======滑动到最顶部======');
+      _pageController.animateToPage(1,  duration: const Duration(milliseconds: 1), curve: Curves.ease);
+      }
+    }  return true;
+    }
     Widget step3 =  Container(
-      color:  prefix0.LIGHT_LINE_COLOR,
-      child: new StickWidget(
-        ///header
-        stickHeader: new Container(
-          height: 50.0,
-          color: prefix0.LIGHT_LINE_COLOR,
-          padding: new EdgeInsets.only(left: 20.0),
-          alignment: Alignment.centerLeft,
-          child: new InkWell(
-            onTap: () {
-              print("header");
-            },
-            child: new Text(
-              electricalItems[2],
-              style: TextStyle(color:prefix0.TITLE_TEXT_COLOR),
-            ),
-          ),
-        ),
+        color:  prefix0.LIGHT_LINE_COLOR,
+        padding: new EdgeInsets.fromLTRB(0, 0, 0, 60),
+        child: new NotificationListener(
 
-        ///content
-        stickContent: new InkWell(
-            onTap: () {
-              print("content");
-            },
-            child: installationEnvironment,
-        ),
-      ),
+            onNotification: dataNotification3,
+
+            child:new ListView(
+//          physics: NeverScrollableScrollPhysics(),
+//          shrinkWrap: true,
+              controller: _controller3,
+              children: <Widget>[
+                new Column(
+                  children: <Widget>[
+                    new Row(
+
+                        children:<Widget>[
+                          Padding(
+                            child: new Text(
+                              electricalItems[2],
+                              style: TextStyle(color:prefix0.TITLE_TEXT_COLOR),
+                            ),
+                            padding:  new EdgeInsets.fromLTRB(20, 20, 20, 20),
+                          )
+                        ]
+                    ),
+
+                   installationEnvironment,
+
+                  ],
+                )
+              ],
+
+            )
+
+        )
     );
+
+
+//    Widget step3 =  Container(
+//        color:  prefix0.LIGHT_LINE_COLOR,
+//        child: new ListView(
+//          physics: NeverScrollableScrollPhysics(),
+//          shrinkWrap: true,
+//          children: <Widget>[
+//            new Column(
+//              children: <Widget>[
+//                new Row(
+//
+//                    children:<Widget>[
+//                      Padding(
+//                        child: new Text(
+//                          electricalItems[2],
+//                          style: TextStyle(color:prefix0.TITLE_TEXT_COLOR),
+//                        ),
+//                        padding:  new EdgeInsets.fromLTRB(20, 20, 20, 20),
+//                      )
+//                    ]
+//                ),
+//
+//                installationEnvironment,
+//
+//              ],
+//            )
+//          ],
+//
+//        )
+//    );
+
+//
+//    Widget step3 =  Container(
+//      color:  prefix0.LIGHT_LINE_COLOR,
+//      child: new StickWidget(
+//        ///header
+//        stickHeader: new Container(
+//          height: 50.0,
+//          color: prefix0.LIGHT_LINE_COLOR,
+//          padding: new EdgeInsets.only(left: 20.0),
+//          alignment: Alignment.centerLeft,
+//          child: new InkWell(
+//            onTap: () {
+//              print("header");
+//            },
+//            child: new Text(
+//              electricalItems[2],
+//              style: TextStyle(color:prefix0.TITLE_TEXT_COLOR),
+//            ),
+//          ),
+//        ),
+//
+//        ///content
+//        stickContent: new InkWell(
+//            onTap: () {
+//              print("content");
+//            },
+//            child: installationEnvironment,
+//        ),
+//      ),
+//    );
 
 
     Widget perationEnvironment = Container(
@@ -786,66 +1093,169 @@ class _State extends State<SurvayElectricalFirePage> {
     );
 
 
+
+    ScrollController _controller4 =  TrackingScrollController();
+
+    bool dataNotification4(ScrollNotification notification) {  if (notification is ScrollEndNotification) {    //下滑到最底部
+      if (notification.metrics.extentAfter == 0.0) {      print('======下滑到最底部======');
+      _pageController.animateToPage(4,  duration: const Duration(milliseconds: 1), curve: Curves.ease);
+      }    //滑动到最顶部
+      if (notification.metrics.extentBefore == 0.0) {      print('======滑动到最顶部======');
+      _pageController.animateToPage(2,  duration: const Duration(milliseconds: 1), curve: Curves.ease);
+      }
+    }  return true;
+    }
     Widget step4 =  Container(
-      color:  prefix0.LIGHT_LINE_COLOR,
-      child: new StickWidget(
-        ///header
-        stickHeader: new Container(
-          height: 50.0,
-          color: prefix0.LIGHT_LINE_COLOR,
-          padding: new EdgeInsets.only(left: 20.0),
-          alignment: Alignment.centerLeft,
-          child: new InkWell(
-            onTap: () {
-              print("header");
-            },
-            child: new Text(
-              electricalItems[3],
-              style: TextStyle(color:prefix0.TITLE_TEXT_COLOR),
-            ),
-          ),
-        ),
+        color:  prefix0.LIGHT_LINE_COLOR,
+        padding: new EdgeInsets.fromLTRB(0, 0, 0, 60),
+        child: new NotificationListener(
 
-        ///content
-        stickContent: new InkWell(
-          onTap: () {
-            print("content");
-          },
-          child: perationEnvironment,
-        ),
-      ),
+            onNotification: dataNotification4,
+
+            child:new ListView(
+//          physics: NeverScrollableScrollPhysics(),
+//          shrinkWrap: true,
+              controller: _controller4,
+              children: <Widget>[
+                new Column(
+                  children: <Widget>[
+                    new Row(
+
+                        children:<Widget>[
+                          Padding(
+                            child: new Text(
+                              electricalItems[3],
+                              style: TextStyle(color:prefix0.TITLE_TEXT_COLOR),
+                            ),
+                            padding:  new EdgeInsets.fromLTRB(20, 20, 20, 20),
+                          )
+                        ]
+                    ),
+
+                    perationEnvironment,
+
+                  ],
+                )
+              ],
+
+            )
+
+        )
     );
 
 
+//    Widget step4 =  Container(
+//      color:  prefix0.LIGHT_LINE_COLOR,
+//      child: new StickWidget(
+//        ///header
+//        stickHeader: new Container(
+//          height: 50.0,
+//          color: prefix0.LIGHT_LINE_COLOR,
+//          padding: new EdgeInsets.only(left: 20.0),
+//          alignment: Alignment.centerLeft,
+//          child: new InkWell(
+//            onTap: () {
+//              print("header");
+//            },
+//            child: new Text(
+//              electricalItems[3],
+//              style: TextStyle(color:prefix0.TITLE_TEXT_COLOR),
+//            ),
+//          ),
+//        ),
+//
+//        ///content
+//        stickContent: new InkWell(
+//          onTap: () {
+//            print("content");
+//          },
+//          child: perationEnvironment,
+//        ),
+//      ),
+//    );
+
+
+
+    ScrollController _controller5 =  TrackingScrollController();
+
+    bool dataNotification5(ScrollNotification notification) {  if (notification is ScrollEndNotification) {    //下滑到最底部
+      if (notification.metrics.extentAfter == 0.0) {      print('======下滑到最底部======');
+//      _pageController.animateToPage(4,  duration: const Duration(milliseconds: 300), curve: Curves.ease);
+      }    //滑动到最顶部
+      if (notification.metrics.extentBefore == 0.0) {      print('======滑动到最顶部======');
+      _pageController.animateToPage(3,  duration: const Duration(milliseconds: 300), curve: Curves.ease);
+      }
+    }  return true;
+    }
     Widget step5 =  Container(
-      color:  prefix0.LIGHT_LINE_COLOR,
-      child: new StickWidget(
-        ///header
-        stickHeader: new Container(
-          height: 50.0,
-          color: prefix0.LIGHT_LINE_COLOR,
-          padding: new EdgeInsets.only(left: 20.0),
-          alignment: Alignment.centerLeft,
-          child: new InkWell(
-            onTap: () {
-              print("header");
-            },
-            child: new Text(
-              electricalItems[4],
-              style: TextStyle(color:prefix0.TITLE_TEXT_COLOR),
-            ),
-          ),
-        ),
+        color:  prefix0.LIGHT_LINE_COLOR,
+        padding: new EdgeInsets.fromLTRB(0, 0, 0, 60),
+        child: new NotificationListener(
 
-        ///content
-        stickContent: new InkWell(
-          onTap: () {
-            print("content");
-          },
-          child: perationEnvironment,
-        ),
-      ),
+            onNotification: dataNotification4,
+
+            child:new ListView(
+//          physics: NeverScrollableScrollPhysics(),
+//          shrinkWrap: true,
+              controller: _controller4,
+              children: <Widget>[
+                new Column(
+                  children: <Widget>[
+                    new Row(
+
+                        children:<Widget>[
+                          Padding(
+                            child: new Text(
+                              electricalItems[4],
+                              style: TextStyle(color:prefix0.TITLE_TEXT_COLOR),
+                            ),
+                            padding:  new EdgeInsets.fromLTRB(20, 20, 20, 20),
+                          )
+                        ]
+                    ),
+
+                    perationEnvironment,
+
+                  ],
+                )
+              ],
+
+            )
+
+        )
     );
+
+
+
+//    Widget step5 =  Container(
+//      color:  prefix0.LIGHT_LINE_COLOR,
+//      child: new StickWidget(
+//        ///header
+//        stickHeader: new Container(
+//          height: 50.0,
+//          color: prefix0.LIGHT_LINE_COLOR,
+//          padding: new EdgeInsets.only(left: 20.0),
+//          alignment: Alignment.centerLeft,
+//          child: new InkWell(
+//            onTap: () {
+//              print("header");
+//            },
+//            child: new Text(
+//              electricalItems[4],
+//              style: TextStyle(color:prefix0.TITLE_TEXT_COLOR),
+//            ),
+//          ),
+//        ),
+//
+//        ///content
+//        stickContent: new InkWell(
+//          onTap: () {
+//            print("content");
+//          },
+//          child: perationEnvironment,
+//        ),
+//      ),
+//    );
 
 
     Widget bigContainer = Container(
@@ -865,12 +1275,32 @@ class _State extends State<SurvayElectricalFirePage> {
     );
 
 
+    var mPageView = new PageView.builder(
+      controller: _pageController,
+        itemCount: 5 ,
+        scrollDirection: Axis.vertical,
+       itemBuilder: (BuildContext context, int index){
+          if (index==0){
+            return  step1;
+          }else if(index==1){
+            return  step2;
+          } else if(index==2){
+            return  step3;
+          }else if(index==3){
+            return  step4;
+          }else{
+            return  step5;
+          }
+
+       },
+    );
+
 
 
     return Scaffold(
 
       appBar: NavBar,
-      body: bigContainer,
+      body: mPageView,
       bottomSheet: bottomButton,
     );
 
