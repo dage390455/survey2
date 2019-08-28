@@ -48,9 +48,7 @@
 		EE84349A230E62BE0078082F /* WechatConnector.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE84348F230E62BD0078082F /* WechatConnector.framework */; };
 		EE84349B230E62BE0078082F /* ShareSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE843490230E62BD0078082F /* ShareSDK.framework */; };
 		EE84349D230E62FA0078082F /* MOBFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE84349C230E62FA0078082F /* MOBFoundation.framework */; };
-		EE866CF92305003300F757D0 /* FlutterElectricInstallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE866CF82305003300F757D0 /* FlutterElectricInstallViewController.swift */; };
 		EE866CFB23052A1000F757D0 /* FlutterProjectListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE866CFA23052A1000F757D0 /* FlutterProjectListViewController.swift */; };
-		EE866CFD2306832500F757D0 /* FlutterPointListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE866CFC2306832500F757D0 /* FlutterPointListViewController.swift */; };
 		EE9F3EDC230280B800536CC1 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = EE9F3EDB230280B800536CC1 /* GeneratedPluginRegistrant.m */; };
 /* End PBXBuildFile section */
 
@@ -121,9 +119,7 @@
 		EE84348F230E62BD0078082F /* WechatConnector.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = WechatConnector.framework; sourceTree = "<group>"; };
 		EE843490230E62BD0078082F /* ShareSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ShareSDK.framework; sourceTree = "<group>"; };
 		EE84349C230E62FA0078082F /* MOBFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MOBFoundation.framework; sourceTree = "<group>"; };
-		EE866CF82305003300F757D0 /* FlutterElectricInstallViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlutterElectricInstallViewController.swift; sourceTree = "<group>"; };
 		EE866CFA23052A1000F757D0 /* FlutterProjectListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlutterProjectListViewController.swift; sourceTree = "<group>"; };
-		EE866CFC2306832500F757D0 /* FlutterPointListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlutterPointListViewController.swift; sourceTree = "<group>"; };
 		EE9F3EDA230280B800536CC1 /* GeneratedPluginRegistrant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeneratedPluginRegistrant.h; sourceTree = "<group>"; };
 		EE9F3EDB230280B800536CC1 /* GeneratedPluginRegistrant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeneratedPluginRegistrant.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -260,8 +256,6 @@
 				EE65BD4622FD8C5500C7C340 /* FlutterBaseViewController.swift */,
 				EE65BD4722FD8C5500C7C340 /* FlutterSplashViewController.swift */,
 				EE65BD4822FD8C5500C7C340 /* FlutterPageConfig.swift */,
-				EE866CF82305003300F757D0 /* FlutterElectricInstallViewController.swift */,
-				EE866CFC2306832500F757D0 /* FlutterPointListViewController.swift */,
 				EE866CFA23052A1000F757D0 /* FlutterProjectListViewController.swift */,
 				EE843476230E407E0078082F /* DocumentManagerViewController.h */,
 				EE843477230E407E0078082F /* DocumentManagerViewController.m */,
@@ -561,14 +555,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				EE65BD5122FD8C5500C7C340 /* AlertConfimConst.swift in Sources */,
-				EE866CFD2306832500F757D0 /* FlutterPointListViewController.swift in Sources */,
 				EE65BD5A22FD8C5500C7C340 /* FlutterPageConfig.swift in Sources */,
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,
 				EE65BD4E22FD8C5500C7C340 /* ButtonWithImageAndTitleExtension.swift in Sources */,
 				EA86FB602307D06B00ED8C17 /* LocationViewController.swift in Sources */,
 				EE65BD5922FD8C5500C7C340 /* FlutterSplashViewController.swift in Sources */,
 				EA86FB682307D7FB00ED8C17 /* CustomPointAnnotation.swift in Sources */,
-				EE866CF92305003300F757D0 /* FlutterElectricInstallViewController.swift in Sources */,
 				EE9F3EDC230280B800536CC1 /* GeneratedPluginRegistrant.m in Sources */,
 				EA86FB622307D76300ED8C17 /* LocationEditController.swift in Sources */,
 				EA86FB672307D7FB00ED8C17 /* CustomAnnotationView.swift in Sources */,
@@ -681,7 +673,7 @@
 					"$(PROJECT_DIR)/Runner/ShareSDK/Support/PlatformSDK/WeChatSDK",
 				);
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.sensoro.survey;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sensoro.survey1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
@@ -818,7 +810,7 @@
 					"$(PROJECT_DIR)/Runner/ShareSDK/Support/PlatformSDK/WeChatSDK",
 				);
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.sensoro.survey;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sensoro.survey1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -854,7 +846,7 @@
 					"$(PROJECT_DIR)/Runner/ShareSDK/Support/PlatformSDK/WeChatSDK",
 				);
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.sensoro.survey;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sensoro.survey1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;

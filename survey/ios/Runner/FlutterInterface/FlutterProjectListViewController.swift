@@ -143,7 +143,17 @@ class FlutterProjectListViewController: FlutterBaseViewController,UIDocumentInte
             data = try Data(contentsOf: url as! URL);
             let userDefaults = UserDefaults.standard;
             if let txtStr = String(data: data!, encoding: String.Encoding.utf8){
-                let str = txtStr.replacingOccurrences(of: ",", with: ";");
+                 let array = txtStr.components(separatedBy: ",")
+//                if array.count>0&&txtStr.count>0{
+//                    for index in 0 ..< array.count {
+//                        let str = array[index];
+//                        var newStr:String?=str;
+//                    }
+//                }
+                var str = txtStr;
+                if(array.count==1){
+                    str = txtStr.replacingOccurrences(of: ",", with: ";");
+                }
                 var newStr:String?=str;
                 if let str1 = userDefaults.object(forKey: "projectList") as? String{
                     //外部打开的文件做本地存储

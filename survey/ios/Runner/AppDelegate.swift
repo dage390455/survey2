@@ -99,6 +99,7 @@ import Photos
         return true
     }
     
+<<<<<<< Updated upstream
     var localId:String!
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         let image:UIImage = info[UIImagePickerControllerOriginalImage] as! UIImage
@@ -134,6 +135,11 @@ import Photos
 
     }
    
+=======
+    
+ // 微信开放平台  AppID：wxa6699198d77a32f2    Bundle ID：com.sensoro.survey1
+  
+>>>>>>> Stashed changes
 }
 
 

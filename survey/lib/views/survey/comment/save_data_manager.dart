@@ -118,6 +118,53 @@ class SaveDataManger {
     // }
   }
 
+  static deleteHistory(List<String> tags, String historyKey) async {
+    // SharedPreferences.setMockInitialValues({});
+    // const MethodChannel('plugins.flutter.io/shared_preferences')
+    //     .setMockMethodCallHandler((MethodCall methodCall) async {
+    //   if (methodCall.method == 'getAll') {
+    //     return <String, dynamic>{}; // set initial values here if desired
+    //   }
+    //   return null;
+    // });
+    // return null;
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var history = prefs.getString(historyKey);
+    List<String> historyList = [];
+    if (history != null && history.length > 0) {
+      historyList = history.split(",");
+    }
+
+    var tagsString = "";
+    for (int i = 0; i < tags.length; i++) {
+      for (int j = 0; j < historyList.length; j++) {
+        if (tags[i] == historyList[j]) {
+          historyList.removeAt(j);
+        }
+      }
+    }
+
+    for (int j = 0; j < historyList.length; j++) {
+      if (tagsString.length == 0 && historyList.length > 0) {
+        tagsString = historyList[0];
+      } else {
+        tagsString = tagsString + "," + historyList[j];
+      }
+    }
+
+    var f = await prefs.setString(historyKey, tagsString);
+
+    //用自定义methodChannel保存本地化数据，不是shared_preferences
+    Map<String, dynamic> map = {
+      "value": tagsString,
+      "key": historyKey,
+    };
+    await methodChannel.invokeMethod('saveHistoryList', map);
+
+    print("---------------" + f.toString());
+  }
+
   void _onEvent(Object value) {
     if (value is Map) {
       Map dic = value;
