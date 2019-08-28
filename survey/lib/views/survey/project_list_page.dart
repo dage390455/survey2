@@ -162,6 +162,9 @@ class _State extends State<Home1> {
     });
 
     eventChannel
+        .receiveBroadcastStream("sendHistory")
+        .listen(_onEvent, onError: _onError);
+    eventChannel
         .receiveBroadcastStream("sendProjectList")
         .listen(_onEvent, onError: _onError);
     //测试用
@@ -257,7 +260,16 @@ class _State extends State<Home1> {
         });
       }
 
-      if (name == "sendOneProject") {}
+      if (name == "sendHistory") {
+        //把history历史写入share_preference
+        Map dic = value;
+        Map historyDic = dic["value"];
+
+        for (String key in historyDic.keys) {
+          String value = historyDic[key];
+          SaveDataManger.addHistory(value, key);
+        }
+      }
 
       if (name == "sendProjectList") {
         String projectListStr = dic["projectListStr"].toString();

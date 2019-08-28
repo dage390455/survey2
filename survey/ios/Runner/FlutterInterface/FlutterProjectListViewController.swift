@@ -70,15 +70,31 @@ class FlutterProjectListViewController: FlutterBaseViewController,UIDocumentInte
         return UIStatusBarStyle.default
     }
     
+    //MARK: - private method
     //读取本地flutter数据 ，并发送给flutter
     func loadLocalProjectList() -> Void{
         let userDefaults = UserDefaults.standard;
-//        for(key in userDefaults){
-//
-//        }
-//        let str = userDefaults.object(forKey: "projectList") ;
+        //勘查的项目列表本地存储
         if let str = userDefaults.object(forKey: "projectList") {
             self.mEventSink?(["name":"sendProjectList","projectListStr":str] )
+        }
+    }
+    
+    func loadLocalHistoryList() -> Void{
+        let userDefaults = UserDefaults.standard;
+        let dic = userDefaults.dictionaryRepresentation();
+        var flag = false;
+        var historyDic : [NSString:Any] = [:];
+        for (key, value) in dic
+        {
+            let key1:NSString = key as NSString;
+            if(key1.contains("histroy")){
+                flag = true;
+                historyDic[key1] = value;
+            }
+        }
+        if(flag){
+            self.mEventSink?(["name":"sendHistory","value":historyDic] )
         }
     }
     
@@ -99,8 +115,8 @@ class FlutterProjectListViewController: FlutterBaseViewController,UIDocumentInte
                 weakSelf.beginTime = start.timeIntervalSince1970;
                 weakSelf.endTime = end.timeIntervalSince1970;
                 
-                var beginTime = start.timeIntervalSince1970*1000
-                var endTime = end.timeIntervalSince1970*1000;
+                let beginTime = start.timeIntervalSince1970*1000
+                let endTime = end.timeIntervalSince1970*1000;
                 
                 let headers:[String: String]? = NetworkManager.shared.headers ;
                 let TaskLogURL = NetworkManager.TaskLogURL;
@@ -150,22 +166,6 @@ class FlutterProjectListViewController: FlutterBaseViewController,UIDocumentInte
             return;
         }
     }
-    
-//    func openFileAndSave(url:NSURL) -> Void{
-    
-//        let dataFile:NSString = url.strin
-//
-//        NSString *dataFile = [NSString stringWithContentsOfURL:[NSURL URLWithString:filePath] encoding:NSUTF8StringEncoding error:nil];
-//        NSArray *dataarr = [dataFile componentsSeparatedByString:@";"];
-//        if(dataarr.count>0){
-//            NSString *str = dataarr[0];
-//            str = [str stringByReplacingOccurrencesOfString:@"," withString:@";"];
-//            [[NSUserDefaults standardUserDefaults] setObject:str forKey:@"histroySurveysiteProjectname"];
-//
-//        }
-        
-        
-//    }
     
     
     //MARK: - flutter delegate
@@ -223,11 +223,15 @@ class FlutterProjectListViewController: FlutterBaseViewController,UIDocumentInte
             self.loadLocalProjectList();
         }
         
+        if str == "sendHistory"{
+            self.loadLocalHistoryList();
+        }
+        
         events("我来自native222")
         return nil
     }
     
-    
+    //MARK: - DocumentInteractionController
     func openDocumentInteractionController(fileURL : URL) {
         let url = Bundle.main.url(forResource: "SNSBack", withExtension: "png")
         
