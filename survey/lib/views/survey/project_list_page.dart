@@ -15,9 +15,10 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:event_bus/event_bus.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 import 'package:sensoro_survey/views/survey/const.dart';
-
 import 'package:sensoro_survey/views/survey/survey_point_information.dart';
 import 'package:sensoro_survey/widgets/progressHud.dart';
 import 'package:sensoro_survey/generated/easyRefresh/easy_refresh.dart';
@@ -314,12 +315,42 @@ class _State extends State<HomePage> {
         }
       }
 
+      if (name == "sendOneProject") {
+        String projectListStr = dic["projectListStr"].toString();
+        // List<String> list = projectListStr.split(',');
+        List<String> list = projectListStr.split(';');
+        String historyKey = 'projectList';
+
+        String historyStr = "";
+        //外部导入文件的情况
+        if (list.length == 1) {
+          String str = list[0];
+          if (str == null || str.length < 3) {
+            return;
+          }
+          str = str.replaceAll(';', ',');
+          str = str.replaceAll('subList\":}', 'subList\":[]}');
+          String str1 = '[' + str + ']';
+          List<dynamic> jsonList = jsonDecode(str1);
+          for (int i = 0; i < jsonList.length; i++) {
+            Map<String, dynamic> map = jsonList[i];
+            if (map["subList"] == null) {
+              map["subList"] = [];
+            }
+            projectInfoModel model = projectInfoModel.fromJson(map);
+            dataList.add(model);
+          }
+          historyStr = str;
+          SaveDataManger.addProjectHistory(historyStr, historyKey);
+        }
+      }
+
       if (name == "sendProjectList") {
         String projectListStr = dic["projectListStr"].toString();
         // List<String> list = projectListStr.split(',');
         List<String> list = projectListStr.split(';');
         String historyKey = 'projectList';
-        String historyStr = '';
+        String historyStr = "";
         for (int i = 0; i < list.length; i++) {
           String str = list[i];
           if (str.length > 0) {
