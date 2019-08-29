@@ -226,21 +226,33 @@ class _State extends State<Home1> {
 
   void loadLocalData() async {
     String hisoryKey = "projectList";
-    List<String> tags = [];
-    tags = await SaveDataManger.getHistory(hisoryKey);
+    // List<String> tags = [];
+    List<dynamic> list = [];
+    list = await SaveDataManger.getProjectHistory(hisoryKey);
     setState(() {
       dataList.clear();
-      for (int i = 0; i < tags.length; i++) {
-        String jsonStr = tags[i];
-        if (jsonStr == null || jsonStr.length < 3) {
-          continue;
-        }
-        String jsonStr1 = jsonStr.replaceAll(';', ',');
-        Map<String, dynamic> map = json.decode(jsonStr1);
+      for (int i = 0; i < list.length; i++) {
+        Map<String, dynamic> map = list[i];
         projectInfoModel model = projectInfoModel.fromJson(map);
         dataList.add(model);
       }
     });
+
+    // String tags = jsonEncode(list);
+    // setState(() {
+    //   dataList.clear();
+    //   for (int i = 0; i < tags.length; i++) {
+    //     // Map<String, dynamic> map = tags[i];
+    //     String jsonStr = tags[i];
+    //     if (jsonStr == null || jsonStr.length < 3) {
+    //       continue;
+    //     }
+    //     // String jsonStr1 = jsonStr.replaceAll(';', ',');
+    //     Map<String, dynamic> map = json.decode(jsonStr);
+    //     projectInfoModel model = projectInfoModel.fromJson(map);
+    //     dataList.add(model);
+    //   }
+    // });
   }
 
   void deleteData(int index) async {
@@ -318,8 +330,8 @@ class _State extends State<Home1> {
             if (str == null || str.length < 3) {
               continue;
             }
-            String str1 = str.replaceAll(';', ',');
-            Map<String, dynamic> map = json.decode(str1);
+            // String str1 = str.replaceAll(';', ',');
+            Map<String, dynamic> map = json.decode(str);
             projectInfoModel model = projectInfoModel.fromJson(map);
             dataList.add(model);
             //把native发来的数据发给share_preferences保存下来
@@ -703,7 +715,7 @@ class _State extends State<Home1> {
                             //表示所有的子��件都是从左到��顺序排列，这是默认值
                             textDirection: TextDirection.ltr,
                             children: <Widget>[
-                              //这行决定了左对齐
+                              //这��决定了左对齐
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.start,

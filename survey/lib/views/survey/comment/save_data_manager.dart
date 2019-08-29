@@ -84,9 +84,35 @@ class SaveDataManger {
     return List<String>();
   }
 
+  static Future<List<dynamic>> getProjectHistory(String historyKey) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    var history = prefs.getString(historyKey);
+    history = "[$history]";
+    if (history != null && history.length > 0) {
+      List<dynamic> list = jsonDecode(history);
+      return list;
+    }
+    return List<dynamic>();
+  }
+
   static addHistory(String tag, String historyKey) async {
     var history = await SaveDataManger.getHistory(historyKey);
 
+    // if (historyKey == "projectList") {
+    //   history = await SaveDataManger.getProjectHistory(historyKey);
+    // }
+
+    if (!history.contains(tag)) {
+      history.add(tag);
+
+      SaveDataManger.saveHistory(history, historyKey);
+    }
+  }
+
+  static addProjectHistory(String tag, String historyKey) async {
+    var history = await SaveDataManger.getProjectHistory(historyKey);
+    List<dynamic> tags = history;
     if (!history.contains(tag)) {
       history.add(tag);
 
@@ -96,21 +122,33 @@ class SaveDataManger {
 
   //修改已存储的内容，编辑模式
   static replaceHistory(String tag, String historyKey, int id) async {
-    var history = await SaveDataManger.getHistory(historyKey);
-    for (String str in history) {
-      String str1 = str.replaceAll(';', ',');
-      if (str1 == null || str1.length < 10) {
-        continue;
-      }
-      Map<String, dynamic> map = json.decode(str1);
+    var history = await SaveDataManger.getProjectHistory(historyKey);
+    List<dynamic> tags = history;
+    String teststr3 = jsonEncode(tags);
+    List<String> list = [];
+
+    for (int i = 0; i < tags.length; i++) {
+      Map<String, dynamic> map = tags[i];
+
+      // Map<String, dynamic> map = json.decode(str);
       int id1 = map["id"].toInt();
       //替换
       if (id == id1) {
-        history.remove(str);
-        history.add(tag);
-        SaveDataManger.saveHistory(history, historyKey);
+        // tags.removeAt(i);
+        continue;
+        // history.add(tag);
+        // List<dynamic> list = jsonDecode(tag);
+        // SaveDataManger.saveHistory(history, historyKey);
       }
+      List list1 = [map];
+      String str = jsonEncode(list1);
+      list.add(str);
     }
+    list.add(tag);
+    //这一步要把tags里的map转成字符串数组，再加上tag才能用
+
+    // String newStr = jsonEncode(tags);
+    SaveDataManger.saveHistory(tags, historyKey);
 
     // if (!history.contains(tag)) {
     //   history.add(tag);

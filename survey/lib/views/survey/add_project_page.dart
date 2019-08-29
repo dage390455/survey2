@@ -78,7 +78,7 @@ class _AddProjectPageState extends State<AddProjectPage> {
     String historyKey = 'projectList';
     Map<String, dynamic> map = input.toJson();
     String jsonStr = json.encode(map);
-    jsonStr = jsonStr.replaceAll(',', ';');
+    // jsonStr = jsonStr.replaceAll(',', ';');
     if (isEdit) {
       SaveDataManger.replaceHistory(
         jsonStr,

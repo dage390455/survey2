@@ -26,7 +26,8 @@ class projectInfoModel {
   String projectName;
   String createTime;
   String remark; //备注
-  List<projectInfoSubModel> subList;
+  // List<projectInfoSubModel> subList;
+  List<dynamic> subList;
 
   projectInfoModel(this.projectName, this.createTime, this.projectId,
       this.remark, this.subList);

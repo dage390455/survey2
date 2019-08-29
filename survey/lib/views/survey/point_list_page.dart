@@ -107,7 +107,6 @@ class _PointListPageState extends State<PointListPage> {
       dataList.clear();
       for (int i = 0; i < tags.length; i++) {
         String jsonStr = tags[i];
-        jsonStr = jsonStr.replaceAll(';', ',');
         if (jsonStr == null || jsonStr.length < 3) {
           continue;
         }
