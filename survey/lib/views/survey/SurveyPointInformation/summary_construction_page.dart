@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sensoro_survey/model/electrical_fire_model.dart';
 import 'package:sensoro_survey/views/survey/SurveyPointInformation/survay_electrical_fire.dart';
+import 'package:sensoro_survey/views/survey/comment/data_transfer_manager.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 import 'package:sensoro_survey/views/survey/editPage/edit_address_page.dart';
 import 'package:sensoro_survey/views/survey/editPage/edit_boss_person_page.dart';
@@ -24,22 +25,10 @@ class _State extends State<SummaryConstructionPage> {
   BasicMessageChannel<String> _basicMessageChannel =
       BasicMessageChannel("BasicMessageChannelPlugin", StringCodec());
 
-  var fireModel =  ElectricalFireModel();
+  ElectricalFireModel fireModel =  DataTransferManager.shared.fireCreatModel;
 
   var isCheack = false;
 
-//  var name = "";
-//  var purpose = "";
-//  var address = "";
-//  var location = "";
-//
-//  var structure = "";
-//  var area = "";
-//
-//  var headName = "";
-//  var headPhone = "";
-//  var bossName = "";
-//  var bossPhone = "";
 
   @override
   void initState() {

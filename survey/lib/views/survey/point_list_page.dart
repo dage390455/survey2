@@ -13,6 +13,7 @@ import 'package:flutter_custom_calendar/model/date_model.dart';
 import 'package:flutter/material.dart';
 import 'package:event_bus/event_bus.dart';
 import 'package:flutter/services.dart';
+import 'package:sensoro_survey/model/electrical_fire_model.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 import 'package:sensoro_survey/views/survey/const.dart';
 import 'package:sensoro_survey/widgets/progressHud.dart';
@@ -21,6 +22,8 @@ import 'package:sensoro_survey/generated/easyRefresh/easy_refresh.dart';
 import 'package:sensoro_survey/model/project_info_model.dart';
 import 'package:sensoro_survey/views/survey/comment/save_data_manager.dart';
 import 'package:sensoro_survey/views/survey/survey_type_page.dart';
+
+import 'comment/data_transfer_manager.dart';
 
 class PointListPage extends StatefulWidget {
   projectInfoModel input;
@@ -85,7 +88,7 @@ class _PointListPageState extends State<PointListPage> {
   @override
   void initState() {
     super.initState();
-
+    dataList = input.subList;
     _focusNode.addListener(() {
       if (!_focusNode.hasFocus) {}
     });
@@ -357,6 +360,8 @@ class _PointListPageState extends State<PointListPage> {
                         fontWeight: FontWeight.normal,
                         fontSize: 20)),
                 onPressed: () {
+
+                  DataTransferManager.shared.project = input;
                   _gotoSurveyType();
                 },
               ),
@@ -500,17 +505,16 @@ class _PointListPageState extends State<PointListPage> {
           // updatedTimeStr = updatedTimeStr.substring(0, 19);
           // print("updatedTimeStr = $updatedTimeStr");
 
-          var name = "勘查点11111";
-          var time = "2019-08-19";
+          Map model = dataList[index];
 
-          if (!name.contains(searchStr) && searchStr.length > 0) {
+          if (!model.editName.contains(searchStr) && searchStr.length > 0) {
             return emptyContainer;
           }
 
           bool flag = false;
           if (dateFilterList.length > 0) {
             for (String dateStr in dateFilterList) {
-              if (time.contains(dateStr)) {
+              if (model.electricalFireId.toString().contains(dateStr)) {
                 flag = true;
               }
             }
@@ -561,13 +565,13 @@ class _PointListPageState extends State<PointListPage> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
                                 //这个位置用ListTile就会报错
-                                Text(name,
+                                Text(model.editName,
                                     textAlign: TextAlign.start,
                                     style: TextStyle(
                                         color: prefix0.BLACK_TEXT_COLOR,
                                         fontWeight: FontWeight.normal,
                                         fontSize: 17)),
-                                Text("2019-09-29",
+                                Text(model.electricalFireId.toString(),
                                     textAlign: TextAlign.start,
                                     style: TextStyle(
                                         color: prefix0.BLACK_TEXT_COLOR,

@@ -3,4 +3,5 @@ class surveyTypeModel {
   String ImagePath;
 
   surveyTypeModel(this.name, this.ImagePath);
+
 }

@@ -7,7 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sensoro_survey/model/electical_fire_create_model.dart';
+import 'package:sensoro_survey/model/electrical_fire_model.dart';
 import 'package:sensoro_survey/views/survey/SurveyPointInformation/stick_widget.dart';
+import 'package:sensoro_survey/views/survey/comment/data_transfer_manager.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 import 'package:sensoro_survey/views/survey/editPage/edit_electrical_address_page.dart';
 import 'package:sensoro_survey/views/survey/editPage/edit_electrical_current_page.dart';
@@ -29,7 +31,8 @@ class _State extends State<SurvayElectricalFirePage> {
   BasicMessageChannel("BasicMessageChannelPluginPickImage", StringCodec());
 
   static PageController _pageController = new PageController();
-  var fireCreatModel =  ElectricalFireCreateModel();
+
+  ElectricalFireModel fireCreatModel =  DataTransferManager.shared.fireCreatModel;
   var isCheack = false;
 //  var remark = "";
   var imgPath;
@@ -121,14 +124,14 @@ class _State extends State<SurvayElectricalFirePage> {
       context,
       new MaterialPageRoute(
           builder: (context) => new EditElectricalAdressPage(
-            name: this.fireCreatModel.editAddress,
+            name: this.fireCreatModel.page2editAddress,
           )),
     );
 
     if (result != null) {
       String name = result as String;
 
-      this.fireCreatModel.editAddress = name;
+      this.fireCreatModel.page2editAddress = name;
       updateNextButton();
       setState(() {});
     }
@@ -176,21 +179,25 @@ class _State extends State<SurvayElectricalFirePage> {
       context,
       new MaterialPageRoute(
           builder: (context) => new EditElectricalPurposePage(
-            name: this.fireCreatModel.editPurpose,
+            name: this.fireCreatModel.page2editPurpose,
           )),
     );
 
     if (result != null) {
       String name = result as String;
 
-      this.fireCreatModel.editPurpose = name;
+      this.fireCreatModel.page2editPurpose = name;
       updateNextButton();
       setState(() {});
     }
   }
 
   updateNextButton() {
-
+    if (fireCreatModel.page2editAddress.length>0&&fireCreatModel.editpic1.length>0&&fireCreatModel.editpic2.length>0&&fireCreatModel.editenvironmentpic1.length>0&&fireCreatModel.current.length>0){
+      setState(() {
+        isCheack = true;
+      });
+    }
   }
 
   showPicDialog(){
@@ -402,10 +409,9 @@ class _State extends State<SurvayElectricalFirePage> {
                 fontSize: 20)),
         onPressed: () {
           if (this.isCheack){
-//            Navigator.push(
-//              context,
-//              new MaterialPageRoute(builder: (context) => new  SummaryConstructionPage()),
-//            );
+            DataTransferManager.shared.project.subList.add(DataTransferManager.shared.fireCreatModel.toJson());
+            DataTransferManager.shared.saveProject();
+            Navigator.popAndPushNamed(context, '/');
           }
         },
       ),
@@ -431,7 +437,7 @@ class _State extends State<SurvayElectricalFirePage> {
                   Text("电箱位置"),
                   Expanded (
                     child: Text(
-                      fireCreatModel.editAddress.length>0?fireCreatModel.editAddress:"必填",
+                      fireCreatModel.page2editAddress.length>0?fireCreatModel.page2editAddress:"必填",
                       textAlign: TextAlign.right,
                     ),
                   )
@@ -464,7 +470,7 @@ class _State extends State<SurvayElectricalFirePage> {
                   Text("电箱用途"),
                   Expanded (
                     child: Text(
-                      fireCreatModel.editPurpose.length>0?fireCreatModel.editPurpose:"选填",
+                      fireCreatModel.page2editPurpose.length>0?fireCreatModel.page2editPurpose:"选填",
                       textAlign: TextAlign.right,
                     ),
                   )

@@ -52,4 +52,6 @@ class ElectricalFireCreateModel {
   String currentSelect = "";  //额定电流
   String recommendedTransformer = ""; //推荐互感器
 
+
+
 }

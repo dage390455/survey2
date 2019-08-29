@@ -188,23 +188,23 @@ class _State extends State<Home1> {
   void testTranslate() {
     // String teststr =
     // "[{\'remark' : \'ii',\'createTime' : \'2019-08-22 16:58'},{\'remark' : \'oo',\'createTime' : \'2019-08-22 16:22'}]";
-    String teststr = "[{\"remark\":\"ii\"},{\"remark\":\"ii\"}]";
-    List<dynamic> user = jsonDecode(teststr);
-    String teststr2 = jsonEncode(user);
-
-    projectInfoModel model = projectInfoModel("name", "des", 1, "备注11", []);
-    projectInfoSubModel model1 = projectInfoSubModel("name1", "des1");
-    projectInfoSubModel model2 = projectInfoSubModel("name2", "des2");
-    List<projectInfoSubModel> sublist = [model1, model2];
-    model.subList = sublist;
-
-    Map<String, dynamic> json = model.toJson();
-    List<Map<String, dynamic>> list = [json, json];
-    String teststr3 = jsonEncode(list);
-    List<dynamic> user2 = jsonDecode(teststr3);
-
-    //model转JSONrr
-    String teststr4 = "";
+//    String teststr = "[{\"remark\":\"ii\"},{\"remark\":\"ii\"}]";
+//    List<dynamic> user = jsonDecode(teststr);
+//    String teststr2 = jsonEncode(user);
+//
+//    projectInfoModel model = projectInfoModel("name", "des", 1, "备注11", []);
+//    projectInfoSubModel model1 = projectInfoSubModel("name1", "des1");
+//    projectInfoSubModel model2 = projectInfoSubModel("name2", "des2");
+//    List<projectInfoSubModel> sublist = [model1, model2];
+//    model.subList = sublist;
+//
+//    Map<String, dynamic> json = model.toJson();
+//    List<Map<String, dynamic>> list = [json, json];
+//    String teststr3 = jsonEncode(list);
+//    List<dynamic> user2 = jsonDecode(teststr3);
+//
+//    //model转JSONrr
+//    String teststr4 = "";
     // model.subList = {};
   }
 
