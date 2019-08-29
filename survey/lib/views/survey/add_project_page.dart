@@ -70,6 +70,9 @@ class _AddProjectPageState extends State<AddProjectPage> {
     String minuteStr =
         _dateTime.minute < 10 ? "0${_dateTime.minute}" : "${_dateTime.minute}";
 
+    if (this.subList == null) {
+      this.subList = [];
+    }
     String datestr =
         "${_dateTime.year}-${monthStr}-${dayStr} ${hourStr}:${minuteStr}";
     input.createTime = datestr;

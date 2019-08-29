@@ -52,17 +52,17 @@ class _ProjectListPageState extends State<ProjectListPage> {
       //   bottomSheet: bottomButton,
       //   // bottomSheet: bottomButton,
       // ) // This trailing comma makes auto-formatting nicer for build methods.
-      home: Home1(),
+      home: HomePage(),
     );
   }
 }
 
-class Home1 extends StatefulWidget {
+class HomePage extends StatefulWidget {
   @override
   _State createState() => _State();
 }
 
-class _State extends State<Home1> {
+class _State extends State<HomePage> {
   static List dataList = new List(); //static才能在build里使用
   static int listTotalCount = 0;
   static const EventChannel eventChannel =
@@ -70,8 +70,8 @@ class _State extends State<Home1> {
   bool _calendaring = false;
   String beginTimeStr = "";
   String endTimeStr = "";
-  int beginTime = 0;
-  int endTime = 0;
+  // int beginTime = 0;
+  // int endTime = 0;
   FocusNode _focusNode = FocusNode();
   bool isFrist = true;
   TextEditingController searchController = TextEditingController();
@@ -104,12 +104,7 @@ class _State extends State<Home1> {
   bool _loading = false;
   bool _loadMore = false;
   TimeOfDay _time = TimeOfDay.now();
-
-  // String teststr1 = "{remark : ii,projectName : 宝贝别扭扭捏捏},{}";
-  // final DismissDirection dismissDirection;
   final bool confirmDismiss = true;
-
-  // final ConfirmDismissCallback confirmDismiss1;
 
   Future<String> get token async {
     final sp = await SharedPreferences.getInstance();
@@ -151,9 +146,9 @@ class _State extends State<Home1> {
     });
 
     loadLocalData();
-    getData();
-    saveData();
-    token = "aaa";
+    // getData();
+    // saveData();
+    // token = "aaa";
 
     controller = new CalendarController();
     controller.addMonthChangeListener(
@@ -169,9 +164,9 @@ class _State extends State<Home1> {
       setState(() {});
     });
 
-    eventChannel
-        .receiveBroadcastStream("sendHistory")
-        .listen(_onEvent, onError: _onError);
+    // eventChannel
+    //     .receiveBroadcastStream("sendHistory")
+    //     .listen(_onEvent, onError: _onError);
     eventChannel
         .receiveBroadcastStream("sendProjectList")
         .listen(_onEvent, onError: _onError);
@@ -208,21 +203,21 @@ class _State extends State<Home1> {
     // model.subList = {};
   }
 
-  void saveData() async {
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setInt('counter', 5);
-  }
+  // void saveData() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   prefs.setInt('counter', 5);
+  // }
 
-  void getData() async {
-    final prefs = await SharedPreferences.getInstance();
-    final counter = prefs.getInt('counter') ?? 0;
-    final counter1 = prefs.getInt('counter') ?? 0;
-    print("countet = $counter");
-    if (counter > 0) {
-      btnStr = "已有项目";
-      setState(() {});
-    }
-  }
+  // void getData() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   final counter = prefs.getInt('counter') ?? 0;
+  //   final counter1 = prefs.getInt('counter') ?? 0;
+  //   print("countet = $counter");
+  //   if (counter > 0) {
+  //     btnStr = "已有项目";
+  //     setState(() {});
+  //   }
+  // }
 
   void loadLocalData() async {
     String hisoryKey = "projectList";
@@ -290,8 +285,8 @@ class _State extends State<Home1> {
         // _startLoading();
         setState(() {
           _calendaring = true;
-          beginTime = dic["beginTime"].toInt();
-          endTime = dic["endTime"].toInt();
+          int beginTime = dic["beginTime"].toInt();
+          int endTime = dic["endTime"].toInt();
           if (beginTime > 10000 && endTime > 10000) {
             DateTime date1 = new DateTime.fromMillisecondsSinceEpoch(beginTime);
             beginTimeStr = date1.toString();
@@ -334,15 +329,29 @@ class _State extends State<Home1> {
             // if (!str.contains('[') && !str.contains(']')) {
             //   str = "[" + str + "]";
             // }
-            String str1 = str.replaceAll(';', ',');
-            Map<String, dynamic> map = json.decode(str1);
-            projectInfoModel model = projectInfoModel.fromJson(map);
-            dataList.add(model);
+            str = str.replaceAll(';', ',');
+            str = str.replaceAll('subList\":}', 'subList\":[]}');
+            String str1 = '[' + str + ']';
+            List<dynamic> jsonList = jsonDecode(str1);
+            for (int i = 0; i < jsonList.length; i++) {
+              Map<String, dynamic> map = jsonList[i];
+              if (map["subList"] == null) {
+                map["subList"] = [];
+              }
+              projectInfoModel model = projectInfoModel.fromJson(map);
+              dataList.add(model);
+            }
+            // projectInfoModel model = projectInfoModel.fromJson(map);
             //把native发来的数据发给share_preferences保存下来
             //原来过来的数据存储share_preference
-            historyStr = historyStr + ',' + str;
+            if (historyStr.length == 0) {
+              historyStr = str;
+            } else {
+              historyStr = historyStr + ',' + str;
+            }
           }
         }
+        //historyStr这种格式的 "{"projectName":"ttttttuuuuyyyy"}
         SaveDataManger.addProjectHistory(historyStr, historyKey);
       }
 
@@ -397,11 +406,11 @@ class _State extends State<Home1> {
     }
     return;
     //调用IOS原生日历组件
-    Map<String, dynamic> map = {
-      "beginTime": beginTime > 10000 ? beginTime / 1000 : 0,
-      "endTime": endTime > 10000 ? endTime / 1000 : 0,
-    };
-    await methodChannel.invokeMethod('showCalendar', map);
+    // Map<String, dynamic> map = {
+    //   "beginTime": beginTime > 10000 ? beginTime / 1000 : 0,
+    //   "endTime": endTime > 10000 ? endTime / 1000 : 0,
+    // };
+    // await methodChannel.invokeMethod('showCalendar', map);
   }
 
   //调用原生文件导出
@@ -491,7 +500,7 @@ class _State extends State<Home1> {
       onSubmitted: (String str) {
         //提交监听
         // searchStr = val;
-        // print('用户提交变更');
+        // print('用户提���变更');
       },
       onChanged: (val) {
         searchStr = val;
@@ -539,7 +548,7 @@ class _State extends State<Home1> {
       ),
     );
 
-    Widget NavBar = AppBar(
+    Widget navBar = AppBar(
       elevation: 1.0,
       brightness: Brightness.light,
       backgroundColor: Colors.white,
@@ -935,7 +944,7 @@ class _State extends State<Home1> {
     );
 
     return Scaffold(
-      appBar: NavBar,
+      appBar: navBar,
       body: bodyContiner,
       // bottomSheet: bottomButton,
     );

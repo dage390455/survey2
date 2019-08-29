@@ -1,7 +1,7 @@
 import UIKit
 import Flutter
 import MAMapKit
-import shared_preferences
+//import shared_preferences
 import Photos
 
 @UIApplicationMain

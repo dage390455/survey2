@@ -109,10 +109,17 @@ class SaveDataManger {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     String history = prefs.getString(historyKey);
-    String str0 = history.substring(0, 1);
-    if (str0 == ',') {
-      history = history.substring(1, history.length);
+    if (history == null || history.length == 0) {
+      return List<dynamic>();
     }
+    if (history.length > 0) {
+      String str0 = history.substring(0, 1);
+      if (str0 == ',') {
+        history = history.substring(1, history.length);
+      }
+    }
+
+    history = history.replaceAll('subList\":}', 'subList\":[]}');
     history = "[$history]";
     if (history != null && history.length > 0) {
       List<dynamic> list = jsonDecode(history);
