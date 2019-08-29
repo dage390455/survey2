@@ -99,41 +99,34 @@ import Photos
         return true
     }
     
-    var localId:String!
+  
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         let image:UIImage = info[UIImagePickerControllerOriginalImage] as! UIImage
-        
-        PHPhotoLibrary.shared().performChanges({
-            let result = PHAssetChangeRequest.creationRequestForAsset(from: image)
-            let assetPlaceholder = result.placeholderForCreatedAsset
-            //保存标志符
-            self.localId = assetPlaceholder?.localIdentifier
-        }) { (isSuccess: Bool, error: Error?) in
-            if isSuccess {
-                print("保存成功!")
-                //通过标志符获取对应的资源
-                let assetResult = PHAsset.fetchAssets(
-                    withLocalIdentifiers: [self.localId], options: nil)
-                let asset = assetResult[0]
-                let options = PHContentEditingInputRequestOptions()
-                options.canHandleAdjustmentData = {(adjustmeta: PHAdjustmentData)
-                    -> Bool in
-                    return true
-                }
-                //获取保存的图片路径
-                asset.requestContentEditingInput(with: options, completionHandler: {
-                    (contentEditingInput:PHContentEditingInput?, info: [AnyHashable : Any]) in
-                    print("地址：",contentEditingInput!.fullSizeImageURL!.absoluteString)
-                    self.bascChanalpickImage.sendMessage(contentEditingInput!.fullSizeImageURL!.absoluteString)
-                })
-            } else{
-                print("保存失败：", error!.localizedDescription)
-            }
+       
+       
+        let home = NSHomeDirectory() as NSString
+        //打印沙盒路径,可以前往文件夹看到你下载好的图片
+        print(home)
+        let docPath = home.appendingPathComponent("Documents") as NSString
+        let filePath = docPath.appendingPathComponent(getCurrentId()+"666.png")
+        do {
+            try UIImagePNGRepresentation(image)?.write(to: URL(fileURLWithPath: filePath),options: NSData.WritingOptions.atomic)
+            bascChanalpickImage.sendMessage(filePath)
+//            writeToFile(filePath, options: NSData.WritingOptions.DataWritingAtomic)
+        }catch {
+            print(error)
         }
         picker.dismiss(animated: true, completion: nil)
 
     }
-   
+    func getCurrentId() -> String {
+        let now = NSDate()
+        let timeInterval:TimeInterval = now.timeIntervalSince1970
+        let timeStamp = Int(timeInterval)
+        return "\(timeStamp)"
+    }
+    
+
 }
 
 

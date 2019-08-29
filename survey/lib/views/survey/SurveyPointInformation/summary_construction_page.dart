@@ -1,6 +1,7 @@
 //现场情况
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:sensoro_survey/model/electrical_fire_model.dart';
 import 'package:sensoro_survey/views/survey/SurveyPointInformation/survay_electrical_fire.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 import 'package:sensoro_survey/views/survey/editPage/edit_address_page.dart';
@@ -22,20 +23,23 @@ class SummaryConstructionPage extends StatefulWidget {
 class _State extends State<SummaryConstructionPage> {
   BasicMessageChannel<String> _basicMessageChannel =
       BasicMessageChannel("BasicMessageChannelPlugin", StringCodec());
+
+  var fireModel =  ElectricalFireModel();
+
   var isCheack = false;
 
-  var name = "";
-  var purpose = "";
-  var address = "";
-  var location = "";
-
-  var structure = "";
-  var area = "";
-
-  var headName = "";
-  var headPhone = "";
-  var bossName = "";
-  var bossPhone = "";
+//  var name = "";
+//  var purpose = "";
+//  var address = "";
+//  var location = "";
+//
+//  var structure = "";
+//  var area = "";
+//
+//  var headName = "";
+//  var headPhone = "";
+//  var bossName = "";
+//  var bossPhone = "";
 
   @override
   void initState() {
@@ -43,7 +47,7 @@ class _State extends State<SummaryConstructionPage> {
           print(message);
           //message为native传递的数据
           setState(() {
-            location = message;
+            fireModel.editPosition = message;
           });
           //给Android端的返回值
           return "========================收到Native消息：" + message;
@@ -54,7 +58,7 @@ class _State extends State<SummaryConstructionPage> {
 
   //向native发送消息
   void _sendToNative() {
-    Future<String> future = _basicMessageChannel.send(location);
+    Future<String> future = _basicMessageChannel.send(fireModel.editPosition);
     future.then((message) {
       print("========================" + message);
     });
@@ -114,14 +118,14 @@ class _State extends State<SummaryConstructionPage> {
         context,
         new MaterialPageRoute(
             builder: (context) => new EditNamePage(
-                  name: this.name,
+                  name: this.fireModel.editName,
                 )),
       );
 
       if (result != null) {
         String name = result as String;
 
-        this.name = name;
+        this.fireModel.editName = name;
         updateNextButton();
         setState(() {});
       }
@@ -132,14 +136,14 @@ class _State extends State<SummaryConstructionPage> {
         context,
         new MaterialPageRoute(
             builder: (context) => new EditPurposePage(
-                  name: this.purpose,
+                  name: this.fireModel.editPurpose,
                 )),
       );
 
       if (result != null) {
         String name = result as String;
 
-        this.purpose = name;
+        this.fireModel.editPurpose = name;
         updateNextButton();
         setState(() {});
       }
@@ -150,18 +154,21 @@ class _State extends State<SummaryConstructionPage> {
         context,
         new MaterialPageRoute(
             builder: (context) => new EditAdressPage(
-                  name: this.address,
+                  name: this.fireModel.editAddress,
                 )),
       );
 
       if (result != null) {
         String name = result as String;
 
-        this.address = name;
+        this.fireModel.editAddress = name;
         updateNextButton();
         setState(() {});
       }
     }
+
+
+
 
     editLoction() async {
 //       final result = await Navigator.push(
@@ -186,14 +193,14 @@ class _State extends State<SummaryConstructionPage> {
         context,
         new MaterialPageRoute(
             builder: (context) => new SurveyPointStructureEditPage(
-                  name: this.structure,
+                  name: this.fireModel.editPointStructure,
                 )),
       );
 
       if (result != null) {
         String name = result as String;
 
-        this.structure = name;
+        this.fireModel.editPointStructure = name;
         updateNextButton();
         setState(() {});
       }
@@ -204,14 +211,14 @@ class _State extends State<SummaryConstructionPage> {
         context,
         new MaterialPageRoute(
             builder: (context) => new SurveyPointAreaEditPage(
-                  name: this.area,
+                  name: this.fireModel.editPointArea,
                 )),
       );
 
       if (result != null) {
         String name = result as String;
 
-        this.area = name;
+        this.fireModel.editPointArea = name;
         updateNextButton();
         setState(() {});
       }
@@ -222,14 +229,14 @@ class _State extends State<SummaryConstructionPage> {
         context,
         new MaterialPageRoute(
             builder: (context) => new EditHeadPersonPage(
-                  name: this.headName,
+                  name: this.fireModel.headPerson,
                 )),
       );
 
       if (result != null) {
         String name = result as String;
 
-        this.headName = name;
+        this.fireModel.headPerson = name;
         updateNextButton();
         setState(() {});
       }
@@ -240,14 +247,14 @@ class _State extends State<SummaryConstructionPage> {
         context,
         new MaterialPageRoute(
             builder: (context) => new EditHeadPersonPhonePage(
-                  name: this.headPhone,
+                  name: this.fireModel.headPhone,
                 )),
       );
 
       if (result != null) {
         String name = result as String;
 
-        this.headPhone = name;
+        this.fireModel.headPhone = name;
         updateNextButton();
         setState(() {});
       }
@@ -258,14 +265,14 @@ class _State extends State<SummaryConstructionPage> {
         context,
         new MaterialPageRoute(
             builder: (context) => new EditBossPersonPage(
-                  name: this.bossName,
+                  name: this.fireModel.bossName,
                 )),
       );
 
       if (result != null) {
         String name = result as String;
 
-        this.bossName = name;
+        this.fireModel.bossName = name;
         updateNextButton();
         setState(() {});
       }
@@ -276,14 +283,14 @@ class _State extends State<SummaryConstructionPage> {
         context,
         new MaterialPageRoute(
             builder: (context) => new EditBossPersonPhonePage(
-                  name: this.bossPhone,
+                  name: this.fireModel.bossPhone,
                 )),
       );
 
       if (result != null) {
         String name = result as String;
 
-        this.bossPhone = name;
+        this.fireModel.bossPhone = name;
         updateNextButton();
         setState(() {});
       }
@@ -306,7 +313,7 @@ class _State extends State<SummaryConstructionPage> {
                   Text("勘察点名称"),
                   Expanded(
                     child: Text(
-                      this.name.length > 0 ? this.name : "必填",
+                      this.fireModel.editName.length > 0 ? this.fireModel.editName : "必填",
                       textAlign: TextAlign.right,
                     ),
                   ),
@@ -332,7 +339,7 @@ class _State extends State<SummaryConstructionPage> {
                   Text("勘察点用途"),
                   Expanded(
                     child: Text(
-                      this.purpose.length > 0 ? this.purpose : "选填",
+                      this.fireModel.editPurpose.length > 0 ? this.fireModel.editPurpose : "选填",
                       textAlign: TextAlign.right,
                     ),
                   ),
@@ -358,7 +365,7 @@ class _State extends State<SummaryConstructionPage> {
                   Text("具体地址"),
                   Expanded(
                     child: Text(
-                      this.address.length > 0 ? this.address : "选填",
+                      this.fireModel.editAddress.length > 0 ? this.fireModel.editAddress : "选填",
                       textAlign: TextAlign.right,
                     ),
                   ),
@@ -384,7 +391,7 @@ class _State extends State<SummaryConstructionPage> {
                   Text("定位地址"),
                   Expanded(
                     child: Text(
-                      this.location.length > 0 ? this.location : "选填",
+                      this.fireModel.editPosition.length > 0 ? this.fireModel.editPosition : "选填",
                       textAlign: TextAlign.right,
                     ),
                   ),
@@ -417,7 +424,7 @@ class _State extends State<SummaryConstructionPage> {
                   Text("勘察点结构"),
                   Expanded(
                     child: Text(
-                      this.structure.length > 0 ? this.structure : "选填",
+                      this.fireModel.editPointStructure.length > 0 ? this.fireModel.editPointStructure : "选填",
                       textAlign: TextAlign.right,
                     ),
                   ),
@@ -443,7 +450,7 @@ class _State extends State<SummaryConstructionPage> {
                   Text("勘察点面积(㎡)"),
                   Expanded(
                     child: Text(
-                      this.area.length > 0 ? this.area : "选填",
+                      this.fireModel.editPointArea.length > 0 ? this.fireModel.editPointArea : "选填",
                       textAlign: TextAlign.right,
                     ),
                   ),
@@ -476,7 +483,7 @@ class _State extends State<SummaryConstructionPage> {
                   Text("现场负责人姓名"),
                   Expanded(
                     child: Text(
-                      this.headName.length > 0 ? this.headName : "必填",
+                      this.fireModel.headPerson.length > 0 ? this.fireModel.headPerson : "必填",
                       textAlign: TextAlign.right,
                     ),
                   ),
@@ -502,7 +509,7 @@ class _State extends State<SummaryConstructionPage> {
                   Text("现在负责人电话"),
                   Expanded(
                     child: Text(
-                      this.headPhone.length > 0 ? this.headPhone : "必填",
+                      this.fireModel.headPhone.length > 0 ? this.fireModel.headPhone : "必填",
                       textAlign: TextAlign.right,
                     ),
                   ),
@@ -528,7 +535,7 @@ class _State extends State<SummaryConstructionPage> {
                   Text("老板姓名"),
                   Expanded(
                     child: Text(
-                      this.bossName.length > 0 ? this.bossName : "选填",
+                      this.fireModel.bossName.length > 0 ? this.fireModel.bossName : "选填",
                       textAlign: TextAlign.right,
                     ),
                   ),
@@ -554,7 +561,7 @@ class _State extends State<SummaryConstructionPage> {
                   Text("老板电话"),
                   Expanded(
                     child: Text(
-                      this.bossPhone.length > 0 ? this.bossPhone : "选填",
+                      this.fireModel.bossPhone.length > 0 ? this.fireModel.bossPhone : "选填",
                       textAlign: TextAlign.right,
                     ),
                   ),
@@ -600,10 +607,10 @@ class _State extends State<SummaryConstructionPage> {
   }
 
   updateNextButton() {
-    if (name.length > 0 && headName.length > 0 && headPhone.length > 0) {
-      this.isCheack = true;
+    if (fireModel.editName.length > 0 && fireModel.headPerson.length > 0 && fireModel.headPhone.length > 0) {
+       this.isCheack = true;
     } else {
-      this.isCheack = false;
+       this.isCheack = false;
     }
   }
 }
