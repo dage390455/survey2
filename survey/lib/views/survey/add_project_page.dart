@@ -38,6 +38,8 @@ class _AddProjectPageState extends State<AddProjectPage> {
   String time = "";
   int id = 0;
   String remark = "";
+  List<dynamic> subList = [];
+
   bool isEdit = false;
 
   var bookName = "完成";
@@ -49,6 +51,7 @@ class _AddProjectPageState extends State<AddProjectPage> {
     name = this.input.projectName;
     time = this.input.createTime;
     id = this.input.projectId;
+    subList = this.input.subList;
     super.initState();
     if (name.length > 0 && id > 0) {
       this.isEdit = true;
@@ -71,6 +74,7 @@ class _AddProjectPageState extends State<AddProjectPage> {
         "${_dateTime.year}-${monthStr}-${dayStr} ${hourStr}:${minuteStr}";
     input.createTime = datestr;
     input.projectName = this.name;
+    input.subList = this.subList;
     if (!isEdit) {
       input.projectId = currentTimeMillis;
     }

@@ -108,7 +108,11 @@ class SaveDataManger {
   static Future<List<dynamic>> getProjectHistory(String historyKey) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    var history = prefs.getString(historyKey);
+    String history = prefs.getString(historyKey);
+    String str0 = history.substring(0, 1);
+    if (str0 == ',') {
+      history = history.substring(1, history.length);
+    }
     history = "[$history]";
     if (history != null && history.length > 0) {
       List<dynamic> list = jsonDecode(history);
@@ -148,6 +152,23 @@ class SaveDataManger {
   }
 
   //修改已存储的内容，编辑模式
+  static replaceHistory1(String tag, String historyKey, int id) async {
+    var history = await SaveDataManger.getHistory(historyKey);
+    List<String> tags = history;
+    for (int i = 0; i < tags.length; i++) {
+      String str = tags[i];
+      if (str.length < 3) {
+        continue;
+      }
+      Map<String, dynamic> map = json.decode(str);
+      if (map.containsKey("id") && map["id"].toInt() == id) {
+        String str1 = tags[i - 3];
+        Map<String, dynamic> map1 = json.decode(str1);
+      }
+    }
+  }
+
+  //修改已存储的内容，编辑模式
   static replaceHistory(String tag, String historyKey, int id) async {
     var history = await SaveDataManger.getProjectHistory(historyKey);
     List<dynamic> tags = history;
@@ -171,16 +192,42 @@ class SaveDataManger {
       String str = jsonEncode(list1);
       list.add(str);
     }
-    list.add(tag);
+    // list.add(tag);
+
+    String inputStr = "";
+    for (int i = 0; i < list.length; i++) {
+      String str = list[i];
+      str = str.replaceAll('[', '');
+      str = str.replaceAll(']', '');
+      if (inputStr.length == 0) {
+        inputStr = str;
+      } else {
+        inputStr = inputStr + ',' + str;
+      }
+    }
+    if (inputStr.length == 0) {
+      inputStr = tag;
+    } else {
+      inputStr = inputStr + ',' + tag;
+    }
+    List<String> list2 = inputStr.split(',');
     //这一步要把tags里的map转成字符串数组，再加上tag才能用
 
     // String newStr = jsonEncode(tags);
-    SaveDataManger.saveHistory(tags, historyKey);
+    // SaveDataManger.saveHistory(list2, historyKey);
 
-    // if (!history.contains(tag)) {
-    //   history.add(tag);
-    //   SaveDataManger.saveHistory(history, historyKey);
-    // }
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var f = await prefs.setString(historyKey, inputStr);
+    //tagsString={"projectName":"韩国哈哈","createTime":"2019-08-29 10:21","remark":"","id":1567045262407,"subList":[]},{"projectName":"哈哈哈哈","createTime":"2019-08-29 10:21","remark":"","id":1567045268967,"subList":[]},
+    //用自定义methodChannel保���本地化数据，不是shared_preferences
+
+    //给userdefault保存时，最外层用;分割.
+    String str1 = inputStr.replaceAll('},{"p', '};{"p');
+    Map<String, dynamic> map = {
+      "value": str1,
+      "key": historyKey,
+    };
+    await methodChannel.invokeMethod('saveHistoryList', map);
   }
 
   static deleteHistory(List<String> tags, String historyKey) async {
