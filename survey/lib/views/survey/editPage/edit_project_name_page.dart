@@ -115,10 +115,13 @@ class _State extends State<EditProjectNamePage> {
     );
 
     Widget backContainer = Container(
-        color: Colors.white,
-        padding: EdgeInsets.all(0),
+      color: Colors.white,
+      padding: EdgeInsets.all(0),
 //        height: 70,
-        child: container);
+      // child: Expanded(
+      child: container,
+      // ),
+    );
 
     Widget bigContainer = Container(
       color: prefix0.LIGHT_LINE_COLOR,
