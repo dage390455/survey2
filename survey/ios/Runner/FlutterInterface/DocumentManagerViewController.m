@@ -21,7 +21,6 @@
 
 @implementation DocumentManagerViewController
 
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -50,6 +49,7 @@
     //文件不存在会自动创建，文件夹不存在则不会自动创建会报错
 //    NSString *path = @"/Users/gx/Desktop/test_export.txt";
     NSError *error1;
+    jsonString = [jsonString stringByReplacingOccurrencesOfString:@"," withString:@";"];
     [jsonString writeToFile:path atomically:YES encoding:NSUTF8StringEncoding error:&error1];
     if (error1) {
         NSLog(@"写入失败:%@",error);
@@ -77,8 +77,8 @@
     //多媒体消息
     fileObj.fileExtension = @"txt";
     WXMediaMessage *wxMediaMessage = [WXMediaMessage message];
-    wxMediaMessage.title = @"share";
-    wxMediaMessage.description = @"描述";
+    wxMediaMessage.title = @"来自升哲勘查的文件";
+    wxMediaMessage.description = @"项目记录";
     wxMediaMessage.messageExt = @"txt";
     wxMediaMessage.mediaObject = fileObj;
     //发送消息
@@ -87,6 +87,7 @@
     req.bText = NO;
     req.scene = WXSceneSession;
     [WXApi sendReq:req];
+    
     
     //微信好友
     [shareParams SSDKSetupWeChatParamsByText:nil
@@ -118,33 +119,33 @@
     [shareParams SSDKEnableUseClientShare];
     
     
-    [ShareSDK showShareActionSheet:nil
-                             items:@[@(SSDKPlatformSubTypeWechatSession),
-                                     @(SSDKPlatformSubTypeWechatTimeline)]
-                       shareParams:shareParams
-               onShareStateChanged:^(SSDKResponseState state, SSDKPlatformType platformType, NSDictionary *userData, SSDKContentEntity *contentEntity, NSError *error, BOOL end) {
-                   switch (state) {
-                       case SSDKResponseStateBegin:
-                           break;
-                       case SSDKResponseStateSuccess:
-                           if (platformType == SSDKPlatformTypeCopy) {
-                               NSLog(@"复制成功");
-                           }else{
-                               NSLog(@"分享成功");
-                           }
-                           break;
-                       case  SSDKResponseStateFail:
-                           if (platformType == SSDKPlatformTypeCopy) {
-                               NSLog(@"复制失败");
-                           }else{
-                               NSLog(@"分享失败");
-                           }
-                           NSLog(@"失败：%@", error);
-                           break;
-                       default:
-                           break;
-                   }
-               }];
+//    [ShareSDK showShareActionSheet:nil
+//                             items:@[@(SSDKPlatformSubTypeWechatSession),
+//                                     @(SSDKPlatformSubTypeWechatTimeline)]
+//                       shareParams:shareParams
+//               onShareStateChanged:^(SSDKResponseState state, SSDKPlatformType platformType, NSDictionary *userData, SSDKContentEntity *contentEntity, NSError *error, BOOL end) {
+//                   switch (state) {
+//                       case SSDKResponseStateBegin:
+//                           break;
+//                       case SSDKResponseStateSuccess:
+//                           if (platformType == SSDKPlatformTypeCopy) {
+//                               NSLog(@"复制成功");
+//                           }else{
+//                               NSLog(@"分享成功");
+//                           }
+//                           break;
+//                       case  SSDKResponseStateFail:
+//                           if (platformType == SSDKPlatformTypeCopy) {
+//                               NSLog(@"复制失败");
+//                           }else{
+//                               NSLog(@"分享失败");
+//                           }
+//                           NSLog(@"失败：%@", error);
+//                           break;
+//                       default:
+//                           break;
+//                   }
+//               }];
 }
 
 #pragma mark - Share
@@ -174,8 +175,8 @@
          
          switch (platformType) {
              case SSDKPlatformTypeWechat:
-                 [appInfo SSDKSetupWeChatByAppId:@"wx10737ef55ada250d"
-                                       appSecret:@"7a8c3fdc89f7ef2ecf2aa5d2ddf32636"];
+                 [appInfo SSDKSetupWeChatByAppId:@"wxa6699198d77a32f2"
+                                       appSecret:@"e4f935b68806e2d49ba31cd0f3ae33ef"];
                  break;
              default:
                  break;

@@ -79,7 +79,7 @@ class _State extends State<Home1> {
   String dateFilterStr = "";
   List<String> dateFilterList = new List();
   String btnStr = '新建项目';
-  projectInfoModel selectModel = projectInfoModel("", "", 1, "");
+  projectInfoModel selectModel = projectInfoModel("", "", 1, "", []);
 
   CalendarController controller;
   // String dateText = "${DateTime.now().year}年${DateTime.now().month}月";
@@ -104,6 +104,12 @@ class _State extends State<Home1> {
   bool _loading = false;
   bool _loadMore = false;
   TimeOfDay _time = TimeOfDay.now();
+
+  // String teststr1 = "{remark : ii,projectName : 宝贝别扭扭捏捏},{}";
+  // final DismissDirection dismissDirection;
+  final bool confirmDismiss = true;
+
+  // final ConfirmDismissCallback confirmDismiss1;
 
   Future<String> get token async {
     final sp = await SharedPreferences.getInstance();
@@ -131,6 +137,8 @@ class _State extends State<Home1> {
     _focusNode.addListener(() {
       if (!_focusNode.hasFocus) {}
     });
+
+    testTranslate();
 
     //延时调用，重新获取window.physicalSize,因为release模式，不同机型有可能先显示页面后获取window.physicalSize
     _changeTimer = new Timer(Duration(milliseconds: 300), () {
@@ -176,6 +184,30 @@ class _State extends State<Home1> {
         ));
   }
 
+//测试JSON ，LIST ,MAP ,MODEL的转换
+  void testTranslate() {
+    // String teststr =
+    // "[{\'remark' : \'ii',\'createTime' : \'2019-08-22 16:58'},{\'remark' : \'oo',\'createTime' : \'2019-08-22 16:22'}]";
+    String teststr = "[{\"remark\":\"ii\"},{\"remark\":\"ii\"}]";
+    List<dynamic> user = jsonDecode(teststr);
+    String teststr2 = jsonEncode(user);
+
+    projectInfoModel model = projectInfoModel("name", "des", 1, "备注11", []);
+    projectInfoSubModel model1 = projectInfoSubModel("name1", "des1");
+    projectInfoSubModel model2 = projectInfoSubModel("name2", "des2");
+    List<projectInfoSubModel> sublist = [model1, model2];
+    model.subList = sublist;
+
+    Map<String, dynamic> json = model.toJson();
+    List<Map<String, dynamic>> list = [json, json];
+    String teststr3 = jsonEncode(list);
+    List<dynamic> user2 = jsonDecode(teststr3);
+
+    //model转JSONrr
+    String teststr4 = "";
+    // model.subList = {};
+  }
+
   void saveData() async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setInt('counter', 5);
@@ -194,21 +226,37 @@ class _State extends State<Home1> {
 
   void loadLocalData() async {
     String hisoryKey = "projectList";
-    List<String> tags = [];
-    tags = await SaveDataManger.getHistory(hisoryKey);
+    // List<String> tags = [];
+    List<dynamic> list = [];
+    list = await SaveDataManger.getProjectHistory(hisoryKey);
     setState(() {
       dataList.clear();
-      for (int i = 0; i < tags.length; i++) {
-        String jsonStr = tags[i];
-        if (jsonStr == null || jsonStr.length < 3) {
-          continue;
-        }
-        String jsonStr1 = jsonStr.replaceAll(';', ',');
-        Map<String, dynamic> map = json.decode(jsonStr1);
+      for (int i = 0; i < list.length; i++) {
+        Map<String, dynamic> map = list[i];
         projectInfoModel model = projectInfoModel.fromJson(map);
         dataList.add(model);
       }
     });
+
+    // String tags = jsonEncode(list);
+    // setState(() {
+    //   dataList.clear();
+    //   for (int i = 0; i < tags.length; i++) {
+    //     // Map<String, dynamic> map = tags[i];
+    //     String jsonStr = tags[i];
+    //     if (jsonStr == null || jsonStr.length < 3) {
+    //       continue;
+    //     }
+    //     // String jsonStr1 = jsonStr.replaceAll(';', ',');
+    //     Map<String, dynamic> map = json.decode(jsonStr);
+    //     projectInfoModel model = projectInfoModel.fromJson(map);
+    //     dataList.add(model);
+    //   }
+    // });
+  }
+
+  void deleteData(int index) async {
+    String hisoryKey = "projectList";
   }
 
   void initDetailList() {
@@ -216,7 +264,7 @@ class _State extends State<Home1> {
       var name = "测试设备 $index";
       name = "FAGJKJVXOE63S";
       if (index % 3 == 0) name = "项目1118888";
-      if (index % 3 == 1) name = "项目222";
+      if (index % 3 == 1) name = "项��222";
       if (index % 3 == 2) name = "项目333";
 
       var des = "状态 $index ��常";
@@ -225,7 +273,7 @@ class _State extends State<Home1> {
       if (index == 2) des = "2019-07-06 15:24";
       if (index == 3) des = "2019-07-22 02:14:09";
 
-      projectInfoModel model = projectInfoModel(name, des, index, "备注11");
+      projectInfoModel model = projectInfoModel(name, des, index, "备注11", []);
       dataList.add(model);
       // var a = 'dd';
       // a = cityDetailArrays[index].name;
@@ -273,7 +321,8 @@ class _State extends State<Home1> {
 
       if (name == "sendProjectList") {
         String projectListStr = dic["projectListStr"].toString();
-        List<String> list = projectListStr.split(',');
+        // List<String> list = projectListStr.split(',');
+        List<String> list = projectListStr.split(';');
         String historyKey = 'projectList';
         String historyStr = '';
         for (int i = 0; i < list.length; i++) {
@@ -282,6 +331,9 @@ class _State extends State<Home1> {
             if (str == null || str.length < 3) {
               continue;
             }
+            // if (!str.contains('[') && !str.contains(']')) {
+            //   str = "[" + str + "]";
+            // }
             String str1 = str.replaceAll(';', ',');
             Map<String, dynamic> map = json.decode(str1);
             projectInfoModel model = projectInfoModel.fromJson(map);
@@ -291,7 +343,7 @@ class _State extends State<Home1> {
             historyStr = historyStr + ',' + str;
           }
         }
-        SaveDataManger.addHistory(historyStr, historyKey);
+        SaveDataManger.addProjectHistory(historyStr, historyKey);
       }
 
       setState(() {});
@@ -373,40 +425,6 @@ class _State extends State<Home1> {
     );
   }
 
-  _direction() async {
-    var _confirmContent;
-    var _alertDialog;
-    if (_direction == DismissDirection.endToStart) {
-      // 从右向左  也就是删除
-      _confirmContent = '确认删除 ？';
-      _alertDialog = _createDialog(
-        _confirmContent,
-        () {
-          // 展示 SnackBar
-          Scaffold.of(context).showSnackBar(SnackBar(
-            content: Text('确认删除 '),
-            duration: Duration(milliseconds: 400),
-          ));
-          Navigator.of(context).pop(true);
-        },
-        () {
-          // 展示 SnackBar
-          Scaffold.of(context).showSnackBar(SnackBar(
-            content: Text('不删除 '),
-            duration: Duration(milliseconds: 400),
-          ));
-          Navigator.of(context).pop(false);
-        },
-      );
-    }
-    var isDismiss = await showDialog(
-        context: context,
-        builder: (context) {
-          return _alertDialog;
-        });
-    return isDismiss;
-  }
-
   @override
   Widget build(BuildContext context) {
     void _gotoPoint() async {
@@ -446,7 +464,7 @@ class _State extends State<Home1> {
     }
 
     void _addProject() async {
-      projectInfoModel model = projectInfoModel("", "", 1, "");
+      projectInfoModel model = projectInfoModel("", "", 1, "", []);
       final result = await Navigator.push(
         context,
         new MaterialPageRoute(
@@ -517,7 +535,7 @@ class _State extends State<Home1> {
 
         contentPadding:
             EdgeInsets.fromLTRB(3.0, 20.0, 3.0, 10.0), //设置显示��本的一个内边距
-// //                border: InputBorder.none,//取消默认的下划线边框
+// //                border: InputBorder.none,//取���默认的下划线边框
       ),
     );
 
@@ -560,6 +578,35 @@ class _State extends State<Home1> {
             }),
       ],
     );
+
+    Future<bool> _showConfirmationDialog(BuildContext context, String action) {
+      final ThemeData theme = Theme.of(context);
+      return showDialog<bool>(
+        context: context,
+        barrierDismissible: true,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('你想${action}这一条数据吗?'),
+            actions: <Widget>[
+              FlatButton(
+                color: theme.buttonColor,
+                child: Text(action.substring(0, 1).toUpperCase() +
+                    action.substring(1, action.length)),
+                onPressed: () {
+                  Navigator.pop(context, true);
+                },
+              ),
+              FlatButton(
+                child: const Text('取消'),
+                onPressed: () {
+                  Navigator.pop(context, false);
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
 
     Widget myListView = new ListView.builder(
         physics: new AlwaysScrollableScrollPhysics()
@@ -613,104 +660,136 @@ class _State extends State<Home1> {
             return emptyContainer;
           }
 
-          return Container(
-            color: Colors.white,
-            padding:
-                const EdgeInsets.only(top: 0.0, bottom: 0, left: 0, right: 0),
-            child: new Column(
+          return Dismissible(
+            key: Key("$index"),
+            onDismissed: (DismissDirection direction) {
+              if (direction == DismissDirection.endToStart) {
+                //这里处理数据
+                print("object");
+              }
+            },
+            direction: DismissDirection.endToStart,
+            // direction: DismissDirection.up,
+            confirmDismiss: !confirmDismiss
+                ? null
+                : (DismissDirection dismissDirection) async {
+                    switch (dismissDirection) {
+                      case DismissDirection.endToStart:
+                        return await _showConfirmationDialog(context, '删除') ==
+                            true;
+                      case DismissDirection.startToEnd:
+                        return false;
+                      // return await _showConfirmationDialog(
+                      //         context, 'delete') ==
+                      //     true;
+                      case DismissDirection.horizontal:
+                      case DismissDirection.vertical:
+                      case DismissDirection.up:
+                      case DismissDirection.down:
+                        assert(false);
+                    }
+                    return false;
+                  },
+            // confirmDismiss: confirmDismiss1,
+            child: new Container(
+              color: Colors.white,
+              padding:
+                  const EdgeInsets.only(top: 0.0, bottom: 0, left: 0, right: 0),
+              child: new Column(
 
-                //这行决定了�������对齐
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Container(
-                    color: LIGHT_LINE_COLOR,
-                    height: 12,
-                    width: prefix0.screen_width,
-                  ),
-
-                  GestureDetector(
-                    onTap: _gotoPoint,
-                    child: Container(
-                      color: Colors.white,
-                      padding: const EdgeInsets.only(
-                          top: 0.0, bottom: 0, left: 20, right: 20),
-                      child: Row(
-                          //Row 中mainAxisAlignment是水平的，Column中是垂直的
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          //表示所有的子��件都是从左到��顺序排列，这是默认值
-                          textDirection: TextDirection.ltr,
-                          children: <Widget>[
-                            //这行决定了左对齐
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: <Widget>[
-                                //这个位置用ListTile就会报错
-                                Text(name,
-                                    textAlign: TextAlign.start,
-                                    style: TextStyle(
-                                        color: prefix0.BLACK_TEXT_COLOR,
-                                        fontWeight: FontWeight.normal,
-                                        fontSize: 17)),
-                                Text(time,
-                                    textAlign: TextAlign.start,
-                                    style: TextStyle(
-                                        color: prefix0.BLACK_TEXT_COLOR,
-                                        fontWeight: FontWeight.normal,
-                                        fontSize: 17)),
-                              ],
-                            ),
-
-                            new SizedBox(
-                              width: 10,
-                            ),
-
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: <Widget>[
-                                new RaisedButton(
-                                  color: Colors.orange,
-                                  textColor: Colors.white,
-                                  child: new Text('编辑'),
-                                  onPressed: () {
-                                    _editProject(model);
-                                  },
-                                ),
-                                new RaisedButton(
-                                  color: prefix0.LIGHT_TEXT_COLOR,
-                                  textColor: Colors.white,
-                                  child: new Text('导出'),
-                                  onPressed: () {
-                                    _outputDocument();
-                                  },
-                                ),
-                                new RaisedButton(
-                                  color: prefix0.LIGHT_TEXT_COLOR,
-                                  textColor: Colors.white,
-                                  child: new Text('入口'),
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      new MaterialPageRoute(
-                                          builder: (context) =>
-                                              new SurveyPointInformationPage()),
-                                    );
-                                  },
-                                ),
-                              ],
-                            ),
-                          ]),
+                  //这行决定了�������对齐
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Container(
+                      color: LIGHT_LINE_COLOR,
+                      height: 12,
+                      width: prefix0.screen_width,
                     ),
-                  ),
 
-                  //分割线
-                  Container(
-                      width: prefix0.screen_width - 40,
-                      height: 1.0,
-                      color: FENGE_LINE_COLOR),
-                ]),
+                    GestureDetector(
+                      onTap: _gotoPoint,
+                      child: Container(
+                        color: Colors.white,
+                        padding: const EdgeInsets.only(
+                            top: 0.0, bottom: 0, left: 20, right: 20),
+                        child: Row(
+                            //Row 中mainAxisAlignment是水平的，Column中是垂直的
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            //表示所有的子��件都是从左到��顺序排列，这是默认值
+                            textDirection: TextDirection.ltr,
+                            children: <Widget>[
+                              //这��决定了左对齐
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: <Widget>[
+                                  //这个位置用ListTile就会报错
+                                  Text(name,
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                          color: prefix0.BLACK_TEXT_COLOR,
+                                          fontWeight: FontWeight.normal,
+                                          fontSize: 17)),
+                                  Text(time,
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                          color: prefix0.BLACK_TEXT_COLOR,
+                                          fontWeight: FontWeight.normal,
+                                          fontSize: 17)),
+                                ],
+                              ),
+
+                              new SizedBox(
+                                width: 10,
+                              ),
+
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: <Widget>[
+                                  new RaisedButton(
+                                    color: Colors.orange,
+                                    textColor: Colors.white,
+                                    child: new Text('编辑'),
+                                    onPressed: () {
+                                      _editProject(model);
+                                    },
+                                  ),
+                                  new RaisedButton(
+                                    color: prefix0.LIGHT_TEXT_COLOR,
+                                    textColor: Colors.white,
+                                    child: new Text('导出'),
+                                    onPressed: () {
+                                      _outputDocument();
+                                    },
+                                  ),
+                                  new RaisedButton(
+                                    color: prefix0.LIGHT_TEXT_COLOR,
+                                    textColor: Colors.white,
+                                    child: new Text('入口'),
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        new MaterialPageRoute(
+                                            builder: (context) =>
+                                                new SurveyPointInformationPage()),
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ]),
+                      ),
+                    ),
+
+                    //分割线
+                    Container(
+                        width: prefix0.screen_width - 40,
+                        height: 1.0,
+                        color: FENGE_LINE_COLOR),
+                  ]),
+            ),
           );
         });
 

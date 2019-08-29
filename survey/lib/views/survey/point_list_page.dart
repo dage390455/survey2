@@ -107,7 +107,6 @@ class _PointListPageState extends State<PointListPage> {
       dataList.clear();
       for (int i = 0; i < tags.length; i++) {
         String jsonStr = tags[i];
-        jsonStr = jsonStr.replaceAll(';', ',');
         if (jsonStr == null || jsonStr.length < 3) {
           continue;
         }
@@ -132,7 +131,7 @@ class _PointListPageState extends State<PointListPage> {
       if (index == 2) des = "2019-07-06 15:24";
       if (index == 3) des = "2019-07-22 02:14:09";
 
-      projectInfoModel model = projectInfoModel(name, des, index, "备注11");
+      projectInfoModel model = projectInfoModel(name, des, index, "备注11", []);
       dataList.add(model);
       // var a = 'dd';
       // a = cityDetailArrays[index].name;

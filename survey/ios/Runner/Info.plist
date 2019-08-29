@@ -8,6 +8,29 @@
 	<string>cn</string>
 	<key>CFBundleDisplayName</key>
 	<string>升哲勘查</string>
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>com.myapp.common-data</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>com.microsoft.powerpoint.ppt</string>
+				<string>public.item</string>
+				<string>com.microsoft.word.doc</string>
+				<string>com.adobe.pdf</string>
+				<string>com.microsoft.excel.xls</string>
+				<string>public.image</string>
+				<string>public.content</string>
+				<string>public.composite-content</string>
+				<string>public.archive</string>
+				<string>public.rtf</string>
+				<string>public.movie</string>
+				<string>public.text</string>
+				<string>public.data</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -20,16 +43,6 @@
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
 	<string>$(FLUTTER_BUILD_NAME)</string>
-	<key>LSApplicationQueriesSchemes</key>
-	<array>
-		<string>wechat</string>
-		<string>weixin</string>
-		<string>baidumap</string>
-	</array>
-	<key>MOBAppSecret</key>
-	<string>03966e80c6ce1a956f97c53fff05be43</string>
-	<key>MOBAppKey</key>
-	<string>2337087078556</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
@@ -38,7 +51,7 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>com.sensoro.survey</string>
+			<string>com.sensoro.survey1</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>surveyt</string>
@@ -51,14 +64,26 @@
 			<string>weixin</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>wx10737ef55ada250d</string>
+				<string>wxa6699198d77a32f2</string>
 			</array>
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>wechat</string>
+		<string>weixin</string>
+		<string>baidumap</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>MOBAppKey</key>
+	<string>2337087078556</string>
+	<key>MOBAppSecret</key>
+	<string>03966e80c6ce1a956f97c53fff05be43</string>
+	<key>NSCameraUsageDescription</key>
+	<string>用于识别设备的二维码来快速获取设备信息，或在部署设备和确认报警情况时，拍摄相关图片</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>在部署设备时，用来当前位置部署设备，或在巡检时，获取当前位置周边的设备</string>
 	<key>NSLocationAlwaysUsageDescription</key>
@@ -82,6 +107,7 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+ 
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
@@ -116,5 +142,6 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+ 
 </dict>
 </plist>
