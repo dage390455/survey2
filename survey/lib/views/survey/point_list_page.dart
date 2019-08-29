@@ -505,8 +505,9 @@ class _PointListPageState extends State<PointListPage> {
           // updatedTimeStr = updatedTimeStr.substring(0, 19);
           // print("updatedTimeStr = $updatedTimeStr");
 
-          Map model = dataList[index];
+          Map modelMap = dataList[index];
 
+          ElectricalFireModel model = ElectricalFireModel.fromJson(modelMap);
           if (!model.editName.contains(searchStr) && searchStr.length > 0) {
             return emptyContainer;
           }
