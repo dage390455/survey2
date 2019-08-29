@@ -47,15 +47,36 @@ class SaveDataManger {
     }
 
     var f = await prefs.setString(historyKey, tagsString);
-
+    //tagsString={"projectName":"韩国哈哈","createTime":"2019-08-29 10:21","remark":"","id":1567045262407,"subList":[]},{"projectName":"哈哈哈哈","createTime":"2019-08-29 10:21","remark":"","id":1567045268967,"subList":[]},
     //用自定义methodChannel保存本地化数据，不是shared_preferences
+
+    //给userdefault保存时，最外层用;分割.
+    String str1 = tagsString.replaceAll('},{"p', '};{"p');
     Map<String, dynamic> map = {
-      "value": tagsString,
+      "value": str1,
       "key": historyKey,
     };
     await methodChannel.invokeMethod('saveHistoryList', map);
 
     print("---------------" + f.toString());
+  }
+
+  static saveProjectHistory(List<String> tags, String historyKey) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    var tagsString = "";
+
+    for (int i = 0; i < tags.length; i++) {
+      if (tagsString.length == 0) {
+        tagsString = tags[i];
+      } else {
+        tagsString = tagsString + "," + tags[i];
+      }
+    }
+
+    var f = await prefs.setString(historyKey, tagsString);
+    //tagsString={"projectName":"韩国哈哈","createTime":"2019-08-29 10:21","remark":"","id":1567045262407,"subList":[]},{"projectName":"哈哈哈哈","createTime":"2019-08-29 10:21","remark":"","id":1567045268967,"subList":[]},
+    //用自定义methodChannel保存本地化数据，不是shared_preferences
   }
 
   static Future<List<String>> getHistory(String historyKey) async {
@@ -108,16 +129,22 @@ class SaveDataManger {
 
       SaveDataManger.saveHistory(history, historyKey);
     }
+    //history是一个被,分割后的字符串数组,[0]"{"projectName":"韩国哈哈"" [1]""createTime":"2019-08-29 10:21""
   }
 
   static addProjectHistory(String tag, String historyKey) async {
-    var history = await SaveDataManger.getProjectHistory(historyKey);
-    List<dynamic> tags = history;
+    var history = await SaveDataManger.getHistory(historyKey);
+
+    // if (historyKey == "projectList") {
+    //   history = await SaveDataManger.getProjectHistory(historyKey);
+    // }
+
     if (!history.contains(tag)) {
       history.add(tag);
 
-      SaveDataManger.saveHistory(history, historyKey);
+      SaveDataManger.saveProjectHistory(history, historyKey);
     }
+    //history是一个被,分割后的字符串数组,[0]"{"projectName":"韩国哈哈"" [1]""createTime":"2019-08-29 10:21""
   }
 
   //修改已存储的内容，编辑模式

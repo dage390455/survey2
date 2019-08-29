@@ -321,7 +321,8 @@ class _State extends State<Home1> {
 
       if (name == "sendProjectList") {
         String projectListStr = dic["projectListStr"].toString();
-        List<String> list = projectListStr.split(',');
+        // List<String> list = projectListStr.split(',');
+        List<String> list = projectListStr.split(';');
         String historyKey = 'projectList';
         String historyStr = '';
         for (int i = 0; i < list.length; i++) {
@@ -330,8 +331,11 @@ class _State extends State<Home1> {
             if (str == null || str.length < 3) {
               continue;
             }
-            // String str1 = str.replaceAll(';', ',');
-            Map<String, dynamic> map = json.decode(str);
+            // if (!str.contains('[') && !str.contains(']')) {
+            //   str = "[" + str + "]";
+            // }
+            String str1 = str.replaceAll(';', ',');
+            Map<String, dynamic> map = json.decode(str1);
             projectInfoModel model = projectInfoModel.fromJson(map);
             dataList.add(model);
             //把native发来的数据发给share_preferences保存下来
@@ -339,7 +343,7 @@ class _State extends State<Home1> {
             historyStr = historyStr + ',' + str;
           }
         }
-        SaveDataManger.addHistory(historyStr, historyKey);
+        SaveDataManger.addProjectHistory(historyStr, historyKey);
       }
 
       setState(() {});
