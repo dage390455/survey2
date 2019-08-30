@@ -74,7 +74,7 @@ class FlutterProjectListViewController: FlutterBaseViewController,UIDocumentInte
     //读取本地flutter数据 ，并发送给flutter
     func loadLocalProjectList() -> Void{
         let userDefaults = UserDefaults.standard;
-        //勘查的项目列表本地存储
+        //勘察的项目列表本地存储
         //{"projectName":"永野芽郁","createTime":"2019-08-29 10:47","remark":"","id":1567046850508,"subList":[]};{"projectName":"久","createTime":"2019-08-29 10:47","remark":"","id":1567046855664,"subList":[]}
         if let str = userDefaults.object(forKey: "projectList") {
             self.mEventSink?(["name":"sendProjectList","projectListStr":str] )

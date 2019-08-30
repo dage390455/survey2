@@ -25,10 +25,9 @@ class _State extends State<SummaryConstructionPage> {
   BasicMessageChannel<String> _basicMessageChannel =
       BasicMessageChannel("BasicMessageChannelPlugin", StringCodec());
 
-  ElectricalFireModel fireModel =  DataTransferManager.shared.fireCreatModel;
+  ElectricalFireModel fireModel = DataTransferManager.shared.fireCreatModel;
 
   var isCheack = false;
-
 
   @override
   void initState() {
@@ -57,8 +56,6 @@ class _State extends State<SummaryConstructionPage> {
   }
 
   nextStep() async {
-
-
     final result = await Navigator.push(
       context,
       new MaterialPageRoute(
@@ -68,7 +65,7 @@ class _State extends State<SummaryConstructionPage> {
     if (result != null) {
       String name = result as String;
 
-      if(name == "1"){
+      if (name == "1") {
         Navigator.of(context).pop("1");
       }
     }
@@ -111,15 +108,11 @@ class _State extends State<SummaryConstructionPage> {
                 fontSize: 20)),
         onPressed: () {
           if (this.isCheack) {
-
             nextStep();
-
           }
         },
       ),
     );
-
-
 
     editName() async {
       final result = await Navigator.push(
@@ -174,9 +167,6 @@ class _State extends State<SummaryConstructionPage> {
         setState(() {});
       }
     }
-
-
-
 
     editLoction() async {
 //       final result = await Navigator.push(
@@ -321,7 +311,9 @@ class _State extends State<SummaryConstructionPage> {
                   Text("勘察点名称"),
                   Expanded(
                     child: Text(
-                      this.fireModel.editName.length > 0 ? this.fireModel.editName : "必填",
+                      this.fireModel.editName.length > 0
+                          ? this.fireModel.editName
+                          : "必填",
                       textAlign: TextAlign.right,
                     ),
                   ),
@@ -347,7 +339,9 @@ class _State extends State<SummaryConstructionPage> {
                   Text("勘察点用途"),
                   Expanded(
                     child: Text(
-                      this.fireModel.editPurpose.length > 0 ? this.fireModel.editPurpose : "选填",
+                      this.fireModel.editPurpose.length > 0
+                          ? this.fireModel.editPurpose
+                          : "选填",
                       textAlign: TextAlign.right,
                     ),
                   ),
@@ -373,7 +367,9 @@ class _State extends State<SummaryConstructionPage> {
                   Text("具体地址"),
                   Expanded(
                     child: Text(
-                      this.fireModel.editAddress.length > 0 ? this.fireModel.editAddress : "选填",
+                      this.fireModel.editAddress.length > 0
+                          ? this.fireModel.editAddress
+                          : "选填",
                       textAlign: TextAlign.right,
                     ),
                   ),
@@ -399,7 +395,9 @@ class _State extends State<SummaryConstructionPage> {
                   Text("定位地址"),
                   Expanded(
                     child: Text(
-                      this.fireModel.editPosition.length > 0 ? this.fireModel.editPosition : "选填",
+                      this.fireModel.editPosition.length > 0
+                          ? this.fireModel.editPosition
+                          : "选填",
                       textAlign: TextAlign.right,
                     ),
                   ),
@@ -432,7 +430,9 @@ class _State extends State<SummaryConstructionPage> {
                   Text("勘察点结构"),
                   Expanded(
                     child: Text(
-                      this.fireModel.editPointStructure.length > 0 ? this.fireModel.editPointStructure : "选填",
+                      this.fireModel.editPointStructure.length > 0
+                          ? this.fireModel.editPointStructure
+                          : "选填",
                       textAlign: TextAlign.right,
                     ),
                   ),
@@ -458,7 +458,9 @@ class _State extends State<SummaryConstructionPage> {
                   Text("勘察点面积(㎡)"),
                   Expanded(
                     child: Text(
-                      this.fireModel.editPointArea.length > 0 ? this.fireModel.editPointArea : "选填",
+                      this.fireModel.editPointArea.length > 0
+                          ? this.fireModel.editPointArea
+                          : "选填",
                       textAlign: TextAlign.right,
                     ),
                   ),
@@ -491,7 +493,9 @@ class _State extends State<SummaryConstructionPage> {
                   Text("现场负责人姓名"),
                   Expanded(
                     child: Text(
-                      this.fireModel.headPerson.length > 0 ? this.fireModel.headPerson : "必填",
+                      this.fireModel.headPerson.length > 0
+                          ? this.fireModel.headPerson
+                          : "必填",
                       textAlign: TextAlign.right,
                     ),
                   ),
@@ -517,7 +521,9 @@ class _State extends State<SummaryConstructionPage> {
                   Text("现场负责人电话"),
                   Expanded(
                     child: Text(
-                      this.fireModel.headPhone.length > 0 ? this.fireModel.headPhone : "必填",
+                      this.fireModel.headPhone.length > 0
+                          ? this.fireModel.headPhone
+                          : "必填",
                       textAlign: TextAlign.right,
                     ),
                   ),
@@ -543,7 +549,9 @@ class _State extends State<SummaryConstructionPage> {
                   Text("老板姓名"),
                   Expanded(
                     child: Text(
-                      this.fireModel.bossName.length > 0 ? this.fireModel.bossName : "选填",
+                      this.fireModel.bossName.length > 0
+                          ? this.fireModel.bossName
+                          : "选填",
                       textAlign: TextAlign.right,
                     ),
                   ),
@@ -569,7 +577,9 @@ class _State extends State<SummaryConstructionPage> {
                   Text("老板电话"),
                   Expanded(
                     child: Text(
-                      this.fireModel.bossPhone.length > 0 ? this.fireModel.bossPhone : "选填",
+                      this.fireModel.bossPhone.length > 0
+                          ? this.fireModel.bossPhone
+                          : "选填",
                       textAlign: TextAlign.right,
                     ),
                   ),
@@ -615,10 +625,12 @@ class _State extends State<SummaryConstructionPage> {
   }
 
   updateNextButton() {
-    if (fireModel.editName.length > 0 && fireModel.headPerson.length > 0 && fireModel.headPhone.length > 0) {
-       this.isCheack = true;
+    if (fireModel.editName.length > 0 &&
+        fireModel.headPerson.length > 0 &&
+        fireModel.headPhone.length > 0) {
+      this.isCheack = true;
     } else {
-       this.isCheack = false;
+      this.isCheack = false;
     }
   }
 }

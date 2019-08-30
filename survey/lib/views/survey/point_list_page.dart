@@ -384,10 +384,10 @@ class _PointListPageState extends State<PointListPage> {
                                     // height: 20,
                                   ),
                             onPressed: () {
-                              setState(() {
-                                isRightSelect = false;
-                                isLeftSelect = true;
-                              });
+                              //   setState(() {
+                              //     isRightSelect = false;
+                              //     isLeftSelect = true;
+                              //   });
                             },
                           ),
                         ),
