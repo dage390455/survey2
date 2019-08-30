@@ -445,12 +445,12 @@ class _State extends State<HomePage> {
   }
 
   //调用原生文件导出
-  _outputDocument() async {
+  _outputDocument(int index) async {
+    selectModel = dataList[index];
     Map<String, dynamic> json = selectModel.toJson();
     Map<String, dynamic> map = {
       "json": json,
     };
-    await methodChannel.invokeMethod('outputDocument', map);
   }
 
   Widget _createDialog(
@@ -762,24 +762,34 @@ class _State extends State<HomePage> {
                             textDirection: TextDirection.ltr,
                             children: <Widget>[
                               //这��决定了左对齐
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: <Widget>[
-                                  //这个位置用ListTile就会报错
-                                  Text(name,
-                                      textAlign: TextAlign.start,
-                                      style: TextStyle(
-                                          color: prefix0.BLACK_TEXT_COLOR,
-                                          fontWeight: FontWeight.normal,
-                                          fontSize: 17)),
-                                  Text(time,
-                                      textAlign: TextAlign.start,
-                                      style: TextStyle(
-                                          color: prefix0.BLACK_TEXT_COLOR,
-                                          fontWeight: FontWeight.normal,
-                                          fontSize: 17)),
-                                ],
+                              Expanded(
+                                child: Container(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: <Widget>[
+                                      //这个位置用ListTile就会报错
+                                      // Expanded(
+                                      Text(name,
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                              color: prefix0.BLACK_TEXT_COLOR,
+                                              fontWeight: FontWeight.normal,
+                                              fontSize: 17)),
+                                      // ),
+                                      new SizedBox(
+                                        height: 2,
+                                      ),
+                                      Text(time,
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                              color: prefix0.BLACK_TEXT_COLOR,
+                                              fontWeight: FontWeight.normal,
+                                              fontSize: 17)),
+                                    ],
+                                  ),
+                                ),
                               ),
 
                               new SizedBox(
@@ -803,7 +813,7 @@ class _State extends State<HomePage> {
                                     textColor: Colors.white,
                                     child: new Text('导出'),
                                     onPressed: () {
-                                      _outputDocument();
+                                      _outputDocument(index);
                                     },
                                   ),
 //                                  new RaisedButton(
