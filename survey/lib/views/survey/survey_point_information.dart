@@ -30,6 +30,26 @@ class _State extends State<SurveyPointInformationPage> {
         : BoxDecoration(),
   );
 
+  nextStep() async {
+
+
+    final result = await Navigator.push(
+      context,
+      new MaterialPageRoute(
+          builder: (context) =>  new SummaryConstructionPage()),
+    );
+
+    if (result != null) {
+      String name = result as String;
+
+      if(name == "1"){
+        Navigator.of(context).pop("1");
+      }
+    }
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     PageController controller = PageController(viewportFraction: 0.8);
@@ -70,11 +90,13 @@ class _State extends State<SurveyPointInformationPage> {
                 fontSize: 20)),
         onPressed: () {
           if (this.isCheack) {
-            Navigator.push(
-              context,
-              new MaterialPageRoute(
-                  builder: (context) => new SummaryConstructionPage()),
-            );
+
+            nextStep();
+//            Navigator.push(
+//              context,
+//              new MaterialPageRoute(
+//                  builder: (context) => new SummaryConstructionPage()),
+//            );
           }
         },
       ),

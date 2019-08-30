@@ -254,26 +254,26 @@ class _State extends State<HomePage> {
     String hisoryKey = "projectList";
   }
 
-  void initDetailList() {
-    for (int index = 0; index < 1000; index++) {
-      var name = "测试设备 $index";
-      name = "FAGJKJVXOE63S";
-      if (index % 3 == 0) name = "项目1118888";
-      if (index % 3 == 1) name = "项��222";
-      if (index % 3 == 2) name = "项目333";
-
-      var des = "状态 $index ��常";
-      des = "11:04:12";
-      if (index == 1) des = "2019-07-03 10:54";
-      if (index == 2) des = "2019-07-06 15:24";
-      if (index == 3) des = "2019-07-22 02:14:09";
-
-      projectInfoModel model = projectInfoModel(name, des, index, "备注11", []);
-      dataList.add(model);
-      // var a = 'dd';
-      // a = cityDetailArrays[index].name;
-    }
-  }
+//  void initDetailList() {
+//    for (int index = 0; index < 1000; index++) {
+//      var name = "测试设备 $index";
+//      name = "FAGJKJVXOE63S";
+//      if (index % 3 == 0) name = "项目1118888";
+//      if (index % 3 == 1) name = "项��222";
+//      if (index % 3 == 2) name = "项目333";
+//
+//      var des = "状态 $index ��常";
+//      des = "11:04:12";
+//      if (index == 1) des = "2019-07-03 10:54";
+//      if (index == 2) des = "2019-07-06 15:24";
+//      if (index == 3) des = "2019-07-22 02:14:09";
+//
+//      projectInfoModel model = projectInfoModel(name, des, index, "备注11", []);
+//      dataList.add(model);
+//      // var a = 'dd';
+//      // a = cityDetailArrays[index].name;
+//    }
+//  }
 
   void _onEvent(Object value) {
     if (value is Map) {
@@ -436,12 +436,12 @@ class _State extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    void _gotoPoint() async {
+    void _gotoPoint(int index) async {
       // projectInfoModel model = projectInfoModel("", "", 1, "");
       final result = await Navigator.push(
         context,
         new MaterialPageRoute(
-            builder: (context) => new PointListPage(input: selectModel)),
+            builder: (context) => new PointListPage(input: dataList[index])),
       );
 
       if (result != null) {
@@ -717,7 +717,9 @@ class _State extends State<HomePage> {
                     ),
 
                     GestureDetector(
-                      onTap: _gotoPoint,
+                      onTap: (){
+                        _gotoPoint(index);
+                      },
                       child: Container(
                         color: Colors.white,
                         padding: const EdgeInsets.only(
@@ -773,19 +775,19 @@ class _State extends State<HomePage> {
                                       _outputDocument();
                                     },
                                   ),
-                                  new RaisedButton(
-                                    color: prefix0.LIGHT_TEXT_COLOR,
-                                    textColor: Colors.white,
-                                    child: new Text('入口'),
-                                    onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        new MaterialPageRoute(
-                                            builder: (context) =>
-                                                new SurveyPointInformationPage()),
-                                      );
-                                    },
-                                  ),
+//                                  new RaisedButton(
+//                                    color: prefix0.LIGHT_TEXT_COLOR,
+//                                    textColor: Colors.white,
+//                                    child: new Text('入口'),
+//                                    onPressed: () {
+//                                      Navigator.push(
+//                                        context,
+//                                        new MaterialPageRoute(
+//                                            builder: (context) =>
+//                                                new SurveyPointInformationPage()),
+//                                      );
+//                                    },
+//                                  ),
                                 ],
                               ),
                             ]),

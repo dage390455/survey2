@@ -11,69 +11,74 @@ class DataTransferManager {
   static var shared = DataTransferManager();
 
   var project = projectInfoModel("","",1,"",[]);
+  ElectricalFireModel fireCreatModel;
 
-  var fireCreatModel =  ElectricalFireModel(prefix0.currentTimeMillis(),
-    "",
-    "",
-    "",
-    "",
+  bool isEditModel = false;
 
-    "",
-    "",
-    "",
-    "",
-    "",
+  creatModel(){
+     fireCreatModel =  ElectricalFireModel(prefix0.currentTimeMillis(),
+        "",
+        "",
+        "",
+        "",
 
-    "",
-    "",
-    "",
-    "",
-    "",
+        "",
+        "",
+        "",
+        "",
+        "",
 
-    "",
-    "",
-    "",
-    "",
-    "",
+        "",
+        "",
+        "",
+        "",
+        "",
 
-    "",
-    "",
-    "",
-    "",
-    "",
+        "",
+        "",
+        "",
+        "",
+        "",
 
-    1,
-    1,
-    1,
-    "",
-    "",
+        "",
+        "",
+        "",
+        "",
+        "",
 
-    1,
-    1,
-    1,
-    "",
-    1,
+        1,
+        1,
+        1,
+        "",
+        "",
 
-    1,
-    0,
-    "",
-    "",
-    "",
+        1,
+        1,
+        1,
+        "",
+        1,
 
-    1,
-    "",
-    ""
-  );
+        1,
+        0,
+        "",
+        "",
+        "",
+
+        1,
+        "",
+        ""
+    );
+  }
+
+
+
 
 
   saveProject(){
     String historyKey = 'projectList';
     Map<String, dynamic> map = project.toJson();
     String jsonStr = json.encode(map);
-    // jsonStr = jsonStr.replaceAll(',', ';');
-
-    SaveDataManger.addHistory(jsonStr, historyKey);
-
+    SaveDataManger.replaceHistory(jsonStr, historyKey, project.projectId);
   }
 
 

@@ -23,6 +23,7 @@ import 'package:sensoro_survey/model/project_info_model.dart';
 import 'package:sensoro_survey/views/survey/comment/save_data_manager.dart';
 import 'package:sensoro_survey/views/survey/survey_type_page.dart';
 
+import 'SurveyPointInformation/summary_construction_page.dart';
 import 'comment/data_transfer_manager.dart';
 
 class PointListPage extends StatefulWidget {
@@ -79,7 +80,7 @@ class _PointListPageState extends State<PointListPage> {
   //组件即将销毁时调用
   @override
   void dispose() {
-    dataList.clear();
+//    dataList.clear();
     super.dispose();
   }
 
@@ -102,23 +103,23 @@ class _PointListPageState extends State<PointListPage> {
         ));
   }
 
-  void loadLocalData() async {
-    String hisoryKey = "projectList";
-    List<String> tags = [];
-    tags = await SaveDataManger.getHistory(hisoryKey);
-    setState(() {
-      dataList.clear();
-      for (int i = 0; i < tags.length; i++) {
-        String jsonStr = tags[i];
-        if (jsonStr == null || jsonStr.length < 3) {
-          continue;
-        }
-        Map<String, dynamic> map = json.decode(jsonStr);
-        projectInfoModel model = projectInfoModel.fromJson(map);
-        dataList.add(model);
-      }
-    });
-  }
+//  void loadLocalData() async {
+//    String hisoryKey = "projectList";
+//    List<String> tags = [];
+//    tags = await SaveDataManger.getHistory(hisoryKey);
+//    setState(() {
+//      dataList.clear();
+//      for (int i = 0; i < tags.length; i++) {
+//        String jsonStr = tags[i];
+//        if (jsonStr == null || jsonStr.length < 3) {
+//          continue;
+//        }
+//        Map<String, dynamic> map = json.decode(jsonStr);
+//        projectInfoModel model = projectInfoModel.fromJson(map);
+//        dataList.add(model);
+//      }
+//    });
+//  }
 
   void initDetailList() {
     for (int index = 0; index < 1000; index++) {
@@ -177,12 +178,28 @@ class _PointListPageState extends State<PointListPage> {
   // 错误处理
   void _onError(dynamic) {}
 
-  void _gotoSurveyType() {
-    Navigator.push(
+
+
+  _gotoSurveyType() async {
+
+
+    final result = await Navigator.push(
       context,
-      new MaterialPageRoute(builder: (context) => new SurveyTypePage()),
+      new MaterialPageRoute(
+          builder: (context) => SurveyTypePage()),
     );
+
+    if (result != null) {
+      String name = result as String;
+
+      if(name == "1"){
+        setState(() {
+
+        });
+      }
+    }
   }
+
 
   _navBack() async {
     Map<String, dynamic> map = {
@@ -362,6 +379,7 @@ class _PointListPageState extends State<PointListPage> {
                 onPressed: () {
 
                   DataTransferManager.shared.project = input;
+                  DataTransferManager.shared.creatModel();
                   _gotoSurveyType();
                 },
               ),
@@ -444,6 +462,50 @@ class _PointListPageState extends State<PointListPage> {
           ]),
     );
 
+    String _getFireModelCreateDate(int timeId){
+
+
+
+
+      DateTime _dateTime = DateTime.fromMillisecondsSinceEpoch(timeId);
+      String monthStr =
+      _dateTime.month < 10 ? "0${_dateTime.month}" : "${_dateTime.month}";
+      String dayStr =
+      _dateTime.day < 10 ? "0${_dateTime.day}" : "${_dateTime.day}";
+      String hourStr =
+      _dateTime.hour < 10 ? "0${_dateTime.hour}" : "${_dateTime.hour}";
+      String minuteStr =
+      _dateTime.minute < 10 ? "0${_dateTime.minute}" : "${_dateTime.minute}";
+
+
+      return "${_dateTime.year}-${monthStr}-${dayStr} ${hourStr}:${minuteStr}";
+
+    }
+
+
+    editSurvey() async {
+
+
+      final result = await Navigator.push(
+        context,
+        new MaterialPageRoute(
+            builder: (context) => new SummaryConstructionPage()),
+      );
+
+      if (result != null) {
+        String name = result as String;
+
+        if(name == "1"){
+          setState(() {
+
+          });
+        }
+      }
+    }
+
+
+
+
     Widget myListView = new ListView.builder(
         physics: new AlwaysScrollableScrollPhysics()
             .applyTo(new BouncingScrollPhysics()), // 这个是用来控制能否在不满屏的状态下滚动的属性
@@ -472,38 +534,6 @@ class _PointListPageState extends State<PointListPage> {
               ]),
             );
           }
-
-          // if (!(dataList[index - 1] is Map)) {
-          //   return emptyContainer;
-          // }
-
-          // Map dic = dataList[index];
-          // var scheduleNo =
-          //     dic["scheduleNo"] == null ? "" : dic["scheduleNo"];
-          // var contact = dic["contact"];
-          // var name = contact["name"] == null ? "" : contact["name"];
-          // var total = "0";
-          // var successTotal = "0";
-          // if (dic["complete"] != null) {
-          //   successTotal = dic["complete"].toString();
-          // }
-          // if (dic["total"] != null) {
-          //   total = dic["total"].toString();
-          // }
-          // var totalStr = "$successTotal/$total";
-          // var updatedTimeStr = dic["updatedTime"].toString();
-          // var updatedTime = dic["updatedTime"].toInt();
-          // var type = dic["type"] == null ? "" : dic["type"];
-          // var content = dic["content"] == null ? "" : dic["content"];
-          // var rules = dic["rules"];
-          // var typeStr = "";
-          // var contentStr = "";
-
-          // DateTime date =
-          //     new DateTime.fromMillisecondsSinceEpoch(updatedTime);
-          // updatedTimeStr = date.toString();
-          // updatedTimeStr = updatedTimeStr.substring(0, 19);
-          // print("updatedTimeStr = $updatedTimeStr");
 
           Map modelMap = dataList[index];
 
@@ -572,7 +602,7 @@ class _PointListPageState extends State<PointListPage> {
                                         color: prefix0.BLACK_TEXT_COLOR,
                                         fontWeight: FontWeight.normal,
                                         fontSize: 17)),
-                                Text(model.electricalFireId.toString(),
+                                Text( _getFireModelCreateDate(model.electricalFireId),
                                     textAlign: TextAlign.start,
                                     style: TextStyle(
                                         color: prefix0.BLACK_TEXT_COLOR,
@@ -594,7 +624,18 @@ class _PointListPageState extends State<PointListPage> {
                                 color: Colors.orange,
                                 textColor: Colors.white,
                                 child: new Text('编辑'),
-                                onPressed: () {},
+                                onPressed: () {
+                                  DataTransferManager.shared.project = input;
+                                  DataTransferManager.shared.fireCreatModel = model;
+                                  DataTransferManager.shared.isEditModel = true;
+
+//                                  Navigator.push(
+//                                    context,
+//                                    new MaterialPageRoute(
+//                                        builder: (context) => new SummaryConstructionPage()),
+//                                  );
+                                  editSurvey();
+                                },
                               ),
                               // new RaisedButton(
                               //   color: prefix0.LIGHT_TEXT_COLOR,
@@ -614,6 +655,8 @@ class _PointListPageState extends State<PointListPage> {
                 ]),
           );
         });
+
+
 
     Widget myRefreshListView = ProgressDialog(
       loading: _loading,

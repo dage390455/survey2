@@ -32,6 +32,7 @@ class _State extends State<SummaryConstructionPage> {
 
   @override
   void initState() {
+    updateNextButton();
     _basicMessageChannel.setMessageHandler((message) => Future<String>(() {
           print(message);
           //message为native传递的数据
@@ -55,6 +56,24 @@ class _State extends State<SummaryConstructionPage> {
     super.initState();
   }
 
+  nextStep() async {
+
+
+    final result = await Navigator.push(
+      context,
+      new MaterialPageRoute(
+          builder: (context) => new SurvayElectricalFirePage()),
+    );
+
+    if (result != null) {
+      String name = result as String;
+
+      if(name == "1"){
+        Navigator.of(context).pop("1");
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget NavBar = AppBar(
@@ -63,7 +82,7 @@ class _State extends State<SummaryConstructionPage> {
       brightness: Brightness.light,
       backgroundColor: Colors.white,
       title: Text(
-        "勘察点信息",
+        "勘查点信息",
         style: TextStyle(color: Colors.black),
       ),
       leading: IconButton(
@@ -92,15 +111,15 @@ class _State extends State<SummaryConstructionPage> {
                 fontSize: 20)),
         onPressed: () {
           if (this.isCheack) {
-            Navigator.push(
-              context,
-              new MaterialPageRoute(
-                  builder: (context) => new SurvayElectricalFirePage()),
-            );
+
+            nextStep();
+
           }
         },
       ),
     );
+
+
 
     editName() async {
       final result = await Navigator.push(

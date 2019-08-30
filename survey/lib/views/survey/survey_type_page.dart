@@ -72,8 +72,13 @@ class _SurveyTypePageState extends State<SurveyTypePage> {
 
       if (result != null) {
         String name = result as String;
+
+        if(name == "1"){
+          Navigator.of(context).pop("1");
+        }else{
+          setState(() {});
+        }
         // this.name = name;
-        setState(() {});
       }
     }
 

@@ -10,6 +10,7 @@ import 'package:sensoro_survey/model/electical_fire_create_model.dart';
 import 'package:sensoro_survey/model/electrical_fire_model.dart';
 import 'package:sensoro_survey/views/survey/SurveyPointInformation/stick_widget.dart';
 import 'package:sensoro_survey/views/survey/comment/data_transfer_manager.dart';
+import 'package:sensoro_survey/views/survey/comment/save_data_manager.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 import 'package:sensoro_survey/views/survey/editPage/edit_electrical_address_page.dart';
 import 'package:sensoro_survey/views/survey/editPage/edit_electrical_current_page.dart';
@@ -39,6 +40,8 @@ class _State extends State<SurvayElectricalFirePage> {
   var _groupValue=1;
   int picImageIndex = 0;
 
+  var hisoryKey = "isNeedPresent";
+
   var _currentValue=1;
   TextEditingController step1remarkController = TextEditingController(
   );
@@ -59,10 +62,33 @@ class _State extends State<SurvayElectricalFirePage> {
       //给Android端的返回值
       return "========================收到Native消息：" + message;
     }));
+
+    _getIsNeedShowPresent();
      step1remarkController.text = fireCreatModel.step1Remak;
      step3remarkController.text = fireCreatModel.step3Remak;
      step4remarkController.text = fireCreatModel.step4Remak;
+    updateNextButton();
     super.initState();
+  }
+
+  _getIsNeedShowPresent() async {
+    List tags = await SaveDataManger.getHistory(hisoryKey);
+
+    if (tags.length>0){
+      String isNeedDate = tags[0];
+
+      DateTime date = DateTime.parse(isNeedDate);
+      var difference = date.difference(DateTime.now());
+
+      if (difference.inDays>=1){
+        _groupValue = 0;
+      }else{
+        _groupValue = 1;
+      }
+
+    }else{
+         _groupValue = 0;
+    }
   }
 
 
@@ -201,9 +227,19 @@ class _State extends State<SurvayElectricalFirePage> {
   }
 
   showPicDialog(){
+      if (_groupValue == 1){
+         openGallery();
+      }else{
+//        showPicDialog2();
+        showPicDialognew();
+      }
+  }
+
+  showPicDialog2(){
     showDialog<Null>(
       context: context,
       builder: (BuildContext context) {
+        int selected = _groupValue;
         return new SimpleDialog(
           title: new Text('电箱环境拍照示例',
             textAlign: TextAlign.center,
@@ -225,7 +261,12 @@ class _State extends State<SurvayElectricalFirePage> {
               padding: new EdgeInsets.fromLTRB(0, 10, 0, 0),
               child: new Row(
                 children: <Widget>[
-                  new Radio(value: 7, groupValue: _groupValue, onChanged: null),
+                  new Radio(value: 1, groupValue: selected, onChanged: (int e){
+                    setState(() {
+                      selected = e;
+                      SaveDataManger.saveHistory([DateTime.now().toString()], hisoryKey);
+                    });
+                  }),
                   Text("今日不再提示"),
                 ],
               ) ,
@@ -262,9 +303,79 @@ class _State extends State<SurvayElectricalFirePage> {
     });
   }
 
+  showPicDialognew(){
+    showDialog(
+        context: context,
+        builder: (context) {
+          bool selected = false;
+          return new AlertDialog(
+            title:new Text('电箱环境拍照示例',
+              textAlign: TextAlign.center,
+
+            ),
+            content:
+            new StatefulBuilder(builder: (context, StateSetter setState) {
+              return Container(
+                child: Column(
+                  children: <Widget>[
+
+                    Padding(
+                      padding: new EdgeInsets.fromLTRB(20, 0, 20, 20),
+                      child: new Text("需看到电箱四周墙面情况及离地高度"),
+                    ),
+                    Image.asset("assets/images/take_photo_prompt.png",
+                      width: 150,
+                      height: 150,
+
+                    ),
+
+                    Padding(
+                      padding: new EdgeInsets.fromLTRB(0, 10, 0, 0),
+                      child: new Row(
+                        children: <Widget>[
+                         Radio(value: 1, groupValue: selected, onChanged: null),
+
+                          Text("今日不再提示"),
+                        ],
+                      ) ,
+                    ),
+
+                    new SimpleDialogOption(
+                      child:Padding(
+                        padding: new EdgeInsets.fromLTRB(20, 20, 20, 20),
+                        child: GestureDetector(
+                          onTap: null, //写入方法名称就可以了，但是是无参的
+                          child: Container(
+
+                              color: prefix0.TITLE_TEXT_COLOR,
+                              alignment: Alignment.center,
+                              height: 50,
+                              child: new Text("拍照",
+                                style: new TextStyle(color: Colors.white),
+                              )
+                          ),
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        openGallery();
+                      },
+                    ),
+
+                  ],
+                )
+              );
+            }),
+          );
+        });
+
+  }
+
+
   /*拍照*/
   takePhoto1() async {
      picImageIndex = 0;
+
      showPicDialog();
   }
 
@@ -409,9 +520,27 @@ class _State extends State<SurvayElectricalFirePage> {
                 fontSize: 20)),
         onPressed: () {
           if (this.isCheack){
-            DataTransferManager.shared.project.subList.add(DataTransferManager.shared.fireCreatModel.toJson());
+
+            if (DataTransferManager.shared.isEditModel){
+
+              for (int i = 0;i<DataTransferManager.shared.project.subList.length;i++){
+               Map map = DataTransferManager.shared.project.subList[i];
+
+               ElectricalFireModel model = ElectricalFireModel.fromJson(map);
+                if (model.electricalFireId == DataTransferManager.shared.fireCreatModel.electricalFireId){
+                  DataTransferManager.shared.project.subList.remove(map);
+                  break;
+                }
+              }
+              DataTransferManager.shared.project.subList.add(DataTransferManager.shared.fireCreatModel.toJson());
+            }else{
+              DataTransferManager.shared.project.subList.add(DataTransferManager.shared.fireCreatModel.toJson());
+            }
+
+
             DataTransferManager.shared.saveProject();
-            Navigator.popAndPushNamed(context, '/');
+
+            Navigator.of(context).pop("1");
           }
         },
       ),
