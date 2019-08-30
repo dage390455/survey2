@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+
     package="com.sensoro.survey">
 
     <!--
@@ -10,8 +12,6 @@
          FlutterApplication and put your custom class here.
     -->
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- 允许程序设置内置sd卡的写权限 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -23,14 +23,26 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <!-- 允许程序访问CellID或WiFi热点来获取粗略的位置 -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/logo"
         android:label="升哲稽查">
 
-
+        <meta-data
+            android:name="android.notch_support"
+            android:value="true" /> <!-- 适配小米（xiaomi）刘海屏 -->
+        <meta-data
+            android:name="notch.config"
+            android:value="portrait|landscape" />
+        <meta-data
+            android:name="android.max_aspect"
+            android:value="2.4" />
         <!--<service android:name="com.amap.api.location.APSService" />-->
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="223082ee8e171c2e60fe707d8bb48806" />
 
         <activity
             android:name="com.sensoro.survey.MainActivity"
@@ -57,9 +69,27 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.sensoro.survey.LocationEdtitActivtiy"
-            android:theme="@style/LaunchTheme"
-            ></activity>
+        <activity
+            android:name="com.sensoro.survey.LocationEdtitActivtiy"
+            android:theme="@style/LaunchTheme"></activity>
+        <activity
+            android:name="com.sensoro.survey.DeployMapActivity"
+            android:theme="@style/LaunchTheme"></activity>
+
+        <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:theme="@style/DisablePreviewTheme" />
+        <activity
+            android:name=".wxapi.WXPayEntryActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:theme="@style/DisablePreviewTheme" />
+
+
+        <service android:name="com.amap.api.location.APSService" />
+
     </application>
 
 </manifest>

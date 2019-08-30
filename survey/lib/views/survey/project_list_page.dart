@@ -28,8 +28,12 @@ import 'package:sensoro_survey/views/survey/add_project_page.dart';
 import 'package:sensoro_survey/model/project_info_model.dart';
 import 'package:sensoro_survey/views/survey/SurveyPointInformation/summary_construction_page.dart';
 import 'package:sensoro_survey/views/survey/comment/save_data_manager.dart';
+import 'package:fluwx/fluwx.dart' as fluwx;
 
 class ProjectListPage extends StatefulWidget {
+  String _text = "share text from fluwx";
+  fluwx.WeChatScene scene = fluwx.WeChatScene.SESSION;
+
   _ProjectListPageState createState() => _ProjectListPageState();
 }
 
@@ -53,6 +57,27 @@ class _ProjectListPageState extends State<ProjectListPage> {
       home: HomePage(),
     );
   }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    _initFluwx();
+    fluwx.responseFromShare.listen((data) {
+      print(data.toString());
+    });
+  }
+}
+
+_initFluwx() async {
+  await fluwx.register(
+      appId: "wxa65d8bad62a982e1",
+      doOnAndroid: true,
+      doOnIOS: false,
+      enableMTA: false);
+  var result = await fluwx.isWeChatInstalled();
+  print("is installed $result");
 }
 
 class HomePage extends StatefulWidget {
@@ -81,6 +106,7 @@ class _State extends State<HomePage> {
   FocusNode _focusNode = FocusNode();
 
   static Map<String, dynamic> headers = {};
+
   // 创建一个给native的channel (类似iOS的通知）
   static const methodChannel =
       const MethodChannel('com.pages.your/project_list');
@@ -371,7 +397,76 @@ class _State extends State<HomePage> {
     Map<String, dynamic> map = {
       "json": json,
     };
+//    StringBuffer stringBuffer = new StringBuffer();
+//    map.forEach((String key, dynamic value) {
+//      stringBuffer..write(value);
+//      stringBuffer..write("\n");
+//    });
+//    print(stringBuffer.toString());
+//    showWxDialog(stringBuffer.toString());
     await methodChannel.invokeMethod('outputDocument', map);
+  }
+
+  /**
+   * 分享弹窗
+   */
+  showWxDialog(String res) {
+    showDialog(
+        context: context,
+        builder: (ctx) {
+          return SimpleDialog(
+            title: Text("分享到微信"),
+            titlePadding: EdgeInsets.all(10),
+            backgroundColor: Colors.white,
+            elevation: 5,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(6))),
+            children: <Widget>[
+              ListTile(
+                title: Center(
+                  child: Text("会话"),
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+
+                  _shareText(res, fluwx.WeChatScene.SESSION);
+                },
+              ),
+              ListTile(
+                title: Center(
+                  child: Text("朋友圈"),
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+
+                  _shareText(res, fluwx.WeChatScene.TIMELINE);
+                },
+              ),
+              ListTile(
+                title: Center(
+                  child: Text("Close"),
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          );
+        });
+  }
+
+  /**
+   * 分享
+   */
+  void _shareText(String _text, fluwx.WeChatScene scene) {
+    fluwx
+        .share(fluwx.WeChatShareTextModel(
+            text: _text,
+            transaction: "text${DateTime.now().millisecondsSinceEpoch}",
+            scene: scene))
+        .then((data) {
+      print(data);
+    });
   }
 
   @override
@@ -449,14 +544,16 @@ class _State extends State<HomePage> {
       controller: searchController,
       cursorWidth: 0,
       cursorColor: Colors.white,
-      keyboardType: TextInputType.text, //设置输入框文本类型
+      keyboardType: TextInputType.text,
+      //设置输入框文本类型
       textAlign: TextAlign.left,
       //设置内容显示位置是否居中等
       style: new TextStyle(
         fontSize: 13.0,
         color: prefix0.BLACK_TEXT_COLOR,
       ),
-      autofocus: false, //自动获取焦点
+      autofocus: false,
+      //自动获取焦点
       decoration: new InputDecoration(
         border: InputBorder.none,
         hintText: "项目名称",

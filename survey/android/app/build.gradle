@@ -38,67 +38,62 @@ android {
         targetSdkVersion 28
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk {
             abiFilters "armeabi-v7a"
         }
-        manifestPlaceholders = [
-                AMAP_KEY: "223082ee8e171c2e60fe707d8bb48806", /// 高德地图key
-        ]
+//        manifestPlaceholders = [
+//                AMAP_KEY: "223082ee8e171c2e60fe707d8bb48806", /// 高德地图key
+//        ]
     }
     signingConfigs {
         release {
-            keyAlias 'sensoro'
-            keyPassword 'sensoro'
-            storeFile file('sensoro.keystore')
-            storePassword 'sensoro'
+
+            storeFile file('UQI_AUTO')
+            storePassword 'uqi88888'
+            keyAlias 'uqi'
+            keyPassword 'uqi88888'
+
         }
         debug {
-            keyAlias 'sensoro'
-            keyPassword 'sensoro'
-            storeFile file('sensoro.keystore')
-            storePassword 'sensoro'
+            storeFile file('UQI_AUTO')
+            storePassword 'uqi88888'
+            keyAlias 'uqi'
+            keyPassword 'uqi88888'
         }
     }
 
     buildTypes {
-        release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig signingConfigs.debug
-            ndk {
-                abiFilters "armeabi-v7a"
-            }
-        }
-
-
         debug {
-            ndk {
-                abiFilters "armeabi-v7a"
-            }
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            debuggable true
+//
+//            ]
         }
-
+        release {
+            //是否zip对齐
+            zipAlignEnabled true
+            // 缩减resource文件
+            shrinkResources false
+            //Proguard
+            minifyEnabled false
+            //
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+            debuggable false
+//
+//            ]
+        }
     }
 }
-//compileOptions {
-//    sourceCompatibility JavaVersion.VERSION_1_8
-//    targetCompatibility JavaVersion.VERSION_1_8
-//}
-//sourceSets {
-//    main {
-//        jniLibs.srcDir 'libs'
-//    }
-//
-//}
 flutter {
     source '../..'
 }
 
 dependencies {
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     //3D地图so及jar
     api 'com.amap.api:3dmap:latest.integration'
@@ -106,5 +101,5 @@ dependencies {
     api 'com.amap.api:location:latest.integration'
     //搜索功能
     api 'com.amap.api:search:latest.integration'
-//    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'androidx.core:core:1.1.0-rc02'
 }
