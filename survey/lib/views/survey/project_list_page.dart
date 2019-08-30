@@ -451,6 +451,7 @@ class _State extends State<HomePage> {
     Map<String, dynamic> map = {
       "json": json,
     };
+    await methodChannel.invokeMethod('outputDocument', map);
   }
 
   Widget _createDialog(
