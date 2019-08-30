@@ -178,6 +178,7 @@ class _AddProjectPageState extends State<AddProjectPage> {
             children: <Widget>[
               GestureDetector(
                 onTap: editName, //写入方法名称就可以了，但是是无参的
+
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
