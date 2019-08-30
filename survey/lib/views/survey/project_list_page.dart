@@ -748,7 +748,7 @@ class _State extends State<HomePage> {
                     ),
 
                     GestureDetector(
-                      onTap: (){
+                      onTap: () {
                         _gotoPoint(index);
                       },
                       child: Container(

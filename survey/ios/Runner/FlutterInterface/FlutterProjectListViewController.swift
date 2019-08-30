@@ -233,11 +233,9 @@ class FlutterProjectListViewController: FlutterBaseViewController,UIDocumentInte
         
         if str == "sendProjectList"{
             self.loadLocalProjectList();
-        }
-        
-        if str == "sendHistory"{
             self.loadLocalHistoryList();
         }
+        
         
         events("我来自native222")
         return nil
