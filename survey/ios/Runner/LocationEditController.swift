@@ -24,6 +24,7 @@ class LocationEditController: UIViewController {
     var lon : Double = 0;
     var lat : Double = 0;
 
+    
     var readOnly : Bool = false;//标识是否只用来显示位置，
     var repositionDeviceOnly : Bool = false; //是否只是编辑设备位置
 //    var deployType : DeployType = .device;//记录部署类型，部署基站时，并不需要相应的ChannelMask设定。

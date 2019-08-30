@@ -1,7 +1,9 @@
 //现场情况
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:sensoro_survey/views/survey/SurveyPointInformation/summary_construction_page.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
+import 'package:sensoro_survey/views/survey/const.dart';
 
 import 'Electric_box_information_page.dart';
 
@@ -12,6 +14,7 @@ class SurveyPointInformationPage extends StatefulWidget {
 
 class _State extends State<SurveyPointInformationPage> {
   var isCheack = false;
+  var isLastPage = false;
 
   static bool _isAddGradient = false;
 
@@ -31,24 +34,20 @@ class _State extends State<SurveyPointInformationPage> {
   );
 
   nextStep() async {
-
-
     final result = await Navigator.push(
       context,
       new MaterialPageRoute(
-          builder: (context) =>  new SummaryConstructionPage()),
+          builder: (context) => new SummaryConstructionPage()),
     );
 
     if (result != null) {
       String name = result as String;
 
-      if(name == "1"){
+      if (name == "1") {
         Navigator.of(context).pop("1");
       }
     }
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +60,7 @@ class _State extends State<SurveyPointInformationPage> {
       brightness: Brightness.light,
       backgroundColor: Colors.white,
       title: Text(
-        "现场情况",
+        "指导说明书",
         style: TextStyle(color: Colors.black),
       ),
       leading: IconButton(
@@ -76,30 +75,68 @@ class _State extends State<SurveyPointInformationPage> {
       ),
     );
 
-    Widget bottomButton = Container(
-      color: prefix0.LIGHT_LINE_COLOR,
-      height: 60,
-      width: prefix0.screen_width,
-      child: new MaterialButton(
-        color: this.isCheack ? prefix0.GREEN_COLOR : Colors.grey,
-        textColor: Colors.white,
-        child: new Text('下一步',
-            style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.normal,
-                fontSize: 20)),
-        onPressed: () {
-          if (this.isCheack) {
+    Widget emptyContainer = Container(
+      height: 0,
+      width: 0,
+    );
 
-            nextStep();
+    Widget bottomButton = Container(
+      color: Colors.white,
+      height: 108,
+      width: prefix0.screen_width,
+      child: Column(
+          //这行决定了左对齐
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            !isLastPage
+                ? emptyContainer
+                : new Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    //表示所有的子控件都是从左到右序排列，这是默认值
+                    textDirection: TextDirection.ltr,
+                    children: <Widget>[
+                        IconButton(
+                          icon: isCheack
+                              ? Icon(Icons.check_box)
+                              : Icon(Icons.check_box_outline_blank),
+                          onPressed: () {
+                            setState(() {
+                              isCheack ? isCheack = false : isCheack = true;
+                            });
+                          },
+                        ),
+                        Text('我已阅读完说明',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.normal,
+                                fontSize: 20)),
+                      ]),
+            Container(
+              height: 60,
+              width: prefix0.screen_width,
+              child: new MaterialButton(
+                color: this.isCheack ? prefix0.GREEN_COLOR : Colors.grey,
+                textColor: Colors.white,
+                child: new Text('下一步',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.normal,
+                        fontSize: 20)),
+                onPressed: () {
+                  if (this.isCheack) {
+                    nextStep();
 //            Navigator.push(
 //              context,
 //              new MaterialPageRoute(
 //                  builder: (context) => new SummaryConstructionPage()),
 //            );
-          }
-        },
-      ),
+                  }
+                },
+              ),
+            ),
+          ]),
     );
 
     Widget container = Container(
@@ -169,79 +206,125 @@ class _State extends State<SurveyPointInformationPage> {
       ),
     );
 
+    final List<Widget> _pages = <Widget>[
+      new ConstrainedBox(
+        constraints: const BoxConstraints.expand(),
+        child: new Image(
+          width: double.infinity,
+          height: double.infinity,
+          // fit: BoxFit.fitWidth,
+          image: new AssetImage("assets/images/page1.png"),
+          // width: 200,
+          // height: 200,
+          // fit: BoxFit.fitWidth,
+        ),
+      ),
+      new ConstrainedBox(
+        constraints: const BoxConstraints.expand(),
+        child: new Image(
+          image: new AssetImage("assets/images/page2.png"),
+          width: double.infinity,
+          height: double.infinity,
+          fit: BoxFit.fitWidth,
+        ),
+      ),
+      new ConstrainedBox(
+        constraints: const BoxConstraints.expand(),
+        child: new Image(
+          image: new AssetImage("assets/images/page3.png"),
+          width: double.infinity,
+          height: double.infinity,
+          fit: BoxFit.fitWidth,
+        ),
+      ),
+    ];
+
     Widget mainScaffold = Scaffold(
       appBar: NavBar,
       backgroundColor: Colors.black,
-      body: Center(
-        child: SizedBox.fromSize(
-          size: Size.fromHeight(550.0),
-          child: PageView.builder(
-            controller: controller,
-            itemCount: 3,
-            onPageChanged: (int index) {
-              if (index == 2) {
-                setState(() {
-                  isCheack = true;
-                });
-              }
-            },
-            itemBuilder: (BuildContext context, int index) {
-              String imagePath = "";
-              switch (index) {
-                case 0:
-                  imagePath = "assets/images/page1.png";
-                  break;
-                case 1:
-                  imagePath = "assets/images/page2.png";
-                  break;
-                case 2:
-                  imagePath = "assets/images/page3.png";
-                  isCheack = true;
-                  break;
-              }
+      body: Container(
+        width: prefix0.screen_width + 200,
+        // height: 500,
+        color: Colors.white,
 
-              return Padding(
-                padding: EdgeInsets.symmetric(
-                  vertical: 8.0,
-                  horizontal: 4.0,
-                ),
-                child: GestureDetector(
-                  onTap: () {
-                    Scaffold.of(context).showSnackBar(SnackBar(
-                      backgroundColor: Colors.white,
-                      duration: Duration(milliseconds: 20000),
-                      content: Center(
-                        child: new Image(
-                          image: new AssetImage(imagePath),
-                          width: prefix0.screen_width + 300,
-                          height: (prefix0.screen_width + 300) * 1.3,
-                          // width: 20,
-                          // height: 20,
-                          // fit: BoxFit.fitWidth,
-                        ),
+        // child: SizedBox.fromSize(
+        //   size: Size.fromWidth(prefix0.screen_width),
+        // size: Size.fromHeight(prefix0.screen_height),
+        // size: Size.fromHeight(100),
+        child: PageView.builder(
+          controller: controller,
+          itemCount: 3,
+          pageSnapping: true,
+          reverse: false,
+          physics: PageScrollPhysics(parent: BouncingScrollPhysics()),
+          // dragStartBehavior: DragStartBehavior.down,
+          onPageChanged: (int index) {
+            if (index == 2) {
+              setState(() {
+                isLastPage = true;
+              });
+            } else {
+              setState(() {
+                // isLastPage = false;
+              });
+            }
+          },
+          itemBuilder: (BuildContext context, int index) {
+            return _pages[index];
+            String imagePath = "";
+            switch (index) {
+              case 0:
+                imagePath = "assets/images/page1.png";
+                break;
+              case 1:
+                imagePath = "assets/images/page2.png";
+                break;
+              case 2:
+                imagePath = "assets/images/page3.png";
+                break;
+            }
+
+            return Padding(
+              padding: EdgeInsets.symmetric(
+                vertical: 0.0,
+                horizontal: 0.0,
+              ),
+              child: GestureDetector(
+                // onTap: () {
+                //   Scaffold.of(context).showSnackBar(SnackBar(
+                //     backgroundColor: Colors.white,
+                //     duration: Duration(milliseconds: 20000),
+                //     content: Center(
+                //       child: new Image(
+                //         image: new AssetImage(imagePath),
+                //         width: prefix0.screen_width + 300,
+                //         height: (prefix0.screen_width + 300) * 1.3,
+                //         // width: 20,
+                //         // height: 20,
+                //         // fit: BoxFit.fitWidth,
+                //       ),
+                //     ),
+                //   ));
+                // },
+                child: Material(
+                  elevation: 5.0,
+                  borderRadius: BorderRadius.circular(8.0),
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      new Image(
+                        image: new AssetImage(imagePath),
+                        // width: 200,
+                        // height: 200,
+                        fit: BoxFit.fitWidth,
                       ),
-                    ));
-                  },
-                  child: Material(
-                    elevation: 5.0,
-                    borderRadius: BorderRadius.circular(8.0),
-                    child: Stack(
-                      fit: StackFit.expand,
-                      children: [
-                        new Image(
-                          image: new AssetImage(imagePath),
-                          width: 20,
-                          height: 20,
-                          // fit: BoxFit.fitWidth,
-                        ),
-                        decorationBox,
-                      ],
-                    ),
+                      decorationBox,
+                    ],
                   ),
                 ),
-              );
-            },
-          ),
+              ),
+            );
+          },
         ),
       ),
       bottomSheet: bottomButton,
@@ -256,3 +339,5 @@ class _State extends State<SurveyPointInformationPage> {
     );
   }
 }
+
+class Continer {}

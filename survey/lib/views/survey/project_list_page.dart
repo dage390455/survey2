@@ -16,6 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:event_bus/event_bus.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:fluwx/fluwx.dart' as fluwx;
 
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 import 'package:sensoro_survey/views/survey/const.dart';
@@ -112,6 +113,8 @@ class _State extends State<HomePage> {
       if (!_focusNode.hasFocus) {}
     });
 
+    //微信插件
+    fluwx.register(appId: "wxa6699198d77a32f2");
     testTranslate();
 
     //延时调用，重新获取window.physicalSize,因为release模式，不同机型有可能先显示页面后获取window.physicalSize

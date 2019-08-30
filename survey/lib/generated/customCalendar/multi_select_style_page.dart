@@ -20,7 +20,7 @@ class _MultiSelectStylePageState extends State<MultiSelectStylePage> {
 
     controller = new CalendarController(
         selectMode: Constants.MODE_MULTI_SELECT,
-        maxMultiSelectCount: 5,
+        maxMultiSelectCount: 10,
         minSelectYear: 2019,
         minSelectMonth: 5,
         minSelectDay: 20,
