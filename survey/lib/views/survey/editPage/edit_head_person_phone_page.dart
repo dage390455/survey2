@@ -1,5 +1,6 @@
 //现场情况
 import 'package:flutter/material.dart';
+import 'package:sensoro_survey/views/survey/comment/Tools.dart';
 import 'package:sensoro_survey/views/survey/comment/save_data_manager.dart';
 import 'package:sensoro_survey/views/survey/comment/history_page.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
@@ -16,6 +17,7 @@ class _State extends State<EditHeadPersonPhonePage> {
   var historyKey = "histroyEditHeadPersonPhoneKey";
   var name = "";
   var isHighHistory = true;
+  var isShowError = true;
   _State({this.name});
 
   TextEditingController locationController = TextEditingController();
@@ -38,7 +40,7 @@ class _State extends State<EditHeadPersonPhonePage> {
       brightness: Brightness.light,
       backgroundColor: Colors.white,
       title: Text(
-        "现在负责人电话",
+        "现场负责人电话",
         style: TextStyle(color: Colors.black),
       ),
       leading: IconButton(
@@ -67,8 +69,16 @@ class _State extends State<EditHeadPersonPhonePage> {
                 fontSize: 20)),
         onPressed: () {
           if (this.name.length > 0) {
-            SaveDataManger.addHistory(this.name, historyKey);
-            Navigator.of(context).pop(this.name);
+            if (Tools.isChinaPhoneLegal(this.name)){
+              SaveDataManger.addHistory(this.name, historyKey);
+              Navigator.of(context).pop(this.name);
+            }else{
+
+              setState(() {
+                isShowError = false;
+              });
+
+            }
           }
         },
       ),
@@ -106,7 +116,7 @@ class _State extends State<EditHeadPersonPhonePage> {
             autofocus: false,
             onChanged: (val) {
               name = val;
-
+              isShowError = true;
               setState(() {});
             },
           ),
@@ -127,6 +137,20 @@ class _State extends State<EditHeadPersonPhonePage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           backContainer,
+
+          new Offstage(
+            offstage: isShowError,
+            child: Padding(
+              padding: new EdgeInsets.fromLTRB(20, 8, 20, 8),
+              child:  Text("请输入正确电话号码",
+                style: new TextStyle(
+                  color: Colors.red,
+                ),
+              ),
+            ),
+          ),
+
+
           new Offstage(
             offstage: isHighHistory,
             child: HistoryPage(

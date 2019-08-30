@@ -6,6 +6,7 @@ import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 class HistoryPage extends StatefulWidget {
   var hisoryKey = "";
   final editParentText;
+
   HistoryPage({this.hisoryKey, this.editParentText});
 
   @override
@@ -17,6 +18,7 @@ class _State extends State<HistoryPage> {
   var editParentText;
   var hisoryKey = "";
   List<String> tags = [];
+
   _State({this.hisoryKey, this.editParentText});
 
   @override
@@ -103,6 +105,7 @@ class _State extends State<HistoryPage> {
 class TagItem extends StatelessWidget {
   final String text;
   var editParentText;
+
   TagItem(this.text, this.editParentText);
 
   test() {

@@ -247,7 +247,7 @@ class _PointListPageState extends State<PointListPage> {
       autofocus: false, //自动获取焦点
       decoration: new InputDecoration(
         border: InputBorder.none,
-        hintText: "勘查点名称",
+        hintText: "勘察点名称",
         icon: new Container(
           padding: EdgeInsets.all(0.0),
           child: new Image(
@@ -343,7 +343,7 @@ class _PointListPageState extends State<PointListPage> {
               child: new MaterialButton(
                 color: prefix0.GREEN_COLOR,
                 textColor: Colors.white,
-                child: new Text('新建勘查点',
+                child: new Text('新建勘察点',
                     style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.normal,
@@ -483,7 +483,7 @@ class _PointListPageState extends State<PointListPage> {
                   height: 120,
                   // fit: BoxFit.fitWidth,
                 ),
-                Text("没有已创建的勘查点，请创建勘查点",
+                Text("没有已创建的勘察点，请创建勘察点",
                     textAlign: TextAlign.start,
                     style: TextStyle(
                         color: prefix0.LIGHT_TEXT_COLOR,

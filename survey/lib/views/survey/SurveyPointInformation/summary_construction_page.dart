@@ -82,7 +82,7 @@ class _State extends State<SummaryConstructionPage> {
       brightness: Brightness.light,
       backgroundColor: Colors.white,
       title: Text(
-        "勘查点信息",
+        "勘察点信息",
         style: TextStyle(color: Colors.black),
       ),
       leading: IconButton(
@@ -514,7 +514,7 @@ class _State extends State<SummaryConstructionPage> {
               height: 60,
               child: new Row(
                 children: <Widget>[
-                  Text("现在负责人电话"),
+                  Text("现场负责人电话"),
                   Expanded(
                     child: Text(
                       this.fireModel.headPhone.length > 0 ? this.fireModel.headPhone : "必填",

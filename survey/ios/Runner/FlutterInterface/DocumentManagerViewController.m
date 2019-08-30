@@ -77,7 +77,7 @@
     //多媒体消息
     fileObj.fileExtension = @"txt";
     WXMediaMessage *wxMediaMessage = [WXMediaMessage message];
-    wxMediaMessage.title = @"来自升哲勘查的文件";
+    wxMediaMessage.title = @"来自升哲勘察的文件";
     wxMediaMessage.description = @"项目记录";
     wxMediaMessage.messageExt = @"txt";
     wxMediaMessage.mediaObject = fileObj;
