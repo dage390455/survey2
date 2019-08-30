@@ -8,6 +8,7 @@
 
 import UIKit
 import CityBase
+import Alamofire
 import MAMapKit
 import AMapSearchKit
 

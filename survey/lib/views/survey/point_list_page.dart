@@ -42,7 +42,7 @@ class _PointListPageState extends State<PointListPage> {
   static int listTotalCount = 0;
   static const EventChannel eventChannel =
       const EventChannel("App/Event/Channel", const StandardMethodCodec());
-  bool _calendaring = false;
+  bool calendaring = false;
   String beginTimeStr = "";
   String endTimeStr = "";
   int beginTime = 0;
@@ -61,7 +61,6 @@ class _PointListPageState extends State<PointListPage> {
   // 创建一个给native的channel (类似iOS的通知）
   static const methodChannel =
       const MethodChannel('com.pages.your/project_list');
-  static int _itemCount = dataList.length;
 
   Timer _changeTimer;
   GlobalKey<EasyRefreshState> _easyRefreshKey =
@@ -73,8 +72,8 @@ class _PointListPageState extends State<PointListPage> {
   GlobalKey<RefreshHeaderState> _headerKey =
       new GlobalKey<RefreshHeaderState>();
 
-  bool _loading = false;
-  bool _loadMore = false;
+  bool loading = false;
+  bool loadMore = false;
   TimeOfDay _time = TimeOfDay.now();
 
   //组件即将销毁时调用
@@ -94,7 +93,6 @@ class _PointListPageState extends State<PointListPage> {
       if (!_focusNode.hasFocus) {}
     });
 
-    // loadLocalData();
     // initDetailList();
 
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
@@ -102,24 +100,6 @@ class _PointListPageState extends State<PointListPage> {
         // statusBarColor: Colors.blue,
         ));
   }
-
-//  void loadLocalData() async {
-//    String hisoryKey = "projectList";
-//    List<String> tags = [];
-//    tags = await SaveDataManger.getHistory(hisoryKey);
-//    setState(() {
-//      dataList.clear();
-//      for (int i = 0; i < tags.length; i++) {
-//        String jsonStr = tags[i];
-//        if (jsonStr == null || jsonStr.length < 3) {
-//          continue;
-//        }
-//        Map<String, dynamic> map = json.decode(jsonStr);
-//        projectInfoModel model = projectInfoModel.fromJson(map);
-//        dataList.add(model);
-//      }
-//    });
-//  }
 
   void initDetailList() {
     for (int index = 0; index < 1000; index++) {
@@ -151,7 +131,7 @@ class _PointListPageState extends State<PointListPage> {
         dataList.clear();
         // _startLoading();
         setState(() {
-          _calendaring = true;
+          calendaring = true;
           beginTime = dic["beginTime"].toInt();
           endTime = dic["endTime"].toInt();
           if (beginTime > 10000 && endTime > 10000) {
@@ -178,28 +158,20 @@ class _PointListPageState extends State<PointListPage> {
   // 错误处理
   void _onError(dynamic) {}
 
-
-
   _gotoSurveyType() async {
-
-
     final result = await Navigator.push(
       context,
-      new MaterialPageRoute(
-          builder: (context) => SurveyTypePage()),
+      new MaterialPageRoute(builder: (context) => SurveyTypePage()),
     );
 
     if (result != null) {
       String name = result as String;
 
-      if(name == "1"){
-        setState(() {
-
-        });
+      if (name == "1") {
+        setState(() {});
       }
     }
   }
-
 
   _navBack() async {
     Map<String, dynamic> map = {
@@ -238,7 +210,7 @@ class _PointListPageState extends State<PointListPage> {
         if (dateFilterList.length > 2) {
           dateFilterStr = "${dateFilterList[0]},${dateFilterList[1]}等";
         }
-        _calendaring = true;
+        calendaring = true;
         setState(() {});
       }
     }
@@ -304,7 +276,7 @@ class _PointListPageState extends State<PointListPage> {
       ),
     );
 
-    Widget NavBar = AppBar(
+    Widget navBar = AppBar(
       elevation: 1.0,
       brightness: Brightness.light,
       backgroundColor: Colors.white,
@@ -377,7 +349,6 @@ class _PointListPageState extends State<PointListPage> {
                         fontWeight: FontWeight.normal,
                         fontSize: 20)),
                 onPressed: () {
-
                   DataTransferManager.shared.project = input;
                   DataTransferManager.shared.creatModel();
                   _gotoSurveyType();
@@ -462,30 +433,22 @@ class _PointListPageState extends State<PointListPage> {
           ]),
     );
 
-    String _getFireModelCreateDate(int timeId){
-
-
-
-
+    String _getFireModelCreateDate(int timeId) {
       DateTime _dateTime = DateTime.fromMillisecondsSinceEpoch(timeId);
       String monthStr =
-      _dateTime.month < 10 ? "0${_dateTime.month}" : "${_dateTime.month}";
+          _dateTime.month < 10 ? "0${_dateTime.month}" : "${_dateTime.month}";
       String dayStr =
-      _dateTime.day < 10 ? "0${_dateTime.day}" : "${_dateTime.day}";
+          _dateTime.day < 10 ? "0${_dateTime.day}" : "${_dateTime.day}";
       String hourStr =
-      _dateTime.hour < 10 ? "0${_dateTime.hour}" : "${_dateTime.hour}";
-      String minuteStr =
-      _dateTime.minute < 10 ? "0${_dateTime.minute}" : "${_dateTime.minute}";
-
+          _dateTime.hour < 10 ? "0${_dateTime.hour}" : "${_dateTime.hour}";
+      String minuteStr = _dateTime.minute < 10
+          ? "0${_dateTime.minute}"
+          : "${_dateTime.minute}";
 
       return "${_dateTime.year}-${monthStr}-${dayStr} ${hourStr}:${minuteStr}";
-
     }
 
-
     editSurvey() async {
-
-
       final result = await Navigator.push(
         context,
         new MaterialPageRoute(
@@ -495,16 +458,11 @@ class _PointListPageState extends State<PointListPage> {
       if (result != null) {
         String name = result as String;
 
-        if(name == "1"){
-          setState(() {
-
-          });
+        if (name == "1") {
+          setState(() {});
         }
       }
     }
-
-
-
 
     Widget myListView = new ListView.builder(
         physics: new AlwaysScrollableScrollPhysics()
@@ -602,7 +560,9 @@ class _PointListPageState extends State<PointListPage> {
                                         color: prefix0.BLACK_TEXT_COLOR,
                                         fontWeight: FontWeight.normal,
                                         fontSize: 17)),
-                                Text( _getFireModelCreateDate(model.electricalFireId),
+                                Text(
+                                    _getFireModelCreateDate(
+                                        model.electricalFireId),
                                     textAlign: TextAlign.start,
                                     style: TextStyle(
                                         color: prefix0.BLACK_TEXT_COLOR,
@@ -626,7 +586,8 @@ class _PointListPageState extends State<PointListPage> {
                                 child: new Text('编辑'),
                                 onPressed: () {
                                   DataTransferManager.shared.project = input;
-                                  DataTransferManager.shared.fireCreatModel = model;
+                                  DataTransferManager.shared.fireCreatModel =
+                                      model;
                                   DataTransferManager.shared.isEditModel = true;
 
 //                                  Navigator.push(
@@ -656,10 +617,8 @@ class _PointListPageState extends State<PointListPage> {
           );
         });
 
-
-
     Widget myRefreshListView = ProgressDialog(
-      loading: _loading,
+      loading: loading,
       msg: '正在加载...',
       child: EasyRefresh(
         key: _easyRefreshKey,
@@ -697,7 +656,7 @@ class _PointListPageState extends State<PointListPage> {
               _easyRefreshKey.currentState.waitState(() {
                 dataList.clear();
                 setState(() {
-                  _loadMore = true;
+                  loadMore = true;
                 });
               });
             });
@@ -707,7 +666,7 @@ class _PointListPageState extends State<PointListPage> {
           await new Future.delayed(const Duration(milliseconds: 600), () {
             _easyRefreshKey.currentState.waitState(() {
               setState(() {
-                _loadMore = false;
+                loadMore = false;
                 if (dataList.length >= listTotalCount && listTotalCount > 0) {
                   return;
                 }
@@ -729,7 +688,7 @@ class _PointListPageState extends State<PointListPage> {
       // title: Text("Flutter Layout Demo"),
       title: "Flutter Layout Demo",
       home: Scaffold(
-        appBar: NavBar,
+        appBar: navBar,
         body: Container(
           color: Colors.white,
           // height: 140, //高��不填会自适应
@@ -740,7 +699,7 @@ class _PointListPageState extends State<PointListPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              !_calendaring
+              !calendaring
                   ? emptyContainer
                   : Container(
                       color: Colors.white,
@@ -765,7 +724,7 @@ class _PointListPageState extends State<PointListPage> {
                               color: Colors.black,
                             ),
                             onPressed: () {
-                              _calendaring = false;
+                              calendaring = false;
                               this.dateFilterList.clear();
                               this.dateFilterStr = "";
                               setState(() {});
@@ -783,16 +742,10 @@ class _PointListPageState extends State<PointListPage> {
                 child: myListView,
               ),
               bottomButton,
-              // Expanded(
-              //   child: bottomButton,
-              // ),
             ],
           ),
         ),
-        // bottomSheet: bottomButton,
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
-
-class staticbool {}

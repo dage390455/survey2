@@ -45,7 +45,7 @@ class projectInfoModel {
 
   @override
   toString() {
-    return 'projectName:$projectName;createTime:$createTime;remark:$remark;id:${projectId.toString()}';
+    return 'projectName:$projectName,createTime:$createTime,remark:$remark,id:${projectId.toString()}';
   }
 
   List<Map<String, dynamic>> subList1() {
@@ -53,7 +53,7 @@ class projectInfoModel {
     for (int i = 0; i < subList.length; i++) {
 //      ElectricalFireModel model = subList[i];
 //      Map<String, dynamic> map = model.toJson();
-      Map<String, dynamic> map =  subList[i];
+      Map<String, dynamic> map = subList[i];
       list.add(map);
     }
     return list;

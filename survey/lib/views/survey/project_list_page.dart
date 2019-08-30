@@ -34,10 +34,7 @@ class ProjectListPage extends StatefulWidget {
 }
 
 class _ProjectListPageState extends State<ProjectListPage> {
-  _ProjectListPageState() {
-    final eventBus = new EventBus();
-    // ApplicationEvent.event = eventBus;
-  }
+  _ProjectListPageState() {}
 
   @override
   Widget build(BuildContext context) {
@@ -66,31 +63,29 @@ class HomePage extends StatefulWidget {
 class _State extends State<HomePage> {
   static List dataList = new List(); //static才能在build里使用
   static int listTotalCount = 0;
-  static const EventChannel eventChannel =
-      const EventChannel("App/Event/Channel", const StandardMethodCodec());
-  bool _calendaring = false;
+  bool calendaring = false;
   String beginTimeStr = "";
   String endTimeStr = "";
-  // int beginTime = 0;
-  // int endTime = 0;
-  FocusNode _focusNode = FocusNode();
-  bool isFrist = true;
-  TextEditingController searchController = TextEditingController();
   String searchStr = "";
   String dateFilterStr = "";
-  List<String> dateFilterList = new List();
   String btnStr = '新建项目';
-  projectInfoModel selectModel = projectInfoModel("", "", 1, "", []);
+  bool isFrist = true;
+  bool loading = false;
+  bool loadMore = false;
+  TimeOfDay _time = TimeOfDay.now();
+  final bool confirmDismiss = true;
+  List<String> dateFilterList = new List();
 
   CalendarController controller;
-  // String dateText = "${DateTime.now().year}年${DateTime.now().month}月";
-  // CalendarViewWidget({@required this.calendarController, this.boxDecoration});
+  TextEditingController searchController = TextEditingController();
+  FocusNode _focusNode = FocusNode();
 
   static Map<String, dynamic> headers = {};
   // 创建一个给native的channel (类似iOS的通知）
   static const methodChannel =
       const MethodChannel('com.pages.your/project_list');
-  static int _itemCount = dataList.length;
+  static const EventChannel eventChannel =
+      const EventChannel("App/Event/Channel", const StandardMethodCodec());
 
   Timer _changeTimer;
   GlobalKey<EasyRefreshState> _easyRefreshKey =
@@ -101,23 +96,6 @@ class _State extends State<HomePage> {
 
   GlobalKey<RefreshHeaderState> _headerKey =
       new GlobalKey<RefreshHeaderState>();
-
-  bool _loading = false;
-  bool _loadMore = false;
-  TimeOfDay _time = TimeOfDay.now();
-  final bool confirmDismiss = true;
-
-  Future<String> get token async {
-    final sp = await SharedPreferences.getInstance();
-    var value = sp.get("token");
-    return sp.get("token") ?? "";
-  }
-
-  set token(value) {
-    SharedPreferences.getInstance().then((sp) {
-      sp.setString("token", value);
-    });
-  }
 
   @override
   void dispose() {
@@ -143,13 +121,9 @@ class _State extends State<HomePage> {
       prefix0.screen_height = window.physicalSize.height;
       prefix0.screen_width = window.physicalSize.width;
       setState(() {});
-      // setState(() {});
     });
 
     loadLocalData();
-    // getData();
-    // saveData();
-    // token = "aaa";
 
     controller = new CalendarController();
     controller.addMonthChangeListener(
@@ -165,14 +139,9 @@ class _State extends State<HomePage> {
       setState(() {});
     });
 
-    // eventChannel
-    //     .receiveBroadcastStream("sendHistory")
-    //     .listen(_onEvent, onError: _onError);
     eventChannel
         .receiveBroadcastStream("sendProjectList")
         .listen(_onEvent, onError: _onError);
-    //测试用
-    // this.initDetailList();
 
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
         //or set color with: Color(0xFF0000FF)
@@ -204,25 +173,8 @@ class _State extends State<HomePage> {
     // model.subList = {};
   }
 
-  // void saveData() async {
-  //   final prefs = await SharedPreferences.getInstance();
-  //   prefs.setInt('counter', 5);
-  // }
-
-  // void getData() async {
-  //   final prefs = await SharedPreferences.getInstance();
-  //   final counter = prefs.getInt('counter') ?? 0;
-  //   final counter1 = prefs.getInt('counter') ?? 0;
-  //   print("countet = $counter");
-  //   if (counter > 0) {
-  //     btnStr = "已有项目";
-  //     setState(() {});
-  //   }
-  // }
-
   void loadLocalData() async {
     String hisoryKey = "projectList";
-    // List<String> tags = [];
     List<dynamic> list = [];
     list = await SaveDataManger.getProjectHistory(hisoryKey);
     setState(() {
@@ -233,22 +185,6 @@ class _State extends State<HomePage> {
         dataList.add(model);
       }
     });
-
-    // String tags = jsonEncode(list);
-    // setState(() {
-    //   dataList.clear();
-    //   for (int i = 0; i < tags.length; i++) {
-    //     // Map<String, dynamic> map = tags[i];
-    //     String jsonStr = tags[i];
-    //     if (jsonStr == null || jsonStr.length < 3) {
-    //       continue;
-    //     }
-    //     // String jsonStr1 = jsonStr.replaceAll(';', ',');
-    //     Map<String, dynamic> map = json.decode(jsonStr);
-    //     projectInfoModel model = projectInfoModel.fromJson(map);
-    //     dataList.add(model);
-    //   }
-    // });
   }
 
   void deleteData(int index) async {
@@ -261,7 +197,7 @@ class _State extends State<HomePage> {
 //      name = "FAGJKJVXOE63S";
 //      if (index % 3 == 0) name = "项目1118888";
 //      if (index % 3 == 1) name = "项��222";
-//      if (index % 3 == 2) name = "项目333";
+//      if (index % 3 == 2) name = "��目333";
 //
 //      var des = "状态 $index ��常";
 //      des = "11:04:12";
@@ -285,7 +221,7 @@ class _State extends State<HomePage> {
         dataList.clear();
         // _startLoading();
         setState(() {
-          _calendaring = true;
+          calendaring = true;
           int beginTime = dic["beginTime"].toInt();
           int endTime = dic["endTime"].toInt();
           if (beginTime > 10000 && endTime > 10000) {
@@ -357,9 +293,7 @@ class _State extends State<HomePage> {
             if (str == null || str.length < 3) {
               continue;
             }
-            // if (!str.contains('[') && !str.contains(']')) {
-            //   str = "[" + str + "]";
-            // }
+
             str = str.replaceAll(';', ',');
             str = str.replaceAll('subList\":}', 'subList\":[]}');
             String str1 = '[' + str + ']';
@@ -394,14 +328,6 @@ class _State extends State<HomePage> {
   // 错误处理
   void _onError(dynamic) {}
 
-  _navBack() async {
-    Map<String, dynamic> map = {
-      "code": "200",
-      "data": [0, 0, 0]
-    };
-    await methodChannel.invokeMethod('navBack', map);
-  }
-
   _showCalendar() async {
     //调用flutter日历控件
     final result = await Navigator.push(
@@ -431,39 +357,21 @@ class _State extends State<HomePage> {
         if (dateFilterList.length > 2) {
           dateFilterStr = "${dateFilterList[0]},${dateFilterList[1]}等";
         }
-        _calendaring = true;
+        calendaring = true;
         setState(() {});
       }
     }
     return;
-    //调用IOS原生日历组件
-    // Map<String, dynamic> map = {
-    //   "beginTime": beginTime > 10000 ? beginTime / 1000 : 0,
-    //   "endTime": endTime > 10000 ? endTime / 1000 : 0,
-    // };
-    // await methodChannel.invokeMethod('showCalendar', map);
   }
 
   //调用原生文件导出
   _outputDocument(int index) async {
-    selectModel = dataList[index];
+    projectInfoModel selectModel = dataList[index];
     Map<String, dynamic> json = selectModel.toJson();
     Map<String, dynamic> map = {
       "json": json,
     };
     await methodChannel.invokeMethod('outputDocument', map);
-  }
-
-  Widget _createDialog(
-      String _confirmContent, Function sureFunction, Function cancelFunction) {
-    return AlertDialog(
-      title: Text('Confirm'),
-      content: Text(_confirmContent),
-      actions: <Widget>[
-        FlatButton(onPressed: sureFunction, child: Text('确认')),
-        FlatButton(onPressed: cancelFunction, child: Text('删除')),
-      ],
-    );
   }
 
   @override
@@ -695,7 +603,6 @@ class _State extends State<HomePage> {
           if (!flag) {
             return emptyContainer;
           }
-          this.selectModel = model;
 
           if (!name.contains(searchStr) && searchStr.length > 0) {
             return emptyContainer;
@@ -847,7 +754,7 @@ class _State extends State<HomePage> {
         });
 
     Widget myRefreshListView = ProgressDialog(
-      loading: _loading,
+      loading: loading,
       msg: '正在加载...',
       child: EasyRefresh(
         key: _easyRefreshKey,
@@ -885,7 +792,7 @@ class _State extends State<HomePage> {
               _easyRefreshKey.currentState.waitState(() {
                 dataList.clear();
                 setState(() {
-                  _loadMore = true;
+                  loadMore = true;
                 });
               });
             });
@@ -895,7 +802,7 @@ class _State extends State<HomePage> {
           await new Future.delayed(const Duration(milliseconds: 600), () {
             _easyRefreshKey.currentState.waitState(() {
               setState(() {
-                _loadMore = false;
+                loadMore = false;
                 if (dataList.length >= listTotalCount && listTotalCount > 0) {
                   return;
                 }
@@ -939,11 +846,11 @@ class _State extends State<HomePage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          !_calendaring
+          !calendaring
               ? emptyContainer
               : Container(
                   color: Colors.white,
-                  // height: 140, //高度不填会自适应
+                  // height: 140, //高度��填会自适应
                   padding: const EdgeInsets.only(
                       top: 3.0, bottom: 3, left: 20, right: 10),
                   child: Row(
@@ -964,7 +871,7 @@ class _State extends State<HomePage> {
                           color: Colors.black,
                         ),
                         onPressed: () {
-                          _calendaring = false;
+                          calendaring = false;
                           this.dateFilterList.clear();
                           this.dateFilterStr = "";
                           loadLocalData();
