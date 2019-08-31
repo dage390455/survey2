@@ -40,3 +40,25 @@ subprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+subprojects {
+    project.buildDir = "${rootProject.buildDir}/${project.name}"
+
+    project.configurations.all {
+        resolutionStrategy.eachDependency { details ->
+            if (details.requested.group == 'com.android.support'
+                    && !details.requested.name.contains('multidex') ) {
+                details.useVersion "27.1.1"
+            }else if(details.requested.group == 'androidx.lifecycle')
+            {
+                details.useVersion "2.0.0-rc01"
+            }else if(details.requested.group == 'androidx.versionedparcelable')
+            {
+                details.useVersion "1.0.0-rc01"
+            }else if(details.requested.group == 'androidx.core')
+            {
+                details.useVersion "1.0.0-rc01"
+            }
+        }
+    }
+}

@@ -76,16 +76,16 @@
             android:name="com.sensoro.survey.DeployMapActivity"
             android:theme="@style/LaunchTheme"></activity>
 
-        <activity
-            android:name=".wxapi.WXEntryActivity"
-            android:exported="true"
-            android:launchMode="singleTop"
-            android:theme="@style/DisablePreviewTheme" />
-        <activity
-            android:name=".wxapi.WXPayEntryActivity"
-            android:exported="true"
-            android:launchMode="singleTop"
-            android:theme="@style/DisablePreviewTheme" />
+        <!--<activity-->
+            <!--android:name=".wxapi.WXEntryActivity"-->
+            <!--android:exported="true"-->
+            <!--android:launchMode="singleTop"-->
+            <!--android:theme="@style/DisablePreviewTheme" />-->
+        <!--<activity-->
+            <!--android:name=".wxapi.WXPayEntryActivity"-->
+            <!--android:exported="true"-->
+            <!--android:launchMode="singleTop"-->
+            <!--android:theme="@style/DisablePreviewTheme" />-->
 
 
         <service android:name="com.amap.api.location.APSService" />
