@@ -16,7 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:event_bus/event_bus.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:fluwx/fluwx.dart' as fluwx;
+//import 'package:fluwx/fluwx.dart' as fluwx;
 
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 import 'package:sensoro_survey/views/survey/const.dart';
@@ -29,11 +29,11 @@ import 'package:sensoro_survey/views/survey/add_project_page.dart';
 import 'package:sensoro_survey/model/project_info_model.dart';
 import 'package:sensoro_survey/views/survey/SurveyPointInformation/summary_construction_page.dart';
 import 'package:sensoro_survey/views/survey/comment/save_data_manager.dart';
-import 'package:fluwx/fluwx.dart' as fluwx;
+//import 'package:fluwx/fluwx.dart' as fluwx;
 
 class ProjectListPage extends StatefulWidget {
   String _text = "share text from fluwx";
-  fluwx.WeChatScene scene = fluwx.WeChatScene.SESSION;
+//  fluwx.WeChatScene scene = fluwx.WeChatScene.SESSION;
 
   _ProjectListPageState createState() => _ProjectListPageState();
 }
@@ -64,21 +64,21 @@ class _ProjectListPageState extends State<ProjectListPage> {
     // TODO: implement initState
     super.initState();
 
-    _initFluwx();
-    fluwx.responseFromShare.listen((data) {
-      print(data.toString());
-    });
+//    _initFluwx();
+//    fluwx.responseFromShare.listen((data) {
+//      print(data.toString());
+//    });
   }
 }
 
 _initFluwx() async {
-  await fluwx.register(
-      appId: "wxa65d8bad62a982e1",
-      doOnAndroid: true,
-      doOnIOS: false,
-      enableMTA: false);
-  var result = await fluwx.isWeChatInstalled();
-  print("is installed $result");
+//  await fluwx.register(
+//      appId: "wxa65d8bad62a982e1",
+//      doOnAndroid: true,
+//      doOnIOS: false,
+//      enableMTA: false);
+//  var result = await fluwx.isWeChatInstalled();
+//  print("is installed $result");
 }
 
 class HomePage extends StatefulWidget {
@@ -140,7 +140,7 @@ class _State extends State<HomePage> {
     });
 
     //微信插件
-    fluwx.register(appId: "wxa6699198d77a32f2");
+//    fluwx.register(appId: "wxa6699198d77a32f2");
     testTranslate();
 
     //延时调用，重新获取window.physicalSize,因为release模式，不同机型有可能先显示页面后获取window.physicalSize
@@ -432,7 +432,7 @@ class _State extends State<HomePage> {
                 onTap: () {
                   Navigator.pop(context);
 
-                  _shareText(res, fluwx.WeChatScene.SESSION);
+//                  _shareText(res, fluwx.WeChatScene.SESSION);
                 },
               ),
               ListTile(
@@ -442,7 +442,7 @@ class _State extends State<HomePage> {
                 onTap: () {
                   Navigator.pop(context);
 
-                  _shareText(res, fluwx.WeChatScene.TIMELINE);
+//                  _shareText(res, fluwx.WeChatScene.TIMELINE);
                 },
               ),
               ListTile(
@@ -461,16 +461,16 @@ class _State extends State<HomePage> {
   /**
    * 分享
    */
-  void _shareText(String _text, fluwx.WeChatScene scene) {
-    fluwx
-        .share(fluwx.WeChatShareTextModel(
-            text: _text,
-            transaction: "text${DateTime.now().millisecondsSinceEpoch}",
-            scene: scene))
-        .then((data) {
-      print(data);
-    });
-  }
+//  void _shareText(String _text, fluwx.WeChatScene scene) {
+//    fluwx
+//        .share(fluwx.WeChatShareTextModel(
+//            text: _text,
+//            transaction: "text${DateTime.now().millisecondsSinceEpoch}",
+//            scene: scene))
+//        .then((data) {
+//      print(data);
+//    });
+//  }
 
   @override
   Widget build(BuildContext context) {
