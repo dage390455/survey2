@@ -15,6 +15,7 @@ class EditBossPersonPage extends StatefulWidget {
 class _State extends State<EditBossPersonPage> {
   var historyKey = "histroyBosspersonKey";
   var name = "";
+  FocusNode blankNode = FocusNode();
   var isHighHistory = true;
   _State({this.name});
 
@@ -138,9 +139,19 @@ class _State extends State<EditBossPersonPage> {
     );
 
     return Scaffold(
-      appBar: NavBar,
-      body: bigContainer,
-      bottomSheet: bottomButton,
+        appBar: NavBar,
+        body: GestureDetector(
+          onTap: (){
+            // 点击空白页面关闭键盘
+            FocusScope.of(context).requestFocus(blankNode);
+          },
+          child: bigContainer,
+        ),
+
+        bottomNavigationBar: BottomAppBar(
+          child: bottomButton,
+        )
+
     );
   }
 }

@@ -24,6 +24,7 @@ import 'package:sensoro_survey/views/survey/comment/save_data_manager.dart';
 import 'package:sensoro_survey/views/survey/survey_type_page.dart';
 
 import 'SurveyPointInformation/summary_construction_page.dart';
+import 'SurveyPointInformation/survay_electrical_fire_detail.dart';
 import 'comment/data_transfer_manager.dart';
 
 class PointListPage extends StatefulWidget {
@@ -464,6 +465,23 @@ class _PointListPageState extends State<PointListPage> {
       }
     }
 
+    surveyDetail() async {
+      final result = await Navigator.push(
+        context,
+        new MaterialPageRoute(
+            builder: (context) => new SurvayElectricalFireDetailPage()),
+      );
+
+      if (result != null) {
+        String name = result as String;
+
+        if (name == "1") {
+          setState(() {});
+        }
+      }
+    }
+
+
     Widget myListView = new ListView.builder(
         physics: new AlwaysScrollableScrollPhysics()
             .applyTo(new BouncingScrollPhysics()), // 这个是用来控制能否在不满屏的状态下滚动的属性
@@ -514,7 +532,15 @@ class _PointListPageState extends State<PointListPage> {
             return emptyContainer;
           }
 
-          return new Container(
+          return new GestureDetector(
+              onTap: () {
+                DataTransferManager.shared.project = input;
+                DataTransferManager.shared.fireCreatModel =
+                    model;
+                DataTransferManager.shared.isEditModel = true;
+                surveyDetail();
+              },
+            child:new Container(
             color: Colors.white,
             padding:
                 const EdgeInsets.only(top: 0.0, bottom: 0, left: 0, right: 0),
@@ -614,6 +640,7 @@ class _PointListPageState extends State<PointListPage> {
                       height: 1.0,
                       color: FENGE_LINE_COLOR),
                 ]),
+          )
           );
         });
 

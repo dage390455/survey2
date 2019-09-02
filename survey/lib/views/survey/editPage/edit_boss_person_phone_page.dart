@@ -19,7 +19,7 @@ class _State extends State<EditBossPersonPhonePage> {
   var isHighHistory = true;
   var isShowError = true;
   _State({this.name});
-
+  FocusNode blankNode = FocusNode();
   TextEditingController locationController = TextEditingController();
 
   @override
@@ -160,9 +160,19 @@ class _State extends State<EditBossPersonPhonePage> {
     );
 
     return Scaffold(
-      appBar: NavBar,
-      body: bigContainer,
-      bottomSheet: bottomButton,
+        appBar: NavBar,
+        body: GestureDetector(
+          onTap: (){
+            // 点击空白页面关闭键盘
+            FocusScope.of(context).requestFocus(blankNode);
+          },
+          child: bigContainer,
+        ),
+
+        bottomNavigationBar: BottomAppBar(
+          child: bottomButton,
+        )
+
     );
   }
 }

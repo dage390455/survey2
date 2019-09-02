@@ -17,7 +17,7 @@ class _State extends State<EditProjectNamePage> {
   var name = "";
   var isHighHistory = true;
   _State({this.name});
-
+  FocusNode blankNode = FocusNode();
   TextEditingController locationController = TextEditingController();
 
   @override
@@ -141,9 +141,19 @@ class _State extends State<EditProjectNamePage> {
     );
 
     return Scaffold(
-      appBar: NavBar,
-      body: bigContainer,
-      bottomSheet: bottomButton,
+        appBar: NavBar,
+        body: GestureDetector(
+          onTap: (){
+            // 点击空白页面关闭键盘
+            FocusScope.of(context).requestFocus(blankNode);
+          },
+          child: bigContainer,
+        ),
+
+        bottomNavigationBar: BottomAppBar(
+          child: bottomButton,
+        )
+
     );
   }
 }

@@ -14,6 +14,7 @@ class EditAdressPage extends StatefulWidget {
 
 class _State extends State<EditAdressPage> {
   var historyKey = "histroyAddresskey";
+  FocusNode blankNode = FocusNode();
   var name = "";
   var isHighHistory = true;
   _State({this.name});
@@ -139,8 +140,18 @@ class _State extends State<EditAdressPage> {
 
     return Scaffold(
       appBar: NavBar,
-      body: bigContainer,
-      bottomSheet: bottomButton,
+        body: GestureDetector(
+          onTap: (){
+            // 点击空白页面关闭键盘
+            FocusScope.of(context).requestFocus(blankNode);
+          },
+          child: bigContainer,
+        ),
+
+      bottomNavigationBar: BottomAppBar(
+        child: bottomButton,
+      )
+
     );
   }
 }

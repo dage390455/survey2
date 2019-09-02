@@ -13,7 +13,7 @@ class EditLoctionPage extends StatefulWidget {
 
 class _State extends State<EditLoctionPage> {
   var name = "";
-
+  FocusNode blankNode = FocusNode();
   _State({this.name});
    @override
    void initState() {
@@ -123,9 +123,19 @@ class _State extends State<EditLoctionPage> {
     );
 
     return Scaffold(
-      appBar: NavBar,
-      body: bigContainer,
-      bottomSheet: bottomButton,
+        appBar: NavBar,
+        body: GestureDetector(
+          onTap: (){
+            // 点击空白页面关闭键盘
+            FocusScope.of(context).requestFocus(blankNode);
+          },
+          child: bigContainer,
+        ),
+
+        bottomNavigationBar: BottomAppBar(
+          child: bottomButton,
+        )
+
     );
   }
 }
