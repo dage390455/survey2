@@ -847,7 +847,7 @@ class _State extends State<SurvayElectricalFirePage> {
 
     bool dataNotification(ScrollNotification notification) {
       double height = 183; //step2的高度
-      height = height + 50;
+      height = height + 80;
       if (notification.metrics.extentBefore > height) {
         //下滑到最底部
         _pageController.animateToPage(2,
@@ -1047,7 +1047,7 @@ class _State extends State<SurvayElectricalFirePage> {
     bool dataNotification3(ScrollNotification notification) {
       // notification.metrics.maxScrollExtent
       double height = 199; //step3的高度
-      height = height + 50;
+      height = height + 80;
       //下滑到最底部
       // if (notification.metrics.extentAfter == 0.0) {
       if (notification.metrics.extentBefore > height) {
@@ -1639,7 +1639,7 @@ class _State extends State<SurvayElectricalFirePage> {
 
     bool dataNotification4(ScrollNotification notification) {
       double height = 29; //step4的超出整屏的高度
-      height = height + 50;
+      height = height + 80;
       if (notification.metrics.extentBefore > height) {
         //下滑到最底部
         _pageController.animateToPage(4,

@@ -251,7 +251,7 @@ class _State extends State<SurveyPointInformationPage> {
       backgroundColor: Colors.white,
       body: Container(
         // width: prefix0.screen_width + 200,
-        height: 700,
+        height: 530,
         color: Colors.white,
         child: PageView.builder(
           controller: controller, //这一句导致有边缘不是全屏
@@ -267,7 +267,7 @@ class _State extends State<SurveyPointInformationPage> {
               });
             } else {
               setState(() {
-                // isLastPage = false;
+                isLastPage = false;
               });
             }
           },
