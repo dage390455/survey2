@@ -421,14 +421,11 @@ class _State extends State<SurvayElectricalFireDetailPage> {
                     child: Text(
                       fireCreatModel.page2editAddress.length > 0
                           ? fireCreatModel.page2editAddress
-                          : "必填",
+                          : "",
                       textAlign: TextAlign.right,
                     ),
                   ),
-//                  Image.asset(
-//                    "assets/images/right_arrar.png",
-//                    width: 20,
-//                  )
+
                 ],
               ),
             ),
@@ -453,10 +450,6 @@ class _State extends State<SurvayElectricalFireDetailPage> {
                       textAlign: TextAlign.right,
                     ),
                   ),
-//                  Image.asset(
-//                    "assets/images/right_arrar.png",
-//                    width: 20,
-//                  )
                 ],
               ),
             ),
@@ -1651,10 +1644,6 @@ class _State extends State<SurvayElectricalFireDetailPage> {
                       textAlign: TextAlign.right,
                     ),
                   ),
-//                  Image.asset(
-//                    "assets/images/right_arrar.png",
-//                    width: 20,
-//                  )
                 ],
               ),
             ),
@@ -1679,10 +1668,6 @@ class _State extends State<SurvayElectricalFireDetailPage> {
                       textAlign: TextAlign.right,
                     ),
                   ),
-//                  Image.asset(
-//                    "assets/images/right_arrar.png",
-//                    width: 20,
-//                  )
                 ],
               ),
             ),
@@ -1961,7 +1946,7 @@ class _State extends State<SurvayElectricalFireDetailPage> {
 
 
 
-    Widget container = Container(
+    Widget container11 = Container(
       color: Colors.white,
       padding: new EdgeInsets.fromLTRB(20, 0, 20, 0),
       child: Column(
@@ -1969,7 +1954,7 @@ class _State extends State<SurvayElectricalFireDetailPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           GestureDetector(
-            onTap: editName, //写入方法名称就可以了，但是是无参的
+            onTap: null, //写入方法名称就可以了，但是是无参的
             child: Container(
               alignment: Alignment.center,
               height: 60,
@@ -1980,14 +1965,10 @@ class _State extends State<SurvayElectricalFireDetailPage> {
                     child: Text(
                       this.fireModel.editName.length > 0
                           ? this.fireModel.editName
-                          : "必填",
+                          : "",
                       textAlign: TextAlign.right,
                     ),
                   ),
-                  Image.asset(
-                    "assets/images/right_arrar.png",
-                    width: 20,
-                  )
                 ],
               ),
             ),
@@ -2008,14 +1989,10 @@ class _State extends State<SurvayElectricalFireDetailPage> {
                     child: Text(
                       this.fireModel.editPurpose.length > 0
                           ? this.fireModel.editPurpose
-                          : "选填",
+                          : "",
                       textAlign: TextAlign.right,
                     ),
                   ),
-                  Image.asset(
-                    "assets/images/right_arrar.png",
-                    width: 20,
-                  )
                 ],
               ),
             ),
@@ -2036,14 +2013,10 @@ class _State extends State<SurvayElectricalFireDetailPage> {
                     child: Text(
                       this.fireModel.editAddress.length > 0
                           ? this.fireModel.editAddress
-                          : "选填",
+                          : "",
                       textAlign: TextAlign.right,
                     ),
                   ),
-                  Image.asset(
-                    "assets/images/right_arrar.png",
-                    width: 20,
-                  )
                 ],
               ),
             ),
@@ -2053,7 +2026,7 @@ class _State extends State<SurvayElectricalFireDetailPage> {
             height: 1,
           ),
           GestureDetector(
-            onTap: editLoction, //写入方法名称就可以了，但是是无参的
+            onTap: null, //写入方法名称就可以了，但是是无参的
             child: Container(
               alignment: Alignment.center,
               height: 60,
@@ -2064,14 +2037,10 @@ class _State extends State<SurvayElectricalFireDetailPage> {
                     child: Text(
                       this.fireModel.editPosition.length > 0
                           ? this.fireModel.editPosition
-                          : "选填",
+                          : "",
                       textAlign: TextAlign.right,
                     ),
                   ),
-                  Image.asset(
-                    "assets/images/right_arrar.png",
-                    width: 20,
-                  )
                 ],
               ),
             ),
@@ -2080,7 +2049,7 @@ class _State extends State<SurvayElectricalFireDetailPage> {
       ),
     );
 
-    Widget container2 = Container(
+    Widget container12 = Container(
       color: Colors.white,
       padding: new EdgeInsets.fromLTRB(20, 0, 20, 0),
       child: Column(
@@ -2088,7 +2057,7 @@ class _State extends State<SurvayElectricalFireDetailPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           GestureDetector(
-            onTap: editStructure, //写入方法名称就可以了，但是是无参的
+            onTap: null, //写入方法名称就可以了，但是是无参的
             child: Container(
               alignment: Alignment.center,
               height: 60,
@@ -2099,14 +2068,10 @@ class _State extends State<SurvayElectricalFireDetailPage> {
                     child: Text(
                       this.fireModel.editPointStructure.length > 0
                           ? this.fireModel.editPointStructure
-                          : "选填",
+                          : "",
                       textAlign: TextAlign.right,
                     ),
                   ),
-                  Image.asset(
-                    "assets/images/right_arrar.png",
-                    width: 20,
-                  )
                 ],
               ),
             ),
@@ -2116,7 +2081,7 @@ class _State extends State<SurvayElectricalFireDetailPage> {
             height: 1,
           ),
           GestureDetector(
-            onTap: editAre, //写入方法名称就可以了，但是是无参的
+            onTap: null, //写入方法名称就可以了，但是是无参的
             child: Container(
               alignment: Alignment.center,
               height: 60,
@@ -2127,14 +2092,10 @@ class _State extends State<SurvayElectricalFireDetailPage> {
                     child: Text(
                       this.fireModel.editPointArea.length > 0
                           ? this.fireModel.editPointArea
-                          : "选填",
+                          : "",
                       textAlign: TextAlign.right,
                     ),
                   ),
-                  Image.asset(
-                    "assets/images/right_arrar.png",
-                    width: 20,
-                  )
                 ],
               ),
             ),
@@ -2143,7 +2104,7 @@ class _State extends State<SurvayElectricalFireDetailPage> {
       ),
     );
 
-    Widget container3 = Container(
+    Widget container13 = Container(
       color: Colors.white,
       padding: new EdgeInsets.fromLTRB(20, 0, 20, 0),
       child: Column(
@@ -2151,7 +2112,7 @@ class _State extends State<SurvayElectricalFireDetailPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           GestureDetector(
-            onTap: editheadName, //写入方法名称就可以了，但是是无参的
+            onTap: null, //写入方法名称就可以了，但是是无参的
             child: Container(
               alignment: Alignment.center,
               height: 60,
@@ -2162,14 +2123,11 @@ class _State extends State<SurvayElectricalFireDetailPage> {
                     child: Text(
                       this.fireModel.headPerson.length > 0
                           ? this.fireModel.headPerson
-                          : "必填",
+                          : "",
                       textAlign: TextAlign.right,
                     ),
                   ),
-                  Image.asset(
-                    "assets/images/right_arrar.png",
-                    width: 20,
-                  )
+
                 ],
               ),
             ),
@@ -2190,14 +2148,10 @@ class _State extends State<SurvayElectricalFireDetailPage> {
                     child: Text(
                       this.fireModel.headPhone.length > 0
                           ? this.fireModel.headPhone
-                          : "必填",
+                          : "",
                       textAlign: TextAlign.right,
                     ),
                   ),
-                  Image.asset(
-                    "assets/images/right_arrar.png",
-                    width: 20,
-                  )
                 ],
               ),
             ),
@@ -2207,7 +2161,7 @@ class _State extends State<SurvayElectricalFireDetailPage> {
             height: 1,
           ),
           GestureDetector(
-            onTap: editBossName, //写入方法名称就可以了，但是是无参的
+            onTap: null, //写入方法名称就可以了，但是是无参的
             child: Container(
               alignment: Alignment.center,
               height: 60,
@@ -2218,14 +2172,10 @@ class _State extends State<SurvayElectricalFireDetailPage> {
                     child: Text(
                       this.fireModel.bossName.length > 0
                           ? this.fireModel.bossName
-                          : "选填",
+                          : "",
                       textAlign: TextAlign.right,
                     ),
                   ),
-                  Image.asset(
-                    "assets/images/right_arrar.png",
-                    width: 20,
-                  )
                 ],
               ),
             ),
@@ -2235,7 +2185,7 @@ class _State extends State<SurvayElectricalFireDetailPage> {
             height: 1,
           ),
           GestureDetector(
-            onTap: editBossPhone, //写入方法名称就可以了，但是是无参的
+            onTap: null, //写入方法名称就可以了，但是是无参的
             child: Container(
               alignment: Alignment.center,
               height: 60,
@@ -2246,14 +2196,11 @@ class _State extends State<SurvayElectricalFireDetailPage> {
                     child: Text(
                       this.fireModel.bossPhone.length > 0
                           ? this.fireModel.bossPhone
-                          : "选填",
+                          : "",
                       textAlign: TextAlign.right,
                     ),
                   ),
-                  Image.asset(
-                    "assets/images/right_arrar.png",
-                    width: 20,
-                  )
+
                 ],
               ),
             ),
@@ -2265,20 +2212,20 @@ class _State extends State<SurvayElectricalFireDetailPage> {
     Widget bigContainer2 = Container(
       color: prefix0.LIGHT_LINE_COLOR,
       padding: new EdgeInsets.fromLTRB(0, 0, 0, 60),
-      child: new ListView(
-        scrollDirection: Axis.vertical,
+      child: new Column(
+//        scrollDirection: Axis.vertical,
         children: <Widget>[
           new Padding(
             padding: new EdgeInsets.fromLTRB(0, 0, 0, 0),
-            child: container,
+            child: container11,
           ),
           new Padding(
             padding: new EdgeInsets.fromLTRB(0, 20, 0, 0),
-            child: container2,
+            child: container12,
           ),
           new Padding(
             padding: new EdgeInsets.fromLTRB(0, 20, 0, 0),
-            child: container3,
+            child: container13,
           ),
         ],
       ),
@@ -2298,6 +2245,7 @@ class _State extends State<SurvayElectricalFireDetailPage> {
 //            Container(
 //              child: step1,
 //            ),
+              bigContainer2,
               step1,
 
               step2,
