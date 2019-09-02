@@ -645,6 +645,9 @@ class _State extends State<HomePage> {
                   Navigator.pop(context, true);
                 },
               ),
+              new SizedBox(
+                width: 10,
+              ),
               FlatButton(
                 child: const Text('取消'),
                 onPressed: () {
@@ -709,6 +712,14 @@ class _State extends State<HomePage> {
           }
 
           return Dismissible(
+            background: Container(
+                color: Colors.red,
+                child: Center(
+                  child: Text(
+                    "删除",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                )),
             key: Key("$index"),
             onDismissed: (DismissDirection direction) {
               if (direction == DismissDirection.endToStart) {
