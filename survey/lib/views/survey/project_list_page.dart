@@ -713,7 +713,18 @@ class _State extends State<HomePage> {
             onDismissed: (DismissDirection direction) {
               if (direction == DismissDirection.endToStart) {
                 //这里处理数据
-                print("object");
+                print("这里处理数据");
+                dataList.removeAt(index);
+                //本地存储也去掉
+                String historyKey = 'projectList';
+                Map<String, dynamic> map = model.toJson();
+                String jsonStr = json.encode(map);
+
+                SaveDataManger.deleteHistory(
+                  jsonStr,
+                  historyKey,
+                  model.projectId,
+                );
               }
             },
             direction: DismissDirection.endToStart,

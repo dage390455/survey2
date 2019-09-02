@@ -238,51 +238,59 @@ class SaveDataManger {
     await methodChannel.invokeMethod('saveHistoryList', map);
   }
 
-  static deleteHistory(List<String> tags, String historyKey) async {
-    // SharedPreferences.setMockInitialValues({});
-    // const MethodChannel('plugins.flutter.io/shared_preferences')
-    //     .setMockMethodCallHandler((MethodCall methodCall) async {
-    //   if (methodCall.method == 'getAll') {
-    //     return <String, dynamic>{}; // set initial values here if desired
-    //   }
-    //   return null;
-    // });
-    // return null;
+  //删除已存储的内容
+  static deleteHistory(String tag, String historyKey, int id) async {
+    var history = await SaveDataManger.getProjectHistory(historyKey);
+    List<dynamic> tags = history;
+    String teststr3 = jsonEncode(tags);
+    List<String> list = [];
+
+    for (int i = 0; i < tags.length; i++) {
+      Map<String, dynamic> map = tags[i];
+
+      // Map<String, dynamic> map = json.decode(str);
+      int id1 = map["id"].toInt();
+      //替换
+      if (id == id1) {
+        // tags.removeAt(i);
+        continue;
+        // history.add(tag);
+        // List<dynamic> list = jsonDecode(tag);
+        // SaveDataManger.saveHistory(history, historyKey);
+      }
+      List list1 = [map];
+      String str = jsonEncode(list1);
+      list.add(str);
+    }
+    // list.add(tag);
+
+    String inputStr = "";
+    for (int i = 0; i < list.length; i++) {
+      String str = list[i];
+      str = str.replaceAll('[', '');
+      str = str.replaceAll(']', '');
+      if (inputStr.length == 0) {
+        inputStr = str;
+      } else {
+        inputStr = inputStr + ',' + str;
+      }
+    }
+
+    List<String> list2 = inputStr.split(',');
+    //这一步要把tags里的map转成字符串数组，再加上tag才能用
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    var history = prefs.getString(historyKey);
-    List<String> historyList = [];
-    if (history != null && history.length > 0) {
-      historyList = history.split(",");
-    }
+    var f = await prefs.setString(historyKey, inputStr);
+    //tagsString={"projectName":"韩国哈哈","createTime":"2019-08-29 10:21","remark":"","id":1567045262407,"subList":[]},{"projectName":"哈哈哈哈","createTime":"2019-08-29 10:21","remark":"","id":1567045268967,"subList":[]},
+    //用自定义methodChannel保���本地化数据，不是shared_preferences
 
-    var tagsString = "";
-    for (int i = 0; i < tags.length; i++) {
-      for (int j = 0; j < historyList.length; j++) {
-        if (tags[i] == historyList[j]) {
-          historyList.removeAt(j);
-        }
-      }
-    }
-
-    for (int j = 0; j < historyList.length; j++) {
-      if (tagsString.length == 0 && historyList.length > 0) {
-        tagsString = historyList[0];
-      } else {
-        tagsString = tagsString + "," + historyList[j];
-      }
-    }
-
-    var f = await prefs.setString(historyKey, tagsString);
-
-    //用自定义methodChannel保存本地化数据，不是shared_preferences
+    //给userdefault保存时，最外层用;分割.
+    String str1 = inputStr.replaceAll('},{"p', '};{"p');
     Map<String, dynamic> map = {
-      "value": tagsString,
+      "value": str1,
       "key": historyKey,
     };
     await methodChannel.invokeMethod('saveHistoryList', map);
-
-    print("---------------" + f.toString());
   }
 
   void _onEvent(Object value) {
