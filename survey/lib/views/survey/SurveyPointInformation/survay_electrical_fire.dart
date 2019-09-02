@@ -387,12 +387,15 @@ class _State extends State<SurvayElectricalFirePage> {
 //    });
     _sendToNative();
     var image = await ImagePicker.pickImage(source: ImageSource.camera);
-    _resentpics(image.uri.path.toString());
+    if(null!=image){
+
+      _resentpics(image.uri.path.toString());
 
 //    setState(() {
 //
 //      imgPath = image;
 //    });
+    }
   }
 
   @override
@@ -1313,6 +1316,7 @@ class _State extends State<SurvayElectricalFirePage> {
             child: new ListView(
 //          physics: NeverScrollableScrollPhysics(),
 //          shrinkWrap: true,
+
               controller: _controller2,
               children: <Widget>[
                 new Column(
