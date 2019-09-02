@@ -21,8 +21,8 @@ const Color blueSwitch = Color.fromRGBO(0, 162, 185, 1.0);
 const Color blueSendMail = Color.fromRGBO(61, 60, 219, 1.0);
 const Color blueGenerateReport = Color.fromRGBO(30, 131, 147, 1.0);
 
-const String appName = "Sensoro-City";
-const String appBarTitle = "Sensoro-City";
+const String appName = "Survey";
+const String appBarTitle = "Survey";
 const String appVersion = "1.0";
 const String yearCopyright = "2019";
 bool isEnglish = false;
@@ -73,19 +73,3 @@ void setIsEnglish(bool isEnglish) {
 int currentTimeMillis() {
   return new DateTime.now().millisecondsSinceEpoch;
 }
-
-// public static let SELECTED_COLOR = UIColor.fromRGB(0x1DBB99); //原来29C093   替换为 1DBB99
-//     public static let TITLE_TEXT_COLOR = UIColor.fromRGB(0x252525);//原来为030303，统一替换为252525.
-//     public static let NORMAL_TEXT_COLOR = UIColor.fromRGB(0x252525);
-//     public static let LIGHT_TEXT_COLOR = UIColor.fromRGB(0xA6A6A6);
-//     public static let PLACEHOLDER_TEXT_COLOR = UIColor.fromRGB(0x888888);
-//     public static let ALARM_LOG_TEXT_COLOR = UIColor.fromRGB(0x626262);
-//  public static let BACK_COLOR = UIColor.fromRGB(0xF4F4F4);
-//     public static let SUBVIEW_BACK_COLOR = UIColor.fromRGB(0xFAFAFA);
-//     public static let MENU_ICON_COLOR = UIColor.fromRGB(0xB6B6B6);
-//     public static let HEADER_BACK_COLOR = UIColor.white;
-//     public static let DISABLE_BACK_COLOR = UIColor.fromRGB(0xDFDFDF);
-//     public static let FILL_COLOR = UIColor.fromRGB(0xFAFAFA)
-
-//     public static let SEARCH_ITEM_BACK_COLOR = UIColor.fromRGB(0xE7E7E7);
-//     public static let RED_COLOR = UIColor.fromRGB(0xF34A4A);

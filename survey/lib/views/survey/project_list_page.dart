@@ -725,7 +725,6 @@ class _State extends State<HomePage> {
               if (direction == DismissDirection.endToStart) {
                 //这里处理数据
                 print("这里处理数据");
-                dataList.removeAt(index);
                 //本地存储也去掉
                 String historyKey = 'projectList';
                 Map<String, dynamic> map = model.toJson();
@@ -736,6 +735,9 @@ class _State extends State<HomePage> {
                   historyKey,
                   model.projectId,
                 );
+                setState(() {
+                  dataList.removeAt(index);
+                });
               }
             },
             direction: DismissDirection.endToStart,
