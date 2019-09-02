@@ -645,6 +645,9 @@ class _State extends State<HomePage> {
                   Navigator.pop(context, true);
                 },
               ),
+              new SizedBox(
+                width: 10,
+              ),
               FlatButton(
                 child: const Text('取消'),
                 onPressed: () {
@@ -709,11 +712,32 @@ class _State extends State<HomePage> {
           }
 
           return Dismissible(
+            background: Container(
+                color: Colors.red,
+                child: Center(
+                  child: Text(
+                    "删除",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                )),
             key: Key("$index"),
             onDismissed: (DismissDirection direction) {
               if (direction == DismissDirection.endToStart) {
                 //这里处理数据
-                print("object");
+                print("这里处理数据");
+                //本地存储也去掉
+                String historyKey = 'projectList';
+                Map<String, dynamic> map = model.toJson();
+                String jsonStr = json.encode(map);
+
+                SaveDataManger.deleteHistory(
+                  jsonStr,
+                  historyKey,
+                  model.projectId,
+                );
+                setState(() {
+                  dataList.removeAt(index);
+                });
               }
             },
             direction: DismissDirection.endToStart,
