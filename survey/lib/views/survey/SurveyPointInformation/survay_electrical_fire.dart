@@ -1293,11 +1293,11 @@ class _State extends State<SurvayElectricalFirePage> {
 
 
         _pageController.animateToPage(2,
-            duration: const Duration(milliseconds: 300), curve: Curves.ease);
+            duration: const Duration(milliseconds: 100), curve: Curves.ease);
       } //滑动到最顶部
       if (notification.metrics.extentAfter > height) {
         _pageController.animateToPage(0,
-            duration: const Duration(milliseconds: 300), curve: Curves.ease);
+            duration: const Duration(milliseconds: 100), curve: Curves.ease);
       }
       return true;
     }
