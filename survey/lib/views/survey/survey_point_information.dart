@@ -51,7 +51,8 @@ class _State extends State<SurveyPointInformationPage> {
 
   @override
   Widget build(BuildContext context) {
-    PageController controller = PageController(viewportFraction: 0.8);
+    // viewportFraction决定了左右边距有多大
+    PageController controller = PageController(viewportFraction: 1.05);
     controller.addListener(() {});
 
     Widget NavBar = AppBar(
@@ -82,7 +83,7 @@ class _State extends State<SurveyPointInformationPage> {
 
     Widget bottomButton = Container(
       color: Colors.white,
-      height: 108,
+      height: !isLastPage ? 61 : 108,
       width: prefix0.screen_width,
       child: Column(
           //这行决定了左对齐
@@ -212,7 +213,7 @@ class _State extends State<SurveyPointInformationPage> {
         child: new Image(
           width: double.infinity,
           height: double.infinity,
-          // fit: BoxFit.fitWidth,
+          // fit: BoxFit.fitWidth,case 2:
           image: new AssetImage("assets/images/page1.png"),
           // width: 200,
           // height: 200,
@@ -228,35 +229,36 @@ class _State extends State<SurveyPointInformationPage> {
           fit: BoxFit.fitWidth,
         ),
       ),
-      new ConstrainedBox(
-        constraints: const BoxConstraints.expand(),
-        child: new Image(
-          image: new AssetImage("assets/images/page3.png"),
-          width: double.infinity,
-          height: double.infinity,
-          fit: BoxFit.fitWidth,
-        ),
+      new Image(
+        image: new AssetImage("assets/images/page3.png"),
+        width: double.infinity,
+        height: double.infinity,
+        fit: BoxFit.fitWidth,
       ),
+      // new ConstrainedBox(
+      //   constraints: const BoxConstraints.expand(),
+      //   child: new Image(
+      //     image: new AssetImage("assets/images/指导说明书p4.png"),
+      //     width: double.infinity,
+      //     height: double.infinity,
+      //     fit: BoxFit.fitWidth,
+      //   ),
+      // ),
     ];
 
     Widget mainScaffold = Scaffold(
       appBar: NavBar,
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.white,
       body: Container(
-        width: prefix0.screen_width + 200,
-        // height: 500,
+        // width: prefix0.screen_width + 200,
+        height: 530,
         color: Colors.white,
-
-        // child: SizedBox.fromSize(
-        //   size: Size.fromWidth(prefix0.screen_width),
-        // size: Size.fromHeight(prefix0.screen_height),
-        // size: Size.fromHeight(100),
         child: PageView.builder(
-          controller: controller,
+          controller: controller, //这一句导致有边缘不是全屏
           itemCount: 3,
-          pageSnapping: true,
-          reverse: false,
-          physics: PageScrollPhysics(parent: BouncingScrollPhysics()),
+          // pageSnapping: true,
+          // reverse: false,
+          // physics: PageScrollPhysics(parent: BouncingScrollPhysics()),
           // dragStartBehavior: DragStartBehavior.down,
           onPageChanged: (int index) {
             if (index == 2) {
@@ -265,7 +267,7 @@ class _State extends State<SurveyPointInformationPage> {
               });
             } else {
               setState(() {
-                // isLastPage = false;
+                isLastPage = false;
               });
             }
           },
@@ -274,13 +276,16 @@ class _State extends State<SurveyPointInformationPage> {
             String imagePath = "";
             switch (index) {
               case 0:
-                imagePath = "assets/images/page1.png";
+                imagePath = "assets/images/指导说明书p1.png";
                 break;
               case 1:
-                imagePath = "assets/images/page2.png";
+                imagePath = "assets/images/指导说明书p2.png";
                 break;
               case 2:
-                imagePath = "assets/images/page3.png";
+                imagePath = "assets/images/指导说明书p3.png";
+                break;
+              case 3:
+                imagePath = "assets/images/指导说明书p4.png";
                 break;
             }
 

@@ -22,7 +22,7 @@ class SurvayElectricalFirePage extends StatefulWidget {
 
 class _State extends State<SurvayElectricalFirePage> {
   BasicMessageChannel<String> _basicMessageChannel =
-      BasicMessageChannel("BasicMessageChannelPluginPickImage", StringCodec());
+  BasicMessageChannel("BasicMessageChannelPluginPickImage", StringCodec());
 
   static PageController _pageController = new PageController();
 
@@ -45,7 +45,8 @@ class _State extends State<SurvayElectricalFirePage> {
 
   @override
   void initState() {
-    _basicMessageChannel.setMessageHandler((message) => Future<String>(() {
+    _basicMessageChannel.setMessageHandler((message) =>
+        Future<String>(() {
           print(message);
           //message为native传递的数据
           _resentpics(message);
@@ -134,9 +135,10 @@ class _State extends State<SurvayElectricalFirePage> {
     final result = await Navigator.push(
       context,
       new MaterialPageRoute(
-          builder: (context) => new EditElectricalAdressPage(
-                name: this.fireCreatModel.page2editAddress,
-              )),
+          builder: (context) =>
+          new EditElectricalAdressPage(
+            name: this.fireCreatModel.page2editAddress,
+          )),
     );
 
     if (result != null) {
@@ -152,9 +154,10 @@ class _State extends State<SurvayElectricalFirePage> {
     final result = await Navigator.push(
       context,
       new MaterialPageRoute(
-          builder: (context) => new EditElectricalDangerousPage(
-                name: this.fireCreatModel.dangerous,
-              )),
+          builder: (context) =>
+          new EditElectricalDangerousPage(
+            name: this.fireCreatModel.dangerous,
+          )),
     );
 
     if (result != null) {
@@ -170,9 +173,10 @@ class _State extends State<SurvayElectricalFirePage> {
     final result = await Navigator.push(
       context,
       new MaterialPageRoute(
-          builder: (context) => new EditElectricalCurrentPage(
-                name: this.fireCreatModel.current,
-              )),
+          builder: (context) =>
+          new EditElectricalCurrentPage(
+            name: this.fireCreatModel.current,
+          )),
     );
 
     if (result != null) {
@@ -188,9 +192,10 @@ class _State extends State<SurvayElectricalFirePage> {
     final result = await Navigator.push(
       context,
       new MaterialPageRoute(
-          builder: (context) => new EditElectricalPurposePage(
-                name: this.fireCreatModel.page2editPurpose,
-              )),
+          builder: (context) =>
+          new EditElectricalPurposePage(
+            name: this.fireCreatModel.page2editPurpose,
+          )),
     );
 
     if (result != null) {
@@ -233,7 +238,7 @@ class _State extends State<SurvayElectricalFirePage> {
               textAlign: TextAlign.center,
             ),
             content:
-                new StatefulBuilder(builder: (context, StateSetter setState) {
+            new StatefulBuilder(builder: (context, StateSetter setState) {
               return Container(
                   height: 380,
                   child: Column(
@@ -365,11 +370,10 @@ class _State extends State<SurvayElectricalFirePage> {
     openGallery();
   }
 
-  Widget buildButton(
-    String text,
-    Function onPressed, {
-    Color color = Colors.white,
-  }) {
+  Widget buildButton(String text,
+      Function onPressed, {
+        Color color = Colors.white,
+      }) {
     return FlatButton(
       color: prefix0.TITLE_TEXT_COLOR,
       child: Text(text),
@@ -432,8 +436,8 @@ class _State extends State<SurvayElectricalFirePage> {
           if (this.isCheack) {
             if (DataTransferManager.shared.isEditModel) {
               for (int i = 0;
-                  i < DataTransferManager.shared.project.subList.length;
-                  i++) {
+              i < DataTransferManager.shared.project.subList.length;
+              i++) {
                 Map map = DataTransferManager.shared.project.subList[i];
 
                 ElectricalFireModel model = ElectricalFireModel.fromJson(map);
@@ -615,7 +619,7 @@ class _State extends State<SurvayElectricalFirePage> {
                                 ? Colors.green
                                 : prefix0.LINE_COLOR)),
                         borderRadius:
-                            new BorderRadius.all(new Radius.circular(5.0)),
+                        new BorderRadius.all(new Radius.circular(5.0)),
                       ),
                       width: 150,
                       height: 150,
@@ -642,69 +646,71 @@ class _State extends State<SurvayElectricalFirePage> {
                 ],
               )),
           GestureDetector(
-              onTap: takePhoto2,
-              //写入方法名称就可以了，但是是无参的
-              onTapUp: (_) {
-                setState(() {
-                  editIndex = -1;
-                });
-              },
-              onTapCancel: () {
-                setState(() {
-                  editIndex = -1;
-                });
-              },
-              onTapDown: (_) {
-                setState(() {
-                  editIndex = 2;
-                });
-              },
-              child: Stack(
-                alignment: const Alignment(0.9, -1.1),
-                children: <Widget>[
-                  new Padding(
-                      padding: new EdgeInsets.fromLTRB(0, 10, 20, 0),
-                      child: Stack(
-                        children: <Widget>[
-                          Container(
-                            alignment: Alignment.center,
-                            child: fireCreatModel.editpic2.length == 0
-                                ? Text('     上传\n总开关照片')
-                                : Image.file(File(fireCreatModel.editpic2)),
-                            decoration: new BoxDecoration(
-                              border: new Border.all(
-                                  width: 1.0,
-                                  color: (editIndex == 2
-                                      ? Colors.green
-                                      : prefix0.LINE_COLOR)),
-                              borderRadius: new BorderRadius.all(
-                                  new Radius.circular(5.0)),
-                            ),
-                            width: 150,
-                            height: 150,
+            onTap: takePhoto2,
+            //写入方法名称就可以了，但是是无参的
+            onTapUp: (_) {
+              setState(() {
+                editIndex = -1;
+              });
+            },
+            onTapCancel: () {
+              setState(() {
+                editIndex = -1;
+              });
+            },
+            onTapDown: (_) {
+              setState(() {
+                editIndex = 2;
+              });
+            },
+            child: Stack(
+              alignment: const Alignment(0.9, -1.1),
+              children: <Widget>[
+                new Padding(
+                    padding: new EdgeInsets.fromLTRB(0, 10, 20, 0),
+                    child: Stack(
+                      children: <Widget>[
+                        Container(
+                          alignment: Alignment.center,
+                          child: fireCreatModel.editpic2.length == 0
+                              ? Text('     上传\n总开关照片')
+                              : Image.file(File(fireCreatModel.editpic2)),
+                          decoration: new BoxDecoration(
+                            border: new Border.all(
+                                width: 1.0,
+                                color: (editIndex == 2
+                                    ? Colors.green
+                                    : prefix0.LINE_COLOR)),
+                            borderRadius: new BorderRadius.all(
+                                new Radius.circular(5.0)),
                           ),
-                        ],
-                      )),
-                  Row(
-                    children: <Widget>[
-                      new Offstage(
-                          offstage: (fireCreatModel.editpic2.length > 0)
-                              ? false
-                              : true,
-                          child: new IconButton(
-                            icon: new Image.asset(
-                                "assets/images/picture_del.png"),
-                            tooltip: 'Increase volume by 10%',
-                            onPressed: () {
-                              setState(() {
-                                fireCreatModel.editpic2 = "";
-                              });
-                            },
-                          )),
-                    ],
-                  )
-                ],
-              )),
+                          width: 150,
+                          height: 150,
+                        ),
+                      ],
+                    )),
+                Row(
+                  children: <Widget>[
+                    new Offstage(
+                        offstage: (fireCreatModel.editpic2.length > 0)
+                            ? false
+                            : true,
+                        child: new IconButton(
+                          icon: new Image.asset(
+                              "assets/images/picture_del.png"),
+                          tooltip: 'Increase volume by 10%',
+                          onPressed: () {
+                            setState(() {
+                              fireCreatModel.editpic2 = "";
+                            });
+                          },
+                        )),
+                  ],
+                )
+              ],
+            ),
+
+          ),
           GestureDetector(
               onTap: takePhoto3,
               //写入方法名称就可以了，但是是无参的
@@ -740,7 +746,7 @@ class _State extends State<SurvayElectricalFirePage> {
                                 ? Colors.green
                                 : prefix0.LINE_COLOR)),
                         borderRadius:
-                            new BorderRadius.all(new Radius.circular(5.0)),
+                        new BorderRadius.all(new Radius.circular(5.0)),
                       ),
                       width: 150,
                       height: 150,
@@ -801,7 +807,7 @@ class _State extends State<SurvayElectricalFirePage> {
                                 ? Colors.green
                                 : prefix0.LINE_COLOR)),
                         borderRadius:
-                            new BorderRadius.all(new Radius.circular(5.0)),
+                        new BorderRadius.all(new Radius.circular(5.0)),
                       ),
                       width: 150,
                       height: 150,
@@ -862,7 +868,7 @@ class _State extends State<SurvayElectricalFirePage> {
                                 ? Colors.green
                                 : prefix0.LINE_COLOR)),
                         borderRadius:
-                            new BorderRadius.all(new Radius.circular(5.0)),
+                        new BorderRadius.all(new Radius.circular(5.0)),
                       ),
                       width: 150,
                       height: 150,
@@ -928,7 +934,7 @@ class _State extends State<SurvayElectricalFirePage> {
                       child: fireCreatModel.editenvironmentpic1.length == 0
                           ? Text('   上传\n环境照片')
                           : Image.file(
-                              File(fireCreatModel.editenvironmentpic1)),
+                          File(fireCreatModel.editenvironmentpic1)),
                       decoration: new BoxDecoration(
                         border: new Border.all(
                             width: 1.0,
@@ -936,7 +942,7 @@ class _State extends State<SurvayElectricalFirePage> {
                                 ? Colors.green
                                 : prefix0.LINE_COLOR)),
                         borderRadius:
-                            new BorderRadius.all(new Radius.circular(5.0)),
+                        new BorderRadius.all(new Radius.circular(5.0)),
                       ),
                       width: 150,
                       height: 150,
@@ -945,7 +951,8 @@ class _State extends State<SurvayElectricalFirePage> {
                   Row(
                     children: <Widget>[
                       new Offstage(
-                          offstage: (fireCreatModel.editenvironmentpic1.length > 0)
+                          offstage: (fireCreatModel.editenvironmentpic1.length >
+                              0)
                               ? false
                               : true,
                           child: new IconButton(
@@ -963,251 +970,266 @@ class _State extends State<SurvayElectricalFirePage> {
                 ],
               )),
           GestureDetector(
-            onTap: takePhoto7,
-            //写入方法名称就可以了，但是是无参的
-            onTapUp: (_) {
-              setState(() {
-                editIndex = -1;
-              });
-            },
-            onTapCancel: () {
-              setState(() {
-                editIndex = -1;
-              });
-            },
+              onTap: takePhoto7,
+              //写入方法名称就可以了，但是是无参的
+              onTapUp: (_) {
+                setState(() {
+                  editIndex = -1;
+                });
+              },
+              onTapCancel: () {
+                setState(() {
+                  editIndex = -1;
+                });
+              },
 
-            onTapDown: (_) {
-              setState(() {
-                editIndex = 7;
-              });
-            },
-            child: Stack(
-              alignment: const Alignment(0.9, -1.1),
-              children: <Widget>[
-                new Padding(
-                  padding: new EdgeInsets.fromLTRB(0, 10, 20, 0),
-                  child: Container(
-                    alignment: Alignment.center,
-                    child: fireCreatModel.editenvironmentpic2.length == 0
-                        ? Text('+')
-                        : Image.file(File(fireCreatModel.editenvironmentpic2)),
-                    decoration: new BoxDecoration(
-                      border: new Border.all(
-                          width: 1.0,
-                          color:
-                          (editIndex == 7 ? Colors.green : prefix0.LINE_COLOR)),
-                      borderRadius: new BorderRadius.all(new Radius.circular(5.0)),
+              onTapDown: (_) {
+                setState(() {
+                  editIndex = 7;
+                });
+              },
+              child: Stack(
+                alignment: const Alignment(0.9, -1.1),
+                children: <Widget>[
+                  new Padding(
+                    padding: new EdgeInsets.fromLTRB(0, 10, 20, 0),
+                    child: Container(
+                      alignment: Alignment.center,
+                      child: fireCreatModel.editenvironmentpic2.length == 0
+                          ? Text('+')
+                          : Image.file(
+                          File(fireCreatModel.editenvironmentpic2)),
+                      decoration: new BoxDecoration(
+                        border: new Border.all(
+                            width: 1.0,
+                            color:
+                            (editIndex == 7 ? Colors.green : prefix0
+                                .LINE_COLOR)),
+                        borderRadius: new BorderRadius.all(
+                            new Radius.circular(5.0)),
+                      ),
+                      width: 150,
+                      height: 150,
                     ),
-                    width: 150,
-                    height: 150,
                   ),
-                ),
-                Row(
-                  children: <Widget>[
-                    new Offstage(
-                        offstage: (fireCreatModel.editenvironmentpic2.length > 0)
-                            ? false
-                            : true,
-                        child: new IconButton(
-                          icon: new Image.asset(
-                              "assets/images/picture_del.png"),
-                          tooltip: 'Increase volume by 10%',
-                          onPressed: () {
-                            setState(() {
-                              fireCreatModel.editenvironmentpic2 = "";
-                            });
-                          },
-                        )),
-                  ],
-                )
+                  Row(
+                    children: <Widget>[
+                      new Offstage(
+                          offstage: (fireCreatModel.editenvironmentpic2.length >
+                              0)
+                              ? false
+                              : true,
+                          child: new IconButton(
+                            icon: new Image.asset(
+                                "assets/images/picture_del.png"),
+                            tooltip: 'Increase volume by 10%',
+                            onPressed: () {
+                              setState(() {
+                                fireCreatModel.editenvironmentpic2 = "";
+                              });
+                            },
+                          )),
+                    ],
+                  )
 
 
-              ],
-            )
+                ],
+              )
           ),
           GestureDetector(
-            onTap: takePhoto8,
-            //写入方法名称就可以了，但是是无参的
-            onTapUp: (_) {
-              setState(() {
-                editIndex = -1;
-              });
-            },
-            onTapCancel: () {
-              setState(() {
-                editIndex = -1;
-              });
-            },
+              onTap: takePhoto8,
+              //写入方法名称就可以了，但是是无参的
+              onTapUp: (_) {
+                setState(() {
+                  editIndex = -1;
+                });
+              },
+              onTapCancel: () {
+                setState(() {
+                  editIndex = -1;
+                });
+              },
 
-            onTapDown: (_) {
-              setState(() {
-                editIndex = 8;
-              });
-            },
-            child: Stack(
-              alignment: const Alignment(0.9, -1.1),
-              children: <Widget>[
-                new Padding(
-                  padding: new EdgeInsets.fromLTRB(0, 10, 20, 0),
-                  child: Container(
-                    alignment: Alignment.center,
-                    child: fireCreatModel.editenvironmentpic3.length == 0
-                        ? Text('+')
-                        : Image.file(File(fireCreatModel.editenvironmentpic3)),
-                    decoration: new BoxDecoration(
-                      border: new Border.all(
-                          width: 1.0,
-                          color:
-                          (editIndex == 8 ? Colors.green : prefix0.LINE_COLOR)),
-                      borderRadius: new BorderRadius.all(new Radius.circular(5.0)),
+              onTapDown: (_) {
+                setState(() {
+                  editIndex = 8;
+                });
+              },
+              child: Stack(
+                alignment: const Alignment(0.9, -1.1),
+                children: <Widget>[
+                  new Padding(
+                    padding: new EdgeInsets.fromLTRB(0, 10, 20, 0),
+                    child: Container(
+                      alignment: Alignment.center,
+                      child: fireCreatModel.editenvironmentpic3.length == 0
+                          ? Text('+')
+                          : Image.file(
+                          File(fireCreatModel.editenvironmentpic3)),
+                      decoration: new BoxDecoration(
+                        border: new Border.all(
+                            width: 1.0,
+                            color:
+                            (editIndex == 8 ? Colors.green : prefix0
+                                .LINE_COLOR)),
+                        borderRadius: new BorderRadius.all(
+                            new Radius.circular(5.0)),
+                      ),
+                      width: 150,
+                      height: 150,
                     ),
-                    width: 150,
-                    height: 150,
                   ),
-                ),
-                Row(
-                  children: <Widget>[
-                    new Offstage(
-                        offstage: (fireCreatModel.editenvironmentpic3.length > 0)
-                            ? false
-                            : true,
-                        child: new IconButton(
-                          icon: new Image.asset(
-                              "assets/images/picture_del.png"),
-                          tooltip: 'Increase volume by 10%',
-                          onPressed: () {
-                            setState(() {
-                              fireCreatModel.editenvironmentpic3 = "";
-                            });
-                          },
-                        )),
-                  ],
-                )
-              ],
-            )
+                  Row(
+                    children: <Widget>[
+                      new Offstage(
+                          offstage: (fireCreatModel.editenvironmentpic3.length >
+                              0)
+                              ? false
+                              : true,
+                          child: new IconButton(
+                            icon: new Image.asset(
+                                "assets/images/picture_del.png"),
+                            tooltip: 'Increase volume by 10%',
+                            onPressed: () {
+                              setState(() {
+                                fireCreatModel.editenvironmentpic3 = "";
+                              });
+                            },
+                          )),
+                    ],
+                  )
+                ],
+              )
           ),
           GestureDetector(
-            onTap: takePhoto9,
-            //写入方法名称就可以了，但是是无参的
-            onTapUp: (_) {
-              setState(() {
-                editIndex = -1;
-              });
-            },
-            onTapCancel: () {
-              setState(() {
-                editIndex = -1;
-              });
-            },
+              onTap: takePhoto9,
+              //写入方法名称就可以了，但是是无参的
+              onTapUp: (_) {
+                setState(() {
+                  editIndex = -1;
+                });
+              },
+              onTapCancel: () {
+                setState(() {
+                  editIndex = -1;
+                });
+              },
 
-            onTapDown: (_) {
-              setState(() {
-                editIndex = 9;
-              });
-            },
-            child: Stack(
-              alignment: const Alignment(0.9, -1.1),
-              children: <Widget>[
-                new Padding(
-                  padding: new EdgeInsets.fromLTRB(0, 10, 20, 0),
-                  child: Container(
-                    alignment: Alignment.center,
-                    child: fireCreatModel.editenvironmentpic4.length == 0
-                        ? Text('+')
-                        : Image.file(File(fireCreatModel.editenvironmentpic4)),
-                    decoration: new BoxDecoration(
-                      border: new Border.all(
-                          width: 1.0,
-                          color:
-                          (editIndex == 9 ? Colors.green : prefix0.LINE_COLOR)),
-                      borderRadius: new BorderRadius.all(new Radius.circular(5.0)),
+              onTapDown: (_) {
+                setState(() {
+                  editIndex = 9;
+                });
+              },
+              child: Stack(
+                alignment: const Alignment(0.9, -1.1),
+                children: <Widget>[
+                  new Padding(
+                    padding: new EdgeInsets.fromLTRB(0, 10, 20, 0),
+                    child: Container(
+                      alignment: Alignment.center,
+                      child: fireCreatModel.editenvironmentpic4.length == 0
+                          ? Text('+')
+                          : Image.file(
+                          File(fireCreatModel.editenvironmentpic4)),
+                      decoration: new BoxDecoration(
+                        border: new Border.all(
+                            width: 1.0,
+                            color:
+                            (editIndex == 9 ? Colors.green : prefix0
+                                .LINE_COLOR)),
+                        borderRadius: new BorderRadius.all(
+                            new Radius.circular(5.0)),
+                      ),
+                      width: 150,
+                      height: 150,
                     ),
-                    width: 150,
-                    height: 150,
                   ),
-                ),
-                Row(
-                  children: <Widget>[
-                    new Offstage(
-                        offstage: (fireCreatModel.editenvironmentpic4.length > 0)
-                            ? false
-                            : true,
-                        child: new IconButton(
-                          icon: new Image.asset(
-                              "assets/images/picture_del.png"),
-                          tooltip: 'Increase volume by 10%',
-                          onPressed: () {
-                            setState(() {
-                              fireCreatModel.editenvironmentpic4 = "";
-                            });
-                          },
-                        )),
-                  ],
-                )
-              ],
-            )
+                  Row(
+                    children: <Widget>[
+                      new Offstage(
+                          offstage: (fireCreatModel.editenvironmentpic4.length >
+                              0)
+                              ? false
+                              : true,
+                          child: new IconButton(
+                            icon: new Image.asset(
+                                "assets/images/picture_del.png"),
+                            tooltip: 'Increase volume by 10%',
+                            onPressed: () {
+                              setState(() {
+                                fireCreatModel.editenvironmentpic4 = "";
+                              });
+                            },
+                          )),
+                    ],
+                  )
+                ],
+              )
           ),
           GestureDetector(
-            onTap: takePhoto10,
-            //写入方法名称就可以了，但是是无参的
-            onTapUp: (_) {
-              setState(() {
-                editIndex = -1;
-              });
-            },
-            onTapCancel: () {
-              setState(() {
-                editIndex = -1;
-              });
-            },
+              onTap: takePhoto10,
+              //写入方法名称就可以了，但是是无参的
+              onTapUp: (_) {
+                setState(() {
+                  editIndex = -1;
+                });
+              },
+              onTapCancel: () {
+                setState(() {
+                  editIndex = -1;
+                });
+              },
 
-            onTapDown: (_) {
-              setState(() {
-                editIndex = 10;
-              });
-            },
-            child: Stack(
-              alignment: const Alignment(0.9, -1.1),
-              children: <Widget>[
-                new Padding(
-                  padding: new EdgeInsets.fromLTRB(0, 10, 20, 0),
-                  child: Container(
-                    alignment: Alignment.center,
-                    child: fireCreatModel.editenvironmentpic5.length == 0
-                        ? Text('+')
-                        : Image.file(File(fireCreatModel.editenvironmentpic5)),
-                    decoration: new BoxDecoration(
-                      border: new Border.all(
-                          width: 1.0,
-                          color: (editIndex == 10
-                              ? Colors.green
-                              : prefix0.LINE_COLOR)),
-                      borderRadius: new BorderRadius.all(new Radius.circular(5.0)),
+              onTapDown: (_) {
+                setState(() {
+                  editIndex = 10;
+                });
+              },
+              child: Stack(
+                alignment: const Alignment(0.9, -1.1),
+                children: <Widget>[
+                  new Padding(
+                    padding: new EdgeInsets.fromLTRB(0, 10, 20, 0),
+                    child: Container(
+                      alignment: Alignment.center,
+                      child: fireCreatModel.editenvironmentpic5.length == 0
+                          ? Text('+')
+                          : Image.file(
+                          File(fireCreatModel.editenvironmentpic5)),
+                      decoration: new BoxDecoration(
+                        border: new Border.all(
+                            width: 1.0,
+                            color: (editIndex == 10
+                                ? Colors.green
+                                : prefix0.LINE_COLOR)),
+                        borderRadius: new BorderRadius.all(
+                            new Radius.circular(5.0)),
+                      ),
+                      width: 150,
+                      height: 150,
                     ),
-                    width: 150,
-                    height: 150,
                   ),
-                ),
-                Row(
-                  children: <Widget>[
-                    new Offstage(
-                        offstage: (fireCreatModel.editenvironmentpic5.length > 0)
-                            ? false
-                            : true,
-                        child: new IconButton(
-                          icon: new Image.asset(
-                              "assets/images/picture_del.png"),
-                          tooltip: 'Increase volume by 10%',
-                          onPressed: () {
-                            setState(() {
-                              fireCreatModel.editenvironmentpic5 = "";
-                            });
-                          },
-                        )),
-                  ],
-                )
-              ],
-            )
+                  Row(
+                    children: <Widget>[
+                      new Offstage(
+                          offstage: (fireCreatModel.editenvironmentpic5.length >
+                              0)
+                              ? false
+                              : true,
+                          child: new IconButton(
+                            icon: new Image.asset(
+                                "assets/images/picture_del.png"),
+                            tooltip: 'Increase volume by 10%',
+                            onPressed: () {
+                              setState(() {
+                                fireCreatModel.editenvironmentpic5 = "";
+                              });
+                            },
+                          )),
+                    ],
+                  )
+                ],
+              )
           ),
         ],
       ),
@@ -1264,16 +1286,18 @@ class _State extends State<SurvayElectricalFirePage> {
     ScrollController _controller2 = TrackingScrollController();
 
     bool dataNotification(ScrollNotification notification) {
-      if (notification is ScrollEndNotification) {
+      double height = 183; //step2的高度
+      height = height + 80;
+      if (notification.metrics.extentBefore > height) {
         //下滑到最底部
-        if (notification.metrics.extentAfter == 0) {
-          _pageController.animateToPage(2,
-              duration: const Duration(milliseconds: 100), curve: Curves.ease);
-        } //滑动到最顶部
-        if (notification.metrics.extentBefore == 0) {
-          _pageController.animateToPage(0,
-              duration: const Duration(milliseconds: 100), curve: Curves.ease);
-        }
+
+
+        _pageController.animateToPage(2,
+            duration: const Duration(milliseconds: 300), curve: Curves.ease);
+      } //滑动到最顶部
+      if (notification.metrics.extentAfter > height) {
+        _pageController.animateToPage(0,
+            duration: const Duration(milliseconds: 300), curve: Curves.ease);
       }
       return true;
     }
@@ -1498,463 +1522,451 @@ class _State extends State<SurvayElectricalFirePage> {
     bool dataNotification3(ScrollNotification notification) {
       if (notification is ScrollEndNotification) {
         //下滑到最底部
-        if (notification.metrics.extentAfter == 0.0) {
+
+        // notification.metrics.maxScrollExtent
+        double height = 199; //step3的高度
+        height = height + 80;
+        //下滑到最底部
+        // if (notification.metrics.extentAfter == 0.0) {
+        if (notification.metrics.extentBefore > height) {
           print('======下滑到最底部======');
           _pageController.animateToPage(3,
               duration: const Duration(milliseconds: 100), curve: Curves.ease);
         } //滑动到最顶部
-        if (notification.metrics.extentBefore == 0.0) {
+        // if (notification.metrics.extentBefore == 0.0) {
+        if (notification.metrics.extentAfter > height) {
           print('======滑动到最顶部======');
           _pageController.animateToPage(1,
               duration: const Duration(milliseconds: 100), curve: Curves.ease);
+         }
         }
+        // }
+        return true;
       }
-      return true;
-    }
 
-    Widget step3 = Container(
-        color: prefix0.LIGHT_LINE_COLOR,
-        padding: new EdgeInsets.fromLTRB(0, 0, 0, 60),
-        child: new NotificationListener(
-            onNotification: dataNotification3,
-            child: new ListView(
+      Widget step3 = Container(
+          color: prefix0.LIGHT_LINE_COLOR,
+          padding: new EdgeInsets.fromLTRB(0, 0, 0, 60),
+          child: new NotificationListener(
+              onNotification: dataNotification3,
+              child: new ListView(
 //          physics: NeverScrollableScrollPhysics(),
 //          shrinkWrap: true,
-              controller: _controller3,
-              children: <Widget>[
-                new Column(
-                  children: <Widget>[
-                    new Row(children: <Widget>[
-                      Padding(
-                        child: new Text(
-                          electricalItems[2],
-                          style: TextStyle(color: prefix0.TITLE_TEXT_COLOR),
-                        ),
-                        padding: new EdgeInsets.fromLTRB(20, 20, 20, 20),
-                      )
-                    ]),
-                    installationEnvironment,
-                  ],
-                )
-              ],
-            )));
+                controller: _controller3,
+                children: <Widget>[
+                  new Column(
+                    children: <Widget>[
+                      new Row(children: <Widget>[
+                        Padding(
+                          child: new Text(
+                            electricalItems[2],
+                            style: TextStyle(color: prefix0.TITLE_TEXT_COLOR),
+                          ),
+                          padding: new EdgeInsets.fromLTRB(20, 20, 20, 20),
+                        )
+                      ]),
+                      installationEnvironment,
+                    ],
+                  )
+                ],
+              )));
 
-    int _getProbeCount() {
-      if (fireCreatModel.isSingle == 1) {
-        if (fireCreatModel.isZhiHui == 1) {
-          fireCreatModel.probeNumber = "0";
-          return 0;
+      int _getProbeCount() {
+        if (fireCreatModel.isSingle == 1) {
+          if (fireCreatModel.isZhiHui == 1) {
+            fireCreatModel.probeNumber = "0";
+            return 0;
+          } else {
+            fireCreatModel.probeNumber = "2";
+            return 2;
+          }
         } else {
-          fireCreatModel.probeNumber = "2";
-          return 2;
+          fireCreatModel.probeNumber = "4";
+          return 4;
         }
-      } else {
-        fireCreatModel.probeNumber = "4";
-        return 4;
       }
-    }
 
-    String _getRatedCurrent() {
-      if (fireCreatModel.isSingle == 1) {
-        if (fireCreatModel.isZhiHui == 1) {
-          fireCreatModel.currentSelect = "63A";
-          return "63A";
+      String _getRatedCurrent() {
+        if (fireCreatModel.isSingle == 1) {
+          if (fireCreatModel.isZhiHui == 1) {
+            fireCreatModel.currentSelect = "63A";
+            return "63A";
+          } else {
+            fireCreatModel.currentSelect = "63A";
+            return "60A";
+          }
         } else {
-          fireCreatModel.currentSelect = "63A";
-          return "60A";
-        }
-      } else {
-        if (currentValue == 0) {
-          fireCreatModel.currentSelect = "250A";
-        } else {
-          fireCreatModel.currentSelect = "400A";
-        }
-        return "";
-      }
-    }
-
-    String _getLeakageCurrent() {
-      if (fireCreatModel.isSingle == 1) {
-        if (fireCreatModel.isZhiHui == 1) {
-          fireCreatModel.recommendedTransformer = "";
+          if (currentValue == 0) {
+            fireCreatModel.currentSelect = "250A";
+          } else {
+            fireCreatModel.currentSelect = "400A";
+          }
           return "";
-        } else {
-          fireCreatModel.recommendedTransformer = "L16K";
-          return "L16K";
-        }
-      } else {
-        if (fireCreatModel.isMolded == 1) {
-          fireCreatModel.recommendedTransformer = "L45K";
-          return "L45K";
-        } else {
-          fireCreatModel.recommendedTransformer = "L80K";
-          return "L80K";
         }
       }
-    }
 
-    Widget installationEnvironment2 = Container(
-      color: Colors.white,
-      padding: new EdgeInsets.fromLTRB(20, 0, 20, 20),
-      child: Column(
-//           mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          GestureDetector(
-//            onTap: editName,//写入方法名称就可以了，但是是无参的
-            child: Container(
-              alignment: Alignment.center,
-              height: 60,
-              child: new Row(
-                children: <Widget>[
-                  Text("报警音可否有效传播"),
-                  Expanded(
-                    child: new Radio(
-                        value: 1,
-                        groupValue: fireCreatModel.isEffectiveTransmission,
-                        onChanged: (int e) {
-                          setState(() {
-                            fireCreatModel.isEffectiveTransmission = e;
-                          });
-                        }),
-                  ),
-                  Text("是"),
-                  Expanded(
-                    child: new Radio(
-                        value: 0,
-                        groupValue: fireCreatModel.isEffectiveTransmission,
-                        onChanged: (int e) {
-                          setState(() {
-                            fireCreatModel.isEffectiveTransmission = e;
-                          });
-                        }),
-                  ),
-                  Text("否"),
-                ],
-              ),
-            ),
-          ),
-          Container(
-            color: prefix0.LINE_COLOR,
-            height: 1,
-          ),
-          GestureDetector(
-//            onTap: editPurpose,//写入方法名称就可以了，但是是无参的
-            child: Container(
-              alignment: Alignment.center,
-              height: 60,
-              child: new Row(
-                children: <Widget>[
-                  Text("报警是否扰民"),
-                  new Radio(
-                      value: 1,
-                      groupValue: fireCreatModel.isNuisance,
-                      onChanged: (int e) {
-                        setState(() {
-                          fireCreatModel.isNuisance = e;
-                        });
-                      }),
-                  Text("是"),
-                  new Radio(
-                      value: 0,
-                      groupValue: fireCreatModel.isNuisance,
-                      onChanged: (int e) {
-                        setState(() {
-                          fireCreatModel.isNuisance = e;
-                        });
-                      }),
-                  Text("否"),
-                ],
-              ),
-            ),
-          ),
-          Container(
-            color: prefix0.LINE_COLOR,
-            height: 1,
-          ),
-          GestureDetector(
-//            onTap: editPurpose,//写入方法名称就可以了，但是是无参的
-            child: Container(
-              alignment: Alignment.center,
-              height: 60,
-              child: new Row(
-                children: <Widget>[
-                  Text("是否有专人消音"),
-                  new Radio(
-                      value: 1,
-                      groupValue: fireCreatModel.isNoiseReduction,
-                      onChanged: (int e) {
-                        setState(() {
-                          fireCreatModel.isNoiseReduction = e;
-                        });
-                      }),
-                  Text("是"),
-                  new Radio(
-                      value: 0,
-                      groupValue: fireCreatModel.isNoiseReduction,
-                      onChanged: (int e) {
-                        setState(() {
-                          fireCreatModel.isNoiseReduction = e;
-                        });
-                      }),
-                  Text("否"),
-                ],
-              ),
-            ),
-          ),
-          Container(
-            color: prefix0.LINE_COLOR,
-            height: 1,
-          ),
-          GestureDetector(
-//            onTap: editAddress,//写入方法名称就可以了，但是是无参的
-            child: Container(
-              alignment: Alignment.center,
-              height: 60,
-              child: new Row(
-                children: <Widget>[
-                  Text("备注"),
-                ],
-              ),
-            ),
-          ),
-          TextField(
-            controller: step4remarkController,
-            keyboardType: TextInputType.text,
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(2.0),
-                  borderSide: BorderSide(color: Colors.transparent)),
-//                  labelText: '备注',
-              hintText: '请输入其他环境影响因素。',
-            ),
-            maxLines: 5,
-            autofocus: false,
-            onChanged: (val) {
-              fireCreatModel.step4Remak = val;
-              setState(() {});
-            },
-          ),
-          Padding(
-            padding: new EdgeInsets.fromLTRB(0, 0, 0, 100),
-          )
-        ],
-      ),
-    );
+      String _getLeakageCurrent() {
+        if (fireCreatModel.isSingle == 1) {
+          if (fireCreatModel.isZhiHui == 1) {
+            fireCreatModel.recommendedTransformer = "";
+            return "";
+          } else {
+            fireCreatModel.recommendedTransformer = "L16K";
+            return "L16K";
+          }
+        } else {
+          if (fireCreatModel.isMolded == 1) {
+            fireCreatModel.recommendedTransformer = "L45K";
+            return "L45K";
+          } else {
+            fireCreatModel.recommendedTransformer = "L80K";
+            return "L80K";
+          }
+        }
+      }
 
-    Widget perationEnvironment = Container(
-      color: Colors.white,
-      padding: new EdgeInsets.fromLTRB(20, 0, 20, 0),
-      child: Column(
+      Widget installationEnvironment2 = Container(
+        color: Colors.white,
+        padding: new EdgeInsets.fromLTRB(20, 0, 20, 20),
+        child: Column(
 //           mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          GestureDetector(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            GestureDetector(
 //            onTap: editName,//写入方法名称就可以了，但是是无参的
-            child: Container(
-              alignment: Alignment.center,
-              height: 60,
-              child: new Row(
-                children: <Widget>[
-                  Text("空开层级"),
-                  new Radio(
-                      value: 1,
-                      groupValue: fireCreatModel.allOpenValue,
-                      onChanged: (int e) {
-                        setState(() {
-                          fireCreatModel.allOpenValue = e;
-                        });
-                      }),
-                  Text("总空开"),
-                  new Radio(
-                      value: 0,
-                      groupValue: fireCreatModel.allOpenValue,
-                      onChanged: (int e) {
-                        setState(() {
-                          fireCreatModel.allOpenValue = e;
-                        });
-                      }),
-                  Text("分空开"),
-                ],
-              ),
-            ),
-          ),
-          Container(
-            color: prefix0.LINE_COLOR,
-            height: 1,
-          ),
-          GestureDetector(
-//            onTap: editPurpose,//写入方法名称就可以了，但是是无参的
-            child: Container(
-              alignment: Alignment.center,
-              height: 60,
-              child: new Row(
-                children: <Widget>[
-                  Text("空开类型"),
-                  new Radio(
-                      value: 1,
-                      groupValue: fireCreatModel.isSingle,
-                      onChanged: (int e) {
-                        setState(() {
-                          fireCreatModel.isSingle = e;
-                          fireCreatModel.isZhiHui = 0;
-                        });
-                      }),
-                  Text("单相电"),
-                  new Radio(
-                      value: 0,
-                      groupValue: fireCreatModel.isSingle,
-                      onChanged: (int e) {
-                        setState(() {
-                          fireCreatModel.isSingle = e;
-                          fireCreatModel.isZhiHui = 0;
-                        });
-                      }),
-                  Text("三相电"),
-                ],
-              ),
-            ),
-          ),
-          new Offstage(
-            offstage: (fireCreatModel.isSingle == 1) ? true : false,
-            child: Container(
-              padding: new EdgeInsets.fromLTRB(72, 0, 0, 0),
               child: Container(
-                color: prefix0.LINE_COLOR,
-                height: 1,
+                alignment: Alignment.center,
+                height: 60,
+                child: new Row(
+                  children: <Widget>[
+                    Text("报警音可否有效传播"),
+                    Expanded(
+                      child: new Radio(
+                          value: 1,
+                          groupValue: fireCreatModel.isEffectiveTransmission,
+                          onChanged: (int e) {
+                            setState(() {
+                              fireCreatModel.isEffectiveTransmission = e;
+                            });
+                          }),
+                    ),
+                    Text("是"),
+                    Expanded(
+                      child: new Radio(
+                          value: 0,
+                          groupValue: fireCreatModel.isEffectiveTransmission,
+                          onChanged: (int e) {
+                            setState(() {
+                              fireCreatModel.isEffectiveTransmission = e;
+                            });
+                          }),
+                    ),
+                    Text("否"),
+                  ],
+                ),
               ),
             ),
-          ),
-          new Offstage(
-            offstage: (fireCreatModel.isSingle == 1) ? true : false,
-            child: GestureDetector(
+            Container(
+              color: prefix0.LINE_COLOR,
+              height: 1,
+            ),
+            GestureDetector(
 //            onTap: editPurpose,//写入方法名称就可以了，但是是无参的
               child: Container(
                 alignment: Alignment.center,
                 height: 60,
                 child: new Row(
                   children: <Widget>[
-                    Text("              "),
+                    Text("报警是否扰民"),
                     new Radio(
                         value: 1,
-                        groupValue: fireCreatModel.isMolded,
+                        groupValue: fireCreatModel.isNuisance,
                         onChanged: (int e) {
                           setState(() {
-                            fireCreatModel.isMolded = e;
+                            fireCreatModel.isNuisance = e;
                           });
                         }),
-                    Text("微断"),
+                    Text("是"),
                     new Radio(
                         value: 0,
-                        groupValue: fireCreatModel.isMolded,
+                        groupValue: fireCreatModel.isNuisance,
                         onChanged: (int e) {
                           setState(() {
-                            fireCreatModel.isMolded = e;
+                            fireCreatModel.isNuisance = e;
                           });
                         }),
-                    Text("塑壳"),
+                    Text("否"),
                   ],
                 ),
               ),
             ),
-          ),
-          Container(
-            color: prefix0.LINE_COLOR,
-            height: 1,
-          ),
-          GestureDetector(
-            onTap: editCurrent, //写入方法名称就可以了，但是是无参的
-            child: Container(
-              alignment: Alignment.center,
-              height: 60,
-              child: new Row(
-                children: <Widget>[
-                  Text("额定电流"),
-                  Expanded(
-                    child: Text(
-                      fireCreatModel.current.length > 0
-                          ? (fireCreatModel.current + "A")
-                          : "必填",
-                      textAlign: TextAlign.right,
-                    ),
-                  ),
-                  Image.asset(
-                    "assets/images/right_arrar.png",
-                    width: 20,
-                  )
-                ],
-              ),
+            Container(
+              color: prefix0.LINE_COLOR,
+              height: 1,
             ),
-          ),
-          Container(
-            color: prefix0.LINE_COLOR,
-            height: 1,
-          ),
-          GestureDetector(
-            onTap: editDangerous, //写入方法名称就可以了，但是是无参的
-            child: Container(
-              alignment: Alignment.center,
-              height: 60,
-              child: new Row(
-                children: <Widget>[
-                  Text("危险线路数"),
-                  Expanded(
-                    child: Text(
-                      fireCreatModel.dangerous.length > 0
-                          ? (fireCreatModel.dangerous + "条")
-                          : "选填",
-                      textAlign: TextAlign.right,
-                    ),
-                  ),
-                  Image.asset(
-                    "assets/images/right_arrar.png",
-                    width: 20,
-                  )
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-
-    Widget perationEnvironment2 = Container(
-      color: Colors.white,
-      padding: new EdgeInsets.fromLTRB(20, 0, 20, 20),
-      child: Column(
-//           mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          GestureDetector(
+            GestureDetector(
 //            onTap: editPurpose,//写入方法名称就可以了，但是是无参的
-            child: Container(
-              alignment: Alignment.center,
-              height: 60,
-              child: new Row(
-                children: <Widget>[
-                  Text("适用类型"),
-                  new Radio(
-                    value: 1,
-                    groupValue: fireCreatModel.isZhiHui,
-                    onChanged: (int e) {
-                      if (fireCreatModel.isSingle == 1) {
-                        setState(() {
-                          fireCreatModel.isZhiHui = e;
-                        });
-                      }
-                    },
+              child: Container(
+                alignment: Alignment.center,
+                height: 60,
+                child: new Row(
+                  children: <Widget>[
+                    Text("是否有专人消音"),
+                    new Radio(
+                        value: 1,
+                        groupValue: fireCreatModel.isNoiseReduction,
+                        onChanged: (int e) {
+                          setState(() {
+                            fireCreatModel.isNoiseReduction = e;
+                          });
+                        }),
+                    Text("是"),
+                    new Radio(
+                        value: 0,
+                        groupValue: fireCreatModel.isNoiseReduction,
+                        onChanged: (int e) {
+                          setState(() {
+                            fireCreatModel.isNoiseReduction = e;
+                          });
+                        }),
+                    Text("否"),
+                  ],
+                ),
+              ),
+            ),
+            Container(
+              color: prefix0.LINE_COLOR,
+              height: 1,
+            ),
+            GestureDetector(
+//            onTap: editAddress,//写入方法名称就可以了，但是是无参的
+              child: Container(
+                alignment: Alignment.center,
+                height: 60,
+                child: new Row(
+                  children: <Widget>[
+                    Text("备注"),
+                  ],
+                ),
+              ),
+            ),
+            TextField(
+              controller: step4remarkController,
+              keyboardType: TextInputType.text,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(2.0),
+                    borderSide: BorderSide(color: Colors.transparent)),
+//                  labelText: '备注',
+                hintText: '请输入其他环境影响因素。',
+              ),
+              maxLines: 5,
+              autofocus: false,
+              onChanged: (val) {
+                fireCreatModel.step4Remak = val;
+                setState(() {});
+              },
+            ),
+            Padding(
+              padding: new EdgeInsets.fromLTRB(0, 0, 0, 100),
+            )
+          ],
+        ),
+      );
+
+      Widget perationEnvironment = Container(
+        color: Colors.white,
+        padding: new EdgeInsets.fromLTRB(20, 0, 20, 0),
+        child: Column(
+//           mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            GestureDetector(
+//            onTap: editName,//写入方法名称就可以了，但是是无参的
+              child: Container(
+                alignment: Alignment.center,
+                height: 60,
+                child: new Row(
+                  children: <Widget>[
+                    Text("空开层级"),
+                    new Radio(
+                        value: 1,
+                        groupValue: fireCreatModel.allOpenValue,
+                        onChanged: (int e) {
+                          setState(() {
+                            fireCreatModel.allOpenValue = e;
+                          });
+                        }),
+                    Text("总空开"),
+                    new Radio(
+                        value: 0,
+                        groupValue: fireCreatModel.allOpenValue,
+                        onChanged: (int e) {
+                          setState(() {
+                            fireCreatModel.allOpenValue = e;
+                          });
+                        }),
+                    Text("分空开"),
+                  ],
+                ),
+              ),
+            ),
+            Container(
+              color: prefix0.LINE_COLOR,
+              height: 1,
+            ),
+            GestureDetector(
+//            onTap: editPurpose,//写入方法名称就可以了，但是是无参的
+              child: Container(
+                alignment: Alignment.center,
+                height: 60,
+                child: new Row(
+                  children: <Widget>[
+                    Text("空开类型"),
+                    new Radio(
+                        value: 1,
+                        groupValue: fireCreatModel.isSingle,
+                        onChanged: (int e) {
+                          setState(() {
+                            fireCreatModel.isSingle = e;
+                            fireCreatModel.isZhiHui = 0;
+                          });
+                        }),
+                    Text("单相电"),
+                    new Radio(
+                        value: 0,
+                        groupValue: fireCreatModel.isSingle,
+                        onChanged: (int e) {
+                          setState(() {
+                            fireCreatModel.isSingle = e;
+                            fireCreatModel.isZhiHui = 0;
+                          });
+                        }),
+                    Text("三相电"),
+                  ],
+                ),
+              ),
+            ),
+            new Offstage(
+              offstage: (fireCreatModel.isSingle == 1) ? true : false,
+              child: Container(
+                padding: new EdgeInsets.fromLTRB(72, 0, 0, 0),
+                child: Container(
+                  color: prefix0.LINE_COLOR,
+                  height: 1,
+                ),
+              ),
+            ),
+            new Offstage(
+              offstage: (fireCreatModel.isSingle == 1) ? true : false,
+              child: GestureDetector(
+//            onTap: editPurpose,//写入方法名称就可以了，但是是无参的
+                child: Container(
+                  alignment: Alignment.center,
+                  height: 60,
+                  child: new Row(
+                    children: <Widget>[
+                      Text("              "),
+                      new Radio(
+                          value: 1,
+                          groupValue: fireCreatModel.isMolded,
+                          onChanged: (int e) {
+                            setState(() {
+                              fireCreatModel.isMolded = e;
+                            });
+                          }),
+                      Text("微断"),
+                      new Radio(
+                          value: 0,
+                          groupValue: fireCreatModel.isMolded,
+                          onChanged: (int e) {
+                            setState(() {
+                              fireCreatModel.isMolded = e;
+                            });
+                          }),
+                      Text("塑壳"),
+                    ],
                   ),
-                  Expanded(
-                    child: Text(
-                      "智慧空开\n(支持通断)",
-                      style: new TextStyle(
-                          color: fireCreatModel.isSingle == 1
-                              ? Colors.black
-                              : Colors.grey),
+                ),
+              ),
+            ),
+            Container(
+              color: prefix0.LINE_COLOR,
+              height: 1,
+            ),
+            GestureDetector(
+              onTap: editCurrent, //写入方法名称就可以了，但是是无参的
+              child: Container(
+                alignment: Alignment.center,
+                height: 60,
+                child: new Row(
+                  children: <Widget>[
+                    Text("额定电流"),
+                    Expanded(
+                      child: Text(
+                        fireCreatModel.current.length > 0
+                            ? (fireCreatModel.current + "A")
+                            : "必填",
+                        textAlign: TextAlign.right,
+                      ),
                     ),
-                  ),
-                  new Radio(
-                      value: 0,
+                    Image.asset(
+                      "assets/images/right_arrar.png",
+                      width: 20,
+                    )
+                  ],
+                ),
+              ),
+            ),
+            Container(
+              color: prefix0.LINE_COLOR,
+              height: 1,
+            ),
+            GestureDetector(
+              onTap: editDangerous, //写入方法名称就可以了，但是是无参的
+              child: Container(
+                alignment: Alignment.center,
+                height: 60,
+                child: new Row(
+                  children: <Widget>[
+                    Text("危险线路数"),
+                    Expanded(
+                      child: Text(
+                        fireCreatModel.dangerous.length > 0
+                            ? (fireCreatModel.dangerous + "条")
+                            : "选填",
+                        textAlign: TextAlign.right,
+                      ),
+                    ),
+                    Image.asset(
+                      "assets/images/right_arrar.png",
+                      width: 20,
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+
+      Widget perationEnvironment2 = Container(
+        color: Colors.white,
+        padding: new EdgeInsets.fromLTRB(20, 0, 20, 20),
+        child: Column(
+//           mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            GestureDetector(
+//            onTap: editPurpose,//写入方法名称就可以了，但是是无参的
+              child: Container(
+                alignment: Alignment.center,
+                height: 60,
+                child: new Row(
+                  children: <Widget>[
+                    Text("适用类型"),
+                    new Radio(
+                      value: 1,
                       groupValue: fireCreatModel.isZhiHui,
                       onChanged: (int e) {
                         if (fireCreatModel.isSingle == 1) {
@@ -1962,53 +1974,49 @@ class _State extends State<SurvayElectricalFirePage> {
                             fireCreatModel.isZhiHui = e;
                           });
                         }
-                      }),
-                  Expanded(
-                    child: Text("电气火灾\n(不支持通断)"),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Container(
-            color: prefix0.LINE_COLOR,
-            height: 1,
-          ),
-          GestureDetector(
-//            onTap: editPurpose,//写入方法名称就可以了，但是是无参的
-            child: Container(
-              alignment: Alignment.center,
-              height: 60,
-              child: new Row(
-                children: <Widget>[
-                  Text("温度探头数"),
-                  Expanded(
-                    child: Text(
-                      _getProbeCount().toString() + "个",
-                      textAlign: TextAlign.right,
+                      },
                     ),
-                  ),
-                ],
+                    Expanded(
+                      child: Text(
+                        "智慧空开\n(支持通断)",
+                        style: new TextStyle(
+                            color: fireCreatModel.isSingle == 1
+                                ? Colors.black
+                                : Colors.grey),
+                      ),
+                    ),
+                    new Radio(
+                        value: 0,
+                        groupValue: fireCreatModel.isZhiHui,
+                        onChanged: (int e) {
+                          if (fireCreatModel.isSingle == 1) {
+                            setState(() {
+                              fireCreatModel.isZhiHui = e;
+                            });
+                          }
+                        }),
+                    Expanded(
+                      child: Text("电气火灾\n(不支持通断)"),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-          Container(
-            color: prefix0.LINE_COLOR,
-            height: 1,
-          ),
-          new Offstage(
-            offstage: (fireCreatModel.isSingle == 0) ? true : false,
-            child: GestureDetector(
+            Container(
+              color: prefix0.LINE_COLOR,
+              height: 1,
+            ),
+            GestureDetector(
 //            onTap: editPurpose,//写入方法名称就可以了，但是是无参的
               child: Container(
                 alignment: Alignment.center,
                 height: 60,
                 child: new Row(
                   children: <Widget>[
-                    Text("额定电流"),
+                    Text("温度探头数"),
                     Expanded(
                       child: Text(
-                        _getRatedCurrent(),
+                        _getProbeCount().toString() + "个",
                         textAlign: TextAlign.right,
                       ),
                     ),
@@ -2016,217 +2024,243 @@ class _State extends State<SurvayElectricalFirePage> {
                 ),
               ),
             ),
-          ),
-          new Offstage(
-            offstage: (fireCreatModel.isSingle == 1) ? true : false,
-            child: GestureDetector(
+            Container(
+              color: prefix0.LINE_COLOR,
+              height: 1,
+            ),
+            new Offstage(
+              offstage: (fireCreatModel.isSingle == 0) ? true : false,
+              child: GestureDetector(
+//            onTap: editPurpose,//写入方法名称就可以了，但是是无参的
+                child: Container(
+                  alignment: Alignment.center,
+                  height: 60,
+                  child: new Row(
+                    children: <Widget>[
+                      Text("额定电流"),
+                      Expanded(
+                        child: Text(
+                          _getRatedCurrent(),
+                          textAlign: TextAlign.right,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            new Offstage(
+              offstage: (fireCreatModel.isSingle == 1) ? true : false,
+              child: GestureDetector(
 //            onTap: editName,//写入方法名称就可以了，但是是无参的
-              child: Container(
-                alignment: Alignment.center,
-                height: 60,
-                child: new Row(
-                  children: <Widget>[
-                    Text("额定电流"),
-                    Expanded(
-                      child: new Radio(
-                          value: 1,
-                          groupValue: currentValue,
-                          onChanged: (int e) {
-                            setState(() {
-                              currentValue = 1;
-                              fireCreatModel.currentSelect = "250A";
-                            });
-                          }),
-                    ),
-                    Text("250A"),
-                    Expanded(
-                      child: new Radio(
-                          value: 0,
-                          groupValue: currentValue,
-                          onChanged: (int e) {
-                            setState(() {
-                              currentValue = 0;
-                              fireCreatModel.currentSelect = "400A";
-                            });
-                          }),
-                    ),
-                    Text("400A"),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          Container(
-            color: prefix0.LINE_COLOR,
-            height: 1,
-          ),
-          new Offstage(
-            offstage:
-                (fireCreatModel.isSingle == 1 && fireCreatModel.isZhiHui == 1)
-                    ? true
-                    : false,
-            child: GestureDetector(
-//            onTap: editPurpose,//写入方法名称就可以了，但是是无参的
-              child: Container(
-                alignment: Alignment.center,
-                height: 60,
-                child: new Row(
-                  children: <Widget>[
-                    Text("漏电互感器规格"),
-                    Expanded(
-                      child: Text(
-                        _getLeakageCurrent(),
-                        textAlign: TextAlign.right,
+                child: Container(
+                  alignment: Alignment.center,
+                  height: 60,
+                  child: new Row(
+                    children: <Widget>[
+                      Text("额定电流"),
+                      Expanded(
+                        child: new Radio(
+                            value: 1,
+                            groupValue: currentValue,
+                            onChanged: (int e) {
+                              setState(() {
+                                currentValue = 1;
+                                fireCreatModel.currentSelect = "250A";
+                              });
+                            }),
                       ),
-                    ),
-                  ],
+                      Text("250A"),
+                      Expanded(
+                        child: new Radio(
+                            value: 0,
+                            groupValue: currentValue,
+                            onChanged: (int e) {
+                              setState(() {
+                                currentValue = 0;
+                                fireCreatModel.currentSelect = "400A";
+                              });
+                            }),
+                      ),
+                      Text("400A"),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
-      ),
-    );
+            Container(
+              color: prefix0.LINE_COLOR,
+              height: 1,
+            ),
+            new Offstage(
+              offstage:
+              (fireCreatModel.isSingle == 1 && fireCreatModel.isZhiHui == 1)
+                  ? true
+                  : false,
+              child: GestureDetector(
+//            onTap: editPurpose,//写入方法名称就可以了，但是是无参的
+                child: Container(
+                  alignment: Alignment.center,
+                  height: 60,
+                  child: new Row(
+                    children: <Widget>[
+                      Text("漏电互感器规格"),
+                      Expanded(
+                        child: Text(
+                          _getLeakageCurrent(),
+                          textAlign: TextAlign.right,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
 
-    ScrollController _controller4 = TrackingScrollController();
+      ScrollController _controller4 = TrackingScrollController();
 
-    bool dataNotification4(ScrollNotification notification) {
-      if (notification is ScrollEndNotification) {
-        //下滑到最底部
-        if (notification.metrics.extentAfter == 0.0) {
-          print('======下滑到最底部======');
+      bool dataNotification4(ScrollNotification notification) {
+        double height = 29; //step4的超出整屏的高度
+        height = height + 80;
+        if (notification.metrics.extentBefore > height) {
+          //下滑到最底部
+
+
           _pageController.animateToPage(4,
               duration: const Duration(milliseconds: 100), curve: Curves.ease);
         } //滑动到最顶部
-        if (notification.metrics.extentBefore == 0.0) {
-          print('======滑动到最顶部======');
+        if (notification.metrics.extentAfter > height) {
           _pageController.animateToPage(2,
               duration: const Duration(milliseconds: 100), curve: Curves.ease);
         }
+        return true;
       }
-      return true;
-    }
 
-    Widget step4 = Container(
-        color: prefix0.LIGHT_LINE_COLOR,
-        padding: new EdgeInsets.fromLTRB(0, 0, 0, 60),
-        child: new NotificationListener(
-            onNotification: dataNotification4,
-            child: new ListView(
+      Widget step4 = Container(
+          color: prefix0.LIGHT_LINE_COLOR,
+          padding: new EdgeInsets.fromLTRB(0, 0, 0, 60),
+          child: new NotificationListener(
+              onNotification: dataNotification4,
+              child: new ListView(
 //          physics: NeverScrollableScrollPhysics(),
 //          shrinkWrap: true,
-              controller: _controller4,
-              children: <Widget>[
-                new Column(
-                  children: <Widget>[
-                    new Row(children: <Widget>[
-                      Padding(
-                        child: new Text(
-                          electricalItems[3],
-                          style: TextStyle(color: prefix0.TITLE_TEXT_COLOR),
-                        ),
-                        padding: new EdgeInsets.fromLTRB(20, 20, 20, 20),
-                      )
-                    ]),
-                    installationEnvironment2,
-                  ],
-                )
-              ],
-            )));
+                controller: _controller4,
+                children: <Widget>[
+                  new Column(
+                    children: <Widget>[
+                      new Row(children: <Widget>[
+                        Padding(
+                          child: new Text(
+                            electricalItems[3],
+                            style: TextStyle(color: prefix0.TITLE_TEXT_COLOR),
+                          ),
+                          padding: new EdgeInsets.fromLTRB(20, 20, 20, 20),
+                        )
+                      ]),
+                      installationEnvironment2,
+                    ],
+                  )
+                ],
+              )));
 
-    ScrollController _controller5 = TrackingScrollController();
+      ScrollController _controller5 = TrackingScrollController();
 
-    bool dataNotification5(ScrollNotification notification) {
-      if (notification is ScrollEndNotification) {
-        //下滑到最底部
-        if (notification.metrics.extentAfter == 0.0) {
-          print('======下滑到最底部======');
+      bool dataNotification5(ScrollNotification notification) {
+        if (notification is ScrollEndNotification) {
+          //下滑到最底部
+          if (notification.metrics.extentAfter == 0.0) {
+            print('======下滑到最底部======');
 //      _pageController.animateToPage(4,  duration: const Duration(milliseconds: 300), curve: Curves.ease);
-        } //滑动到最顶部
-        if (notification.metrics.extentBefore == 0.0) {
-          print('======滑动到最顶部======');
-          _pageController.animateToPage(3,
-              duration: const Duration(milliseconds: 100), curve: Curves.ease);
+          } //滑动到最顶部
+          if (notification.metrics.extentBefore == 0.0) {
+            print('======滑动到最顶部======');
+            _pageController.animateToPage(3,
+                duration: const Duration(milliseconds: 100),
+                curve: Curves.ease);
+          }
         }
+        return true;
       }
-      return true;
-    }
 
-    Widget step5 = Container(
-        color: prefix0.LIGHT_LINE_COLOR,
-        padding: new EdgeInsets.fromLTRB(0, 0, 0, 60),
-        child: new NotificationListener(
-            onNotification: dataNotification5,
-            child: new ListView(
+      Widget step5 = Container(
+          color: prefix0.LIGHT_LINE_COLOR,
+          padding: new EdgeInsets.fromLTRB(0, 0, 0, 60),
+          child: new NotificationListener(
+              onNotification: dataNotification5,
+              child: new ListView(
 //          physics: NeverScrollableScrollPhysics(),
 //          shrinkWrap: true,
-              controller: _controller5,
-              children: <Widget>[
-                new Column(
-                  children: <Widget>[
-                    new Row(children: <Widget>[
-                      Padding(
-                        child: new Text(
-                          electricalItems[4],
-                          style: TextStyle(color: prefix0.TITLE_TEXT_COLOR),
-                        ),
-                        padding: new EdgeInsets.fromLTRB(20, 20, 20, 20),
-                      )
-                    ]),
-                    perationEnvironment,
-                    new Padding(padding: new EdgeInsets.fromLTRB(0, 0, 0, 20)),
-                    perationEnvironment2,
-                  ],
-                )
-              ],
-            )));
+                controller: _controller5,
+                children: <Widget>[
+                  new Column(
+                    children: <Widget>[
+                      new Row(children: <Widget>[
+                        Padding(
+                          child: new Text(
+                            electricalItems[4],
+                            style: TextStyle(color: prefix0.TITLE_TEXT_COLOR),
+                          ),
+                          padding: new EdgeInsets.fromLTRB(20, 20, 20, 20),
+                        )
+                      ]),
+                      perationEnvironment,
+                      new Padding(
+                          padding: new EdgeInsets.fromLTRB(0, 0, 0, 20)),
+                      perationEnvironment2,
+                    ],
+                  )
+                ],
+              )));
 
-    Widget bigContainer = Container(
-        color: prefix0.LIGHT_LINE_COLOR,
-        padding: new EdgeInsets.fromLTRB(0, 0, 0, 60),
-        child: new ListView(
-          scrollDirection: Axis.vertical,
-          physics: AlwaysScrollableScrollPhysics(),
-          children: <Widget>[
-            step1,
-            step2,
-            step3,
-            step4,
-            step5,
-          ],
-        ));
+      Widget bigContainer = Container(
+          color: prefix0.LIGHT_LINE_COLOR,
+          padding: new EdgeInsets.fromLTRB(0, 0, 0, 60),
+          child: new ListView(
+            scrollDirection: Axis.vertical,
+            physics: AlwaysScrollableScrollPhysics(),
+            children: <Widget>[
+              step1,
+              step2,
+              step3,
+              step4,
+              step5,
+            ],
+          ));
 
-    var mPageView = new PageView.builder(
-      controller: _pageController,
-      itemCount: 5,
-      scrollDirection: Axis.vertical,
-      itemBuilder: (BuildContext context, int index) {
-        if (index == 0) {
-          return step1;
-        } else if (index == 1) {
-          return step2;
-        } else if (index == 2) {
-          return step3;
-        } else if (index == 3) {
-          return step4;
-        } else {
-          return step5;
-        }
-      },
-    );
+      var mPageView = new PageView.builder(
+        controller: _pageController,
+        itemCount: 5,
+        scrollDirection: Axis.vertical,
+        itemBuilder: (BuildContext context, int index) {
+          if (index == 0) {
+            return step1;
+          } else if (index == 1) {
+            return step2;
+          } else if (index == 2) {
+            return step3;
+          } else if (index == 3) {
+            return step4;
+          } else {
+            return step5;
+          }
+        },
+      );
 
-    return Scaffold(
-      appBar: NavBar,
-      body: mPageView,
-      bottomSheet: bottomButton,
-    );
+      return Scaffold(
+        appBar: NavBar,
+        body: mPageView,
+        bottomSheet: bottomButton,
+      );
+    }
   }
-}
 
-const electricalItems = [
-  "1.电箱信息",
-  "2.电箱照片",
-  "3.安装环境",
-  "4.运作环境",
-  "5.设备预选",
-];
+  const electricalItems = [
+    "1.电箱信息",
+    "2.电箱照片",
+    "3.安装环境",
+    "4.运作环境",
+    "5.设备预选",
+  ];
