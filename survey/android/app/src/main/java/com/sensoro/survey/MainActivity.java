@@ -58,32 +58,32 @@ public class MainActivity extends FlutterActivity {
         new MethodChannel(flutterView, "com.pages.your/project_list").setMethodCallHandler(
                 (call, result) -> {
                     //调用分享
-                    if (call.method.equals("outputDocument")) {
-                        boolean wxAppInstalled = api.isWXAppInstalled();
-                        if (wxAppInstalled) {
-                            Map<String, Map> map = (Map) call.arguments;
-                            Map value = null;
-                            for (String key : map.keySet()) {
-                                value = map.get(key);
-                                System.out.println(key + ":" + value);
-                            }
-                            if (null != value) {
-                                WXTextObject textObj = new WXTextObject();
-                                textObj.text = value.toString();
-                                WXMediaMessage msg = new WXMediaMessage();
-                                msg.mediaObject = textObj;
-                                msg.description = value.toString();
-                                SendMessageToWX.Req req = new SendMessageToWX.Req();
-                                req.transaction = String.valueOf(System.currentTimeMillis());
-                                req.message = msg;
-                                req.scene = WXSceneSession;
-                                api.sendReq(req);
-                            }
-                        } else {
-                            Toast.makeText(MainActivity.this, "当前手机未安装微信，请安装后重试", Toast.LENGTH_SHORT).show();
-                        }
-
-                    }
+//                    if (call.method.equals("outputDocument")) {
+//                        boolean wxAppInstalled = api.isWXAppInstalled();
+//                        if (wxAppInstalled) {
+//                            Map<String, Map> map = (Map) call.arguments;
+//                            Map value = null;
+//                            for (String key : map.keySet()) {
+//                                value = map.get(key);
+//                                System.out.println(key + ":" + value);
+//                            }
+//                            if (null != value) {
+//                                WXTextObject textObj = new WXTextObject();
+//                                textObj.text = value.toString();
+//                                WXMediaMessage msg = new WXMediaMessage();
+//                                msg.mediaObject = textObj;
+//                                msg.description = value.toString();
+//                                SendMessageToWX.Req req = new SendMessageToWX.Req();
+//                                req.transaction = String.valueOf(System.currentTimeMillis());
+//                                req.message = msg;
+//                                req.scene = WXSceneSession;
+//                                api.sendReq(req);
+//                            }
+//                        } else {
+//                            Toast.makeText(MainActivity.this, "当前手机未安装微信，请安装后重试", Toast.LENGTH_SHORT).show();
+//                        }
+//
+//                    }
                 });
 
 
