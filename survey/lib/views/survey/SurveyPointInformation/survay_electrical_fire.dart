@@ -1272,7 +1272,7 @@ class _State extends State<SurvayElectricalFirePage> {
     ScrollController _controller2 = TrackingScrollController();
 
     bool dataNotification(ScrollNotification notification) {
-      double height = 183; //step2的高度
+      double height = notification.metrics.maxScrollExtent; //step2的高度
       height = height + 80;
       if (notification.metrics.extentBefore > height) {
         //下滑到最底部
@@ -1505,25 +1505,23 @@ class _State extends State<SurvayElectricalFirePage> {
     ScrollController _controller3 = TrackingScrollController();
 
     bool dataNotification3(ScrollNotification notification) {
-      if (notification is ScrollEndNotification) {
-        //下滑到最底部
+      //下滑到最底部
 
-        // notification.metrics.maxScrollExtent
-        double height = 199; //step3的高度
-        height = height + 80;
-        //下滑到最底部
-        // if (notification.metrics.extentAfter == 0.0) {
-        if (notification.metrics.extentBefore > height) {
-          print('======下滑到最底部======');
-          _pageController.animateToPage(3,
-              duration: const Duration(milliseconds: 100), curve: Curves.ease);
-        } //滑动到最顶部
-        // if (notification.metrics.extentBefore == 0.0) {
-        if (notification.metrics.extentAfter > height) {
-          print('======滑动到最顶部======');
-          _pageController.animateToPage(1,
-              duration: const Duration(milliseconds: 100), curve: Curves.ease);
-        }
+      // notification.metrics.maxScrollExtent
+      double height = notification.metrics.maxScrollExtent; //step3的高度
+      height = height + 80;
+      //下滑到最底部
+      // if (notification.metrics.extentAfter == 0.0) {
+      if (notification.metrics.extentBefore > height) {
+        print('======下滑到最底部======');
+        _pageController.animateToPage(3,
+            duration: const Duration(milliseconds: 100), curve: Curves.ease);
+      } //滑动到最顶部
+      // if (notification.metrics.extentBefore == 0.0) {
+      if (notification.metrics.extentAfter > height) {
+        print('======滑动到最顶部======');
+        _pageController.animateToPage(1,
+            duration: const Duration(milliseconds: 100), curve: Curves.ease);
       }
       // }
       return true;
@@ -2108,7 +2106,7 @@ class _State extends State<SurvayElectricalFirePage> {
     ScrollController _controller4 = TrackingScrollController();
 
     bool dataNotification4(ScrollNotification notification) {
-      double height = 29; //step4的超出整屏的高度
+      double height = notification.metrics.maxScrollExtent; //step4的超出整屏的高度
       height = height + 80;
       if (notification.metrics.extentBefore > height) {
         //下滑到最底部
