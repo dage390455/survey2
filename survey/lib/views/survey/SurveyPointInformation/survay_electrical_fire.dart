@@ -38,7 +38,7 @@ class _State extends State<SurvayElectricalFirePage> {
 
   var hisoryKey = "isNeedPresent";
 
-  var _currentValue = 1;
+  var currentValue = 1;
   TextEditingController step1remarkController = TextEditingController();
   TextEditingController step3remarkController = TextEditingController();
   TextEditingController step4remarkController = TextEditingController();
@@ -302,31 +302,31 @@ class _State extends State<SurvayElectricalFirePage> {
   takePhoto1() async {
     picImageIndex = 0;
 
-    showPicDialog();
+    openGallery();
   }
 
   /*拍照*/
   takePhoto2() async {
     picImageIndex = 1;
-    showPicDialog();
+    openGallery();
   }
 
   /*拍照*/
   takePhoto3() async {
     picImageIndex = 2;
-    showPicDialog();
+    openGallery();
   }
 
   /*拍照*/
   takePhoto4() async {
     picImageIndex = 3;
-    showPicDialog();
+    openGallery();
   }
 
   /*拍照*/
   takePhoto5() async {
     picImageIndex = 4;
-    showPicDialog();
+    openGallery();
   }
 
   /*拍照*/
@@ -362,7 +362,7 @@ class _State extends State<SurvayElectricalFirePage> {
   /*拍照*/
   takePhoto11() async {
     picImageIndex = 10;
-    showPicDialog();
+    openGallery();
   }
 
   Widget buildButton(
@@ -581,112 +581,313 @@ class _State extends State<SurvayElectricalFirePage> {
         scrollDirection: Axis.horizontal,
         children: <Widget>[
           GestureDetector(
-            onTap: takePhoto1, //写入方法名称就可以了，但是是无参的
-            child: new Padding(
-              padding: new EdgeInsets.fromLTRB(0, 0, 20, 0),
-              child: Container(
-                alignment: Alignment.center,
-                child: fireCreatModel.editpic1.length == 0
-                    ? Text('       上传\n电箱整体照片')
-                    : Image.file(File(fireCreatModel.editpic1)),
-                decoration: new BoxDecoration(
-                  border: new Border.all(width: 1.0, color: prefix0.LINE_COLOR),
-                  borderRadius: new BorderRadius.all(new Radius.circular(5.0)),
-                ),
-                width: 150,
-                height: 150,
-              ),
-            ),
-          ),
+              onTap: takePhoto1,
+              //写入方法名称就可以了，但是是无参的
+              onTapUp: (_) {
+                setState(() {
+                  editIndex = -1;
+                });
+              },
+              onTapCancel: () {
+                setState(() {
+                  editIndex = -1;
+                });
+              },
+              onTapDown: (_) {
+                setState(() {
+                  editIndex = 1;
+                });
+              },
+              child: Stack(
+                alignment: const Alignment(0.9, -1.1),
+                children: <Widget>[
+                  new Padding(
+                    padding: new EdgeInsets.fromLTRB(0, 10, 20, 0),
+                    child: Container(
+                      alignment: Alignment.center,
+                      child: fireCreatModel.editpic1.length == 0
+                          ? Text('       上传\n电箱整体照片')
+                          : Image.file(File(fireCreatModel.editpic1)),
+                      decoration: new BoxDecoration(
+                        border: new Border.all(
+                            width: 1.0,
+                            color: (editIndex == 1
+                                ? Colors.green
+                                : prefix0.LINE_COLOR)),
+                        borderRadius:
+                            new BorderRadius.all(new Radius.circular(5.0)),
+                      ),
+                      width: 150,
+                      height: 150,
+                    ),
+                  ),
+                  Row(
+                    children: <Widget>[
+                      new Offstage(
+                          offstage: (fireCreatModel.editpic1.length > 0)
+                              ? false
+                              : true,
+                          child: new IconButton(
+                            icon: new Image.asset(
+                                "assets/images/picture_del.png"),
+                            tooltip: 'Increase volume by 10%',
+                            onPressed: () {
+                              setState(() {
+                                fireCreatModel.editpic1 = "";
+                              });
+                            },
+                          )),
+                    ],
+                  )
+                ],
+              )),
           GestureDetector(
-            onTap: takePhoto2, //写入方法名称就可以了，但是是无参的
-            onTapUp: (_) {
-              setState(() {
-                editIndex = -1;
-              });
-
-            },
-            onTapCancel:(){
-              setState(() {
-                editIndex = -1;
-              });
-            },
-
-            onTapDown: (_) {
-              setState(() {
-                editIndex = 2;
-              });
-            },
-            child: new Padding(
-              padding: new EdgeInsets.fromLTRB(10, 0, 20, 0),
-              child: Container(
-                alignment: Alignment.center,
-                child: fireCreatModel.editpic2.length == 0
-                    ? Text('     上传\n总开关照片')
-                    : Image.file(File(fireCreatModel.editpic2)),
-                decoration: new BoxDecoration(
-                  border: new Border.all(width: 1.0, color:(editIndex==2?Colors.red:prefix0.LINE_COLOR)),
-                  borderRadius: new BorderRadius.all(new Radius.circular(5.0)),
-                ),
-                width: 150,
-                height: 150,
-              ),
-            ),
-          ),
+              onTap: takePhoto2,
+              //写入方法名称就可以了，但是是无参的
+              onTapUp: (_) {
+                setState(() {
+                  editIndex = -1;
+                });
+              },
+              onTapCancel: () {
+                setState(() {
+                  editIndex = -1;
+                });
+              },
+              onTapDown: (_) {
+                setState(() {
+                  editIndex = 2;
+                });
+              },
+              child: Stack(
+                alignment: const Alignment(0.9, -1.1),
+                children: <Widget>[
+                  new Padding(
+                      padding: new EdgeInsets.fromLTRB(0, 10, 20, 0),
+                      child: Stack(
+                        children: <Widget>[
+                          Container(
+                            alignment: Alignment.center,
+                            child: fireCreatModel.editpic2.length == 0
+                                ? Text('     上传\n总开关照片')
+                                : Image.file(File(fireCreatModel.editpic2)),
+                            decoration: new BoxDecoration(
+                              border: new Border.all(
+                                  width: 1.0,
+                                  color: (editIndex == 2
+                                      ? Colors.green
+                                      : prefix0.LINE_COLOR)),
+                              borderRadius: new BorderRadius.all(
+                                  new Radius.circular(5.0)),
+                            ),
+                            width: 150,
+                            height: 150,
+                          ),
+                        ],
+                      )),
+                  Row(
+                    children: <Widget>[
+                      new Offstage(
+                          offstage: (fireCreatModel.editpic2.length > 0)
+                              ? false
+                              : true,
+                          child: new IconButton(
+                            icon: new Image.asset(
+                                "assets/images/picture_del.png"),
+                            tooltip: 'Increase volume by 10%',
+                            onPressed: () {
+                              setState(() {
+                                fireCreatModel.editpic2 = "";
+                              });
+                            },
+                          )),
+                    ],
+                  )
+                ],
+              )),
           GestureDetector(
-            onTap: takePhoto3, //写入方法名称就可以了，但是是无参的
-            child: new Padding(
-              padding: new EdgeInsets.fromLTRB(10, 0, 20, 0),
-              child: Container(
-                alignment: Alignment.center,
-                child: fireCreatModel.editpic3.length == 0
-                    ? Text('+')
-                    : Image.file(File(fireCreatModel.editpic3)),
-                decoration: new BoxDecoration(
-                  border: new Border.all(width: 1.0, color: prefix0.LINE_COLOR),
-                  borderRadius: new BorderRadius.all(new Radius.circular(5.0)),
-                ),
-                width: 150,
-                height: 150,
-              ),
-            ),
-          ),
+              onTap: takePhoto3,
+              //写入方法名称就可以了，但是是无参的
+              onTapUp: (_) {
+                setState(() {
+                  editIndex = -1;
+                });
+              },
+              onTapCancel: () {
+                setState(() {
+                  editIndex = -1;
+                });
+              },
+              onTapDown: (_) {
+                setState(() {
+                  editIndex = 3;
+                });
+              },
+              child: Stack(
+                alignment: const Alignment(0.9, -1.1),
+                children: <Widget>[
+                  new Padding(
+                    padding: new EdgeInsets.fromLTRB(0, 10, 20, 0),
+                    child: Container(
+                      alignment: Alignment.center,
+                      child: fireCreatModel.editpic3.length == 0
+                          ? Text('+')
+                          : Image.file(File(fireCreatModel.editpic3)),
+                      decoration: new BoxDecoration(
+                        border: new Border.all(
+                            width: 1.0,
+                            color: (editIndex == 3
+                                ? Colors.green
+                                : prefix0.LINE_COLOR)),
+                        borderRadius:
+                            new BorderRadius.all(new Radius.circular(5.0)),
+                      ),
+                      width: 150,
+                      height: 150,
+                    ),
+                  ),
+                  Row(
+                    children: <Widget>[
+                      new Offstage(
+                          offstage: (fireCreatModel.editpic3.length > 0)
+                              ? false
+                              : true,
+                          child: new IconButton(
+                            icon: new Image.asset(
+                                "assets/images/picture_del.png"),
+                            tooltip: 'Increase volume by 10%',
+                            onPressed: () {
+                              setState(() {
+                                fireCreatModel.editpic3 = "";
+                              });
+                            },
+                          )),
+                    ],
+                  )
+                ],
+              )),
           GestureDetector(
-            onTap: takePhoto4, //写入方法名称就可以了，但是是无参的
-            child: new Padding(
-              padding: new EdgeInsets.fromLTRB(10, 0, 20, 0),
-              child: Container(
-                alignment: Alignment.center,
-                child: fireCreatModel.editpic4.length == 0
-                    ? Text('+')
-                    : Image.file(File(fireCreatModel.editpic4)),
-                decoration: new BoxDecoration(
-                  border: new Border.all(width: 1.0, color: prefix0.LINE_COLOR),
-                  borderRadius: new BorderRadius.all(new Radius.circular(5.0)),
-                ),
-                width: 150,
-                height: 150,
-              ),
-            ),
-          ),
+              onTap: takePhoto4,
+              //写入方法名称就可以了，但是是无参的
+              onTapUp: (_) {
+                setState(() {
+                  editIndex = -1;
+                });
+              },
+              onTapCancel: () {
+                setState(() {
+                  editIndex = -1;
+                });
+              },
+              onTapDown: (_) {
+                setState(() {
+                  editIndex = 4;
+                });
+              },
+              child: Stack(
+                alignment: const Alignment(0.9, -1.1),
+                children: <Widget>[
+                  new Padding(
+                    padding: new EdgeInsets.fromLTRB(10, 10, 20, 0),
+                    child: Container(
+                      alignment: Alignment.center,
+                      child: fireCreatModel.editpic4.length == 0
+                          ? Text('+')
+                          : Image.file(File(fireCreatModel.editpic4)),
+                      decoration: new BoxDecoration(
+                        border: new Border.all(
+                            width: 1.0,
+                            color: (editIndex == 4
+                                ? Colors.green
+                                : prefix0.LINE_COLOR)),
+                        borderRadius:
+                            new BorderRadius.all(new Radius.circular(5.0)),
+                      ),
+                      width: 150,
+                      height: 150,
+                    ),
+                  ),
+                  Row(
+                    children: <Widget>[
+                      new Offstage(
+                          offstage: (fireCreatModel.editpic4.length > 0)
+                              ? false
+                              : true,
+                          child: new IconButton(
+                            icon: new Image.asset(
+                                "assets/images/picture_del.png"),
+                            tooltip: 'Increase volume by 10%',
+                            onPressed: () {
+                              setState(() {
+                                fireCreatModel.editpic4 = "";
+                              });
+                            },
+                          )),
+                    ],
+                  )
+                ],
+              )),
           GestureDetector(
-            onTap: takePhoto5, //写入方法名称就可以了，但是是无参的
-            child: new Padding(
-              padding: new EdgeInsets.fromLTRB(10, 0, 20, 0),
-              child: Container(
-                alignment: Alignment.center,
-                child: fireCreatModel.editpic5.length == 0
-                    ? Text('+')
-                    : Image.file(File(fireCreatModel.editpic5)),
-                decoration: new BoxDecoration(
-                  border: new Border.all(width: 1.0, color: prefix0.LINE_COLOR),
-                  borderRadius: new BorderRadius.all(new Radius.circular(5.0)),
-                ),
-                width: 150,
-                height: 150,
-              ),
-            ),
-          ),
+              onTap: takePhoto5,
+              //写入方法名称就可以了，但是是无参的
+              onTapUp: (_) {
+                setState(() {
+                  editIndex = -1;
+                });
+              },
+              onTapCancel: () {
+                setState(() {
+                  editIndex = -1;
+                });
+              },
+              onTapDown: (_) {
+                setState(() {
+                  editIndex = 5;
+                });
+              },
+              child: Stack(
+                alignment: const Alignment(0.9, -1.1),
+                children: <Widget>[
+                  new Padding(
+                    padding: new EdgeInsets.fromLTRB(10, 10, 20, 0),
+                    child: Container(
+                      alignment: Alignment.center,
+                      child: fireCreatModel.editpic5.length == 0
+                          ? Text('+')
+                          : Image.file(File(fireCreatModel.editpic5)),
+                      decoration: new BoxDecoration(
+                        border: new Border.all(
+                            width: 1.0,
+                            color: (editIndex == 5
+                                ? Colors.green
+                                : prefix0.LINE_COLOR)),
+                        borderRadius:
+                            new BorderRadius.all(new Radius.circular(5.0)),
+                      ),
+                      width: 150,
+                      height: 150,
+                    ),
+                  ),
+                  Row(
+                    children: <Widget>[
+                      new Offstage(
+                          offstage: (fireCreatModel.editpic5.length > 0)
+                              ? false
+                              : true,
+                          child: new IconButton(
+                            icon: new Image.asset(
+                                "assets/images/picture_del.png"),
+                            tooltip: 'Increase volume by 10%',
+                            onPressed: () {
+                              setState(() {
+                                fireCreatModel.editpic5 = "";
+                              });
+                            },
+                          )),
+                    ],
+                  )
+                ],
+              )),
         ],
       ),
     );
@@ -700,94 +901,313 @@ class _State extends State<SurvayElectricalFirePage> {
         scrollDirection: Axis.horizontal,
         children: <Widget>[
           GestureDetector(
-            onTap: takePhoto6, //写入方法名称就可以了，但是是无参的
-            child: new Padding(
-              padding: new EdgeInsets.fromLTRB(0, 0, 20, 0),
-              child: Container(
-                alignment: Alignment.center,
-                child: fireCreatModel.editenvironmentpic1.length == 0
-                    ? Text('   上传\n环境照片')
-                    : Image.file(File(fireCreatModel.editenvironmentpic1)),
-                decoration: new BoxDecoration(
-                  border: new Border.all(width: 1.0, color: prefix0.LINE_COLOR),
-                  borderRadius: new BorderRadius.all(new Radius.circular(5.0)),
+              onTap: takePhoto6,
+              //写入方法名称就可以了，但是是无参的
+              onTapUp: (_) {
+                setState(() {
+                  editIndex = -1;
+                });
+              },
+              onTapCancel: () {
+                setState(() {
+                  editIndex = -1;
+                });
+              },
+              onTapDown: (_) {
+                setState(() {
+                  editIndex = 6;
+                });
+              },
+              child: Stack(
+                alignment: const Alignment(0.9, -1.1),
+                children: <Widget>[
+                  new Padding(
+                    padding: new EdgeInsets.fromLTRB(0, 10, 20, 0),
+                    child: Container(
+                      alignment: Alignment.center,
+                      child: fireCreatModel.editenvironmentpic1.length == 0
+                          ? Text('   上传\n环境照片')
+                          : Image.file(
+                              File(fireCreatModel.editenvironmentpic1)),
+                      decoration: new BoxDecoration(
+                        border: new Border.all(
+                            width: 1.0,
+                            color: (editIndex == 6
+                                ? Colors.green
+                                : prefix0.LINE_COLOR)),
+                        borderRadius:
+                            new BorderRadius.all(new Radius.circular(5.0)),
+                      ),
+                      width: 150,
+                      height: 150,
+                    ),
+                  ),
+                  Row(
+                    children: <Widget>[
+                      new Offstage(
+                          offstage: (fireCreatModel.editenvironmentpic1.length > 0)
+                              ? false
+                              : true,
+                          child: new IconButton(
+                            icon: new Image.asset(
+                                "assets/images/picture_del.png"),
+                            tooltip: 'Increase volume by 10%',
+                            onPressed: () {
+                              setState(() {
+                                fireCreatModel.editenvironmentpic1 = "";
+                              });
+                            },
+                          )),
+                    ],
+                  )
+                ],
+              )),
+          GestureDetector(
+            onTap: takePhoto7,
+            //写入方法名称就可以了，但是是无参的
+            onTapUp: (_) {
+              setState(() {
+                editIndex = -1;
+              });
+            },
+            onTapCancel: () {
+              setState(() {
+                editIndex = -1;
+              });
+            },
+
+            onTapDown: (_) {
+              setState(() {
+                editIndex = 7;
+              });
+            },
+            child: Stack(
+              alignment: const Alignment(0.9, -1.1),
+              children: <Widget>[
+                new Padding(
+                  padding: new EdgeInsets.fromLTRB(0, 10, 20, 0),
+                  child: Container(
+                    alignment: Alignment.center,
+                    child: fireCreatModel.editenvironmentpic2.length == 0
+                        ? Text('+')
+                        : Image.file(File(fireCreatModel.editenvironmentpic2)),
+                    decoration: new BoxDecoration(
+                      border: new Border.all(
+                          width: 1.0,
+                          color:
+                          (editIndex == 7 ? Colors.green : prefix0.LINE_COLOR)),
+                      borderRadius: new BorderRadius.all(new Radius.circular(5.0)),
+                    ),
+                    width: 150,
+                    height: 150,
+                  ),
                 ),
-                width: 150,
-                height: 150,
-              ),
-            ),
+                Row(
+                  children: <Widget>[
+                    new Offstage(
+                        offstage: (fireCreatModel.editenvironmentpic2.length > 0)
+                            ? false
+                            : true,
+                        child: new IconButton(
+                          icon: new Image.asset(
+                              "assets/images/picture_del.png"),
+                          tooltip: 'Increase volume by 10%',
+                          onPressed: () {
+                            setState(() {
+                              fireCreatModel.editenvironmentpic2 = "";
+                            });
+                          },
+                        )),
+                  ],
+                )
+
+
+              ],
+            )
           ),
           GestureDetector(
-            onTap: takePhoto7, //写入方法名称就可以了，但是是无参的
-            child: new Padding(
-              padding: new EdgeInsets.fromLTRB(0, 0, 20, 0),
-              child: Container(
-                alignment: Alignment.center,
-                child: fireCreatModel.editenvironmentpic2.length == 0
-                    ? Text('+')
-                    : Image.file(File(fireCreatModel.editenvironmentpic2)),
-                decoration: new BoxDecoration(
-                  border: new Border.all(width: 1.0, color: prefix0.LINE_COLOR),
-                  borderRadius: new BorderRadius.all(new Radius.circular(5.0)),
+            onTap: takePhoto8,
+            //写入方法名称就可以了，但是是无参的
+            onTapUp: (_) {
+              setState(() {
+                editIndex = -1;
+              });
+            },
+            onTapCancel: () {
+              setState(() {
+                editIndex = -1;
+              });
+            },
+
+            onTapDown: (_) {
+              setState(() {
+                editIndex = 8;
+              });
+            },
+            child: Stack(
+              alignment: const Alignment(0.9, -1.1),
+              children: <Widget>[
+                new Padding(
+                  padding: new EdgeInsets.fromLTRB(0, 10, 20, 0),
+                  child: Container(
+                    alignment: Alignment.center,
+                    child: fireCreatModel.editenvironmentpic3.length == 0
+                        ? Text('+')
+                        : Image.file(File(fireCreatModel.editenvironmentpic3)),
+                    decoration: new BoxDecoration(
+                      border: new Border.all(
+                          width: 1.0,
+                          color:
+                          (editIndex == 8 ? Colors.green : prefix0.LINE_COLOR)),
+                      borderRadius: new BorderRadius.all(new Radius.circular(5.0)),
+                    ),
+                    width: 150,
+                    height: 150,
+                  ),
                 ),
-                width: 150,
-                height: 150,
-              ),
-            ),
+                Row(
+                  children: <Widget>[
+                    new Offstage(
+                        offstage: (fireCreatModel.editenvironmentpic3.length > 0)
+                            ? false
+                            : true,
+                        child: new IconButton(
+                          icon: new Image.asset(
+                              "assets/images/picture_del.png"),
+                          tooltip: 'Increase volume by 10%',
+                          onPressed: () {
+                            setState(() {
+                              fireCreatModel.editenvironmentpic3 = "";
+                            });
+                          },
+                        )),
+                  ],
+                )
+              ],
+            )
           ),
           GestureDetector(
-            onTap: takePhoto8, //写入方法名称就可以了，但是是无参的
-            child: new Padding(
-              padding: new EdgeInsets.fromLTRB(0, 0, 20, 0),
-              child: Container(
-                alignment: Alignment.center,
-                child: fireCreatModel.editenvironmentpic3.length == 0
-                    ? Text('+')
-                    : Image.file(File(fireCreatModel.editenvironmentpic3)),
-                decoration: new BoxDecoration(
-                  border: new Border.all(width: 1.0, color: prefix0.LINE_COLOR),
-                  borderRadius: new BorderRadius.all(new Radius.circular(5.0)),
+            onTap: takePhoto9,
+            //写入方法名称就可以了，但是是无参的
+            onTapUp: (_) {
+              setState(() {
+                editIndex = -1;
+              });
+            },
+            onTapCancel: () {
+              setState(() {
+                editIndex = -1;
+              });
+            },
+
+            onTapDown: (_) {
+              setState(() {
+                editIndex = 9;
+              });
+            },
+            child: Stack(
+              alignment: const Alignment(0.9, -1.1),
+              children: <Widget>[
+                new Padding(
+                  padding: new EdgeInsets.fromLTRB(0, 10, 20, 0),
+                  child: Container(
+                    alignment: Alignment.center,
+                    child: fireCreatModel.editenvironmentpic4.length == 0
+                        ? Text('+')
+                        : Image.file(File(fireCreatModel.editenvironmentpic4)),
+                    decoration: new BoxDecoration(
+                      border: new Border.all(
+                          width: 1.0,
+                          color:
+                          (editIndex == 9 ? Colors.green : prefix0.LINE_COLOR)),
+                      borderRadius: new BorderRadius.all(new Radius.circular(5.0)),
+                    ),
+                    width: 150,
+                    height: 150,
+                  ),
                 ),
-                width: 150,
-                height: 150,
-              ),
-            ),
+                Row(
+                  children: <Widget>[
+                    new Offstage(
+                        offstage: (fireCreatModel.editenvironmentpic4.length > 0)
+                            ? false
+                            : true,
+                        child: new IconButton(
+                          icon: new Image.asset(
+                              "assets/images/picture_del.png"),
+                          tooltip: 'Increase volume by 10%',
+                          onPressed: () {
+                            setState(() {
+                              fireCreatModel.editenvironmentpic4 = "";
+                            });
+                          },
+                        )),
+                  ],
+                )
+              ],
+            )
           ),
           GestureDetector(
-            onTap: takePhoto9, //写入方法名称就可以了，但是是无参的
-            child: new Padding(
-              padding: new EdgeInsets.fromLTRB(0, 0, 20, 0),
-              child: Container(
-                alignment: Alignment.center,
-                child: fireCreatModel.editenvironmentpic4.length == 0
-                    ? Text('+')
-                    : Image.file(File(fireCreatModel.editenvironmentpic4)),
-                decoration: new BoxDecoration(
-                  border: new Border.all(width: 1.0, color: prefix0.LINE_COLOR),
-                  borderRadius: new BorderRadius.all(new Radius.circular(5.0)),
+            onTap: takePhoto10,
+            //写入方法名称就可以了，但是是无参的
+            onTapUp: (_) {
+              setState(() {
+                editIndex = -1;
+              });
+            },
+            onTapCancel: () {
+              setState(() {
+                editIndex = -1;
+              });
+            },
+
+            onTapDown: (_) {
+              setState(() {
+                editIndex = 10;
+              });
+            },
+            child: Stack(
+              alignment: const Alignment(0.9, -1.1),
+              children: <Widget>[
+                new Padding(
+                  padding: new EdgeInsets.fromLTRB(0, 10, 20, 0),
+                  child: Container(
+                    alignment: Alignment.center,
+                    child: fireCreatModel.editenvironmentpic5.length == 0
+                        ? Text('+')
+                        : Image.file(File(fireCreatModel.editenvironmentpic5)),
+                    decoration: new BoxDecoration(
+                      border: new Border.all(
+                          width: 1.0,
+                          color: (editIndex == 10
+                              ? Colors.green
+                              : prefix0.LINE_COLOR)),
+                      borderRadius: new BorderRadius.all(new Radius.circular(5.0)),
+                    ),
+                    width: 150,
+                    height: 150,
+                  ),
                 ),
-                width: 150,
-                height: 150,
-              ),
-            ),
-          ),
-          GestureDetector(
-            onTap: takePhoto10, //写入方法名称就可以了，但是是无参的
-            child: new Padding(
-              padding: new EdgeInsets.fromLTRB(0, 0, 20, 0),
-              child: Container(
-                alignment: Alignment.center,
-                child: fireCreatModel.editenvironmentpic5.length == 0
-                    ? Text('+')
-                    : Image.file(File(fireCreatModel.editenvironmentpic5)),
-                decoration: new BoxDecoration(
-                  border: new Border.all(width: 1.0, color: prefix0.LINE_COLOR),
-                  borderRadius: new BorderRadius.all(new Radius.circular(5.0)),
-                ),
-                width: 150,
-                height: 150,
-              ),
-            ),
+                Row(
+                  children: <Widget>[
+                    new Offstage(
+                        offstage: (fireCreatModel.editenvironmentpic5.length > 0)
+                            ? false
+                            : true,
+                        child: new IconButton(
+                          icon: new Image.asset(
+                              "assets/images/picture_del.png"),
+                          tooltip: 'Increase volume by 10%',
+                          onPressed: () {
+                            setState(() {
+                              fireCreatModel.editenvironmentpic5 = "";
+                            });
+                          },
+                        )),
+                  ],
+                )
+              ],
+            )
           ),
         ],
       ),
@@ -848,11 +1268,11 @@ class _State extends State<SurvayElectricalFirePage> {
         //下滑到最底部
         if (notification.metrics.extentAfter == 0) {
           _pageController.animateToPage(2,
-              duration: const Duration(milliseconds: 300), curve: Curves.ease);
+              duration: const Duration(milliseconds: 100), curve: Curves.ease);
         } //滑动到最顶部
         if (notification.metrics.extentBefore == 0) {
           _pageController.animateToPage(0,
-              duration: const Duration(milliseconds: 300), curve: Curves.ease);
+              duration: const Duration(milliseconds: 100), curve: Curves.ease);
         }
       }
       return true;
@@ -905,7 +1325,9 @@ class _State extends State<SurvayElectricalFirePage> {
                         value: 0,
                         groupValue: fireCreatModel.isNeedCarton,
                         onChanged: (int e) {
-                          fireCreatModel.isNeedCarton = e;
+                          setState(() {
+                            fireCreatModel.isNeedCarton = e;
+                          });
                         }),
                   ),
                   Text("不需要\n(电箱空间足够)"),
@@ -914,7 +1336,9 @@ class _State extends State<SurvayElectricalFirePage> {
                         value: 1,
                         groupValue: fireCreatModel.isNeedCarton,
                         onChanged: (int e) {
-                          fireCreatModel.isNeedCarton = e;
+                          setState(() {
+                            fireCreatModel.isNeedCarton = e;
+                          });
                         }),
                   ),
                   Text("需要\n(电箱空间不够)"),
@@ -938,14 +1362,18 @@ class _State extends State<SurvayElectricalFirePage> {
                       value: 1,
                       groupValue: fireCreatModel.isOutSide,
                       onChanged: (int e) {
-                        fireCreatModel.isOutSide = e;
+                        setState(() {
+                          fireCreatModel.isOutSide = e;
+                        });
                       }),
                   Text("户外"),
                   new Radio(
                       value: 0,
                       groupValue: fireCreatModel.isOutSide,
                       onChanged: (int e) {
-                        fireCreatModel.isOutSide = e;
+                        setState(() {
+                          fireCreatModel.isOutSide = e;
+                        });
                       }),
                   Text("户内"),
                 ],
@@ -968,14 +1396,18 @@ class _State extends State<SurvayElectricalFirePage> {
                       value: 0,
                       groupValue: fireCreatModel.isNeedLadder,
                       onChanged: (int e) {
-                        fireCreatModel.isNeedLadder = e;
+                        setState(() {
+                          fireCreatModel.isNeedLadder = e;
+                        });
                       }),
                   Text("不需要"),
                   new Radio(
                       value: 1,
                       groupValue: fireCreatModel.isNeedLadder,
                       onChanged: (int e) {
-                        fireCreatModel.isNeedLadder = e;
+                        setState(() {
+                          fireCreatModel.isNeedLadder = e;
+                        });
                       }),
                   Text("需要"),
                 ],
@@ -987,7 +1419,24 @@ class _State extends State<SurvayElectricalFirePage> {
             height: 1,
           ),
           GestureDetector(
-            onTap: takePhoto11, //写入方法名称就可以了，但是是无参的
+            onTap: takePhoto11,
+            //写入方法名称就可以了，但是是无参的
+            onTapUp: (_) {
+              setState(() {
+                editIndex = -1;
+              });
+            },
+            onTapCancel: () {
+              setState(() {
+                editIndex = -1;
+              });
+            },
+
+            onTapDown: (_) {
+              setState(() {
+                editIndex = 11;
+              });
+            },
             child: new Padding(
               padding: new EdgeInsets.fromLTRB(10, 20, 20, 0),
               child: Container(
@@ -996,7 +1445,11 @@ class _State extends State<SurvayElectricalFirePage> {
                     ? Text('+外箱安装位置图片')
                     : Image.file(File(fireCreatModel.editOutsinPic)),
                 decoration: new BoxDecoration(
-                  border: new Border.all(width: 1.0, color: prefix0.LINE_COLOR),
+                  border: new Border.all(
+                      width: 1.0,
+                      color: (editIndex == 11
+                          ? Colors.green
+                          : prefix0.LINE_COLOR)),
                   borderRadius: new BorderRadius.all(new Radius.circular(5.0)),
                 ),
                 width: 150,
@@ -1048,12 +1501,12 @@ class _State extends State<SurvayElectricalFirePage> {
         if (notification.metrics.extentAfter == 0.0) {
           print('======下滑到最底部======');
           _pageController.animateToPage(3,
-              duration: const Duration(milliseconds: 300), curve: Curves.ease);
+              duration: const Duration(milliseconds: 100), curve: Curves.ease);
         } //滑动到最顶部
         if (notification.metrics.extentBefore == 0.0) {
           print('======滑动到最顶部======');
           _pageController.animateToPage(1,
-              duration: const Duration(milliseconds: 300), curve: Curves.ease);
+              duration: const Duration(milliseconds: 100), curve: Curves.ease);
         }
       }
       return true;
@@ -1111,7 +1564,7 @@ class _State extends State<SurvayElectricalFirePage> {
           return "60A";
         }
       } else {
-        if (_currentValue == 0) {
+        if (currentValue == 0) {
           fireCreatModel.currentSelect = "250A";
         } else {
           fireCreatModel.currentSelect = "400A";
@@ -1491,12 +1944,14 @@ class _State extends State<SurvayElectricalFirePage> {
                       }
                     },
                   ),
-                  Text(
-                    "智慧空开\n(支持通断)",
-                    style: new TextStyle(
-                        color: fireCreatModel.isSingle == 1
-                            ? Colors.black
-                            : Colors.grey),
+                  Expanded(
+                    child: Text(
+                      "智慧空开\n(支持通断)",
+                      style: new TextStyle(
+                          color: fireCreatModel.isSingle == 1
+                              ? Colors.black
+                              : Colors.grey),
+                    ),
                   ),
                   new Radio(
                       value: 0,
@@ -1508,7 +1963,9 @@ class _State extends State<SurvayElectricalFirePage> {
                           });
                         }
                       }),
-                  Text("电气火灾\n(不支持通断)"),
+                  Expanded(
+                    child: Text("电气火灾\n(不支持通断)"),
+                  ),
                 ],
               ),
             ),
@@ -1573,10 +2030,10 @@ class _State extends State<SurvayElectricalFirePage> {
                     Expanded(
                       child: new Radio(
                           value: 1,
-                          groupValue: _currentValue,
+                          groupValue: currentValue,
                           onChanged: (int e) {
                             setState(() {
-                              _currentValue = e;
+                              currentValue = 1;
                               fireCreatModel.currentSelect = "250A";
                             });
                           }),
@@ -1585,10 +2042,12 @@ class _State extends State<SurvayElectricalFirePage> {
                     Expanded(
                       child: new Radio(
                           value: 0,
-                          groupValue: _currentValue,
+                          groupValue: currentValue,
                           onChanged: (int e) {
-                            _currentValue = e;
-                            fireCreatModel.currentSelect = "400A";
+                            setState(() {
+                              currentValue = 0;
+                              fireCreatModel.currentSelect = "400A";
+                            });
                           }),
                     ),
                     Text("400A"),
@@ -1637,12 +2096,12 @@ class _State extends State<SurvayElectricalFirePage> {
         if (notification.metrics.extentAfter == 0.0) {
           print('======下滑到最底部======');
           _pageController.animateToPage(4,
-              duration: const Duration(milliseconds: 300), curve: Curves.ease);
+              duration: const Duration(milliseconds: 100), curve: Curves.ease);
         } //滑动到最顶部
         if (notification.metrics.extentBefore == 0.0) {
           print('======滑动到最顶部======');
           _pageController.animateToPage(2,
-              duration: const Duration(milliseconds: 300), curve: Curves.ease);
+              duration: const Duration(milliseconds: 100), curve: Curves.ease);
         }
       }
       return true;
@@ -1687,7 +2146,7 @@ class _State extends State<SurvayElectricalFirePage> {
         if (notification.metrics.extentBefore == 0.0) {
           print('======滑动到最顶部======');
           _pageController.animateToPage(3,
-              duration: const Duration(milliseconds: 300), curve: Curves.ease);
+              duration: const Duration(milliseconds: 100), curve: Curves.ease);
         }
       }
       return true;

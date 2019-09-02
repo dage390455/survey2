@@ -1,6 +1,7 @@
 import UIKit
 import Flutter
 import MAMapKit
+import CityBase
 //import shared_preferences
 import Photos
 
@@ -33,16 +34,20 @@ import Photos
         bascChanal.setMessageHandler { [weak self] (message, fr) in
             guard let self = self else { return }
 
-            let postion = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "LocationEditController") as! LocationEditController;
-
-              postion.completion = { [weak self] (lat,lon, address, channelMask)->Void in
-                guard self != nil else {return;}
-
-                 bascChanal.sendMessage(address)
+            if(CLLocationManager.authorizationStatus() != .denied) {
+                
+                let postion = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "LocationEditController") as! LocationEditController;
+                
+                postion.completion = { [weak self] (lat,lon, address, channelMask)->Void in
+                    guard self != nil else {return;}
+                    
+                    bascChanal.sendMessage(address)
+                }
+                navigationC.pushViewController(postion, animated: true);
+                
+            }else{
+                SVProgressHUD.showError(withStatus: "请到设置页面打开定位权限")
             }
-            navigationC.pushViewController(postion, animated: true);
-            fr("swift 传值成功")
-            
         }
       
         bascChanalpickImage = FlutterBasicMessageChannel(name: "BasicMessageChannelPluginPickImage", binaryMessenger: flutterViewController, codec: FlutterStringCodec.init());

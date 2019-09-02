@@ -52,8 +52,8 @@ class ElectricalFireModel {
 
   //第四步
   int isEffectiveTransmission = 1;  //报警音可否有效传播
-  int isNuisance = 1; //是否扰民
-  int isNoiseReduction = 1; //是否消音
+  int isNuisance = 0; //是否扰民
+  int isNoiseReduction = 0; //是否消音
   String step4Remak = "";      //第四步备注
 
 

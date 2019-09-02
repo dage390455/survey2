@@ -84,6 +84,7 @@ flutter:
   - assets/images/back.png
   - assets/images/right_arrar.png
   - assets/images/take_photo_prompt.png
+  - assets/images/picture_del.png
 
   fonts:
   - family: FlamanteRoma
