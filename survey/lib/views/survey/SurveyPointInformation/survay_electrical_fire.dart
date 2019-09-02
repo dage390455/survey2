@@ -387,8 +387,7 @@ class _State extends State<SurvayElectricalFirePage> {
 //    });
     _sendToNative();
     var image = await ImagePicker.pickImage(source: ImageSource.camera);
-    if(null!=image){
-
+    if (null != image) {
       _resentpics(image.uri.path.toString());
 
 //    setState(() {
@@ -1275,7 +1274,9 @@ class _State extends State<SurvayElectricalFirePage> {
     ScrollController _controller2 = TrackingScrollController();
 
     bool dataNotification(ScrollNotification notification) {
-
+      if (notification.metrics.axis == Axis.horizontal) {
+        return false;
+      }
       if (Platform.isIOS) {
         double height = notification.metrics.maxScrollExtent; //step2的高度
         height = height + 80;
@@ -1303,7 +1304,6 @@ class _State extends State<SurvayElectricalFirePage> {
                 curve: Curves.ease);
           }
         }
-
       }
       return true;
     }
