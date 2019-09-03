@@ -33,6 +33,7 @@ import 'package:sensoro_survey/views/survey/comment/save_data_manager.dart';
 
 class ProjectListPage extends StatefulWidget {
   String _text = "share text from fluwx";
+
 //  fluwx.WeChatScene scene = fluwx.WeChatScene.SESSION;
 
   _ProjectListPageState createState() => _ProjectListPageState();
@@ -591,6 +592,7 @@ class _State extends State<HomePage> {
       elevation: 1.0,
       brightness: Brightness.light,
       backgroundColor: Colors.white,
+      centerTitle: true,
       // title: Text(
       //   "项目列表",
       //   style: TextStyle(
@@ -598,7 +600,7 @@ class _State extends State<HomePage> {
       // ),
       title: Container(
         height: 40,
-        width: 200,
+        width: prefix0.screen_width,
         // color: prefix0.LIGHT_LINE_COLOR,
         decoration: BoxDecoration(
           color: prefix0.FENGE_LINE_COLOR,

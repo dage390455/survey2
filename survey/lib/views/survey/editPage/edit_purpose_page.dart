@@ -89,7 +89,7 @@ class _State extends State<EditPurposePage> {
 
     Widget container = Container(
       color: Colors.white,
-      padding: new EdgeInsets.fromLTRB(20, 10, 0, 20),
+      padding: new EdgeInsets.fromLTRB(20, 10, 20, 10),
       child: Column(
 //           mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,

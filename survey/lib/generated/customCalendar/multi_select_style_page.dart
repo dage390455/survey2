@@ -59,10 +59,11 @@ class _MultiSelectStylePageState extends State<MultiSelectStylePage> {
         elevation: 1.0,
         brightness: Brightness.light,
         backgroundColor: Colors.white,
+        centerTitle: true,
         title: Text(
           "日期选择",
-          style: TextStyle(
-              color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
+          style: TextStyle(color: Colors.black),
+
         ),
         leading: IconButton(
           icon: Image.asset(
