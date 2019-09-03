@@ -25,6 +25,7 @@ import 'package:sensoro_survey/views/survey/survey_type_page.dart';
 
 import 'SurveyPointInformation/summary_construction_page.dart';
 import 'SurveyPointInformation/survay_electrical_fire_detail.dart';
+import 'SurveyPointInformation/survay_electrical_fire_edit.dart';
 import 'comment/data_transfer_manager.dart';
 
 class PointListPage extends StatefulWidget {
@@ -453,7 +454,7 @@ class _PointListPageState extends State<PointListPage> {
       final result = await Navigator.push(
         context,
         new MaterialPageRoute(
-            builder: (context) => new SummaryConstructionPage()),
+            builder: (context) => new SurvayElectricalFireEditPage()),
       );
 
       if (result != null) {

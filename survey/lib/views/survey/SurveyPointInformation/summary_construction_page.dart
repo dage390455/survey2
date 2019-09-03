@@ -52,7 +52,7 @@ class _State extends State<SummaryConstructionPage> {
       print("========================" + message);
     });
 
-    super.initState();
+
   }
 
   nextStep() async {
