@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:core';
+import 'dart:io';
 import 'dart:ui' as ui; // 调用window拿到route判断跳转哪个界面
 
 import 'package:sensoro_survey/generated/application.dart';
@@ -151,7 +152,10 @@ void main() async {
   // runApp(new MyApp());
 
   print('进入了flutter');
-  SharedPreferences.setMockInitialValues({});
+  if (Platform.isIOS) {
+    SharedPreferences.setMockInitialValues({});
+
+  }
   //选择打开哪个页面
   runApp(_widgetForRoute(ui.window.defaultRouteName));
   // runApp(_widgetForRoute('myApp'));
