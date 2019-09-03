@@ -105,6 +105,7 @@ class _State extends State<EditAdressPage> {
               hintText: '请输入详情的勘察点位置。例如：写字楼',
             ),
             autofocus: false,
+            maxLines: 2,
             onChanged: (val) {
               name = val;
 
@@ -124,8 +125,8 @@ class _State extends State<EditAdressPage> {
     Widget bigContainer = Container(
       color: prefix0.LIGHT_LINE_COLOR,
       padding: new EdgeInsets.fromLTRB(0, 20, 0, 0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: ListView(
+//        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           backContainer,
           new Offstage(

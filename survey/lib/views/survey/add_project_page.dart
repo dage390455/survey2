@@ -169,10 +169,10 @@ class _AddProjectPageState extends State<AddProjectPage> {
         body: Container(
           padding:
               const EdgeInsets.only(top: 20.0, bottom: 0, left: 20, right: 20),
-          child: Column(
+          child: ListView(
               //这行决定了左对齐
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
+//              crossAxisAlignment: CrossAxisAlignment.start,
+//              mainAxisAlignment: MainAxisAlignment.start,
               //占满剩空间
               children: <Widget>[
                 GestureDetector(

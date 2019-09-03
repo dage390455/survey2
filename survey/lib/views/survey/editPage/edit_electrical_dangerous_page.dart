@@ -124,8 +124,8 @@ class _State extends State<EditElectricalDangerousPage> {
     Widget bigContainer = Container(
       color: prefix0.LIGHT_LINE_COLOR,
       padding: new EdgeInsets.fromLTRB(0, 20, 0, 0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: ListView(
+
         children: <Widget>[
           backContainer,
           new Offstage(
