@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -116,7 +117,9 @@ public class MainActivity extends FlutterActivity {
                 double latitude = data.getDoubleExtra("latitude", -1);
                 double longitude = data.getDoubleExtra("longitude", -1);
                 String title = data.getStringExtra("title");
-                channel1.send(title);
+                if (!TextUtils.isEmpty(title)) {
+                    channel1.send(title);
+                }
             }
         }
 
