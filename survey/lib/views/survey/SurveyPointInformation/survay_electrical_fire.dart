@@ -26,6 +26,9 @@ class _State extends State<SurvayElectricalFirePage> {
 
   static PageController _pageController = new PageController();
   FocusNode blankNode = FocusNode();
+  FocusNode _focusNode = FocusNode();
+  FocusNode _focusNode2 = FocusNode();
+  FocusNode _focusNode3 = FocusNode();
   ElectricalFireModel fireCreatModel =
       DataTransferManager.shared.fireCreatModel;
   var isCheack = false;
@@ -35,7 +38,7 @@ class _State extends State<SurvayElectricalFirePage> {
   var _groupValue = 0;
   int picImageIndex = 0;
   int editIndex = -1;
-
+  bool isEditing = false;
   var hisoryKey = "isNeedPresent";
 
   var currentValue = 1;
@@ -58,6 +61,64 @@ class _State extends State<SurvayElectricalFirePage> {
     step3remarkController.text = fireCreatModel.step3Remak;
     step4remarkController.text = fireCreatModel.step4Remak;
     updateNextButton();
+
+    _focusNode.addListener(() {
+
+      if (!_focusNode.hasFocus) {
+        // TextField has lost focus
+        setState(() {
+          isEditing = false;
+        });
+
+
+      }else{
+        setState(() {
+          isEditing = true;
+        });
+
+
+      }
+
+    });
+
+    _focusNode2.addListener(() {
+
+      if (!_focusNode2.hasFocus) {
+        // TextField has lost focus
+        setState(() {
+          isEditing = false;
+        });
+
+
+      }else{
+        setState(() {
+          isEditing = true;
+        });
+
+
+      }
+
+    });
+
+    _focusNode3.addListener(() {
+
+      if (!_focusNode3.hasFocus) {
+        // TextField has lost focus
+        setState(() {
+          isEditing = false;
+        });
+
+
+      }else{
+        setState(() {
+          isEditing = true;
+        });
+
+
+      }
+
+    });
+
     super.initState();
   }
 
@@ -541,6 +602,7 @@ class _State extends State<SurvayElectricalFirePage> {
             ),
             TextField(
               controller: step1remarkController,
+              focusNode: _focusNode,
               keyboardType: TextInputType.text,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
@@ -551,6 +613,9 @@ class _State extends State<SurvayElectricalFirePage> {
               ),
               maxLines: 5,
               autofocus: false,
+              onSubmitted: (val){
+                print("----------------------------------------");
+              },
               onChanged: (val) {
                 fireCreatModel.step1Remak = val;
                 setState(() {});
@@ -566,6 +631,11 @@ class _State extends State<SurvayElectricalFirePage> {
       if (notification.metrics.axis == Axis.horizontal) {
         return false;
       }
+
+      if (isEditing) {
+        return false;
+      }
+
       if (Platform.isIOS) {
         double height = notification.metrics.maxScrollExtent; //step2的高度
         height = height + 80;
@@ -1317,6 +1387,12 @@ class _State extends State<SurvayElectricalFirePage> {
       if (notification.metrics.axis == Axis.horizontal) {
         return false;
       }
+
+      if (isEditing) {
+        return false;
+      }
+
+
       if (Platform.isIOS) {
         double height = notification.metrics.maxScrollExtent; //step2的高度
         height = height + 80;
@@ -1542,6 +1618,7 @@ class _State extends State<SurvayElectricalFirePage> {
           ),
           TextField(
             controller: step3remarkController,
+
             keyboardType: TextInputType.text,
             decoration: InputDecoration(
               border: OutlineInputBorder(
@@ -1567,6 +1644,10 @@ class _State extends State<SurvayElectricalFirePage> {
     ScrollController _controller3 = TrackingScrollController();
 
     bool dataNotification3(ScrollNotification notification) {
+      if (isEditing) {
+        return false;
+      }
+
       if (Platform.isIOS) {
         double height = notification.metrics.maxScrollExtent; //step2的高度
         height = height + 80;
@@ -1806,6 +1887,7 @@ class _State extends State<SurvayElectricalFirePage> {
           ),
           TextField(
             controller: step4remarkController,
+
             keyboardType: TextInputType.text,
             decoration: InputDecoration(
               border: OutlineInputBorder(
@@ -2177,6 +2259,10 @@ class _State extends State<SurvayElectricalFirePage> {
     ScrollController _controller4 = TrackingScrollController();
 
     bool dataNotification4(ScrollNotification notification) {
+      if (isEditing) {
+        return false;
+      }
+
       if (Platform.isIOS) {
         double height = notification.metrics.maxScrollExtent; //step2的高度
         height = height + 80;
@@ -2238,6 +2324,10 @@ class _State extends State<SurvayElectricalFirePage> {
     ScrollController _controller5 = TrackingScrollController();
 
     bool dataNotification5(ScrollNotification notification) {
+      if (isEditing) {
+        return false;
+      }
+
       if (Platform.isIOS) {
         double height = notification.metrics.maxScrollExtent; //step2的高度
         height = height + 80;
@@ -2337,12 +2427,15 @@ class _State extends State<SurvayElectricalFirePage> {
 
     );
 
+
 //    return Scaffold(
 //      appBar: NavBar,
 //      body: mPageView,
 //      bottomSheet: bottomButton,
 //    );
   }
+
+
 }
 
 const electricalItems = [
