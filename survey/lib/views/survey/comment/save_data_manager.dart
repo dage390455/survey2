@@ -92,11 +92,6 @@ class SaveDataManger {
     //   return null;
     // });
 
-    //从原生userdefault拉取数据
-    // eventChannel
-    //     .receiveBroadcastStream("sendProjectList")
-    //     .listen(_onEvent, onError: _onError);
-
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     var history = prefs.getString(historyKey);
@@ -132,10 +127,6 @@ class SaveDataManger {
   static addHistory(String tag, String historyKey) async {
     var history = await SaveDataManger.getHistory(historyKey);
 
-    // if (historyKey == "projectList") {
-    //   history = await SaveDataManger.getProjectHistory(historyKey);
-    // }
-
     if (!history.contains(tag)) {
       history.add(tag);
 
@@ -146,10 +137,6 @@ class SaveDataManger {
 
   static addProjectHistory(String tag, String historyKey) async {
     var history = await SaveDataManger.getHistory(historyKey);
-
-    // if (historyKey == "projectList") {
-    //   history = await SaveDataManger.getProjectHistory(historyKey);
-    // }
 
     if (!history.contains(tag)) {
       history.add(tag);
@@ -190,11 +177,7 @@ class SaveDataManger {
       int id1 = map["id"].toInt();
       //替换
       if (id == id1) {
-        // tags.removeAt(i);
         continue;
-        // history.add(tag);
-        // List<dynamic> list = jsonDecode(tag);
-        // SaveDataManger.saveHistory(history, historyKey);
       }
       List list1 = [map];
       String str = jsonEncode(list1);
@@ -247,16 +230,10 @@ class SaveDataManger {
 
     for (int i = 0; i < tags.length; i++) {
       Map<String, dynamic> map = tags[i];
-
-      // Map<String, dynamic> map = json.decode(str);
       int id1 = map["id"].toInt();
       //替换
       if (id == id1) {
-        // tags.removeAt(i);
         continue;
-        // history.add(tag);
-        // List<dynamic> list = jsonDecode(tag);
-        // SaveDataManger.saveHistory(history, historyKey);
       }
       List list1 = [map];
       String str = jsonEncode(list1);
@@ -306,17 +283,4 @@ class SaveDataManger {
 
   // 错误处理
   void _onError(dynamic) {}
-
-//    var tagsString  = "";
-//
-//    for (int i=0;i<tags.length;i++){
-//      if (tagsString.length ==0){
-//        tagsString = tags[i];
-//      }else{
-//        tagsString = tagsString + "," + tags[i];
-//      }
-//    }
-//
-//    prefs.setString(historyKey, tagsString);
-
 }
