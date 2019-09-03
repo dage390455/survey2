@@ -225,10 +225,10 @@ class _State extends State<HomePage> {
 //      var name = "测试设备 $index";
 //      name = "FAGJKJVXOE63S";
 //      if (index % 3 == 0) name = "项目1118888";
-//      if (index % 3 == 1) name = "项��222";
-//      if (index % 3 == 2) name = "��目333";
+//      if (index % 3 == 1) name = "项222";
+//      if (index % 3 == 2) name = "目333";
 //
-//      var des = "状态 $index ��常";
+//      var des = "状态 $index 常";
 //      des = "11:04:12";
 //      if (index == 1) des = "2019-07-03 10:54";
 //      if (index == 2) des = "2019-07-06 15:24";
@@ -538,7 +538,7 @@ class _State extends State<HomePage> {
       onSubmitted: (String str) {
         //提交监听
         // searchStr = val;
-        // print('用户提���变更');
+        // print('用户提变更');
       },
       onChanged: (val) {
         searchStr = val;
@@ -582,9 +582,8 @@ class _State extends State<HomePage> {
               setState(() {});
             }),
 
-        contentPadding:
-            EdgeInsets.fromLTRB(3.0, 20.0, 3.0, 10.0), //设置显示��本的一个内边距
-// //                border: InputBorder.none,//取���默认的下划线边框
+        contentPadding: EdgeInsets.fromLTRB(3.0, 20.0, 3.0, 10.0), //设置显示本的一个内边距
+// //                border: InputBorder.none,//取默认的下划线边框
       ),
     );
 
@@ -605,7 +604,7 @@ class _State extends State<HomePage> {
           color: prefix0.FENGE_LINE_COLOR,
           borderRadius: BorderRadius.circular(20.0),
         ),
-        // height: 140, //高度不填会���适应
+        // height: 140, //高度不填会适应
         padding:
             const EdgeInsets.only(top: 0.0, bottom: 0, left: 20, right: 10),
         child: searchbar,
@@ -662,7 +661,7 @@ class _State extends State<HomePage> {
 
     Widget myListView = new ListView.builder(
         physics: new AlwaysScrollableScrollPhysics()
-            .applyTo(new BouncingScrollPhysics()), // 这个是用来控制能否在不�����屏的状态下滚动的属性
+            .applyTo(new BouncingScrollPhysics()), // 这个是用来控制能否在不屏的状态下滚动的属性
         itemCount: dataList.length == 0 ? 1 : dataList.length,
         // separatorBuilder: (BuildContext context, int index) =>
         // Divider(height: 1.0, color: Colors.grey, indent: 20), // 添加分割线
@@ -769,7 +768,7 @@ class _State extends State<HomePage> {
                   const EdgeInsets.only(top: 0.0, bottom: 0, left: 0, right: 0),
               child: new Column(
 
-                  //这行决定了�������对齐
+                  //这行决定了对齐
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
@@ -790,10 +789,10 @@ class _State extends State<HomePage> {
                         child: Row(
                             //Row 中mainAxisAlignment是水平的，Column中是垂直的
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            //表示所有的子��件都是从左到��顺序排列，这是默认值
+                            //表示所有的子件都是从左到顺序排列，这是默认值
                             textDirection: TextDirection.ltr,
                             children: <Widget>[
-                              //这��决定了左对齐
+                              //这决定了左对齐
                               Expanded(
                                 child: Container(
                                   child: Column(
@@ -974,7 +973,7 @@ class _State extends State<HomePage> {
               ? emptyContainer
               : Container(
                   color: Colors.white,
-                  // height: 140, //高度��填会自适应
+                  // height: 140, //高度填会自适应
                   padding: const EdgeInsets.only(
                       top: 3.0, bottom: 3, left: 20, right: 10),
                   child: Row(

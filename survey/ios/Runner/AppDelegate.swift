@@ -84,8 +84,6 @@ import Photos
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
     
-
-    
     
     override func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
         print(url.absoluteString)

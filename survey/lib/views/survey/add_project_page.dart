@@ -174,7 +174,7 @@ class _AddProjectPageState extends State<AddProjectPage> {
               //这行决定了左对齐
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
-              //占满剩���空间
+              //占满剩空间
               children: <Widget>[
                 GestureDetector(
                   onTap: editName, //写入方法名称就可以了，但是是无参的
