@@ -137,6 +137,9 @@ class _State extends State<SurveyPointAreaEditPage> {
       ),
     );
 
+
+
+
     return Scaffold(
         appBar: NavBar,
         body: GestureDetector(

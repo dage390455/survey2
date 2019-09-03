@@ -482,7 +482,6 @@ class _PointListPageState extends State<PointListPage> {
       }
     }
 
-
     Widget myListView = new ListView.builder(
         physics: new AlwaysScrollableScrollPhysics()
             .applyTo(new BouncingScrollPhysics()), // 这个是用来控制能否在不满屏的状态下滚动的属性
@@ -536,113 +535,113 @@ class _PointListPageState extends State<PointListPage> {
           return new GestureDetector(
               onTap: () {
                 DataTransferManager.shared.project = input;
-                DataTransferManager.shared.fireCreatModel =
-                    model;
+                DataTransferManager.shared.fireCreatModel = model;
                 DataTransferManager.shared.isEditModel = true;
                 surveyDetail();
               },
-            child:new Container(
-            color: Colors.white,
-            padding:
-                const EdgeInsets.only(top: 0.0, bottom: 0, left: 0, right: 0),
-            child: new Column(
+              child: new Container(
+                color: Colors.white,
+                padding: const EdgeInsets.only(
+                    top: 0.0, bottom: 0, left: 0, right: 0),
+                child: new Column(
 
-                //这行决定了左对齐
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Container(
-                    color: LIGHT_LINE_COLOR,
-                    height: 12,
-                    width: prefix0.screen_width,
-                  ),
+                    //这行决定了左对齐
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Container(
+                        color: LIGHT_LINE_COLOR,
+                        height: 12,
+                        width: prefix0.screen_width,
+                      ),
 
-                  Container(
-                    // height: 80,
-                    padding: const EdgeInsets.only(
-                        top: 0.0, bottom: 0, left: 20, right: 20),
-                    child: Row(
-                        //Row 中mainAxisAlignment是水平的，Column中是垂直的
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        //表示所有的子控件都是从左到右顺序排列，这是默认值
-                        textDirection: TextDirection.ltr,
-                        children: <Widget>[
-                          new Image(
-                            image: new AssetImage("assets/images/电气火灾.png"),
-                            width: 20,
-                            height: 20,
-                            // fit: BoxFit.fitWidth,
-                          ),
-                          //这行决定了左对齐
-                          new Padding(
-                            padding: new EdgeInsets.fromLTRB(0, 20, 0, 20),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: <Widget>[
-                                //这个位置用ListTile就会报错
-                                Text(model.editName,
-                                    textAlign: TextAlign.start,
-                                    style: TextStyle(
-                                        color: prefix0.BLACK_TEXT_COLOR,
-                                        fontWeight: FontWeight.normal,
-                                        fontSize: 17)),
-                                Text(
-                                    _getFireModelCreateDate(
-                                        model.electricalFireId),
-                                    textAlign: TextAlign.start,
-                                    style: TextStyle(
-                                        color: prefix0.BLACK_TEXT_COLOR,
-                                        fontWeight: FontWeight.normal,
-                                        fontSize: 17)),
-                              ],
-                            ),
-                          ),
-
-                          new SizedBox(
-                            width: 10,
-                          ),
-
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            mainAxisAlignment: MainAxisAlignment.start,
+                      Container(
+                        // height: 80,
+                        padding: const EdgeInsets.only(
+                            top: 0.0, bottom: 0, left: 20, right: 20),
+                        child: Row(
+                            //Row 中mainAxisAlignment是水平的，Column中是垂直的
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            //表示所有的子控件都是从左到右顺序排列，这是默认值
+                            textDirection: TextDirection.ltr,
                             children: <Widget>[
-                              new RaisedButton(
-                                color: Colors.orange,
-                                textColor: Colors.white,
-                                child: new Text('编辑'),
-                                onPressed: () {
-                                  DataTransferManager.shared.project = input;
-                                  DataTransferManager.shared.fireCreatModel =
-                                      model;
-                                  DataTransferManager.shared.isEditModel = true;
+                              new Image(
+                                image: new AssetImage("assets/images/电气火灾.png"),
+                                width: 20,
+                                height: 20,
+                                // fit: BoxFit.fitWidth,
+                              ),
+                              //这行决定了左对齐
+                              new Padding(
+                                padding: new EdgeInsets.fromLTRB(0, 20, 0, 20),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: <Widget>[
+                                    //这个位置用ListTile就会报错
+                                    Text(model.editName,
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: prefix0.BLACK_TEXT_COLOR,
+                                            fontWeight: FontWeight.normal,
+                                            fontSize: 17)),
+                                    Text(
+                                        _getFireModelCreateDate(
+                                            model.electricalFireId),
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: prefix0.BLACK_TEXT_COLOR,
+                                            fontWeight: FontWeight.normal,
+                                            fontSize: 17)),
+                                  ],
+                                ),
+                              ),
+
+                              new SizedBox(
+                                width: 10,
+                              ),
+
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: <Widget>[
+                                  new RaisedButton(
+                                    color: Colors.orange,
+                                    textColor: Colors.white,
+                                    child: new Text('编辑'),
+                                    onPressed: () {
+                                      DataTransferManager.shared.project =
+                                          input;
+                                      DataTransferManager
+                                          .shared.fireCreatModel = model;
+                                      DataTransferManager.shared.isEditModel =
+                                          true;
 
 //                                  Navigator.push(
 //                                    context,
 //                                    new MaterialPageRoute(
 //                                        builder: (context) => new SummaryConstructionPage()),
 //                                  );
-                                  editSurvey();
-                                },
+                                      editSurvey();
+                                    },
+                                  ),
+                                  // new RaisedButton(
+                                  //   color: prefix0.LIGHT_TEXT_COLOR,
+                                  //   textColor: Colors.white,
+                                  //   child: new Text('导出'),
+                                  //   onPressed: () {},
+                                  // ),
+                                ],
                               ),
-                              // new RaisedButton(
-                              //   color: prefix0.LIGHT_TEXT_COLOR,
-                              //   textColor: Colors.white,
-                              //   child: new Text('导出'),
-                              //   onPressed: () {},
-                              // ),
-                            ],
-                          ),
-                        ]),
-                  ),
-                  //分割线
-                  Container(
-                      width: prefix0.screen_width - 40,
-                      height: 1.0,
-                      color: FENGE_LINE_COLOR),
-                ]),
-          )
-          );
+                            ]),
+                      ),
+                      //分割线
+                      Container(
+                          width: prefix0.screen_width - 40,
+                          height: 1.0,
+                          color: FENGE_LINE_COLOR),
+                    ]),
+              ));
         });
 
     Widget myRefreshListView = ProgressDialog(
@@ -716,64 +715,65 @@ class _PointListPageState extends State<PointListPage> {
       // title: Text("Flutter Layout Demo"),
       title: "Flutter Layout Demo",
       home: Scaffold(
-        appBar: navBar,
-        body: Container(
-          color: Colors.white,
-          // height: 140, //高��不填会自适应
-          padding:
-              const EdgeInsets.only(top: 0.0, bottom: 0, left: 0, right: 0),
-          child: Column(
-            //这行决定了左对齐
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              !calendaring
-                  ? emptyContainer
-                  : Container(
-                      color: Colors.white,
-                      // height: 140, //高度不填会自适应
-                      padding: const EdgeInsets.only(
-                          top: 3.0, bottom: 3, left: 20, right: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text(
-                            // "$beginTimeStr ~ $endTimeStr",
-                            dateFilterStr.length > 0 ? dateFilterStr : "",
-                            textAlign: TextAlign.start,
-                            style: TextStyle(
-                                color: prefix0.BLACK_TEXT_COLOR,
-                                fontWeight: FontWeight.normal,
-                                fontSize: 12),
-                          ),
-                          IconButton(
-                            icon: Image.asset(
-                              "assets/images/close_black.png",
-                              color: Colors.black,
+          appBar: navBar,
+          body: Container(
+            color: Colors.white,
+            // height: 140, //高��不填会自适应
+            padding:
+                const EdgeInsets.only(top: 0.0, bottom: 0, left: 0, right: 0),
+            child: Column(
+              //这行决定了左对齐
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                !calendaring
+                    ? emptyContainer
+                    : Container(
+                        color: Colors.white,
+                        // height: 140, //高度不填会自适应
+                        padding: const EdgeInsets.only(
+                            top: 3.0, bottom: 3, left: 20, right: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text(
+                              // "$beginTimeStr ~ $endTimeStr",
+                              dateFilterStr.length > 0 ? dateFilterStr : "",
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                  color: prefix0.BLACK_TEXT_COLOR,
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 12),
                             ),
-                            onPressed: () {
-                              calendaring = false;
-                              this.dateFilterList.clear();
-                              this.dateFilterStr = "";
-                              setState(() {});
-                            },
-                          ),
-                        ],
+                            IconButton(
+                              icon: Image.asset(
+                                "assets/images/close_black.png",
+                                color: Colors.black,
+                              ),
+                              onPressed: () {
+                                calendaring = false;
+                                this.dateFilterList.clear();
+                                this.dateFilterStr = "";
+                                setState(() {});
+                              },
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-              //分割线
-              Container(
-                  width: prefix0.screen_width - 40,
-                  height: 1.0,
-                  color: FENGE_LINE_COLOR),
-              Expanded(
-                child: myListView,
-              ),
-              bottomButton,
-            ],
+                //分割线
+                Container(
+                    width: prefix0.screen_width - 40,
+                    height: 1.0,
+                    color: FENGE_LINE_COLOR),
+                Expanded(
+                  child: myListView,
+                ),
+              ],
+            ),
           ),
-        ),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+          bottomNavigationBar: BottomAppBar(
+            child: bottomButton,
+          )), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }

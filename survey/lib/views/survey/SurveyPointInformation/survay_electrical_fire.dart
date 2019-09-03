@@ -25,7 +25,7 @@ class _State extends State<SurvayElectricalFirePage> {
       BasicMessageChannel("BasicMessageChannelPluginPickImage", StringCodec());
 
   static PageController _pageController = new PageController();
-
+  FocusNode blankNode = FocusNode();
   ElectricalFireModel fireCreatModel =
       DataTransferManager.shared.fireCreatModel;
   var isCheack = false;
@@ -465,103 +465,143 @@ class _State extends State<SurvayElectricalFirePage> {
 
     Widget container = Container(
       color: Colors.white,
-      padding: new EdgeInsets.fromLTRB(20, 0, 20, 20),
-      child: Column(
+      padding: new EdgeInsets.fromLTRB(20, 0, 20, 120),
+      child:  new SingleChildScrollView(
+        child:  Column(
 //           mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          GestureDetector(
-            onTap: editAddress, //写入方法名称就可以了，但是是无参的
-            child: Container(
-              alignment: Alignment.center,
-              height: 60,
-              child: new Row(
-                children: <Widget>[
-                  Text("电箱位置"),
-                  Expanded(
-                    child: Text(
-                      fireCreatModel.page2editAddress.length > 0
-                          ? fireCreatModel.page2editAddress
-                          : "必填",
-                      textAlign: TextAlign.right,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            GestureDetector(
+              onTap: editAddress, //写入方法名称就可以了，但是是无参的
+              child: Container(
+                alignment: Alignment.center,
+                height: 60,
+                child: new Row(
+                  children: <Widget>[
+                    Text("电箱位置"),
+                    Expanded(
+                      child: Text(
+                        fireCreatModel.page2editAddress.length > 0
+                            ? fireCreatModel.page2editAddress
+                            : "必填",
+                        textAlign: TextAlign.right,
+                      ),
                     ),
-                  ),
-                  Image.asset(
-                    "assets/images/right_arrar.png",
-                    width: 20,
-                  )
-                ],
+                    Image.asset(
+                      "assets/images/right_arrar.png",
+                      width: 20,
+                    )
+                  ],
+                ),
               ),
             ),
-          ),
-          Container(
-            color: prefix0.LINE_COLOR,
-            height: 1,
-          ),
-          GestureDetector(
-            onTap: editPurpose, //写入方法名称就可以了，但是是无参的
-            child: Container(
-              alignment: Alignment.center,
-              height: 60,
-              child: new Row(
-                children: <Widget>[
-                  Text("电箱用途"),
-                  Expanded(
-                    child: Text(
-                      fireCreatModel.page2editPurpose.length > 0
-                          ? fireCreatModel.page2editPurpose
-                          : "选填",
-                      textAlign: TextAlign.right,
+            Container(
+              color: prefix0.LINE_COLOR,
+              height: 1,
+            ),
+            GestureDetector(
+              onTap: editPurpose, //写入方法名称就可以了，但是是无参的
+              child: Container(
+                alignment: Alignment.center,
+                height: 60,
+                child: new Row(
+                  children: <Widget>[
+                    Text("电箱用途"),
+                    Expanded(
+                      child: Text(
+                        fireCreatModel.page2editPurpose.length > 0
+                            ? fireCreatModel.page2editPurpose
+                            : "选填",
+                        textAlign: TextAlign.right,
+                      ),
                     ),
-                  ),
-                  Image.asset(
-                    "assets/images/right_arrar.png",
-                    width: 20,
-                  )
-                ],
+                    Image.asset(
+                      "assets/images/right_arrar.png",
+                      width: 20,
+                    )
+                  ],
+                ),
               ),
             ),
-          ),
-          Container(
-            color: prefix0.LINE_COLOR,
-            height: 1,
-          ),
-          GestureDetector(
+            Container(
+              color: prefix0.LINE_COLOR,
+              height: 1,
+            ),
+            GestureDetector(
 //            onTap: editAddress,//写入方法名称就可以了，但是是无参的
-            child: Container(
-              alignment: Alignment.center,
-              height: 60,
-              child: new Row(
-                children: <Widget>[
-                  Text("备注"),
-                ],
+              child: Container(
+                alignment: Alignment.center,
+                height: 60,
+                child: new Row(
+                  children: <Widget>[
+                    Text("备注"),
+                  ],
+                ),
               ),
             ),
-          ),
-          TextField(
-            controller: step1remarkController,
-            keyboardType: TextInputType.text,
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(2.0),
-                  borderSide: BorderSide(color: Colors.transparent)),
+            TextField(
+              controller: step1remarkController,
+              keyboardType: TextInputType.text,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(2.0),
+                    borderSide: BorderSide(color: Colors.transparent)),
 //                  labelText: '备注',
-              hintText: '例如电箱的危险/风险原因；负载压力；问题影响范围等',
+                hintText: '例如电箱的危险/风险原因；负载压力；问题影响范围等',
+              ),
+              maxLines: 5,
+              autofocus: false,
+              onChanged: (val) {
+                fireCreatModel.step1Remak = val;
+                setState(() {});
+              },
             ),
-            maxLines: 5,
-            autofocus: false,
-            onChanged: (val) {
-              fireCreatModel.step1Remak = val;
-              setState(() {});
-            },
-          ),
-        ],
-      ),
+          ],
+        ),
+      )
+
     );
+
+    bool dataNotification0(ScrollNotification notification) {
+      if (notification.metrics.axis == Axis.horizontal) {
+        return false;
+      }
+      if (Platform.isIOS) {
+        double height = notification.metrics.maxScrollExtent; //step2的高度
+        height = height + 80;
+        if (notification.metrics.extentBefore > height) {
+          //下滑到最底部
+          _pageController.animateToPage(1,
+              duration: const Duration(milliseconds: 300), curve: Curves.ease);
+        } //滑动到最顶部
+//        if (notification.metrics.extentAfter > height) {
+//          _pageController.animateToPage(0,
+//              duration: const Duration(milliseconds: 300), curve: Curves.ease);
+//        }
+      } else if (Platform.isAndroid) {
+        //android相关代码
+        if (notification is ScrollEndNotification) {
+          if (notification.metrics.extentAfter == 0) {
+            //下滑到最底部
+            _pageController.animateToPage(1,
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.ease);
+          } //滑动到最顶部
+//          if (notification.metrics.extentBefore == 0) {
+//            _pageController.animateToPage(0,
+//                duration: const Duration(milliseconds: 300),
+//                curve: Curves.ease);
+//          }
+        }
+      }
+      return true;
+    }
 
     Widget step1 = Container(
         color: prefix0.LIGHT_LINE_COLOR,
-        child: new Column(
+        child: new NotificationListener(
+            onNotification: dataNotification0,
+            child:new ListView(
           children: <Widget>[
             new Row(children: <Widget>[
               Padding(
@@ -574,7 +614,7 @@ class _State extends State<SurvayElectricalFirePage> {
             ]),
             container,
           ],
-        ));
+        )));
 
     Widget takepice1 = Container(
       color: Colors.white,
@@ -1310,7 +1350,7 @@ class _State extends State<SurvayElectricalFirePage> {
 
     Widget step2 = Container(
         color: prefix0.LIGHT_LINE_COLOR,
-        padding: new EdgeInsets.fromLTRB(0, 0, 0, 60),
+        padding: new EdgeInsets.fromLTRB(0, 0, 0, 0),
         child: new NotificationListener(
             onNotification: dataNotification,
             child: new ListView(
@@ -1560,7 +1600,7 @@ class _State extends State<SurvayElectricalFirePage> {
 
     Widget step3 = Container(
         color: prefix0.LIGHT_LINE_COLOR,
-        padding: new EdgeInsets.fromLTRB(0, 0, 0, 60),
+        padding: new EdgeInsets.fromLTRB(0, 0, 0, 0),
         child: new NotificationListener(
             onNotification: dataNotification3,
             child: new ListView(
@@ -2170,7 +2210,7 @@ class _State extends State<SurvayElectricalFirePage> {
 
     Widget step4 = Container(
         color: prefix0.LIGHT_LINE_COLOR,
-        padding: new EdgeInsets.fromLTRB(0, 0, 0, 60),
+        padding: new EdgeInsets.fromLTRB(0, 0, 0, 0),
         child: new NotificationListener(
             onNotification: dataNotification4,
             child: new ListView(
@@ -2220,7 +2260,7 @@ class _State extends State<SurvayElectricalFirePage> {
 
     Widget step5 = Container(
         color: prefix0.LIGHT_LINE_COLOR,
-        padding: new EdgeInsets.fromLTRB(0, 0, 0, 60),
+        padding: new EdgeInsets.fromLTRB(0, 0, 0, 0),
         child: new NotificationListener(
             onNotification: dataNotification5,
             child: new ListView(
@@ -2249,7 +2289,7 @@ class _State extends State<SurvayElectricalFirePage> {
 
     Widget bigContainer = Container(
         color: prefix0.LIGHT_LINE_COLOR,
-        padding: new EdgeInsets.fromLTRB(0, 0, 0, 60),
+        padding: new EdgeInsets.fromLTRB(0, 0, 0, 0),
         child: new ListView(
           scrollDirection: Axis.vertical,
           physics: AlwaysScrollableScrollPhysics(),
@@ -2282,10 +2322,26 @@ class _State extends State<SurvayElectricalFirePage> {
     );
 
     return Scaffold(
-      appBar: NavBar,
-      body: mPageView,
-      bottomSheet: bottomButton,
+        appBar: NavBar,
+        body: GestureDetector(
+          onTap: (){
+            // 点击空白页面关闭键盘
+            FocusScope.of(context).requestFocus(blankNode);
+          },
+          child: mPageView,
+        ),
+
+        bottomNavigationBar: BottomAppBar(
+          child: bottomButton,
+        )
+
     );
+
+//    return Scaffold(
+//      appBar: NavBar,
+//      body: mPageView,
+//      bottomSheet: bottomButton,
+//    );
   }
 }
 

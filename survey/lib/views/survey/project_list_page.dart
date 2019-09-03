@@ -1013,15 +1013,18 @@ class _State extends State<HomePage> {
           Expanded(
             child: myListView,
           ),
-          bottomButton,
+          // bottomButton,
         ],
       ),
     );
 
     return Scaffold(
-      appBar: navBar,
-      body: bodyContiner,
-      // bottomSheet: bottomButton,
-    );
+        appBar: navBar,
+        body: bodyContiner,
+        bottomNavigationBar: BottomAppBar(
+          child: bottomButton,
+        )
+        // bottomSheet: bottomButton,
+        );
   }
 }
