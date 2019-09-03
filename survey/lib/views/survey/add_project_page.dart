@@ -150,12 +150,11 @@ class _AddProjectPageState extends State<AddProjectPage> {
           elevation: 1.0,
           brightness: Brightness.light,
           backgroundColor: Colors.white,
+          centerTitle: true,
           title: Text(
             "项目信息",
-            style: TextStyle(
-                color: BLACK_TEXT_COLOR,
-                fontWeight: FontWeight.bold,
-                fontSize: 16),
+            style: TextStyle(color: Colors.black),
+
           ),
           leading: IconButton(
             icon: Image.asset(

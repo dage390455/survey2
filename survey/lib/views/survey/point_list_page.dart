@@ -282,6 +282,7 @@ class _PointListPageState extends State<PointListPage> {
       elevation: 1.0,
       brightness: Brightness.light,
       backgroundColor: Colors.white,
+      centerTitle: true,
       title: Container(
         height: 40,
         width: 200,
