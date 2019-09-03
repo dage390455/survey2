@@ -105,7 +105,7 @@ class _SurveyTypePageState extends State<SurveyTypePage> {
 
     Widget myListView = new ListView.builder(
         physics: new AlwaysScrollableScrollPhysics()
-            .applyTo(new BouncingScrollPhysics()), // 这个是用来控制能否在不�����屏的状态下滚动的属性
+            .applyTo(new BouncingScrollPhysics()), // 这个是用来控制能否在不屏的状态下滚动的属性
         itemCount: dataList.length,
         // separatorBuilder: (BuildContext context, int index) =>
         // Divider(height: 1.0, color: Colors.grey, indent: 20), // 添加分割线

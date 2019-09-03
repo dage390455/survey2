@@ -227,7 +227,7 @@ class SaveDataManger {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var f = await prefs.setString(historyKey, inputStr);
     //tagsString={"projectName":"韩国哈哈","createTime":"2019-08-29 10:21","remark":"","id":1567045262407,"subList":[]},{"projectName":"哈哈哈哈","createTime":"2019-08-29 10:21","remark":"","id":1567045268967,"subList":[]},
-    //用自定义methodChannel保���本地化数据，不是shared_preferences
+    //用自定义methodChannel保本地化数据，不是shared_preferences
 
     //给userdefault保存时，最外层用;分割.
     String str1 = inputStr.replaceAll('},{"p', '};{"p');
@@ -282,7 +282,7 @@ class SaveDataManger {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var f = await prefs.setString(historyKey, inputStr);
     //tagsString={"projectName":"韩国哈哈","createTime":"2019-08-29 10:21","remark":"","id":1567045262407,"subList":[]},{"projectName":"哈哈哈哈","createTime":"2019-08-29 10:21","remark":"","id":1567045268967,"subList":[]},
-    //用自定义methodChannel保���本地化数据，不是shared_preferences
+    //用自定义methodChannel保本地化数据，不是shared_preferences
 
     //给userdefault保存时，最外层用;分割.
     String str1 = inputStr.replaceAll('},{"p', '};{"p');

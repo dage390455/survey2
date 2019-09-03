@@ -111,7 +111,7 @@ class _PointListPageState extends State<PointListPage> {
       if (index % 3 == 1) name = "项目222";
       if (index % 3 == 2) name = "项目333";
 
-      var des = "状态 $index ��常";
+      var des = "状态 $index 常";
       des = "11:04:12";
       if (index == 1) des = "2019-07-03 10:54";
       if (index == 2) des = "2019-07-06 15:24";
@@ -297,7 +297,7 @@ class _PointListPageState extends State<PointListPage> {
         // Row(
         //     //Row 中mainAxisAlignment是水平的，Column中是垂直的
         //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //     //表示所有的子控件都是从左到右��序排列，这是默认值
+        //     //表示所有的子控件都是从左到右序排列，这是默认值
         //     textDirection: TextDirection.ltr,
         //     children: <Widget>[
         //       searchbar,
@@ -371,7 +371,7 @@ class _PointListPageState extends State<PointListPage> {
 
                     //Row 中mainAxisAlignment是水平的，Column中是垂直的
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //表示所有的子控件都是从左到右��序排列，这是默认值
+                    //表示所有的子控件都是从左到右序排列，这是默认值
                     textDirection: TextDirection.ltr,
                     children: <Widget>[
                       new Column(children: <Widget>[
@@ -699,7 +699,7 @@ class _PointListPageState extends State<PointListPage> {
                 }
                 //延时调用
                 // _changeTimer = new Timer(Duration(milliseconds: 600), () {
-                //   //监听信息传��
+                //   //监听信息传
                 //   SendEvent();
                 //   // setState(() {});
                 // });
@@ -718,7 +718,7 @@ class _PointListPageState extends State<PointListPage> {
           appBar: navBar,
           body: Container(
             color: Colors.white,
-            // height: 140, //高��不填会自适应
+            // height: 140, //高不填会自适应
             padding:
                 const EdgeInsets.only(top: 0.0, bottom: 0, left: 0, right: 0),
             child: Column(

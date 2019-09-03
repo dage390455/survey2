@@ -163,7 +163,7 @@ class _taskListPageState extends State<taskListPage> {
       setState(() {});
     });
 
-    //���时�����������������用
+    //时用
     Timer _changeTimer2 = new Timer(Duration(milliseconds: 1500), () {
       setState(() {});
     });
@@ -175,7 +175,7 @@ class _taskListPageState extends State<taskListPage> {
 
     this.initDetailList();
 
-    //这一句��码改变上方状态栏字体颜色
+    //这一句码改变上方状态栏字体颜色
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
         //or set color with: Color(0xFF0000FF)
         // statusBarColor: Colors.blue,
@@ -262,7 +262,7 @@ class _taskListPageState extends State<taskListPage> {
   // 错误处理
   void _onError(dynamic) {}
 
-  //数据接�������
+  //数据接
   void _onEvent(Object value) {
     if (value is Map) {
       Map dic = value;
@@ -385,14 +385,14 @@ class _taskListPageState extends State<taskListPage> {
       var name = "测试设备 $index";
       name = "FAGJKJVXOE63S";
       if (index % 3 == 0) name = "调动flutter系统库，选择一个时间";
-      if (index % 3 == 1) name = "��动flutter自定义的plugin插件，选择一个城市";
+      if (index % 3 == 1) name = "动flutter自定义的plugin插件，选择一个城市";
       if (index % 3 == 2) name = "进入一段flutter动画";
 
       if (index % 3 == 0) name = "02ABDGAFGAGA";
       if (index % 3 == 1) name = "GFAGATRGD3434";
       if (index % 3 == 2) name = "JKLJLKGAFI87";
 
-      var des = "状态 $index ��常";
+      var des = "状态 $index 常";
       des = "11:04:12";
       if (index == 1) des = "10:54:32";
       if (index == 2) des = "15:24:32";
@@ -424,7 +424,7 @@ class _taskListPageState extends State<taskListPage> {
         _getList();
         //延时调用
         _changeTimer = new Timer(Duration(milliseconds: 500), () {
-          //监����������������信息传递
+          //监信息传递
           SendEvent();
           // setState(() {});
         });
@@ -460,7 +460,7 @@ class _taskListPageState extends State<taskListPage> {
 /*
   @override
   Widget build(BuildContext context) {
-    print('���次进入了build');
+    print('次进入了build');
     var name1 = 'fadfa';
 
     // TODO: implement build
@@ -487,7 +487,7 @@ class _taskListPageState extends State<taskListPage> {
               // _navBack();
               // setState(() {
               //   text11 = "新的文本";
-              //   title1 = "���务列表新";
+              //   title1 = "务列表新";
 
                 // eventChannel
                 //     .receiveBroadcastStream("getList")
@@ -687,7 +687,7 @@ class _taskListPageState extends State<taskListPage> {
                     //这行决定了左对齐
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //占满剩���空间
+                    //占满剩空间
 
                     children: <Widget>[
                       Row(
@@ -940,7 +940,7 @@ class _taskListPageState extends State<taskListPage> {
                 _getListNetCall();
                 //延时调用
                 // _changeTimer = new Timer(Duration(milliseconds: 600), () {
-                //   //监听信息传��
+                //   //监听信息传
                 //   SendEvent();
                 //   // setState(() {});
                 // });
@@ -978,7 +978,7 @@ class _taskListPageState extends State<taskListPage> {
               // SendEvent();
               // setState(() {
               //   text11 = '新的文本';
-              //   title1 = '���的列表';
+              //   title1 = '的列表';
               // });
             },
           ),
@@ -1003,7 +1003,7 @@ class _taskListPageState extends State<taskListPage> {
             //这行决定了左对齐
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
-            //占满剩���空间
+            //占满剩空间
             children: <Widget>[
               !_calendaring
                   ? emptyContainer
