@@ -34,7 +34,7 @@ class _State extends State<SurvayElectricalFireEditPage> {
       BasicMessageChannel("BasicMessageChannelPluginPickImage", StringCodec());
   BasicMessageChannel<String> _locationBasicMessageChannel =
   BasicMessageChannel("BasicMessageChannelPlugin", StringCodec());
-
+  FocusNode blankNode = FocusNode();
   static PageController _pageController = new PageController();
   ElectricalFireModel fireModel = DataTransferManager.shared.fireCreatModel;
   ElectricalFireModel fireCreatModel =
@@ -2809,7 +2809,7 @@ class _State extends State<SurvayElectricalFireEditPage> {
 
     Widget bigContainer = Container(
         color: prefix0.LIGHT_LINE_COLOR,
-        padding: new EdgeInsets.fromLTRB(0, 0, 0, 60),
+        padding: new EdgeInsets.fromLTRB(0, 0, 0, 0),
         child: new ListView(
           scrollDirection: Axis.vertical,
           physics: AlwaysScrollableScrollPhysics(),
@@ -2824,10 +2824,26 @@ class _State extends State<SurvayElectricalFireEditPage> {
         ));
 
     return Scaffold(
-      appBar: NavBar,
-      body: bigContainer,
-      bottomSheet: bottomButton,
+        appBar: NavBar,
+        body: GestureDetector(
+          onTap: (){
+            // 点击空白页面关闭键盘
+            FocusScope.of(context).requestFocus(blankNode);
+          },
+          child: bigContainer,
+        ),
+
+        bottomNavigationBar: BottomAppBar(
+          child: bottomButton,
+        )
+
     );
+
+//    return Scaffold(
+//      appBar: NavBar,
+//      body: bigContainer,
+//      bottomSheet: bottomButton,
+//    );
   }
 }
 
