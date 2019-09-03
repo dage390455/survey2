@@ -439,7 +439,7 @@ class _State extends State<SurvayElectricalFireEditPage> {
       brightness: Brightness.light,
       backgroundColor: Colors.white,
       title: Text(
-        "电器火灾安装点勘察",
+        "电器火灾安装点勘察编辑",
         style: TextStyle(color: Colors.black),
       ),
       leading: IconButton(

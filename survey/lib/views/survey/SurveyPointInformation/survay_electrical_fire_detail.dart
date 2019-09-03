@@ -161,12 +161,12 @@ class _State extends State<SurvayElectricalFireDetailPage> {
   }
 
   showPicDialog() {
-    if (_groupValue == 1) {
-      openGallery();
-    } else {
-//        showPicDialog2();
-      showPicDialognew();
-    }
+//    if (_groupValue == 1) {
+//      openGallery();
+//    } else {
+////        showPicDialog2();
+//      showPicDialognew();
+//    }
   }
 
   showPicDialognew() {
@@ -344,7 +344,7 @@ class _State extends State<SurvayElectricalFireDetailPage> {
       brightness: Brightness.light,
       backgroundColor: Colors.white,
       title: Text(
-        "电器火灾安装点勘察",
+        "电器火灾安装点勘察详情",
         style: TextStyle(color: Colors.black),
       ),
       leading: IconButton(
