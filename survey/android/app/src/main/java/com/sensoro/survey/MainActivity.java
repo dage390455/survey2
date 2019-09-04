@@ -23,6 +23,7 @@ import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import io.flutter.app.FlutterActivity;
@@ -92,12 +93,27 @@ public class MainActivity extends FlutterActivity {
         channel.setMessageHandler((o, reply) -> {
 
 
+
             if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
                     != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 200);
             } else {
-                Intent intent = new Intent(MainActivity.this, DeployMapActivity.class);
-                startActivityForResult(intent, MAPCODE);
+
+                if(o!=null){
+                    String location = o +"";
+                    String[] strArr = location.split(",");
+                    Intent intent = new Intent(MainActivity.this, DeployMapActivity.class);
+                    if (strArr.length>=3){
+                       intent.putExtra("isReadOnly",strArr[0]);
+                       intent.putExtra("lan",strArr[1]);
+                       intent.putExtra("log",strArr[2]);
+
+                    }
+                    startActivityForResult(intent, MAPCODE);
+                }
+
+
+
             }
             reply.reply("我来自 " + " !! 使用的是 BasicMessageChannel 方式");
         });
@@ -118,7 +134,8 @@ public class MainActivity extends FlutterActivity {
                 double longitude = data.getDoubleExtra("longitude", -1);
                 String title = data.getStringExtra("title");
                 if (!TextUtils.isEmpty(title)) {
-                    channel1.send(title);
+                    String location = latitude + "," + longitude+"," + title;
+                    channel1.send(location);
                 }
             }
         }

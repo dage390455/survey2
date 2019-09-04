@@ -59,6 +59,10 @@ public class DeployMapActivity extends Activity implements AMap.OnCameraChangeLi
     private Marker locationMarker;
     public AMapLocationClient mLocationClient;
 
+    private int isReadOnly = 0;
+
+    private double lan = 0;
+    private double log = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +76,11 @@ public class DeployMapActivity extends Activity implements AMap.OnCameraChangeLi
 //            supportActionBar.hide();
 //        }
 
+        if (!TextUtils.isEmpty(getIntent().getStringExtra("isReadOnly"))){
+            isReadOnly = Integer.parseInt(getIntent().getStringExtra("isReadOnly"));
+            lan = Double.parseDouble(getIntent().getStringExtra("lan"));
+            log = Double.parseDouble(getIntent().getStringExtra("log"));
+        }
         iniView();
         locate();
 
@@ -87,8 +96,14 @@ public class DeployMapActivity extends Activity implements AMap.OnCameraChangeLi
         includeTextTitleImvArrowsLeft = findViewById(R.id.include_text_title_imv_arrows_left);
         tmDeployMap = findViewById(R.id.tm_deploy_map);
         includeTextTitleTvTitle.setText("位置");
-        includeTextTitleTvSubtitle.setVisibility(View.VISIBLE);
-        includeTextTitleTvSubtitle.setText("保存");
+
+
+         if(isReadOnly == 0){
+             includeTextTitleTvSubtitle.setVisibility(View.VISIBLE);
+
+             includeTextTitleTvSubtitle.setText("保存");
+
+         }
 
 
         includeTextTitleTvSubtitle.setOnClickListener(new View.OnClickListener() {
@@ -314,7 +329,10 @@ public class DeployMapActivity extends Activity implements AMap.OnCameraChangeLi
         aMap.setOnMapLoadedListener(this);
         aMap.setOnMarkerClickListener(this);
         aMap.setInfoWindowAdapter(this);
-        aMap.setOnCameraChangeListener(this);
+
+        if(isReadOnly==0){
+            aMap.setOnCameraChangeListener(this);
+        }
 
 //        aMap.setOnMapTouchListener(this);
     }
@@ -353,16 +371,40 @@ public class DeployMapActivity extends Activity implements AMap.OnCameraChangeLi
                 .draggable(false);
         locationMarker = aMap.addMarker(locationOption);
         AMapLocation lastKnownLocation = mLocationClient.getLastKnownLocation();
-        if (lastKnownLocation != null) {
-            double lat = lastKnownLocation.getLatitude();//获取纬度
-            double lon = lastKnownLocation.getLongitude();//获取经度
-            locationMarker.setPosition(new LatLng(lat, lon));
-        }
+
         BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromResource(R.mipmap.deploy_map_cur);
         MarkerOptions markerOption = new MarkerOptions().icon(bitmapDescriptor)
                 .anchor(0.5f, 1)
                 .draggable(true);
         deviceMarker = aMap.addMarker(markerOption);
+        if(lan>0){
+            double lat = lastKnownLocation.getLatitude();//获取纬度
+            double lon = lastKnownLocation.getLongitude();//获取经度
+//
+            CameraUpdate update;
+            update = CameraUpdateFactory
+                    .newCameraPosition(new CameraPosition(new LatLng(lan, log), 15, 0, 0));
+            aMap.moveCamera(update);
+            if (locationMarker != null) {
+                locationMarker.setPosition(new LatLng(lat, lon));
+            }
+            deviceMarker.setPosition(new LatLng(lan, log));
+
+            LatLonPoint lp = new LatLonPoint(lan, log);
+            RegeocodeQuery query = new RegeocodeQuery(lp, 200, GeocodeSearch.AMAP);
+            System.out.println("====>onCameraChangeFinish=>" + lp.getLatitude() + "=====" + lp.getLongitude());
+//                    deviceMarker.setPosition(cameraPosition.target);
+            geocoderSearch.getFromLocationAsyn(query);
+        }else {
+            if (lastKnownLocation != null) {
+                double lat = lastKnownLocation.getLatitude();//获取纬度
+                double lon = lastKnownLocation.getLongitude();//获取经度
+                locationMarker.setPosition(new LatLng(lat, lon));
+                backToCurrentLocation();
+            }
+
+        }
+
         //加载完地图之后添加监听防止位置错乱
 //        if (deployAnalyzerModel.latLng.size() == 2) {
 ////可视化区域，将指定位置指定到屏幕中心位置
@@ -375,7 +417,7 @@ public class DeployMapActivity extends Activity implements AMap.OnCameraChangeLi
 //            RegeocodeQuery query = new RegeocodeQuery(lp, 200, GeocodeSearch.AMAP);
 //            geocoderSearch.getFromLocationAsyn(query);
 //        } else {
-        backToCurrentLocation();
+//        backToCurrentLocation();
 //        }
 
     }
@@ -431,7 +473,12 @@ public class DeployMapActivity extends Activity implements AMap.OnCameraChangeLi
                 if (locationMarker != null) {
                     locationMarker.setPosition(latLng);
                 }
-                deviceMarker.setPosition(latLng);
+
+                if(isReadOnly==0){
+                    deviceMarker.setPosition(latLng);
+                }
+
+
             }
         }
 
