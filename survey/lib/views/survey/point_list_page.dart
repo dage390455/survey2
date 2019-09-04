@@ -7,8 +7,6 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_custom_calendar/flutter_custom_calendar.dart';
-import 'package:flutter_custom_calendar/model/date_model.dart';
 
 import 'package:flutter/material.dart';
 import 'package:event_bus/event_bus.dart';
@@ -19,6 +17,8 @@ import 'package:sensoro_survey/views/survey/const.dart';
 import 'package:sensoro_survey/widgets/progressHud.dart';
 import 'package:sensoro_survey/generated/customCalendar/multi_select_style_page.dart';
 import 'package:sensoro_survey/generated/easyRefresh/easy_refresh.dart';
+import 'package:sensoro_survey/generated/customCalendar/lib/flutter_custom_calendar.dart';
+import 'package:sensoro_survey/generated/customCalendar/lib/model/date_model.dart';
 import 'package:sensoro_survey/model/project_info_model.dart';
 import 'package:sensoro_survey/views/survey/comment/save_data_manager.dart';
 import 'package:sensoro_survey/views/survey/survey_type_page.dart';

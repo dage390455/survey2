@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_custom_calendar/flutter_custom_calendar.dart';
+import 'package:sensoro_survey/generated/customCalendar/lib/flutter_custom_calendar.dart';
 
 class MultiSelectStylePage extends StatefulWidget {
   MultiSelectStylePage({Key key, this.title}) : super(key: key);
@@ -63,7 +63,6 @@ class _MultiSelectStylePageState extends State<MultiSelectStylePage> {
         title: Text(
           "日期选择",
           style: TextStyle(color: Colors.black),
-
         ),
         leading: IconButton(
           icon: Image.asset(
@@ -97,8 +96,8 @@ class _MultiSelectStylePageState extends State<MultiSelectStylePage> {
             CalendarViewWidget(
               calendarController: controller,
             ),
-            // new Text(
-            //     "多选模式\n选中的时间:\n${controller.getMultiSelectCalendar().toString()}"),
+            new Text(
+                "多选模式\n选中的时间:\n${controller.getMultiSelectCalendar().toString()}"),
           ],
         ),
       ),
