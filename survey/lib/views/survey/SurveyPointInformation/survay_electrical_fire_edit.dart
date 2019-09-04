@@ -67,9 +67,16 @@ class _State extends State<SurvayElectricalFireEditPage> {
     _locationBasicMessageChannel.setMessageHandler((message) => Future<String>(() {
       print(message);
       //message为native传递的数据
-      setState(() {
-        fireModel.editPosition = message;
-      });
+      if(message!=null&&message.isNotEmpty){
+        List list = message.split(",");
+        if (list.length ==3){
+          setState(() {
+            fireModel.editLongitudeLatitude = list[0] + "," + list[1];
+            fireModel.editPosition = list[2];
+          });
+        }
+
+      }
       //给Android端的返回值
       return "========================收到Native消息：" + message;
     }));
@@ -85,11 +92,24 @@ class _State extends State<SurvayElectricalFireEditPage> {
 
 
   //向native发送消息
+//  void _locationSendToNative() {
+//    Future<String> future = _locationBasicMessageChannel.send(fireModel.editPosition);
+//    future.then((message) {
+//      print("========================" + message);
+//    });
+//
+//  }
+
+
   void _locationSendToNative() {
-    Future<String> future = _locationBasicMessageChannel.send(fireModel.editPosition);
+
+    var location = "0," + fireModel.editLongitudeLatitude +","+ fireModel.editAddress;
+
+    Future<String> future = _locationBasicMessageChannel.send(location);
     future.then((message) {
       print("========================" + message);
     });
+
 
   }
 

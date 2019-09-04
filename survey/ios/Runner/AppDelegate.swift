@@ -33,21 +33,40 @@ import Photos
         
         bascChanal.setMessageHandler { [weak self] (message, fr) in
             guard let self = self else { return }
-
-            if(CLLocationManager.authorizationStatus() != .denied) {
+            
+            if  message != nil {
+                let loction = message as!String
+                let list =  loction.components(separatedBy: ",");
                 
-                let postion = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "LocationEditController") as! LocationEditController;
-                
-                postion.completion = { [weak self] (lat,lon, address, channelMask)->Void in
-                    guard self != nil else {return;}
+                if(CLLocationManager.authorizationStatus() != .denied) {
                     
-                    bascChanal.sendMessage(address)
+                    let postion = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "LocationEditController") as! LocationEditController;
+                    
+                    if list.count == 4 {
+                        if list[0] == "1"{
+                            postion.readOnly = true;
+                        }else{
+                            postion.readOnly = false;
+                        }
+                        if list[1].count > 0 {
+                            postion.lat = Double(list[1])!
+                            postion.lon = Double(list[2])!
+                            postion.repositionDeviceOnly = true
+                        }
+                    }
+                    postion.completion = { [weak self] (lat,lon, address, channelMask)->Void in
+                        guard self != nil else {return;}
+                        let loction = "\(lat),\(lon),\(address)"
+                        bascChanal.sendMessage(loction)
+                    }
+                    navigationC.pushViewController(postion, animated: true);
+                    
+                }else{
+                    SVProgressHUD.showError(withStatus: "请到设置页面打开定位权限")
                 }
-                navigationC.pushViewController(postion, animated: true);
-                
-            }else{
-                SVProgressHUD.showError(withStatus: "请到设置页面打开定位权限")
             }
+            
+           
         }
       
         bascChanalpickImage = FlutterBasicMessageChannel(name: "BasicMessageChannelPluginPickImage", binaryMessenger: flutterViewController, codec: FlutterStringCodec.init());

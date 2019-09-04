@@ -23,7 +23,8 @@ class SurvayElectricalFireDetailPage extends StatefulWidget {
 class _State extends State<SurvayElectricalFireDetailPage> {
   BasicMessageChannel<String> _basicMessageChannel =
       BasicMessageChannel("BasicMessageChannelPluginPickImage", StringCodec());
-
+  BasicMessageChannel<String> _locationBasicMessageChannel =
+  BasicMessageChannel("BasicMessageChannelPlugin", StringCodec());
   static PageController _pageController = new PageController();
   ElectricalFireModel fireModel = DataTransferManager.shared.fireCreatModel;
   ElectricalFireModel fireCreatModel =
@@ -52,7 +53,22 @@ class _State extends State<SurvayElectricalFireDetailPage> {
           //给Android端的返回值
           return "========================收到Native消息：" + message;
         }));
+    _locationBasicMessageChannel.setMessageHandler((message) => Future<String>(() {
+      print(message);
+      //message为native传递的数据
+      if(message!=null&&message.isNotEmpty){
+        List list = message.split(",");
+        if (list.length ==3){
+          setState(() {
+            fireModel.editLongitudeLatitude = list[0] + "," + list[1];
+            fireModel.editPosition = list[2];
+          });
+        }
 
+      }
+      //给Android端的返回值
+      return "========================收到Native消息：" + message;
+    }));
     _getIsNeedShowPresent();
     step1remarkController.text = fireCreatModel.step1Remak;
     step3remarkController.text = fireCreatModel.step3Remak;
@@ -120,6 +136,18 @@ class _State extends State<SurvayElectricalFireDetailPage> {
         }
       });
     }
+  }
+
+  void _locationSendToNative() {
+
+    var location = "1," + fireModel.editLongitudeLatitude +","+ fireModel.editAddress;
+
+    Future<String> future = _locationBasicMessageChannel.send(location);
+    future.then((message) {
+      print("========================" + message);
+    });
+
+
   }
 
   //向native发送消息
@@ -2026,7 +2054,7 @@ class _State extends State<SurvayElectricalFireDetailPage> {
             height: 1,
           ),
           GestureDetector(
-            onTap: null, //写入方法名称就可以了，但是是无参的
+            onTap: _locationSendToNative, //写入方法名称就可以了，但是是无参的
             child: Container(
               alignment: Alignment.center,
               height: 60,
@@ -2037,10 +2065,14 @@ class _State extends State<SurvayElectricalFireDetailPage> {
                     child: Text(
                       this.fireModel.editPosition.length > 0
                           ? this.fireModel.editPosition
-                          : "",
+                          : "选填",
                       textAlign: TextAlign.right,
                     ),
                   ),
+                  Image.asset(
+                    "assets/images/right_arrar.png",
+                    width: 20,
+                  )
                 ],
               ),
             ),

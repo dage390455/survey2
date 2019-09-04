@@ -2324,9 +2324,6 @@ class _State extends State<SurvayElectricalFirePage> {
     ScrollController _controller5 = TrackingScrollController();
 
     bool dataNotification5(ScrollNotification notification) {
-      if (isEditing) {
-        return false;
-      }
 
       if (Platform.isIOS) {
         double height = notification.metrics.maxScrollExtent; //step2的高度
@@ -2418,6 +2415,9 @@ class _State extends State<SurvayElectricalFirePage> {
             // 点击空白页面关闭键盘
             FocusScope.of(context).requestFocus(blankNode);
           },
+          onVerticalDragDown: (details) { FocusScope.of(context).requestFocus(blankNode);},
+          onHorizontalDragDown: (details) {FocusScope.of(context).requestFocus(blankNode);},
+          behavior: HitTestBehavior.translucent,
           child: mPageView,
         ),
 
