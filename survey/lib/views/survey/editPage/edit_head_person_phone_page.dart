@@ -1,8 +1,8 @@
 //现场情况
 import 'package:flutter/material.dart';
-import 'package:sensoro_survey/views/survey/comment/Tools.dart';
-import 'package:sensoro_survey/views/survey/comment/save_data_manager.dart';
-import 'package:sensoro_survey/views/survey/comment/history_page.dart';
+import 'package:sensoro_survey/views/survey/common/Tools.dart';
+import 'package:sensoro_survey/views/survey/common/save_data_manager.dart';
+import 'package:sensoro_survey/views/survey/common/history_page.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 
 class EditHeadPersonPhonePage extends StatefulWidget {
@@ -69,15 +69,13 @@ class _State extends State<EditHeadPersonPhonePage> {
                 fontSize: 20)),
         onPressed: () {
           if (this.name.length > 0) {
-            if (Tools.isChinaPhoneLegal(this.name)){
+            if (Tools.isChinaPhoneLegal(this.name)) {
               SaveDataManger.addHistory(this.name, historyKey);
               Navigator.of(context).pop(this.name);
-            }else{
-
+            } else {
               setState(() {
                 isShowError = false;
               });
-
             }
           }
         },
@@ -137,20 +135,18 @@ class _State extends State<EditHeadPersonPhonePage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           backContainer,
-
           new Offstage(
             offstage: isShowError,
             child: Padding(
               padding: new EdgeInsets.fromLTRB(20, 8, 20, 8),
-              child:  Text("请输入正确电话号码",
+              child: Text(
+                "请输入正确电话号码",
                 style: new TextStyle(
                   color: Colors.red,
                 ),
               ),
             ),
           ),
-
-
           new Offstage(
             offstage: isHighHistory,
             child: HistoryPage(
@@ -164,17 +160,14 @@ class _State extends State<EditHeadPersonPhonePage> {
     return Scaffold(
         appBar: NavBar,
         body: GestureDetector(
-          onTap: (){
+          onTap: () {
             // 点击空白页面关闭键盘
             FocusScope.of(context).requestFocus(blankNode);
           },
           child: bigContainer,
         ),
-
         bottomNavigationBar: BottomAppBar(
           child: bottomButton,
-        )
-
-    );
+        ));
   }
 }

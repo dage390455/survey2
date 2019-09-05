@@ -8,8 +8,7 @@ import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_custom_calendar/flutter_custom_calendar.dart';
-import 'package:flutter_custom_calendar/model/date_model.dart';
+
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -24,11 +23,14 @@ import 'package:sensoro_survey/views/survey/survey_point_information.dart';
 import 'package:sensoro_survey/widgets/progressHud.dart';
 import 'package:sensoro_survey/generated/easyRefresh/easy_refresh.dart';
 import 'package:sensoro_survey/generated/customCalendar/multi_select_style_page.dart';
+import 'package:sensoro_survey/generated/customCalendar/lib/flutter_custom_calendar.dart';
+import 'package:sensoro_survey/generated/customCalendar/lib/model/date_model.dart';
 import 'package:sensoro_survey/views/survey/point_list_page.dart';
 import 'package:sensoro_survey/views/survey/add_project_page.dart';
 import 'package:sensoro_survey/model/project_info_model.dart';
 import 'package:sensoro_survey/views/survey/SurveyPointInformation/summary_construction_page.dart';
-import 'package:sensoro_survey/views/survey/comment/save_data_manager.dart';
+import 'package:sensoro_survey/views/survey/common/save_data_manager.dart';
+import 'package:sensoro_survey/views/survey/common/flutter_screenutil.dart';
 //import 'package:fluwx/fluwx.dart' as fluwx;
 
 class ProjectListPage extends StatefulWidget {
@@ -50,10 +52,7 @@ class _ProjectListPageState extends State<ProjectListPage> {
       debugShowCheckedModeBanner: false,
       // title: Text("Flutter Layout Demo"),
       title: "Flutter Layout Demo",
-      // home: Scaffold(
-      //   appBar: NavBar,
-      //   body: new Home1(),
-      //   bottomSheet: bottomButton,
+
       //   // bottomSheet: bottomButton,
       // ) // This trailing comma makes auto-formatting nicer for build methods.
       home: HomePage(),
@@ -102,12 +101,12 @@ class _State extends State<HomePage> {
   TimeOfDay _time = TimeOfDay.now();
   final bool confirmDismiss = true;
   List<String> dateFilterList = new List();
+  static Map<String, dynamic> headers = {};
 
   CalendarController controller;
   TextEditingController searchController = TextEditingController();
   FocusNode _focusNode = FocusNode();
-
-  static Map<String, dynamic> headers = {};
+  FocusNode blankNode = FocusNode();
 
   // 创建一个给native的channel (类似iOS的通知）
   static const methodChannel =
@@ -145,13 +144,13 @@ class _State extends State<HomePage> {
     testTranslate();
 
     //延时调用，重新获取window.physicalSize,因为release模式，不同机型有可能先显示页面后获取window.physicalSize
-    _changeTimer = new Timer(Duration(milliseconds: 300), () {
-      screen_height = window.physicalSize.height;
-      screen_width = window.physicalSize.width;
-      prefix0.screen_height = window.physicalSize.height;
-      prefix0.screen_width = window.physicalSize.width;
-      setState(() {});
-    });
+    // _changeTimer = new Timer(Duration(milliseconds: 300), () {
+    //   screen_height = window.physicalSize.height;
+    //   screen_width = window.physicalSize.width;
+    //   prefix0.screen_height = window.physicalSize.height;
+    //   prefix0.screen_width = window.physicalSize.width;
+    //   setState(() {});
+    // });
 
     loadLocalData();
 
@@ -220,27 +219,6 @@ class _State extends State<HomePage> {
   void deleteData(int index) async {
     String hisoryKey = "projectList";
   }
-
-//  void initDetailList() {
-//    for (int index = 0; index < 1000; index++) {
-//      var name = "测试设备 $index";
-//      name = "FAGJKJVXOE63S";
-//      if (index % 3 == 0) name = "项目1118888";
-//      if (index % 3 == 1) name = "项222";
-//      if (index % 3 == 2) name = "目333";
-//
-//      var des = "状态 $index 常";
-//      des = "11:04:12";
-//      if (index == 1) des = "2019-07-03 10:54";
-//      if (index == 2) des = "2019-07-06 15:24";
-//      if (index == 3) des = "2019-07-22 02:14:09";
-//
-//      projectInfoModel model = projectInfoModel(name, des, index, "备注11", []);
-//      dataList.add(model);
-//      // var a = 'dd';
-//      // a = cityDetailArrays[index].name;
-//    }
-//  }
 
   void _onEvent(Object value) {
     if (value is Map) {
@@ -366,26 +344,25 @@ class _State extends State<HomePage> {
     );
 
     if (result != null) {
-      if (result is Set) {
+      if (result is List) {
         dateFilterList.clear();
-        for (DateModel model in result) {
+
+        for (int i = 0; i < result.length; i++) {
+          DateModel model = result[i];
           int year = model.year;
           int month = model.month;
           int day = model.day;
           String monthStr = month < 10 ? "0${month}" : "${month}";
           String dayStr = day < 10 ? "0${day}" : "${day}";
-          String dateFilterStr = "${year}-${monthStr}-${dayStr}";
+          String dateFilterStr = "${year}.${monthStr}.${dayStr}";
           dateFilterList.add(dateFilterStr);
           year = model.year;
         }
         if (dateFilterList.length == 1) {
           dateFilterStr = dateFilterList[0];
-        }
-        if (dateFilterList.length == 2) {
-          dateFilterStr = "${dateFilterList[0]},${dateFilterList[1]}";
-        }
-        if (dateFilterList.length > 2) {
-          dateFilterStr = "${dateFilterList[0]},${dateFilterList[1]}等";
+        } else {
+          dateFilterStr =
+              "${dateFilterList[0]}~${dateFilterList[dateFilterList.length - 1]}";
         }
         calendaring = true;
         setState(() {});
@@ -475,6 +452,9 @@ class _State extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    //首次build时获取屏幕宽度等
+    initScreenPhysics(context);
+    MediaQueryData mediaQuery = MediaQuery.of(context);
     void _gotoPoint(int index) async {
       // projectInfoModel model = projectInfoModel("", "", 1, "");
       final result = await Navigator.push(
@@ -693,11 +673,13 @@ class _State extends State<HomePage> {
           projectInfoModel model = dataList[index];
           var name = model.projectName;
           var time = model.createTime;
+          String time1 = time.substring(0, 11);
+          time1 = time1.replaceAll('-', '.');
 
           bool flag = false;
           if (dateFilterList.length > 0) {
             for (String dateStr in dateFilterList) {
-              if (time.contains(dateStr)) {
+              if (time1.contains(dateStr)) {
                 flag = true;
               }
             }
@@ -725,7 +707,7 @@ class _State extends State<HomePage> {
             onDismissed: (DismissDirection direction) {
               if (direction == DismissDirection.endToStart) {
                 //这里处理数据
-                print("这里处理数据");
+                print("这里���理数据");
                 //本地存储也去掉
                 String historyKey = 'projectList';
                 Map<String, dynamic> map = model.toJson();
@@ -941,7 +923,7 @@ class _State extends State<HomePage> {
     Widget bottomButton = new Container(
       color: LIGHT_LINE_COLOR,
       height: 60,
-      width: screen_width,
+      width: mediaQuery.size.width,
       child: new RaisedButton(
         color: GREEN_COLOR,
         textColor: Colors.white,
@@ -1021,7 +1003,13 @@ class _State extends State<HomePage> {
 
     return Scaffold(
         appBar: navBar,
-        body: bodyContiner,
+        body: GestureDetector(
+          onTap: () {
+            // 点击空白页面关闭键盘
+            FocusScope.of(context).requestFocus(blankNode);
+          },
+          child: bodyContiner,
+        ),
         bottomNavigationBar: BottomAppBar(
           child: bottomButton,
         )

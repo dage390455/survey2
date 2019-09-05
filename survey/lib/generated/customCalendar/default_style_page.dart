@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_custom_calendar/flutter_custom_calendar.dart';
+import 'package:sensoro_survey/generated/customCalendar/lib/flutter_custom_calendar.dart';
 
 class DefaultStylePage extends StatefulWidget {
   DefaultStylePage({Key key, this.title}) : super(key: key);

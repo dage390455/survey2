@@ -1,7 +1,7 @@
 //现场情况
 import 'package:flutter/material.dart';
-import 'package:sensoro_survey/views/survey/comment/save_data_manager.dart';
-import 'package:sensoro_survey/views/survey/comment/history_page.dart';
+import 'package:sensoro_survey/views/survey/common/save_data_manager.dart';
+import 'package:sensoro_survey/views/survey/common/history_page.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 
 class EditNamePage extends StatefulWidget {
@@ -140,17 +140,14 @@ class _State extends State<EditNamePage> {
     return Scaffold(
         appBar: NavBar,
         body: GestureDetector(
-          onTap: (){
+          onTap: () {
             // 点击空白页面关闭键盘
             FocusScope.of(context).requestFocus(blankNode);
           },
           child: bigContainer,
         ),
-
         bottomNavigationBar: BottomAppBar(
           child: bottomButton,
-        )
-
-    );
+        ));
   }
 }

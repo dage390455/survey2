@@ -7,13 +7,15 @@ import 'package:image_picker/image_picker.dart';
 import 'package:sensoro_survey/model/electical_fire_create_model.dart';
 import 'package:sensoro_survey/model/electrical_fire_model.dart';
 import 'package:sensoro_survey/views/survey/SurveyPointInformation/stick_widget.dart';
-import 'package:sensoro_survey/views/survey/comment/data_transfer_manager.dart';
-import 'package:sensoro_survey/views/survey/comment/save_data_manager.dart';
+import 'package:sensoro_survey/views/survey/common/data_transfer_manager.dart';
+import 'package:sensoro_survey/views/survey/common/save_data_manager.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 import 'package:sensoro_survey/views/survey/editPage/edit_electrical_address_page.dart';
 import 'package:sensoro_survey/views/survey/editPage/edit_electrical_current_page.dart';
 import 'package:sensoro_survey/views/survey/editPage/edit_electrical_dangerous_page.dart';
 import 'package:sensoro_survey/views/survey/editPage/edit_electrical_purpose_page.dart';
+
+import '../../../pic_swiper.dart';
 
 class SurvayElectricalFireDetailPage extends StatefulWidget {
   @override
@@ -24,7 +26,7 @@ class _State extends State<SurvayElectricalFireDetailPage> {
   BasicMessageChannel<String> _basicMessageChannel =
       BasicMessageChannel("BasicMessageChannelPluginPickImage", StringCodec());
   BasicMessageChannel<String> _locationBasicMessageChannel =
-  BasicMessageChannel("BasicMessageChannelPlugin", StringCodec());
+      BasicMessageChannel("BasicMessageChannelPlugin", StringCodec());
   static PageController _pageController = new PageController();
   ElectricalFireModel fireModel = DataTransferManager.shared.fireCreatModel;
   ElectricalFireModel fireCreatModel =
@@ -53,22 +55,22 @@ class _State extends State<SurvayElectricalFireDetailPage> {
           //给Android端的返回值
           return "========================收到Native消息：" + message;
         }));
-    _locationBasicMessageChannel.setMessageHandler((message) => Future<String>(() {
-      print(message);
-      //message为native传递的数据
-      if(message!=null&&message.isNotEmpty){
-        List list = message.split(",");
-        if (list.length ==3){
-          setState(() {
-            fireModel.editLongitudeLatitude = list[0] + "," + list[1];
-            fireModel.editPosition = list[2];
-          });
-        }
-
-      }
-      //给Android端的返回值
-      return "========================收到Native消息：" + message;
-    }));
+    _locationBasicMessageChannel
+        .setMessageHandler((message) => Future<String>(() {
+              print(message);
+              //message为native传递的数据
+              if (message != null && message.isNotEmpty) {
+                List list = message.split(",");
+                if (list.length == 3) {
+                  setState(() {
+                    fireModel.editLongitudeLatitude = list[0] + "," + list[1];
+                    fireModel.editPosition = list[2];
+                  });
+                }
+              }
+              //给Android端的返回值
+              return "========================收到Native消息：" + message;
+            }));
     _getIsNeedShowPresent();
     step1remarkController.text = fireCreatModel.step1Remak;
     step3remarkController.text = fireCreatModel.step3Remak;
@@ -139,15 +141,13 @@ class _State extends State<SurvayElectricalFireDetailPage> {
   }
 
   void _locationSendToNative() {
-
-    var location = "1," + fireModel.editLongitudeLatitude +","+ fireModel.editAddress;
+    var location =
+        "1," + fireModel.editLongitudeLatitude + "," + fireModel.editAddress;
 
     Future<String> future = _locationBasicMessageChannel.send(location);
     future.then((message) {
       print("========================" + message);
     });
-
-
   }
 
   //向native发送消息
@@ -160,21 +160,13 @@ class _State extends State<SurvayElectricalFireDetailPage> {
 //    super.initState();
   }
 
-  editAddress() async {
+  editAddress() async {}
 
-  }
+  editDangerous() async {}
 
-  editDangerous() async {
+  editCurrent() async {}
 
-  }
-
-  editCurrent() async {
-
-  }
-
-  editPurpose() async {
-
-  }
+  editPurpose() async {}
 
   updateNextButton() {
     if (fireCreatModel.page2editAddress.length > 0 &&
@@ -228,9 +220,7 @@ class _State extends State<SurvayElectricalFireDetailPage> {
                             Radio(
                                 value: 1,
                                 groupValue: _groupValue,
-                                onChanged: (int e) {
-
-                                }),
+                                onChanged: (int e) {}),
                             Text("今日不再提示"),
                           ],
                         ),
@@ -300,31 +290,31 @@ class _State extends State<SurvayElectricalFireDetailPage> {
   /*拍照*/
   takePhoto6() async {
     picImageIndex = 5;
-    showPicDialog();
+    openGallery();
   }
 
   /*拍照*/
   takePhoto7() async {
     picImageIndex = 6;
-    showPicDialog();
+    openGallery();
   }
 
   /*拍照*/
   takePhoto8() async {
     picImageIndex = 7;
-    showPicDialog();
+    openGallery();
   }
 
   /*拍照*/
   takePhoto9() async {
     picImageIndex = 8;
-    showPicDialog();
+    openGallery();
   }
 
   /*拍照*/
   takePhoto10() async {
     picImageIndex = 9;
-    showPicDialog();
+    openGallery();
   }
 
   /*拍照*/
@@ -347,6 +337,66 @@ class _State extends State<SurvayElectricalFireDetailPage> {
 
   /*相册*/
   openGallery() async {
+    List<PicSwiperItem> list = new List();
+    PicSwiperItem picSwiperItem = PicSwiperItem("");
+    list.clear();
+
+    switch (picImageIndex) {
+      case 0:
+        picSwiperItem.picUrl = fireCreatModel.editpic1;
+
+        break;
+      case 1:
+        picSwiperItem.picUrl = fireCreatModel.editpic2;
+
+        break;
+      case 2:
+        picSwiperItem.picUrl = fireCreatModel.editpic3;
+
+        break;
+      case 3:
+        picSwiperItem.picUrl = fireCreatModel.editpic4;
+
+        break;
+      case 4:
+        picSwiperItem.picUrl = fireCreatModel.editpic5;
+
+        break;
+      case 5:
+        picSwiperItem.picUrl = fireCreatModel.editenvironmentpic1;
+
+        break;
+      case 6:
+        picSwiperItem.picUrl = fireCreatModel.editenvironmentpic2;
+
+        break;
+      case 7:
+        picSwiperItem.picUrl = fireCreatModel.editenvironmentpic3;
+
+        break;
+      case 8:
+        picSwiperItem.picUrl = fireCreatModel.editenvironmentpic4;
+
+        break;
+      case 9:
+        picSwiperItem.picUrl = fireCreatModel.editenvironmentpic5;
+
+        break;
+      case 10:
+        picSwiperItem.picUrl = fireCreatModel.editOutsinPic;
+
+        break;
+    }
+
+    list.add(picSwiperItem);
+    if (picSwiperItem.picUrl.isNotEmpty) {
+      final result = await Navigator.push(
+        context,
+        new MaterialPageRoute(
+            builder: (context) => new PicSwiper(index: 0, pics: list)),
+      );
+    }
+
 //    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
 //    setState(() {
 //      imgPath = image;
@@ -453,7 +503,6 @@ class _State extends State<SurvayElectricalFireDetailPage> {
                       textAlign: TextAlign.right,
                     ),
                   ),
-
                 ],
               ),
             ),
@@ -544,6 +593,7 @@ class _State extends State<SurvayElectricalFireDetailPage> {
       child: new ListView(
 //           mainAxisAlignment: MainAxisAlignment.start,
         scrollDirection: Axis.horizontal,
+
         children: <Widget>[
           GestureDetector(
               onTap: takePhoto1,
@@ -586,7 +636,6 @@ class _State extends State<SurvayElectricalFireDetailPage> {
                       height: 150,
                     ),
                   ),
-
                 ],
               )),
           GestureDetector(
@@ -633,7 +682,6 @@ class _State extends State<SurvayElectricalFireDetailPage> {
                         ),
                       ],
                     )),
-
               ],
             ),
           ),
@@ -678,7 +726,6 @@ class _State extends State<SurvayElectricalFireDetailPage> {
                       height: 150,
                     ),
                   ),
-
                 ],
               )),
           GestureDetector(
@@ -765,7 +812,6 @@ class _State extends State<SurvayElectricalFireDetailPage> {
                       height: 150,
                     ),
                   ),
-
                 ],
               )),
         ],
@@ -866,7 +912,6 @@ class _State extends State<SurvayElectricalFireDetailPage> {
                       height: 150,
                     ),
                   ),
-
                 ],
               )),
           GestureDetector(
@@ -911,7 +956,6 @@ class _State extends State<SurvayElectricalFireDetailPage> {
                       height: 150,
                     ),
                   ),
-
                 ],
               )),
           GestureDetector(
@@ -956,7 +1000,6 @@ class _State extends State<SurvayElectricalFireDetailPage> {
                       height: 150,
                     ),
                   ),
-
                 ],
               )),
           GestureDetector(
@@ -1001,7 +1044,6 @@ class _State extends State<SurvayElectricalFireDetailPage> {
                       height: 150,
                     ),
                   ),
-
                 ],
               )),
         ],
@@ -1060,6 +1102,9 @@ class _State extends State<SurvayElectricalFireDetailPage> {
 
     bool dataNotification(ScrollNotification notification) {
 
+      if (notification.metrics.axis == Axis.horizontal) {
+        return false;
+      }
       if (Platform.isIOS) {
         double height = notification.metrics.maxScrollExtent; //step2的高度
         height = height + 80;
@@ -1087,7 +1132,6 @@ class _State extends State<SurvayElectricalFireDetailPage> {
                 curve: Curves.ease);
           }
         }
-
       }
       return true;
     }
@@ -1139,18 +1183,14 @@ class _State extends State<SurvayElectricalFireDetailPage> {
                     child: new Radio(
                         value: 0,
                         groupValue: fireCreatModel.isNeedCarton,
-                        onChanged: (int e) {
-
-                        }),
+                        onChanged: (int e) {}),
                   ),
                   Text("不需要\n(电箱空间足够)"),
                   Expanded(
                     child: new Radio(
                         value: 1,
                         groupValue: fireCreatModel.isNeedCarton,
-                        onChanged: (int e) {
-
-                        }),
+                        onChanged: (int e) {}),
                   ),
                   Text("需要\n(电箱空间不够)"),
                 ],
@@ -1172,16 +1212,12 @@ class _State extends State<SurvayElectricalFireDetailPage> {
                   new Radio(
                       value: 1,
                       groupValue: fireCreatModel.isOutSide,
-                      onChanged: (int e) {
-
-                      }),
+                      onChanged: (int e) {}),
                   Text("户外"),
                   new Radio(
                       value: 0,
                       groupValue: fireCreatModel.isOutSide,
-                      onChanged: (int e) {
-
-                      }),
+                      onChanged: (int e) {}),
                   Text("户内"),
                 ],
               ),
@@ -1202,16 +1238,12 @@ class _State extends State<SurvayElectricalFireDetailPage> {
                   new Radio(
                       value: 0,
                       groupValue: fireCreatModel.isNeedLadder,
-                      onChanged: (int e) {
-
-                      }),
+                      onChanged: (int e) {}),
                   Text("不需要"),
                   new Radio(
                       value: 1,
                       groupValue: fireCreatModel.isNeedLadder,
-                      onChanged: (int e) {
-
-                      }),
+                      onChanged: (int e) {}),
                   Text("需要"),
                 ],
               ),
@@ -1431,18 +1463,14 @@ class _State extends State<SurvayElectricalFireDetailPage> {
                     child: new Radio(
                         value: 1,
                         groupValue: fireCreatModel.isEffectiveTransmission,
-                        onChanged: (int e) {
-
-                        }),
+                        onChanged: (int e) {}),
                   ),
                   Text("是"),
                   Expanded(
                     child: new Radio(
                         value: 0,
                         groupValue: fireCreatModel.isEffectiveTransmission,
-                        onChanged: (int e) {
-
-                        }),
+                        onChanged: (int e) {}),
                   ),
                   Text("否"),
                 ],
@@ -1464,16 +1492,12 @@ class _State extends State<SurvayElectricalFireDetailPage> {
                   new Radio(
                       value: 1,
                       groupValue: fireCreatModel.isNuisance,
-                      onChanged: (int e) {
-
-                      }),
+                      onChanged: (int e) {}),
                   Text("是"),
                   new Radio(
                       value: 0,
                       groupValue: fireCreatModel.isNuisance,
-                      onChanged: (int e) {
-
-                      }),
+                      onChanged: (int e) {}),
                   Text("否"),
                 ],
               ),
@@ -1494,16 +1518,12 @@ class _State extends State<SurvayElectricalFireDetailPage> {
                   new Radio(
                       value: 1,
                       groupValue: fireCreatModel.isNoiseReduction,
-                      onChanged: (int e) {
-
-                      }),
+                      onChanged: (int e) {}),
                   Text("是"),
                   new Radio(
                       value: 0,
                       groupValue: fireCreatModel.isNoiseReduction,
-                      onChanged: (int e) {
-
-                      }),
+                      onChanged: (int e) {}),
                   Text("否"),
                 ],
               ),
@@ -1568,16 +1588,12 @@ class _State extends State<SurvayElectricalFireDetailPage> {
                   new Radio(
                       value: 1,
                       groupValue: fireCreatModel.allOpenValue,
-                      onChanged: (int e) {
-
-                      }),
+                      onChanged: (int e) {}),
                   Text("总空开"),
                   new Radio(
                       value: 0,
                       groupValue: fireCreatModel.allOpenValue,
-                      onChanged: (int e) {
-
-                      }),
+                      onChanged: (int e) {}),
                   Text("分空开"),
                 ],
               ),
@@ -1598,16 +1614,12 @@ class _State extends State<SurvayElectricalFireDetailPage> {
                   new Radio(
                       value: 1,
                       groupValue: fireCreatModel.isSingle,
-                      onChanged: (int e) {
-
-                      }),
+                      onChanged: (int e) {}),
                   Text("单相电"),
                   new Radio(
                       value: 0,
                       groupValue: fireCreatModel.isSingle,
-                      onChanged: (int e) {
-
-                      }),
+                      onChanged: (int e) {}),
                   Text("三相电"),
                 ],
               ),
@@ -1636,16 +1648,12 @@ class _State extends State<SurvayElectricalFireDetailPage> {
                     new Radio(
                         value: 1,
                         groupValue: fireCreatModel.isMolded,
-                        onChanged: (int e) {
-
-                        }),
+                        onChanged: (int e) {}),
                     Text("微断"),
                     new Radio(
                         value: 0,
                         groupValue: fireCreatModel.isMolded,
-                        onChanged: (int e) {
-
-                        }),
+                        onChanged: (int e) {}),
                     Text("塑壳"),
                   ],
                 ),
@@ -1722,9 +1730,7 @@ class _State extends State<SurvayElectricalFireDetailPage> {
                   new Radio(
                     value: 1,
                     groupValue: fireCreatModel.isZhiHui,
-                    onChanged: (int e) {
-
-                    },
+                    onChanged: (int e) {},
                   ),
                   Expanded(
                     child: Text(
@@ -1738,9 +1744,7 @@ class _State extends State<SurvayElectricalFireDetailPage> {
                   new Radio(
                       value: 0,
                       groupValue: fireCreatModel.isZhiHui,
-                      onChanged: (int e) {
-
-                      }),
+                      onChanged: (int e) {}),
                   Expanded(
                     child: Text("电气火灾\n(不支持通断)"),
                   ),
@@ -1809,18 +1813,14 @@ class _State extends State<SurvayElectricalFireDetailPage> {
                       child: new Radio(
                           value: 1,
                           groupValue: currentValue,
-                          onChanged: (int e) {
-
-                          }),
+                          onChanged: (int e) {}),
                     ),
                     Text("250A"),
                     Expanded(
                       child: new Radio(
                           value: 0,
                           groupValue: currentValue,
-                          onChanged: (int e) {
-
-                          }),
+                          onChanged: (int e) {}),
                     ),
                     Text("400A"),
                   ],
@@ -1970,9 +1970,6 @@ class _State extends State<SurvayElectricalFireDetailPage> {
                 )
               ],
             )));
-
-
-
 
     Widget container11 = Container(
       color: Colors.white,
@@ -2159,7 +2156,6 @@ class _State extends State<SurvayElectricalFireDetailPage> {
                       textAlign: TextAlign.right,
                     ),
                   ),
-
                 ],
               ),
             ),
@@ -2232,7 +2228,6 @@ class _State extends State<SurvayElectricalFireDetailPage> {
                       textAlign: TextAlign.right,
                     ),
                   ),
-
                 ],
               ),
             ),
@@ -2263,10 +2258,6 @@ class _State extends State<SurvayElectricalFireDetailPage> {
       ),
     );
 
-
-
-
-
     Widget bigContainer = Container(
         color: prefix0.LIGHT_LINE_COLOR,
 //        padding: new EdgeInsets.fromLTRB(0, 0, 0, 60),
@@ -2277,18 +2268,16 @@ class _State extends State<SurvayElectricalFireDetailPage> {
 //            Container(
 //              child: step1,
 //            ),
-              bigContainer2,
-              step1,
+            bigContainer2,
+            step1,
 
-              step2,
+            step2,
 
-
-              step3,
-              step4,
-              step5,
+            step3,
+            step4,
+            step5,
           ],
         ));
-
 
     return Scaffold(
       appBar: NavBar,

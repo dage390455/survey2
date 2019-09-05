@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sensoro_survey/views/survey/comment/flutter_screenutil.dart';
+import 'package:sensoro_survey/views/survey/common/flutter_screenutil.dart';
 
 class ScreenTestApp extends StatelessWidget {
   // This widget is the root of your application.

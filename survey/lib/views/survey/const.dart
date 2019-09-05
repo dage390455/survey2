@@ -27,8 +27,22 @@ const String appVersion = "1.0";
 const String yearCopyright = "2019";
 bool isEnglish = false;
 
-double screen_height = window.physicalSize.height;
-double screen_width = window.physicalSize.width;
+double screen_height = 0;
+double screen_width = 0;
+double pixelRatio = 0;
+double statusBarHeight = 0;
+double bottomBarHeight = 0;
+double textScaleFactor = 0;
+
+void initScreenPhysics(BuildContext context) {
+  MediaQueryData mediaQuery = MediaQuery.of(context);
+  screen_width = mediaQuery.size.width;
+  screen_height = mediaQuery.size.height;
+  pixelRatio = mediaQuery.devicePixelRatio;
+  statusBarHeight = mediaQuery.padding.top;
+  bottomBarHeight = mediaQuery.padding.bottom;
+  textScaleFactor = mediaQuery.textScaleFactor;
+}
 
 String refresh_localString = "刷新";
 String loadMore_localString = "加载";

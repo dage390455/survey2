@@ -7,8 +7,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:sensoro_survey/model/electical_fire_create_model.dart';
 import 'package:sensoro_survey/model/electrical_fire_model.dart';
 import 'package:sensoro_survey/views/survey/SurveyPointInformation/stick_widget.dart';
-import 'package:sensoro_survey/views/survey/comment/data_transfer_manager.dart';
-import 'package:sensoro_survey/views/survey/comment/save_data_manager.dart';
+import 'package:sensoro_survey/views/survey/common/data_transfer_manager.dart';
+import 'package:sensoro_survey/views/survey/common/save_data_manager.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 import 'package:sensoro_survey/views/survey/editPage/edit_electrical_address_page.dart';
 import 'package:sensoro_survey/views/survey/editPage/edit_electrical_current_page.dart';
@@ -69,60 +69,42 @@ class _State extends State<SurvayElectricalFirePage> {
     updateNextButton();
 
     _focusNode.addListener(() {
-
       if (!_focusNode.hasFocus) {
         // TextField has lost focus
         setState(() {
           isEditing = false;
         });
-
-
-      }else{
+      } else {
         setState(() {
           isEditing = true;
         });
-
-
       }
-
     });
 
     _focusNode2.addListener(() {
-
       if (!_focusNode2.hasFocus) {
         // TextField has lost focus
         setState(() {
           isEditing = false;
         });
-
-
-      }else{
+      } else {
         setState(() {
           isEditing = true;
         });
-
-
       }
-
     });
 
     _focusNode3.addListener(() {
-
       if (!_focusNode3.hasFocus) {
         // TextField has lost focus
         setState(() {
           isEditing = false;
         });
-
-
-      }else{
+      } else {
         setState(() {
           isEditing = true;
         });
-
-
       }
-
     });
 
     super.initState();
@@ -637,107 +619,105 @@ class _State extends State<SurvayElectricalFirePage> {
     );
 
     Widget container = Container(
-      color: Colors.white,
-      padding: new EdgeInsets.fromLTRB(20, 0, 20, 120),
-      child:  new SingleChildScrollView(
-        child:  Column(
+        color: Colors.white,
+        padding: new EdgeInsets.fromLTRB(20, 0, 20, 120),
+        child: new SingleChildScrollView(
+          child: Column(
 //           mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            GestureDetector(
-              onTap: editAddress, //写入方法名称就可以了，但是是无参的
-              child: Container(
-                alignment: Alignment.center,
-                height: 60,
-                child: new Row(
-                  children: <Widget>[
-                    Text("电箱位置"),
-                    Expanded(
-                      child: Text(
-                        fireCreatModel.page2editAddress.length > 0
-                            ? fireCreatModel.page2editAddress
-                            : "必填",
-                        textAlign: TextAlign.right,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              GestureDetector(
+                onTap: editAddress, //写入方法名称就可以了，但是是无参的
+                child: Container(
+                  alignment: Alignment.center,
+                  height: 60,
+                  child: new Row(
+                    children: <Widget>[
+                      Text("电箱位置"),
+                      Expanded(
+                        child: Text(
+                          fireCreatModel.page2editAddress.length > 0
+                              ? fireCreatModel.page2editAddress
+                              : "必填",
+                          textAlign: TextAlign.right,
+                        ),
                       ),
-                    ),
-                    Image.asset(
-                      "assets/images/right_arrar.png",
-                      width: 20,
-                    )
-                  ],
+                      Image.asset(
+                        "assets/images/right_arrar.png",
+                        width: 20,
+                      )
+                    ],
+                  ),
                 ),
               ),
-            ),
-            Container(
-              color: prefix0.LINE_COLOR,
-              height: 1,
-            ),
-            GestureDetector(
-              onTap: editPurpose, //写入方法名称就可以了，但是是无参的
-              child: Container(
-                alignment: Alignment.center,
-                height: 60,
-                child: new Row(
-                  children: <Widget>[
-                    Text("电箱用途"),
-                    Expanded(
-                      child: Text(
-                        fireCreatModel.page2editPurpose.length > 0
-                            ? fireCreatModel.page2editPurpose
-                            : "选填",
-                        textAlign: TextAlign.right,
+              Container(
+                color: prefix0.LINE_COLOR,
+                height: 1,
+              ),
+              GestureDetector(
+                onTap: editPurpose, //写入方法名称就可以了，但是是无参的
+                child: Container(
+                  alignment: Alignment.center,
+                  height: 60,
+                  child: new Row(
+                    children: <Widget>[
+                      Text("电箱用途"),
+                      Expanded(
+                        child: Text(
+                          fireCreatModel.page2editPurpose.length > 0
+                              ? fireCreatModel.page2editPurpose
+                              : "选填",
+                          textAlign: TextAlign.right,
+                        ),
                       ),
-                    ),
-                    Image.asset(
-                      "assets/images/right_arrar.png",
-                      width: 20,
-                    )
-                  ],
+                      Image.asset(
+                        "assets/images/right_arrar.png",
+                        width: 20,
+                      )
+                    ],
+                  ),
                 ),
               ),
-            ),
-            Container(
-              color: prefix0.LINE_COLOR,
-              height: 1,
-            ),
-            GestureDetector(
+              Container(
+                color: prefix0.LINE_COLOR,
+                height: 1,
+              ),
+              GestureDetector(
 //            onTap: editAddress,//写入方法名称就可以了，但是是无参的
-              child: Container(
-                alignment: Alignment.center,
-                height: 60,
-                child: new Row(
-                  children: <Widget>[
-                    Text("备注"),
-                  ],
+                child: Container(
+                  alignment: Alignment.center,
+                  height: 60,
+                  child: new Row(
+                    children: <Widget>[
+                      Text("备注"),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            TextField(
-              controller: step1remarkController,
-              focusNode: _focusNode,
-              keyboardType: TextInputType.text,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(2.0),
-                    borderSide: BorderSide(color: Colors.transparent)),
+              TextField(
+                controller: step1remarkController,
+                focusNode: _focusNode,
+                keyboardType: TextInputType.text,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(2.0),
+                      borderSide: BorderSide(color: Colors.transparent)),
 //                  labelText: '备注',
-                hintText: '例如电箱的危险/风险原因；负载压力；问题影响范围等',
+                  hintText: '例如电箱的危险/风险原因；负载压力；问题影响范围等',
+                ),
+                maxLines: 5,
+                autofocus: false,
+                onSubmitted: (val) {
+                  print("----------------------------------------");
+                },
+                onChanged: (val) {
+                  fireCreatModel.step1Remak = val;
+                  setState(() {});
+                },
               ),
-              maxLines: 5,
-              autofocus: false,
-              onSubmitted: (val){
-                print("----------------------------------------");
-              },
-              onChanged: (val) {
-                fireCreatModel.step1Remak = val;
-                setState(() {});
-              },
-            ),
-          ],
-        ),
-      )
-
-    );
+            ],
+          ),
+        ));
 
     bool dataNotification0(ScrollNotification notification) {
       if (notification.metrics.axis == Axis.horizontal) {
@@ -783,20 +763,20 @@ class _State extends State<SurvayElectricalFirePage> {
         color: prefix0.LIGHT_LINE_COLOR,
         child: new NotificationListener(
             onNotification: dataNotification0,
-            child:new ListView(
-          children: <Widget>[
-            new Row(children: <Widget>[
-              Padding(
-                child: new Text(
-                  electricalItems[0],
-                  style: TextStyle(color: prefix0.TITLE_TEXT_COLOR),
-                ),
-                padding: new EdgeInsets.fromLTRB(20, 20, 20, 20),
-              )
-            ]),
-            container,
-          ],
-        )));
+            child: new ListView(
+              children: <Widget>[
+                new Row(children: <Widget>[
+                  Padding(
+                    child: new Text(
+                      electricalItems[0],
+                      style: TextStyle(color: prefix0.TITLE_TEXT_COLOR),
+                    ),
+                    padding: new EdgeInsets.fromLTRB(20, 20, 20, 20),
+                  )
+                ]),
+                container,
+              ],
+            )));
 
     Widget takepice1 = Container(
       color: Colors.white,
@@ -1504,7 +1484,6 @@ class _State extends State<SurvayElectricalFirePage> {
         return false;
       }
 
-
       if (Platform.isIOS) {
         double height = notification.metrics.maxScrollExtent; //step2的高度
         height = height + 80;
@@ -1730,7 +1709,6 @@ class _State extends State<SurvayElectricalFirePage> {
           ),
           TextField(
             controller: step3remarkController,
-
             keyboardType: TextInputType.text,
             decoration: InputDecoration(
               border: OutlineInputBorder(
@@ -1999,7 +1977,6 @@ class _State extends State<SurvayElectricalFirePage> {
           ),
           TextField(
             controller: step4remarkController,
-
             keyboardType: TextInputType.text,
             decoration: InputDecoration(
               border: OutlineInputBorder(
@@ -2436,7 +2413,6 @@ class _State extends State<SurvayElectricalFirePage> {
     ScrollController _controller5 = TrackingScrollController();
 
     bool dataNotification5(ScrollNotification notification) {
-
       if (Platform.isIOS) {
         double height = notification.metrics.maxScrollExtent; //step2的高度
         height = height + 80;
@@ -2531,22 +2507,22 @@ class _State extends State<SurvayElectricalFirePage> {
     return Scaffold(
         appBar: NavBar,
         body: GestureDetector(
-          onTap: (){
+          onTap: () {
             // 点击空白页面关闭键盘
             FocusScope.of(context).requestFocus(blankNode);
           },
-          onVerticalDragDown: (details) { FocusScope.of(context).requestFocus(blankNode);},
-          onHorizontalDragDown: (details) {FocusScope.of(context).requestFocus(blankNode);},
+          onVerticalDragDown: (details) {
+            FocusScope.of(context).requestFocus(blankNode);
+          },
+          onHorizontalDragDown: (details) {
+            FocusScope.of(context).requestFocus(blankNode);
+          },
           behavior: HitTestBehavior.translucent,
           child: mPageView,
         ),
-
         bottomNavigationBar: BottomAppBar(
           child: bottomButton,
-        )
-
-    );
-
+        ));
 
 //    return Scaffold(
 //      appBar: NavBar,
@@ -2554,8 +2530,6 @@ class _State extends State<SurvayElectricalFirePage> {
 //      bottomSheet: bottomButton,
 //    );
   }
-
-
 }
 
 const electricalItems = [

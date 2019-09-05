@@ -7,8 +7,6 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_custom_calendar/flutter_custom_calendar.dart';
-import 'package:flutter_custom_calendar/model/date_model.dart';
 
 import 'package:flutter/material.dart';
 import 'package:event_bus/event_bus.dart';
@@ -19,14 +17,16 @@ import 'package:sensoro_survey/views/survey/const.dart';
 import 'package:sensoro_survey/widgets/progressHud.dart';
 import 'package:sensoro_survey/generated/customCalendar/multi_select_style_page.dart';
 import 'package:sensoro_survey/generated/easyRefresh/easy_refresh.dart';
+import 'package:sensoro_survey/generated/customCalendar/lib/flutter_custom_calendar.dart';
+import 'package:sensoro_survey/generated/customCalendar/lib/model/date_model.dart';
 import 'package:sensoro_survey/model/project_info_model.dart';
-import 'package:sensoro_survey/views/survey/comment/save_data_manager.dart';
+import 'package:sensoro_survey/views/survey/common/save_data_manager.dart';
 import 'package:sensoro_survey/views/survey/survey_type_page.dart';
 
 import 'SurveyPointInformation/summary_construction_page.dart';
 import 'SurveyPointInformation/survay_electrical_fire_detail.dart';
 import 'SurveyPointInformation/survay_electrical_fire_edit.dart';
-import 'comment/data_transfer_manager.dart';
+import 'common/data_transfer_manager.dart';
 
 class PointListPage extends StatefulWidget {
   projectInfoModel input;
@@ -55,6 +55,7 @@ class _PointListPageState extends State<PointListPage> {
   TextEditingController searchController = TextEditingController();
   String dateFilterStr = "";
   List<String> dateFilterList = new List();
+  FocusNode blankNode = FocusNode();
 
   static bool isLeftSelect = false;
   static bool isRightSelect = true;
@@ -191,26 +192,25 @@ class _PointListPageState extends State<PointListPage> {
     );
 
     if (result != null) {
-      if (result is Set) {
+      if (result is List) {
         dateFilterList.clear();
-        for (DateModel model in result) {
+
+        for (int i = 0; i < result.length; i++) {
+          DateModel model = result[i];
           int year = model.year;
           int month = model.month;
           int day = model.day;
           String monthStr = month < 10 ? "0${month}" : "${month}";
           String dayStr = day < 10 ? "0${day}" : "${day}";
-          String dateFilterStr = "${year}-${monthStr}-${dayStr}";
+          String dateFilterStr = "${year}.${monthStr}.${dayStr}";
           dateFilterList.add(dateFilterStr);
           year = model.year;
         }
         if (dateFilterList.length == 1) {
           dateFilterStr = dateFilterList[0];
-        }
-        if (dateFilterList.length == 2) {
-          dateFilterStr = "${dateFilterList[0]},${dateFilterList[1]}";
-        }
-        if (dateFilterList.length > 2) {
-          dateFilterStr = "${dateFilterList[0]},${dateFilterList[1]}等";
+        } else {
+          dateFilterStr =
+              "${dateFilterList[0]}~${dateFilterList[dateFilterList.length - 1]}";
         }
         calendaring = true;
         setState(() {});
@@ -519,16 +519,21 @@ class _PointListPageState extends State<PointListPage> {
             return emptyContainer;
           }
 
+          String time = _getFireModelCreateDate(model.electricalFireId);
+          String time1 = time.substring(0, 11);
+          time1 = time1.replaceAll('-', '.');
+
           bool flag = false;
           if (dateFilterList.length > 0) {
             for (String dateStr in dateFilterList) {
-              if (model.electricalFireId.toString().contains(dateStr)) {
+              if (time1.contains(dateStr)) {
                 flag = true;
               }
             }
           } else {
             flag = true;
           }
+
           if (!flag) {
             return emptyContainer;
           }
@@ -717,59 +722,65 @@ class _PointListPageState extends State<PointListPage> {
       title: "Flutter Layout Demo",
       home: Scaffold(
           appBar: navBar,
-          body: Container(
-            color: Colors.white,
-            // height: 140, //高不填会自适应
-            padding:
-                const EdgeInsets.only(top: 0.0, bottom: 0, left: 0, right: 0),
-            child: Column(
-              //这行决定了左对齐
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                !calendaring
-                    ? emptyContainer
-                    : Container(
-                        color: Colors.white,
-                        // height: 140, //高度不填会自适应
-                        padding: const EdgeInsets.only(
-                            top: 3.0, bottom: 3, left: 20, right: 10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text(
-                              // "$beginTimeStr ~ $endTimeStr",
-                              dateFilterStr.length > 0 ? dateFilterStr : "",
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                  color: prefix0.BLACK_TEXT_COLOR,
-                                  fontWeight: FontWeight.normal,
-                                  fontSize: 12),
-                            ),
-                            IconButton(
-                              icon: Image.asset(
-                                "assets/images/close_black.png",
-                                color: Colors.black,
+          body: GestureDetector(
+            onTap: () {
+              // 点击空白页面关闭键盘
+              FocusScope.of(context).requestFocus(blankNode);
+            },
+            child: Container(
+              color: Colors.white,
+              // height: 140, //高不填会自适应
+              padding:
+                  const EdgeInsets.only(top: 0.0, bottom: 0, left: 0, right: 0),
+              child: Column(
+                //这行决定了左对齐
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  !calendaring
+                      ? emptyContainer
+                      : Container(
+                          color: Colors.white,
+                          // height: 140, //高度不填会自适应
+                          padding: const EdgeInsets.only(
+                              top: 3.0, bottom: 3, left: 20, right: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Text(
+                                // "$beginTimeStr ~ $endTimeStr",
+                                dateFilterStr.length > 0 ? dateFilterStr : "",
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                    color: prefix0.BLACK_TEXT_COLOR,
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 12),
                               ),
-                              onPressed: () {
-                                calendaring = false;
-                                this.dateFilterList.clear();
-                                this.dateFilterStr = "";
-                                setState(() {});
-                              },
-                            ),
-                          ],
+                              IconButton(
+                                icon: Image.asset(
+                                  "assets/images/close_black.png",
+                                  color: Colors.black,
+                                ),
+                                onPressed: () {
+                                  calendaring = false;
+                                  this.dateFilterList.clear();
+                                  this.dateFilterStr = "";
+                                  setState(() {});
+                                },
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                //分割线
-                Container(
-                    width: prefix0.screen_width - 40,
-                    height: 1.0,
-                    color: FENGE_LINE_COLOR),
-                Expanded(
-                  child: myListView,
-                ),
-              ],
+                  //分割线
+                  Container(
+                      width: prefix0.screen_width - 40,
+                      height: 1.0,
+                      color: FENGE_LINE_COLOR),
+                  Expanded(
+                    child: myListView,
+                  ),
+                ],
+              ),
             ),
           ),
           bottomNavigationBar: BottomAppBar(
