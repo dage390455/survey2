@@ -249,7 +249,7 @@ class _PointListPageState extends State<PointListPage> {
       autofocus: false, //自动获取焦点
       decoration: new InputDecoration(
         border: InputBorder.none,
-        hintText: "勘察点名称",
+        hintText: "勘察点名��",
         icon: new Container(
           padding: EdgeInsets.all(0.0),
           child: new Image(
@@ -643,7 +643,7 @@ class _PointListPageState extends State<PointListPage> {
                       ),
                       //分割线
                       Container(
-                          width: prefix0.screen_width - 40,
+                          width: prefix0.screen_width,
                           height: 1.0,
                           color: FENGE_LINE_COLOR),
                     ]),
@@ -773,7 +773,7 @@ class _PointListPageState extends State<PointListPage> {
                         ),
                   //分割线
                   Container(
-                      width: prefix0.screen_width - 40,
+                      width: prefix0.screen_width,
                       height: 1.0,
                       color: FENGE_LINE_COLOR),
                   Expanded(
