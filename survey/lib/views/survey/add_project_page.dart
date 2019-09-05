@@ -18,7 +18,7 @@ import 'package:sensoro_survey/widgets/progressHud.dart';
 import 'package:sensoro_survey/model/project_info_model.dart';
 
 //import 'package:sensoro_survey/views/survey/editPage/edit_project_name_page.dart';
-import 'package:sensoro_survey/views/survey/comment/save_data_manager.dart';
+import 'package:sensoro_survey/views/survey/common/save_data_manager.dart';
 
 class AddProjectPage extends StatefulWidget {
   projectInfoModel input;

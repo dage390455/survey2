@@ -20,13 +20,13 @@ import 'package:sensoro_survey/generated/easyRefresh/easy_refresh.dart';
 import 'package:sensoro_survey/generated/customCalendar/lib/flutter_custom_calendar.dart';
 import 'package:sensoro_survey/generated/customCalendar/lib/model/date_model.dart';
 import 'package:sensoro_survey/model/project_info_model.dart';
-import 'package:sensoro_survey/views/survey/comment/save_data_manager.dart';
+import 'package:sensoro_survey/views/survey/common/save_data_manager.dart';
 import 'package:sensoro_survey/views/survey/survey_type_page.dart';
 
 import 'SurveyPointInformation/summary_construction_page.dart';
 import 'SurveyPointInformation/survay_electrical_fire_detail.dart';
 import 'SurveyPointInformation/survay_electrical_fire_edit.dart';
-import 'comment/data_transfer_manager.dart';
+import 'common/data_transfer_manager.dart';
 
 class PointListPage extends StatefulWidget {
   projectInfoModel input;

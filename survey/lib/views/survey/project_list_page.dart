@@ -29,7 +29,7 @@ import 'package:sensoro_survey/views/survey/point_list_page.dart';
 import 'package:sensoro_survey/views/survey/add_project_page.dart';
 import 'package:sensoro_survey/model/project_info_model.dart';
 import 'package:sensoro_survey/views/survey/SurveyPointInformation/summary_construction_page.dart';
-import 'package:sensoro_survey/views/survey/comment/save_data_manager.dart';
+import 'package:sensoro_survey/views/survey/common/save_data_manager.dart';
 //import 'package:fluwx/fluwx.dart' as fluwx;
 
 class ProjectListPage extends StatefulWidget {
