@@ -15,6 +15,7 @@ class SurveyPointInformationPage extends StatefulWidget {
 class _State extends State<SurveyPointInformationPage> {
   var isCheack = false;
   var isLastPage = false;
+  var currentPage = 0;
 
   static bool _isAddGradient = false;
 
@@ -52,8 +53,8 @@ class _State extends State<SurveyPointInformationPage> {
   @override
   Widget build(BuildContext context) {
     // viewportFraction决定了左右边距有多大
-    PageController controller = PageController(viewportFraction: 1.05);
-    controller.addListener(() {});
+    PageController pageController = PageController(viewportFraction: 1.05);
+    pageController.addListener(() {});
 
     Widget NavBar = AppBar(
       elevation: 1.0,
@@ -81,9 +82,25 @@ class _State extends State<SurveyPointInformationPage> {
       width: 0,
     );
 
+    Row rightArrawContainer = new Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //表示所有的子控件都是从左到右序排列，这是默认值
+        textDirection: TextDirection.rtl,
+        children: <Widget>[
+          IconButton(
+            iconSize: 30,
+            icon: Icon(Icons.chevron_right),
+            onPressed: () {
+              currentPage++;
+              pageController.jumpToPage(currentPage);
+              setState(() {});
+            },
+          ),
+        ]);
+
     Widget bottomButton = Container(
       color: Colors.white,
-      height: !isLastPage ? 61 : 108,
+      height: !isLastPage ? 108 : 108,
       width: prefix0.screen_width,
       child: Column(
           //这行决定了左对齐
@@ -91,7 +108,7 @@ class _State extends State<SurveyPointInformationPage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             !isLastPage
-                ? emptyContainer
+                ? rightArrawContainer
                 : new Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     //表示所有的子控件都是从左到右序排列，这是默认值
@@ -254,13 +271,14 @@ class _State extends State<SurveyPointInformationPage> {
         height: 530,
         color: Colors.white,
         child: PageView.builder(
-          controller: controller, //这一句导致有边缘不是全屏
+          controller: pageController, //这一句导致有边缘不是全屏
           itemCount: 3,
           // pageSnapping: true,
           // reverse: false,
           // physics: PageScrollPhysics(parent: BouncingScrollPhysics()),
           // dragStartBehavior: DragStartBehavior.down,
           onPageChanged: (int index) {
+            currentPage = index;
             if (index == 2) {
               setState(() {
                 isLastPage = true;

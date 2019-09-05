@@ -96,7 +96,6 @@ import Photos
     
             flutterViewController.present(picker, animated: true, completion: nil)//进入照相界面
         }
-        
     }
     
     
@@ -111,13 +110,6 @@ import Photos
         
 //        DocumentManagerViewController.openFileAndSave(url.absoluteString);
         return true;
-        //file:///private/var/mobile/Containers/Data/Application/43D523A9-B4CC-4B79-819B-761666AD9413/Documents/Inbox/iOS%E9%9D%A2%E8%AF%95%E8%A6%81%E9%97%AE%E7%9A%84-1.txt
-        //打开文件，读取数据
-
-        let documentVC = UIDocumentInteractionController(url: url)
-        documentVC.delegate = self
-//        documentVC.presentOpenInMenu(from: CGRect.zero, in: (topVC?.view)!, animated: true)
-        return true
     }
     
 
