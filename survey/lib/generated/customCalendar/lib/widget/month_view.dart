@@ -10,7 +10,8 @@ import 'package:sensoro_survey/generated/customCalendar/lib/utils/date_util.dart
 class MonthView extends StatefulWidget {
   OnCalendarSelect onCalendarSelectListener;
 
-  Set<DateModel> selectedDateList; //被选中的日期
+  // Set<DateModel> selectedDateList; //被选中的日期
+  List<DateModel> selectedDateList; //被选中的日期
 
   DateModel selectDateModel; //当前选择项,用于单选
 
@@ -129,6 +130,7 @@ class _MonthViewState extends State<MonthView> {
                 return;
               }
 
+              //zyg修改
               if (widget.selectMode == Constants.MODE_MULTI_SELECT) {
                 //多选，判断是否超过限制，超过范围
                 if (widget.selectedDateList.length ==
@@ -142,11 +144,140 @@ class _MonthViewState extends State<MonthView> {
                 widget.selectDateModel = dateModel;
                 widget.onCalendarSelectListener(dateModel);
                 setState(() {
-                  if (widget.selectedDateList.contains(dateModel)) {
-                    widget.selectedDateList.remove(dateModel);
-                  } else {
+                  //新的双选逻辑
+                  if (widget.selectedDateList.length == 0) {
+                    widget.selectedDateList.add(dateModel);
+                  } else if (widget.selectedDateList.length == 1) {
+                    if (widget.selectedDateList.contains(dateModel)) {
+                      widget.selectedDateList.remove(dateModel);
+                    } else {
+                      DateModel model = widget.selectedDateList[0];
+                      bool flag = false;
+                      //新选的日期需要大于原有日期，否则替换
+                      if (dateModel.year < model.year) {
+                        flag = true;
+                      }
+                      if (dateModel.year == model.year &&
+                          dateModel.month < model.month) {
+                        flag = true;
+                      }
+                      if (dateModel.year == model.year &&
+                          dateModel.month == model.month &&
+                          dateModel.day < model.day) {
+                        flag = true;
+                      }
+                      if (flag) {
+                        widget.selectedDateList.removeAt(0);
+                        widget.selectedDateList.add(dateModel);
+                      } else {
+                        int year = dateModel.year;
+                        int month = dateModel.month;
+                        int day = dateModel.day;
+                        //不同年
+                        if (dateModel.year == model.year + 1) {
+                          for (int i = model.month; i <= 12; i++) {
+                            if (i == model.month) {
+                              for (int j = model.day + 1; j <= 31; j++) {
+                                DateModel dateModel1 = new DateModel();
+                                dateModel1.year = model.year;
+                                dateModel1.month = i;
+                                dateModel1.day = j;
+                                widget.selectedDateList.add(dateModel1);
+                              }
+                            } else {
+                              for (int j = 0; j <= 31; j++) {
+                                DateModel dateModel1 = new DateModel();
+                                dateModel1.year = model.year;
+                                dateModel1.month = i;
+                                dateModel1.day = j;
+                                widget.selectedDateList.add(dateModel1);
+                              }
+                            }
+                          }
+                          for (int i = 1; i <= dateModel.month; i++) {
+                            if (i == dateModel.month) {
+                              for (int j = 1; j <= dateModel.day - 1; j++) {
+                                DateModel dateModel1 = new DateModel();
+                                dateModel1.year = dateModel.year;
+                                dateModel1.month = i;
+                                dateModel1.day = j;
+                                widget.selectedDateList.add(dateModel1);
+                              }
+                            } else {
+                              for (int j = 0; j <= 31; j++) {
+                                DateModel dateModel1 = new DateModel();
+                                dateModel1.year = dateModel.year;
+                                dateModel1.month = i;
+                                dateModel1.day = j;
+                                widget.selectedDateList.add(dateModel1);
+                              }
+                            }
+                          }
+                        }
+
+                        //不同月
+                        if (dateModel.year == model.year &&
+                            dateModel.month > model.month) {
+                          for (int i = model.month; i <= dateModel.month; i++) {
+                            if (i == model.month) {
+                              for (int j = model.day + 1; j <= 31; j++) {
+                                DateModel dateModel1 = new DateModel();
+                                dateModel1.year = dateModel.year;
+                                dateModel1.month = i;
+                                dateModel1.day = j;
+                                widget.selectedDateList.add(dateModel1);
+                              }
+                            } else if (i == dateModel.month) {
+                              for (int j = 0; j <= dateModel.day - 1; j++) {
+                                DateModel dateModel1 = new DateModel();
+                                dateModel1.year = dateModel.year;
+                                dateModel1.month = i;
+                                dateModel1.day = j;
+                                widget.selectedDateList.add(dateModel1);
+                              }
+                            } else {
+                              for (int j = 0; j <= 31; j++) {
+                                DateModel dateModel1 = new DateModel();
+                                dateModel1.year = dateModel.year;
+                                dateModel1.month = i;
+                                dateModel1.day = j;
+                                widget.selectedDateList.add(dateModel1);
+                              }
+                            }
+                          }
+                        }
+
+                        //不同日
+                        if (dateModel.year == model.year &&
+                            dateModel.month == model.month &&
+                            dateModel.day > model.day) {
+                          for (int j = model.day + 1;
+                              j <= dateModel.day - 1;
+                              j++) {
+                            DateModel dateModel1 = new DateModel();
+                            dateModel1.year = dateModel.year;
+                            dateModel1.month = dateModel.month;
+                            dateModel1.day = j;
+                            widget.selectedDateList.add(dateModel1);
+                          }
+                        }
+
+                        widget.selectedDateList.add(dateModel);
+                      }
+                    }
+                  }
+                  //重新选择分段
+                  else if (widget.selectedDateList.length > 1) {
+                    widget.selectedDateList.clear();
                     widget.selectedDateList.add(dateModel);
                   }
+
+                  //原有的多选逻辑
+                  // if (widget.selectedDateList.contains(dateModel)) {
+                  //   widget.selectedDateList.remove(dateModel);
+                  // } else {
+                  //   widget.selectedDateList.add(dateModel);
+                  // }
                 });
               } else {
                 selectDateModel = dateModel;

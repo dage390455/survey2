@@ -107,6 +107,7 @@ class _State extends State<HomePage> {
   CalendarController controller;
   TextEditingController searchController = TextEditingController();
   FocusNode _focusNode = FocusNode();
+  FocusNode blankNode = FocusNode();
 
   static Map<String, dynamic> headers = {};
 
@@ -367,26 +368,25 @@ class _State extends State<HomePage> {
     );
 
     if (result != null) {
-      if (result is Set) {
+      if (result is List) {
         dateFilterList.clear();
-        for (DateModel model in result) {
+
+        for (int i = 0; i < result.length; i++) {
+          DateModel model = result[i];
           int year = model.year;
           int month = model.month;
           int day = model.day;
           String monthStr = month < 10 ? "0${month}" : "${month}";
           String dayStr = day < 10 ? "0${day}" : "${day}";
-          String dateFilterStr = "${year}-${monthStr}-${dayStr}";
+          String dateFilterStr = "${year}.${monthStr}.${dayStr}";
           dateFilterList.add(dateFilterStr);
           year = model.year;
         }
         if (dateFilterList.length == 1) {
           dateFilterStr = dateFilterList[0];
-        }
-        if (dateFilterList.length == 2) {
-          dateFilterStr = "${dateFilterList[0]},${dateFilterList[1]}";
-        }
-        if (dateFilterList.length > 2) {
-          dateFilterStr = "${dateFilterList[0]},${dateFilterList[1]}等";
+        } else {
+          dateFilterStr =
+              "${dateFilterList[0]}~${dateFilterList[dateFilterList.length - 1]}";
         }
         calendaring = true;
         setState(() {});
@@ -694,11 +694,13 @@ class _State extends State<HomePage> {
           projectInfoModel model = dataList[index];
           var name = model.projectName;
           var time = model.createTime;
+          String time1 = time.substring(0, 11);
+          time1 = time1.replaceAll('-', '.');
 
           bool flag = false;
           if (dateFilterList.length > 0) {
             for (String dateStr in dateFilterList) {
-              if (time.contains(dateStr)) {
+              if (time1.contains(dateStr)) {
                 flag = true;
               }
             }
@@ -726,7 +728,7 @@ class _State extends State<HomePage> {
             onDismissed: (DismissDirection direction) {
               if (direction == DismissDirection.endToStart) {
                 //这里处理数据
-                print("这里处理数据");
+                print("这里���理数据");
                 //本地存储也去掉
                 String historyKey = 'projectList';
                 Map<String, dynamic> map = model.toJson();
@@ -1022,7 +1024,13 @@ class _State extends State<HomePage> {
 
     return Scaffold(
         appBar: navBar,
-        body: bodyContiner,
+        body: GestureDetector(
+          onTap: () {
+            // 点击空白页面关闭键盘
+            FocusScope.of(context).requestFocus(blankNode);
+          },
+          child: bodyContiner,
+        ),
         bottomNavigationBar: BottomAppBar(
           child: bottomButton,
         )

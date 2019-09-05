@@ -10,7 +10,8 @@ class MonthViewPager extends StatefulWidget {
   OnMultiSelectOutOfRange multiSelectOutOfRange; //多选超出指定范围
   OnMultiSelectOutOfSize multiSelectOutOfSize; //多选超出限制个数
 
-  Set<DateModel> selectedDateList; //被选中的日期,用于多选
+  // Set<DateModel> selectedDateList; //被选中的日期,用于多选
+  List<DateModel> selectedDateList; //被选中的日期,用于多选
   DateModel selectDateModel; //当前选择项,用于单选
 
   final List<DateModel> monthList;

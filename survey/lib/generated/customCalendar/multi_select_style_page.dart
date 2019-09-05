@@ -20,7 +20,7 @@ class _MultiSelectStylePageState extends State<MultiSelectStylePage> {
 
     controller = new CalendarController(
         selectMode: Constants.MODE_MULTI_SELECT,
-        maxMultiSelectCount: 10,
+        maxMultiSelectCount: 1000,
         minSelectYear: 2019,
         minSelectMonth: 5,
         minSelectDay: 20,
@@ -96,8 +96,8 @@ class _MultiSelectStylePageState extends State<MultiSelectStylePage> {
             CalendarViewWidget(
               calendarController: controller,
             ),
-            new Text(
-                "多选模式\n选中的时间:\n${controller.getMultiSelectCalendar().toString()}"),
+            // new Text(
+            // "多选模式\n选中的时间:\n${controller.getMultiSelectCalendar().toString()}"),
           ],
         ),
       ),

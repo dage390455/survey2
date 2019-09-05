@@ -43,6 +43,7 @@ class _AddProjectPageState extends State<AddProjectPage> {
   bool isEdit = false;
 
   var bookName = "完成";
+  FocusNode blankNode = FocusNode();
 
   @override
   void initState() {
@@ -154,7 +155,6 @@ class _AddProjectPageState extends State<AddProjectPage> {
           title: Text(
             "项目信息",
             style: TextStyle(color: Colors.black),
-
           ),
           leading: IconButton(
             icon: Image.asset(
@@ -166,110 +166,118 @@ class _AddProjectPageState extends State<AddProjectPage> {
             },
           ),
         ),
-        body: Container(
-          padding:
-              const EdgeInsets.only(top: 20.0, bottom: 0, left: 20, right: 20),
-          child: ListView(
-              //这行决定了左对齐
+        body: GestureDetector(
+          onTap: () {
+            // 点击空白页面关闭键盘
+            FocusScope.of(context).requestFocus(blankNode);
+          },
+          child: Container(
+            padding: const EdgeInsets.only(
+                top: 20.0, bottom: 0, left: 20, right: 20),
+            child: ListView(
+                //这行决定了左对齐
 //              crossAxisAlignment: CrossAxisAlignment.start,
 //              mainAxisAlignment: MainAxisAlignment.start,
-              //占满剩空间
-              children: <Widget>[
-                GestureDetector(
-                  onTap: editName, //写入方法名称就可以了，但是是无参的
+                //占满剩空间
+                children: <Widget>[
+                  GestureDetector(
+                    onTap: editName, //写入方法名称就可以了，但是是无参的
 
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text("项目名称",
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                              color: prefix0.BLACK_TEXT_COLOR,
-                              fontWeight: FontWeight.normal,
-                              fontSize: 15)),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text("项目名称",
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                                color: prefix0.BLACK_TEXT_COLOR,
+                                fontWeight: FontWeight.normal,
+                                fontSize: 15)),
 
-                      Expanded(
-                          child: Text(name.length > 0 ? name : "必填",
-                              textAlign: TextAlign.end,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                  color: name.length > 0
-                                      ? prefix0.BLACK_TEXT_COLOR
-                                      : prefix0.LIGHT_TEXT_COLOR,
-                                  fontWeight: FontWeight.normal,
-                                  fontSize: 15))),
-                      new Image(
-                        image: new AssetImage("assets/images/right_arrar.png"),
-                        width: 24,
-                        height: 24,
-                        // fit: BoxFit.fitWidth,
+                        Expanded(
+                            child: Text(name.length > 0 ? name : "必填",
+                                textAlign: TextAlign.end,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                    color: name.length > 0
+                                        ? prefix0.BLACK_TEXT_COLOR
+                                        : prefix0.LIGHT_TEXT_COLOR,
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 15))),
+                        new Image(
+                          image:
+                              new AssetImage("assets/images/right_arrar.png"),
+                          width: 24,
+                          height: 24,
+                          // fit: BoxFit.fitWidth,
+                        ),
+                        // IconButton(
+                        //   icon: Image.asset(
+                        //     "assets/images/right_arrar.png",
+                        //     // height: 20,
+                        //   ),
+                        //   onPressed: () {
+                        //     editName;
+                        //   },
+                        // ),
+                      ],
+                    ),
+                  ),
+
+                  new SizedBox(
+                    height: 10,
+                  ),
+                  //分割线
+                  Container(
+                      width: prefix0.screen_width - 40,
+                      height: 1.0,
+                      color: FENGE_LINE_COLOR),
+
+                  new SizedBox(
+                    height: 10,
+                  ),
+                  Text("备注",
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                          color: prefix0.LIGHT_TEXT_COLOR,
+                          fontWeight: FontWeight.normal,
+                          fontSize: 17)),
+                  new SizedBox(
+                    height: 15,
+                  ),
+
+                  Container(
+                    height: 200,
+                    decoration: BoxDecoration(
+                      border:
+                          new Border.all(color: LIGHT_TEXT_COLOR, width: 0.5),
+                    ),
+                    child: TextField(
+                      //文本输入控件
+                      onSubmitted: (String str) {
+                        //提交监听
+                        // searchStr = val;
+                        // print('用户提交变更');
+                      },
+
+                      textAlign: TextAlign.start,
+                      minLines: 1,
+                      maxLines: 10,
+                      style: new TextStyle(
+                        fontSize: 13.0,
+                        color: prefix0.BLACK_TEXT_COLOR,
                       ),
-                      // IconButton(
-                      //   icon: Image.asset(
-                      //     "assets/images/right_arrar.png",
-                      //     // height: 20,
-                      //   ),
-                      //   onPressed: () {
-                      //     editName;
-                      //   },
-                      // ),
-                    ],
-                  ),
-                ),
-
-                new SizedBox(
-                  height: 10,
-                ),
-                //分割线
-                Container(
-                    width: prefix0.screen_width - 40,
-                    height: 1.0,
-                    color: FENGE_LINE_COLOR),
-
-                new SizedBox(
-                  height: 10,
-                ),
-                Text("备注",
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                        color: prefix0.LIGHT_TEXT_COLOR,
-                        fontWeight: FontWeight.normal,
-                        fontSize: 17)),
-                new SizedBox(
-                  height: 15,
-                ),
-
-                Container(
-                  height: 200,
-                  decoration: BoxDecoration(
-                    border: new Border.all(color: LIGHT_TEXT_COLOR, width: 0.5),
-                  ),
-                  child: TextField(
-                    //文本输入控件
-                    onSubmitted: (String str) {
-                      //提交监听
-                      // searchStr = val;
-                      // print('用户提交变更');
-                    },
-
-                    textAlign: TextAlign.start,
-                    minLines: 1,
-                    maxLines: 10,
-                    style: new TextStyle(
-                      fontSize: 13.0,
-                      color: prefix0.BLACK_TEXT_COLOR,
-                    ),
-                    decoration: new InputDecoration(
-                      border: InputBorder.none,
-                      // border: new Border.all(color: LIGHT_TEXT_COLOR, width: 0.5),
-                      hintText: "点击输入",
-                      contentPadding: EdgeInsets.fromLTRB(
-                          20.0, 20.0, 10.0, 10.0), //设置显示文本的一个内边距
+                      decoration: new InputDecoration(
+                        border: InputBorder.none,
+                        // border: new Border.all(color: LIGHT_TEXT_COLOR, width: 0.5),
+                        hintText: "点击输入",
+                        contentPadding: EdgeInsets.fromLTRB(
+                            20.0, 20.0, 10.0, 10.0), //设置显示文本的一个内边距
 // //                border: InputBorder.none,//取消默认的下划线边框
+                      ),
                     ),
                   ),
-                ),
-              ]),
+                ]),
+          ),
         ),
         bottomNavigationBar: BottomAppBar(
           child: bottomButton,

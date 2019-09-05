@@ -37,7 +37,8 @@ class CalendarController {
   int maxSelectMonth;
   int maxSelectDay; //注意：不能超过对应月份的总天数
 
-  Set<DateModel> selectedDateList = new Set(); //被选中的日期,用于多选
+  // Set<DateModel> selectedDateList = new Set(); //被选中的日期,用于多选
+  List<DateModel> selectedDateList = new List(); //被选中的日期,用于多选
   DateModel selectDateModel; //当前选择项,用于单选
   int maxMultiSelectCount; //多选，最多选多少个
   Map<DateTime, Object> extraDataMap = new Map(); //自定义额外的数据
@@ -97,7 +98,7 @@ class CalendarController {
     this.maxMultiSelectCount = maxMultiSelectCount;
     this.extraDataMap = extraDataMap;
 
-    this.selectedDateList = Set();
+    this.selectedDateList = List();
     if (selectedDateTimeList != null && selectedDateTimeList.isNotEmpty) {
       this.selectedDateList.addAll(selectedDateTimeList.map((dateTime) {
             return DateModel.fromDateTime(dateTime);
@@ -228,7 +229,7 @@ class CalendarController {
   }
 
   //获取被选中的日期,多选
-  Set<DateModel> getMultiSelectCalendar() {
+  List<DateModel> getMultiSelectCalendar() {
     if (selectedDateList.isEmpty) {
       return null;
     }
