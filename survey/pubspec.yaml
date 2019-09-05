@@ -51,7 +51,10 @@ dependencies:
   permission_handler: ^3.0.0
   open_file: ^2.0.1+2
   package_info: ^0.4.0+3
-#  fluwx:
+  extended_image_library: ^0.1.4
+#  extended_image:
+#    path: ../
+  #  fluwx:
 #    git:
 #      url: https://github.com/OpenFlutter/fluwx
   # flutter_custom_calendar:
