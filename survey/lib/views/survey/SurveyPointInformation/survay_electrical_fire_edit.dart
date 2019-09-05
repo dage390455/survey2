@@ -33,7 +33,7 @@ class _State extends State<SurvayElectricalFireEditPage> {
   BasicMessageChannel<String> _basicMessageChannel =
       BasicMessageChannel("BasicMessageChannelPluginPickImage", StringCodec());
   BasicMessageChannel<String> _locationBasicMessageChannel =
-  BasicMessageChannel("BasicMessageChannelPlugin", StringCodec());
+      BasicMessageChannel("BasicMessageChannelPlugin", StringCodec());
   FocusNode blankNode = FocusNode();
   static PageController _pageController = new PageController();
   ElectricalFireModel fireModel = DataTransferManager.shared.fireCreatModel;
@@ -64,23 +64,22 @@ class _State extends State<SurvayElectricalFireEditPage> {
           return "========================收到Native消息：" + message;
         }));
 
-    _locationBasicMessageChannel.setMessageHandler((message) => Future<String>(() {
-      print(message);
-      //message为native传递的数据
-      if(message!=null&&message.isNotEmpty){
-        List list = message.split(",");
-        if (list.length ==3){
-          setState(() {
-            fireModel.editLongitudeLatitude = list[0] + "," + list[1];
-            fireModel.editPosition = list[2];
-          });
-        }
-
-      }
-      //给Android端的返回值
-      return "========================收到Native消息：" + message;
-    }));
-
+    _locationBasicMessageChannel
+        .setMessageHandler((message) => Future<String>(() {
+              print(message);
+              //message为native传递的数据
+              if (message != null && message.isNotEmpty) {
+                List list = message.split(",");
+                if (list.length == 3) {
+                  setState(() {
+                    fireModel.editLongitudeLatitude = list[0] + "," + list[1];
+                    fireModel.editPosition = list[2];
+                  });
+                }
+              }
+              //给Android端的返回值
+              return "========================收到Native消息：" + message;
+            }));
 
     _getIsNeedShowPresent();
     step1remarkController.text = fireCreatModel.step1Remak;
@@ -89,7 +88,6 @@ class _State extends State<SurvayElectricalFireEditPage> {
     updateNextButton();
     super.initState();
   }
-
 
   //向native发送消息
 //  void _locationSendToNative() {
@@ -100,20 +98,15 @@ class _State extends State<SurvayElectricalFireEditPage> {
 //
 //  }
 
-
   void _locationSendToNative() {
-
-    var location = "0," + fireModel.editLongitudeLatitude +","+ fireModel.editAddress;
+    var location =
+        "0," + fireModel.editLongitudeLatitude + "," + fireModel.editAddress;
 
     Future<String> future = _locationBasicMessageChannel.send(location);
     future.then((message) {
       print("========================" + message);
     });
-
-
   }
-
-
 
   _getIsNeedShowPresent() async {
     List tags = await SaveDataManger.getHistory(hisoryKey);
@@ -459,7 +452,7 @@ class _State extends State<SurvayElectricalFireEditPage> {
       brightness: Brightness.light,
       backgroundColor: Colors.white,
       title: Text(
-        "电器火灾安装点勘察编辑",
+        DataTransferManager.shared.isEditModel ? "电器火灾安装点勘察编辑" : "电器火灾安装点勘察创建",
         style: TextStyle(color: Colors.black),
       ),
       leading: IconButton(
@@ -525,7 +518,7 @@ class _State extends State<SurvayElectricalFireEditPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           GestureDetector(
-            onTap: (){
+            onTap: () {
               editAddress1();
             }, //写入方法名称就可以了，但是是无参的
             child: Container(
@@ -1374,23 +1367,23 @@ class _State extends State<SurvayElectricalFireEditPage> {
 //          shrinkWrap: true,
 
 //              controller: _controller2,
+          children: <Widget>[
+            new Column(
               children: <Widget>[
-                new Column(
-                  children: <Widget>[
-                    new Row(children: <Widget>[
-                      Padding(
-                        child: new Text(
-                          electricalItems[1],
-                          style: TextStyle(color: prefix0.TITLE_TEXT_COLOR),
-                        ),
-                        padding: new EdgeInsets.fromLTRB(20, 20, 20, 20),
-                      )
-                    ]),
-                    takePhones,
-                  ],
-                )
+                new Row(children: <Widget>[
+                  Padding(
+                    child: new Text(
+                      electricalItems[1],
+                      style: TextStyle(color: prefix0.TITLE_TEXT_COLOR),
+                    ),
+                    padding: new EdgeInsets.fromLTRB(20, 20, 20, 20),
+                  )
+                ]),
+                takePhones,
               ],
-            )));
+            )
+          ],
+        )));
 
     Widget installationEnvironment = Container(
       color: Colors.white,
@@ -1623,23 +1616,23 @@ class _State extends State<SurvayElectricalFireEditPage> {
 //          physics: NeverScrollableScrollPhysics(),
 //          shrinkWrap: true,
 //              controller: _controller3,
+          children: <Widget>[
+            new Column(
               children: <Widget>[
-                new Column(
-                  children: <Widget>[
-                    new Row(children: <Widget>[
-                      Padding(
-                        child: new Text(
-                          electricalItems[2],
-                          style: TextStyle(color: prefix0.TITLE_TEXT_COLOR),
-                        ),
-                        padding: new EdgeInsets.fromLTRB(20, 20, 20, 20),
-                      )
-                    ]),
-                    installationEnvironment,
-                  ],
-                )
+                new Row(children: <Widget>[
+                  Padding(
+                    child: new Text(
+                      electricalItems[2],
+                      style: TextStyle(color: prefix0.TITLE_TEXT_COLOR),
+                    ),
+                    padding: new EdgeInsets.fromLTRB(20, 20, 20, 20),
+                  )
+                ]),
+                installationEnvironment,
               ],
-            )));
+            )
+          ],
+        )));
 
     int _getProbeCount() {
       if (fireCreatModel.isSingle == 1) {
@@ -2233,23 +2226,23 @@ class _State extends State<SurvayElectricalFireEditPage> {
 //          physics: NeverScrollableScrollPhysics(),
 //          shrinkWrap: true,
 //              controller: _controller4,
+          children: <Widget>[
+            new Column(
               children: <Widget>[
-                new Column(
-                  children: <Widget>[
-                    new Row(children: <Widget>[
-                      Padding(
-                        child: new Text(
-                          electricalItems[3],
-                          style: TextStyle(color: prefix0.TITLE_TEXT_COLOR),
-                        ),
-                        padding: new EdgeInsets.fromLTRB(20, 20, 20, 20),
-                      )
-                    ]),
-                    installationEnvironment2,
-                  ],
-                )
+                new Row(children: <Widget>[
+                  Padding(
+                    child: new Text(
+                      electricalItems[3],
+                      style: TextStyle(color: prefix0.TITLE_TEXT_COLOR),
+                    ),
+                    padding: new EdgeInsets.fromLTRB(20, 20, 20, 20),
+                  )
+                ]),
+                installationEnvironment2,
               ],
-            )));
+            )
+          ],
+        )));
 
     ScrollController _controller5 = TrackingScrollController();
 
@@ -2303,7 +2296,6 @@ class _State extends State<SurvayElectricalFireEditPage> {
               ],
             )));
 
-
     var mPageView = new PageView.builder(
       controller: _pageController,
       itemCount: 5,
@@ -2323,14 +2315,13 @@ class _State extends State<SurvayElectricalFireEditPage> {
       },
     );
 
-
     editName() async {
       final result = await Navigator.push(
         context,
         new MaterialPageRoute(
             builder: (context) => new EditNamePage(
-              name: this.fireModel.editName,
-            )),
+                  name: this.fireModel.editName,
+                )),
       );
 
       if (result != null) {
@@ -2347,8 +2338,8 @@ class _State extends State<SurvayElectricalFireEditPage> {
         context,
         new MaterialPageRoute(
             builder: (context) => new EditPurposePage(
-              name: this.fireModel.editPurpose,
-            )),
+                  name: this.fireModel.editPurpose,
+                )),
       );
 
       if (result != null) {
@@ -2365,8 +2356,8 @@ class _State extends State<SurvayElectricalFireEditPage> {
         context,
         new MaterialPageRoute(
             builder: (context) => new EditAdressPage(
-              name: this.fireModel.editAddress,
-            )),
+                  name: this.fireModel.editAddress,
+                )),
       );
 
       if (result != null) {
@@ -2401,8 +2392,8 @@ class _State extends State<SurvayElectricalFireEditPage> {
         context,
         new MaterialPageRoute(
             builder: (context) => new SurveyPointStructureEditPage(
-              name: this.fireModel.editPointStructure,
-            )),
+                  name: this.fireModel.editPointStructure,
+                )),
       );
 
       if (result != null) {
@@ -2419,8 +2410,8 @@ class _State extends State<SurvayElectricalFireEditPage> {
         context,
         new MaterialPageRoute(
             builder: (context) => new SurveyPointAreaEditPage(
-              name: this.fireModel.editPointArea,
-            )),
+                  name: this.fireModel.editPointArea,
+                )),
       );
 
       if (result != null) {
@@ -2437,8 +2428,8 @@ class _State extends State<SurvayElectricalFireEditPage> {
         context,
         new MaterialPageRoute(
             builder: (context) => new EditHeadPersonPage(
-              name: this.fireModel.headPerson,
-            )),
+                  name: this.fireModel.headPerson,
+                )),
       );
 
       if (result != null) {
@@ -2455,8 +2446,8 @@ class _State extends State<SurvayElectricalFireEditPage> {
         context,
         new MaterialPageRoute(
             builder: (context) => new EditHeadPersonPhonePage(
-              name: this.fireModel.headPhone,
-            )),
+                  name: this.fireModel.headPhone,
+                )),
       );
 
       if (result != null) {
@@ -2473,8 +2464,8 @@ class _State extends State<SurvayElectricalFireEditPage> {
         context,
         new MaterialPageRoute(
             builder: (context) => new EditBossPersonPage(
-              name: this.fireModel.bossName,
-            )),
+                  name: this.fireModel.bossName,
+                )),
       );
 
       if (result != null) {
@@ -2491,8 +2482,8 @@ class _State extends State<SurvayElectricalFireEditPage> {
         context,
         new MaterialPageRoute(
             builder: (context) => new EditBossPersonPhonePage(
-              name: this.fireModel.bossPhone,
-            )),
+                  name: this.fireModel.bossPhone,
+                )),
       );
 
       if (result != null) {
@@ -2846,18 +2837,15 @@ class _State extends State<SurvayElectricalFireEditPage> {
     return Scaffold(
         appBar: NavBar,
         body: GestureDetector(
-          onTap: (){
+          onTap: () {
             // 点击空白页面关闭键盘
             FocusScope.of(context).requestFocus(blankNode);
           },
           child: bigContainer,
         ),
-
         bottomNavigationBar: BottomAppBar(
           child: bottomButton,
-        )
-
-    );
+        ));
 
 //    return Scaffold(
 //      appBar: NavBar,

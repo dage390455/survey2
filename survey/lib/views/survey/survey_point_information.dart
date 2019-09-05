@@ -6,6 +6,7 @@ import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 import 'package:sensoro_survey/views/survey/const.dart';
 
 import 'Electric_box_information_page.dart';
+import 'SurveyPointInformation/survay_electrical_fire_edit.dart';
 
 class SurveyPointInformationPage extends StatefulWidget {
   @override
@@ -38,7 +39,7 @@ class _State extends State<SurveyPointInformationPage> {
     final result = await Navigator.push(
       context,
       new MaterialPageRoute(
-          builder: (context) => new SummaryConstructionPage()),
+          builder: (context) => new SurvayElectricalFireEditPage()),
     );
 
     if (result != null) {
