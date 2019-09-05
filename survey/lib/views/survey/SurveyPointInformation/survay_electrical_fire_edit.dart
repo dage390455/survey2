@@ -252,7 +252,9 @@ class _State extends State<SurvayElectricalFireEditPage> {
   }
 
   updateNextButton() {
-    if (fireCreatModel.page2editAddress.length > 0 &&
+    if (fireModel.editName.length > 0 &&
+        fireModel.headPerson.length > 0 &&
+        fireModel.headPhone.length > 0&&fireCreatModel.page2editAddress.length > 0 &&
         fireCreatModel.editpic1.length > 0 &&
         fireCreatModel.editpic2.length > 0 &&
         fireCreatModel.editenvironmentpic1.length > 0 &&
@@ -260,6 +262,8 @@ class _State extends State<SurvayElectricalFireEditPage> {
       setState(() {
         isCheack = true;
       });
+    }else{
+      isCheack = false;
     }
   }
 
