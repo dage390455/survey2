@@ -40,6 +40,12 @@ class _State extends State<SurvayElectricalFirePage> {
   int editIndex = -1;
   bool isEditing = false;
   var hisoryKey = "isNeedPresent";
+  var checkIndex = 0;
+
+  var isStep1 = false;
+  var isStep2 = false;
+  var isStep3 = false;
+  var isStep4 = false;
 
   var currentValue = 1;
   TextEditingController step1remarkController = TextEditingController();
@@ -266,6 +272,39 @@ class _State extends State<SurvayElectricalFirePage> {
   }
 
   updateNextButton() {
+
+    if(fireCreatModel.page2editAddress.length>0){
+      setState(() {
+        isStep1 = true;
+      });
+    }else{
+      setState(() {
+        isStep1 = false;
+      });
+    }
+
+    if(isStep1&&fireCreatModel.editpic1.length > 0 &&
+        fireCreatModel.editpic2.length > 0){
+      setState(() {
+        isStep2 = true;
+      });
+    }else{
+      isStep2 = false;
+    }
+
+
+   if(isStep1&&isStep2&&fireCreatModel.editenvironmentpic1.length > 0){
+      isStep3 = true;
+    }else{
+      isStep3 = false;
+    }
+
+    if(isStep1&&isStep2&&isStep3){
+      isStep4 = true;
+    }else{
+      isStep4 = false;
+    }
+
     if (fireCreatModel.page2editAddress.length > 0 &&
         fireCreatModel.editpic1.length > 0 &&
         fireCreatModel.editpic2.length > 0 &&
@@ -273,7 +312,69 @@ class _State extends State<SurvayElectricalFirePage> {
         fireCreatModel.current.length > 0) {
       setState(() {
         isCheack = true;
+
       });
+
+    }else{
+      setState(() {
+        isCheack = false;
+
+      });
+    }
+    if(checkIndex == 0){
+      if(isStep1){
+        setState(() {
+          buttonColor =  prefix0.GREEN_COLOR;
+        });
+      }else{
+        setState(() {
+          buttonColor =  Colors.grey;
+        });
+      }
+    }
+     else if(checkIndex == 1){
+      if(isStep2){
+        setState(() {
+          buttonColor =  prefix0.GREEN_COLOR;
+        });
+      }else{
+        setState(() {
+          buttonColor =  Colors.grey;
+        });
+      }
+    }
+    else  if(checkIndex == 2){
+      if(isStep3){
+        setState(() {
+          buttonColor =  prefix0.GREEN_COLOR;
+        });
+      }else{
+        setState(() {
+          buttonColor =  Colors.grey;
+        });
+      }
+    }
+    else  if(checkIndex == 3){
+      if(isStep4){
+        setState(() {
+          buttonColor =  prefix0.GREEN_COLOR;
+        });
+      }else{
+        setState(() {
+          buttonColor =  Colors.grey;
+        });
+      }
+    }
+    else if(checkIndex == 4){
+      if(isCheack){
+        setState(() {
+          buttonColor =  prefix0.GREEN_COLOR;
+        });
+      }else{
+        setState(() {
+          buttonColor =  Colors.grey;
+        });
+      }
     }
   }
 
@@ -457,7 +558,7 @@ class _State extends State<SurvayElectricalFirePage> {
 //    });
     }
   }
-
+  var buttonColor =  prefix0.GREEN_COLOR;
   @override
   Widget build(BuildContext context) {
     Widget NavBar = AppBar(
@@ -486,39 +587,50 @@ class _State extends State<SurvayElectricalFirePage> {
       height: 60,
       width: prefix0.screen_width,
       child: new MaterialButton(
-        color: this.isCheack ? prefix0.GREEN_COLOR : Colors.grey,
+        color: buttonColor,
         textColor: Colors.white,
-        child: new Text('完成',
+        child: this.checkIndex ==4 ? new Text('完成',
             style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.normal,
-                fontSize: 20)),
+                fontSize: 20)):new Text('下一步',
+            style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.normal,
+            fontSize: 20)
+        ),
         onPressed: () {
-          if (this.isCheack) {
-            if (DataTransferManager.shared.isEditModel) {
-              for (int i = 0;
-                  i < DataTransferManager.shared.project.subList.length;
-                  i++) {
-                Map map = DataTransferManager.shared.project.subList[i];
+          
+          if(checkIndex==4){
+            if (this.isCheack) {
+              if (DataTransferManager.shared.isEditModel) {
+                for (int i = 0;
+                i < DataTransferManager.shared.project.subList.length;
+                i++) {
+                  Map map = DataTransferManager.shared.project.subList[i];
 
-                ElectricalFireModel model = ElectricalFireModel.fromJson(map);
-                if (model.electricalFireId ==
-                    DataTransferManager
-                        .shared.fireCreatModel.electricalFireId) {
-                  DataTransferManager.shared.project.subList.remove(map);
-                  break;
+                  ElectricalFireModel model = ElectricalFireModel.fromJson(map);
+                  if (model.electricalFireId ==
+                      DataTransferManager
+                          .shared.fireCreatModel.electricalFireId) {
+                    DataTransferManager.shared.project.subList.remove(map);
+                    break;
+                  }
                 }
+                DataTransferManager.shared.project.subList
+                    .add(DataTransferManager.shared.fireCreatModel.toJson());
+              } else {
+                DataTransferManager.shared.project.subList
+                    .add(DataTransferManager.shared.fireCreatModel.toJson());
               }
-              DataTransferManager.shared.project.subList
-                  .add(DataTransferManager.shared.fireCreatModel.toJson());
-            } else {
-              DataTransferManager.shared.project.subList
-                  .add(DataTransferManager.shared.fireCreatModel.toJson());
+
+              DataTransferManager.shared.saveProject();
+
+              Navigator.of(context).pop("1");
             }
-
-            DataTransferManager.shared.saveProject();
-
-            Navigator.of(context).pop("1");
+          }else{
+            _pageController.animateToPage(checkIndex+1,
+                duration: const Duration(milliseconds: 300), curve: Curves.ease);
           }
         },
       ),
@@ -2391,6 +2503,14 @@ class _State extends State<SurvayElectricalFirePage> {
 
     var mPageView = new PageView.builder(
       controller: _pageController,
+      onPageChanged: (current){
+
+        setState(() {
+
+          checkIndex = current;
+        });
+        updateNextButton();
+      },
       itemCount: 5,
       scrollDirection: Axis.vertical,
       itemBuilder: (BuildContext context, int index) {

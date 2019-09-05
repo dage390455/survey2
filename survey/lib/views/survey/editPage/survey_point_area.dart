@@ -15,7 +15,7 @@ class SurveyPointAreaEditPage extends StatefulWidget {
 class _State extends State<SurveyPointAreaEditPage> {
   var historyKey = "histroySurveyPointAreaEditKey";
   var name = "";
-  var isHighHistory = true;
+  var isHighHistory = false;
   _State({this.name});
   FocusNode blankNode = FocusNode();
   TextEditingController locationController = TextEditingController();

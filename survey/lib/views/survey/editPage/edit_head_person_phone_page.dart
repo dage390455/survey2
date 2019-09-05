@@ -16,7 +16,7 @@ class EditHeadPersonPhonePage extends StatefulWidget {
 class _State extends State<EditHeadPersonPhonePage> {
   var historyKey = "histroyEditHeadPersonPhoneKey";
   var name = "";
-  var isHighHistory = true;
+  var isHighHistory = false;
   var isShowError = true;
   _State({this.name});
   FocusNode blankNode = FocusNode();

@@ -16,7 +16,7 @@ class _State extends State<EditBossPersonPage> {
   var historyKey = "histroyBosspersonKey";
   var name = "";
   FocusNode blankNode = FocusNode();
-  var isHighHistory = true;
+  var isHighHistory = false;
   _State({this.name});
 
   TextEditingController locationController = TextEditingController();

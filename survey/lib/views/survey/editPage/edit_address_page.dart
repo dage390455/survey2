@@ -16,7 +16,7 @@ class _State extends State<EditAdressPage> {
   var historyKey = "histroyAddresskey";
   FocusNode blankNode = FocusNode();
   var name = "";
-  var isHighHistory = true;
+  var isHighHistory = false;
   _State({this.name});
 
   TextEditingController locationController = TextEditingController();

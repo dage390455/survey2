@@ -15,7 +15,7 @@ class EditElectricalCurrentPage extends StatefulWidget {
 class _State extends State<EditElectricalCurrentPage> {
   var historyKey = "histroyEditElectricalCurrentPagekey";
   var name = "";
-  var isHighHistory = true;
+  var isHighHistory = false;
   _State({this.name});
   FocusNode blankNode = FocusNode();
   TextEditingController locationController = TextEditingController();
