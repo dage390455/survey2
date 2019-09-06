@@ -73,9 +73,9 @@ class _SurveyTypePageState extends State<SurveyTypePage> {
       if (result != null) {
         String name = result as String;
 
-        if(name == "1"){
+        if (name == "1") {
           Navigator.of(context).pop("1");
-        }else{
+        } else {
           setState(() {});
         }
         // this.name = name;
@@ -103,6 +103,11 @@ class _SurveyTypePageState extends State<SurveyTypePage> {
       ),
     );
 
+    Widget emptyContainer = Container(
+      height: 0,
+      width: 0,
+    );
+
     Widget myListView = new ListView.builder(
         physics: new AlwaysScrollableScrollPhysics()
             .applyTo(new BouncingScrollPhysics()), // 这个是用来控制能否在不屏的状态下滚动的属性
@@ -124,11 +129,13 @@ class _SurveyTypePageState extends State<SurveyTypePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Container(
-                    color: LIGHT_LINE_COLOR,
-                    height: 12,
-                    width: prefix0.screen_width,
-                  ),
+                  index == 0
+                      ? Container(
+                          color: LIGHT_LINE_COLOR,
+                          height: 12,
+                          width: prefix0.screen_width,
+                        )
+                      : emptyContainer,
 
                   GestureDetector(
                     onTap: _gotoInformation,
@@ -165,10 +172,15 @@ class _SurveyTypePageState extends State<SurveyTypePage> {
                     ),
                   ),
                   //分割线
-                  Container(
-                      width: prefix0.screen_width - 40,
-                      height: 1.0,
-                      color: FENGE_LINE_COLOR),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        top: 0.0, bottom: 0, left: 20, right: 0),
+                    child: Container(
+                        alignment: Alignment.center,
+                        width: prefix0.screen_width - 40,
+                        height: 1.0,
+                        color: FENGE_LINE_COLOR),
+                  ),
                 ]),
           );
         });

@@ -249,7 +249,7 @@ class _PointListPageState extends State<PointListPage> {
       autofocus: false, //自动获取焦点
       decoration: new InputDecoration(
         border: InputBorder.none,
-        hintText: "勘察点名��",
+        hintText: "勘察点名称",
         icon: new Container(
           padding: EdgeInsets.all(0.0),
           child: new Image(

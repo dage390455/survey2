@@ -852,6 +852,7 @@ class _State extends State<HomePage> {
 
                     //分割线
                     Container(
+                        alignment: Alignment.center,
                         width: prefix0.screen_width,
                         height: 1.0,
                         color: FENGE_LINE_COLOR),
