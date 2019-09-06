@@ -99,43 +99,6 @@ class FlutterProjectListViewController: FlutterBaseViewController,UIDocumentInte
         }
     }
     
-    func showCalendar() -> Void{
-        if let controller = FlutterComponentManager.getController(controllerID: "calendar") as? CalendarViewController {
-            if self.beginTime != 0 && self.endTime != 0 {
-                controller.firstDate = Date(timeIntervalSince1970: self.beginTime);
-                controller.endDate = Date(timeIntervalSince1970: self.endTime);
-            }
-            
-            controller.completion = { [weak self] (start,end) in
-                guard let weakSelf = self else {return;}
-                
-                let formatter = DateFormatter()
-                formatter.dateFormat = "yyyy.MM.dd"
-                //                weakSelf.dateTime.text = formatter.string(from: start) + " ~ " + formatter.string(from: end);
-                
-                weakSelf.beginTime = start.timeIntervalSince1970;
-                weakSelf.endTime = end.timeIntervalSince1970;
-                
-                let beginTime = start.timeIntervalSince1970*1000
-                let endTime = end.timeIntervalSince1970*1000;
-                
-                let headers:[String: String]? = NetworkManager.shared.headers ;
-                let TaskLogURL = NetworkManager.TaskLogURL;
-                let baseURL = NetworkManager.baseURL;
-                let urlStr:String? = baseURL+TaskLogURL;
-                let parameters : Dictionary?  = ["finish" : "false","offset" : 0, "limit" : 10,"beginTime" :  beginTime,"endTime" :  endTime] as [String : Any];
-                
-                if let urlStr = urlStr, let headers = headers,let parameters = parameters {
-                    weakSelf.mEventSink?(["name":"showCalendar","beginTime" :  beginTime,"endTime" :  endTime] )
-                    weakSelf.mEventSink?(["name":"getURL","urlStr":urlStr,"headers":headers,"params":parameters] )
-                }
-                
-            }
-            controller.modalPresentationStyle = .overFullScreen;
-            self.present(controller, animated: false, completion: nil);
-        }
-    }
-    
     @objc func openFileAndSave(nofi : Notification){
         let urlstr = nofi.userInfo!["url"] as! NSString;
         var url : NSURL? = NSURL(string: urlstr as String);
@@ -194,7 +157,7 @@ class FlutterProjectListViewController: FlutterBaseViewController,UIDocumentInte
                     self.beginTime = arguments["beginTime"] as! TimeInterval;
                     self.endTime = arguments["endTime"] as! TimeInterval;
                 }
-                self.showCalendar();
+//                self.showCalendar();
             }
                 
             else if ("outputDocument" == call.method) {

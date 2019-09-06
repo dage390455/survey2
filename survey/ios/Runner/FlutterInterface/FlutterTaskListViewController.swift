@@ -69,111 +69,45 @@ class FlutterTaskListViewController: FlutterBaseViewController {
         }
         return UIStatusBarStyle.default
     }
+     
     
-    //MARK: - native method
-    /*
-     func loadContent(isComplete : Bool, isHeader : Bool, isShowLoading : Bool = false){
-     if isHeader {
-     currentPage = 1;
-     }
-     
-     var pageSize = NetworkManager.pageSize;
-     if isShowLoading == true {//下拉刷新时，使用List的
-     SVProgressHUD.showProgress(-1, status: localString("LOADING_DATA"));
-     }else{
-     SVProgressHUD.show();
-     }
-     
-     //        beginTime=1563465600000  //测试用
-     //        beginTime=1562464600000  //测试用
-     //        endTime=1563897599999
-     pageSize = 10;
-     let endTimeSearch = endTime == 0 ? endTime : endTime + 1;
-     
-     let _ = NetworkManager.shared.getTaskLogs(isComplete: isComplete, page: currentPage, pageSize: pageSize,beginTime: beginTime, endTime: endTimeSearch, { [weak self] (result, error) in
-     if error == nil {
-     
-     if(isHeader == true){
-     self?.dataList.removeAll();
-     }
-     
-     if(result!.results.count>0){
-     for index in 0 ..< result!.results.count {
-     let dataDict = self?.convertToDictNesting(obj: result!.results[index])
-     self?.dataList.append(dataDict as! NSDictionary)
-     }
-     }
-     
-     //                if((self?.dataList.count)!>0){
-     //                    self?.mEventSink?(["content":self?.dataList as Any,"name":"getList"] )
-     //                }
-     //注册setEventChannel,发送数据需要flutter端主动请求
-     //                self?.setEventChannel(channelName: (self?.pageModel!.eventChannel)!);
-     if isShowLoading == true {//下拉刷新时，使用List的
-     SVProgressHUD.dismiss();
-     }
-     SVProgressHUD.dismiss();
-     
-     }else{
-     if error!.errCode == ErrorInfo.NOT_DATA_RETURN {
-     
-     SVProgressHUD.dismiss();
-     }else{
-     SVProgressHUD.dismiss();
-     print(error!);
-     if error!.errMsg.isEmpty {
-     SVProgressHUD.showError(withStatus: localString("LOADING_DATA_FAILED"));
-     } else {
-     SVProgressHUD.showError(withStatus: error!.errMsg);
-     }
-     }
-     }
-     //            if isHeader {
-     //                self?.taskLis t.cr.endHeaderRefresh();
-     //            }else{
-     //                self?.taskList.cr.endLoadingMore();
-     //            }
-     })
-     }
-     */
-    
-    func showCalendar() -> Void{
-        if let controller = FlutterComponentManager.getController(controllerID: "calendar") as? CalendarViewController {
-            if self.beginTime != 0 && self.endTime != 0 {
-                controller.firstDate = Date(timeIntervalSince1970: self.beginTime);
-                controller.endDate = Date(timeIntervalSince1970: self.endTime);
-            }
-            
-            
-            controller.completion = { [weak self] (start,end) in
-                guard let weakSelf = self else {return;}
-                
-                let formatter = DateFormatter()
-                formatter.dateFormat = "yyyy.MM.dd"
-                //                weakSelf.dateTime.text = formatter.string(from: start) + " ~ " + formatter.string(from: end);
-                
-                weakSelf.beginTime = start.timeIntervalSince1970;
-                weakSelf.endTime = end.timeIntervalSince1970;
-                
-                var beginTime = start.timeIntervalSince1970*1000
-                var endTime = end.timeIntervalSince1970*1000;
-                
-                let headers:[String: String]? = NetworkManager.shared.headers ;
-                let TaskLogURL = NetworkManager.TaskLogURL;
-                let baseURL = NetworkManager.baseURL;
-                let urlStr:String? = baseURL+TaskLogURL;
-                let parameters : Dictionary?  = ["finish" : "false","offset" : 0, "limit" : 10,"beginTime" :  beginTime,"endTime" :  endTime] as [String : Any];
-                
-                if let urlStr = urlStr, let headers = headers,let parameters = parameters {
-                    weakSelf.mEventSink?(["name":"showCalendar","beginTime" :  beginTime,"endTime" :  endTime] )
-                    weakSelf.mEventSink?(["name":"getURL","urlStr":urlStr,"headers":headers,"params":parameters] )
-                }
-                
-            }
-            controller.modalPresentationStyle = .overFullScreen;
-            self.present(controller, animated: false, completion: nil);
-        }
-    }
+//    func showCalendar() -> Void{
+//        if let controller = FlutterComponentManager.getController(controllerID: "calendar") as? CalendarViewController {
+//            if self.beginTime != 0 && self.endTime != 0 {
+//                controller.firstDate = Date(timeIntervalSince1970: self.beginTime);
+//                controller.endDate = Date(timeIntervalSince1970: self.endTime);
+//            }
+//
+//
+//            controller.completion = { [weak self] (start,end) in
+//                guard let weakSelf = self else {return;}
+//
+//                let formatter = DateFormatter()
+//                formatter.dateFormat = "yyyy.MM.dd"
+//                //                weakSelf.dateTime.text = formatter.string(from: start) + " ~ " + formatter.string(from: end);
+//
+//                weakSelf.beginTime = start.timeIntervalSince1970;
+//                weakSelf.endTime = end.timeIntervalSince1970;
+//
+//                var beginTime = start.timeIntervalSince1970*1000
+//                var endTime = end.timeIntervalSince1970*1000;
+//
+//                let headers:[String: String]? = NetworkManager.shared.headers ;
+//                let TaskLogURL = NetworkManager.TaskLogURL;
+//                let baseURL = NetworkManager.baseURL;
+//                let urlStr:String? = baseURL+TaskLogURL;
+//                let parameters : Dictionary?  = ["finish" : "false","offset" : 0, "limit" : 10,"beginTime" :  beginTime,"endTime" :  endTime] as [String : Any];
+//
+//                if let urlStr = urlStr, let headers = headers,let parameters = parameters {
+//                    weakSelf.mEventSink?(["name":"showCalendar","beginTime" :  beginTime,"endTime" :  endTime] )
+//                    weakSelf.mEventSink?(["name":"getURL","urlStr":urlStr,"headers":headers,"params":parameters] )
+//                }
+//
+//            }
+//            controller.modalPresentationStyle = .overFullScreen;
+//            self.present(controller, animated: false, completion: nil);
+//        }
+//    }
     
     //MARK: - flutter delegate
     //注册 messageChannel，用于接收flutter的数据
@@ -215,7 +149,7 @@ class FlutterTaskListViewController: FlutterBaseViewController {
                 
             }
             else if ("showCalendar" == call.method) {
-                self.showCalendar();
+                
             }
                 
             else {

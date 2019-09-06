@@ -45,6 +45,7 @@ class LocationEditController: UIViewController {
                                                 self?.navigationController?.popViewController(animated: true);
         }));
         
+        
         navItems.append(NavigationHeader.Item(type: .title, id: localString("定位地址"), action: nil));
 
         if readOnly == false {

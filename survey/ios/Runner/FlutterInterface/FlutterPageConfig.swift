@@ -33,22 +33,9 @@ let FLUTTER_TASK_LIST = FlutterPageModel.init(routeName: "taskList",
                                               methodChannel: "com.pages.your/task_list",
                                               methods: nil, events:nil);
 
-let FLUTTER_TASK_TEST = FlutterPageModel.init(routeName: "taskTest",
-                                              eventChannel: "App/Event/Channel",
-                                              methodChannel: "com.pages.your/task_test",
-                                              methods: nil, events:nil);
-
-let FLUTTER_ELECTRIC_INSTALL = FlutterPageModel.init(routeName: "electricInstall",
-                                              eventChannel: "App/Event/Channel",
-                                              methodChannel: "com.pages.your/electric_install",
-                                              methods: nil, events:nil);
 
 let FLUTTER_PROJECT_LIST = FlutterPageModel.init(routeName: "projectList",
                                                      eventChannel: "App/Event/Channel",
                                                      methodChannel: "com.pages.your/project_list",
                                                      methods: nil, events:nil);
 
-let FLUTTER_INFORMATION = FlutterPageModel.init(routeName: "surveyInformation",
-                                                 eventChannel: "App/Event/Channel",
-                                                 methodChannel: "com.pages.your/project_list",
-                                                 methods: nil, events:nil);
