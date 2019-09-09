@@ -141,13 +141,16 @@ class _State extends State<SurvayElectricalFireDetailPage> {
   }
 
   void _locationSendToNative() {
-    var location =
-        "1," + fireModel.editLongitudeLatitude + "," + fireModel.editAddress;
 
-    Future<String> future = _locationBasicMessageChannel.send(location);
-    future.then((message) {
-      print("========================" + message);
-    });
+    if (this.fireModel.editPosition.length > 0){
+      var location =
+          "1," + fireModel.editLongitudeLatitude + "," + fireModel.editAddress;
+
+      Future<String> future = _locationBasicMessageChannel.send(location);
+      future.then((message) {
+        print("========================" + message);
+      });
+    }
   }
 
   //向native发送消息
@@ -2062,14 +2065,19 @@ class _State extends State<SurvayElectricalFireDetailPage> {
                     child: Text(
                       this.fireModel.editPosition.length > 0
                           ? this.fireModel.editPosition
-                          : "选填",
+                          : "未定位",
                       textAlign: TextAlign.right,
                     ),
                   ),
-                  Image.asset(
-                    "assets/images/right_arrar.png",
-                    width: 20,
-                  )
+
+              new Offstage(
+                offstage: (this.fireModel.editPosition.length > 0) ? false : true,
+                child: Image.asset(
+                  "assets/images/right_arrar.png",
+                  width: 20,
+                )
+              )
+
                 ],
               ),
             ),
