@@ -8,6 +8,7 @@ import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import 'dart:ui';
 
@@ -282,10 +283,26 @@ class _State extends State<HomePage> {
               map["subList"] = [];
             }
             projectInfoModel model = projectInfoModel.fromJson(map);
-            dataList.add(model);
+            for (int j = 0; j < dataList.length; j++) {
+              projectInfoModel model1 = dataList[j];
+              if (model1.projectId == model.projectId &&
+                  model1.projectName == model.projectName) {
+                Fluttertoast.showToast(
+                    msg: "导入的数据和已有的数据重复了",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.BOTTOM,
+                    timeInSecForIos: 1,
+                    backgroundColor: Colors.grey,
+                    textColor: Colors.black);
+                return;
+              }
+            }
+            setState(() {
+              dataList.add(model);
+            });
           }
           historyStr = str;
-          SaveDataManger.addProjectHistory(historyStr, historyKey);
+          SaveDataManger.addHistory(historyStr, historyKey);
         }
       }
 

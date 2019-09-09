@@ -26,6 +26,7 @@ def parse_KV_file(file, separator='=')
   return pods_ary
 end
 
+
 platform :ios, '10.0'
 source 'git@gitlab.sensoro.com:mobile/cocoapodsMobileSpec.git'
 source 'https://github.com/CocoaPods/Specs.git'

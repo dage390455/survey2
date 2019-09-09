@@ -127,7 +127,7 @@ class FlutterProjectListViewController: FlutterBaseViewController,UIDocumentInte
                     }
                 }
                 
-                userDefaults.set(newStr, forKey: "projectList")
+//                userDefaults.set(newStr, forKey: "projectList")
                 //把数据发给flutter
                 DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
                     self.mEventSink?(["name":"sendOneProject","projectListStr":str] )
