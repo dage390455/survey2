@@ -253,15 +253,6 @@ class _State extends State<SurveyPointInformationPage> {
         height: double.infinity,
         fit: BoxFit.fitWidth,
       ),
-      // new ConstrainedBox(
-      //   constraints: const BoxConstraints.expand(),
-      //   child: new Image(
-      //     image: new AssetImage("assets/images/指导说明书p4.png"),
-      //     width: double.infinity,
-      //     height: double.infinity,
-      //     fit: BoxFit.fitWidth,
-      //   ),
-      // ),
     ];
 
     Widget mainScaffold = Scaffold(
@@ -274,10 +265,6 @@ class _State extends State<SurveyPointInformationPage> {
         child: PageView.builder(
           controller: pageController, //这一句导致有边缘不是全屏
           itemCount: 3,
-          // pageSnapping: true,
-          // reverse: false,
-          // physics: PageScrollPhysics(parent: BouncingScrollPhysics()),
-          // dragStartBehavior: DragStartBehavior.down,
           onPageChanged: (int index) {
             currentPage = index;
             if (index == 2) {
@@ -440,5 +427,15 @@ class _State extends State<SurveyPointInformationPage> {
     );
   }
 }
+
+const electricalItems = [
+  "1.电箱信息",
+  "2.电箱照片",
+  "3.安装环境",
+  "4.运作环境",
+  "5.设备预选",
+];
+
+
 
 class Continer {}

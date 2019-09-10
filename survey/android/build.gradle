@@ -18,15 +18,16 @@ allprojects {
     repositories {
 //        google()
 //        jcenter()
-        maven{
+        maven {
             url 'https://maven.aliyun.com/repository/google'
         }
-        maven{
+        maven {
             url 'https://maven.aliyun.com/repository/jcenter'
         }
-        maven{
+        maven {
             url 'http://maven.aliyun.com/nexus/content/groups/public'
         }
+        maven { url 'https://jitpack.io' }
     }
 }
 
@@ -48,16 +49,13 @@ subprojects {
     project.configurations.all {
         resolutionStrategy.eachDependency { details ->
             if (details.requested.group == 'com.android.support'
-                    && !details.requested.name.contains('multidex') ) {
+                    && !details.requested.name.contains('multidex')) {
                 details.useVersion "27.1.1"
-            }else if(details.requested.group == 'androidx.lifecycle')
-            {
+            } else if (details.requested.group == 'androidx.lifecycle') {
                 details.useVersion "2.0.0-rc01"
-            }else if(details.requested.group == 'androidx.versionedparcelable')
-            {
+            } else if (details.requested.group == 'androidx.versionedparcelable') {
                 details.useVersion "1.0.0-rc01"
-            }else if(details.requested.group == 'androidx.core')
-            {
+            } else if (details.requested.group == 'androidx.core') {
                 details.useVersion "1.0.0-rc01"
             }
         }

@@ -1,7 +1,8 @@
 //现场情况
 import 'package:flutter/material.dart';
-import 'package:sensoro_survey/views/survey/common/save_data_manager.dart';
+import 'package:flutter/services.dart';
 import 'package:sensoro_survey/views/survey/common/history_page.dart';
+import 'package:sensoro_survey/views/survey/common/save_data_manager.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 
 class EditElectricalCurrentPage extends StatefulWidget {
@@ -41,37 +42,40 @@ class _State extends State<EditElectricalCurrentPage> {
         "额定电流",
         style: TextStyle(color: Colors.black),
       ),
-      leading: IconButton(
-        icon: Image.asset(
-          "assets/images/back.png",
-          // height: 20,
+      leading: Container(
+        alignment: Alignment.center,
+        child: GestureDetector(
+          onTap: () {
+            // 点击空白页面关闭键盘
+            Navigator.pop(context);
+          },
+          child: Text(
+            "取消",
+            style: TextStyle(color: Colors.black),
+          ),
         ),
-        onPressed: () {
-          // SendEvent();
-          Navigator.pop(context);
-        },
       ),
-    );
-
-    Widget bottomButton = Container(
-      color: prefix0.LIGHT_LINE_COLOR,
-      height: 60,
-      width: prefix0.screen_width,
-      child: new MaterialButton(
-        color: this.name.length > 0 ? prefix0.GREEN_COLOR : Colors.grey,
-        textColor: Colors.white,
-        child: new Text('保存',
-            style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.normal,
-                fontSize: 20)),
-        onPressed: () {
-          if (this.name.length > 0) {
-            SaveDataManger.addHistory(this.name, historyKey);
-            Navigator.of(context).pop(this.name);
-          }
-        },
-      ),
+      actions: <Widget>[
+        Container(
+          padding: new EdgeInsets.fromLTRB(0, 0, 20, 0),
+          alignment: Alignment.center,
+          child: GestureDetector(
+            onTap: () {
+              // 点击空白页面关闭键盘
+              if (this.name.length > 0) {
+                SaveDataManger.addHistory(this.name, historyKey);
+                Navigator.of(context).pop(this.name);
+              }
+            },
+            child: Text(
+              "保存",
+              style: TextStyle(
+                color: this.name.length > 0 ? prefix0.GREEN_COLOR : Colors.grey,
+              ),
+            ),
+          ),
+        ),
+      ],
     );
 
     _editParentText(editText) {
@@ -98,6 +102,9 @@ class _State extends State<EditElectricalCurrentPage> {
             controller: locationController,
             maxLines: 2,
             keyboardType: TextInputType.number,
+            inputFormatters: [
+              WhitelistingTextInputFormatter(RegExp("[0-9.]")),
+            ],
             decoration: InputDecoration(
               border: InputBorder.none,
 
@@ -139,16 +146,14 @@ class _State extends State<EditElectricalCurrentPage> {
     );
 
     return Scaffold(
-        appBar: NavBar,
-        body: GestureDetector(
-          onTap: () {
-            // 点击空白页面关闭键盘
-            FocusScope.of(context).requestFocus(blankNode);
-          },
-          child: bigContainer,
-        ),
-        bottomNavigationBar: BottomAppBar(
-          child: bottomButton,
-        ));
+      appBar: NavBar,
+      body: GestureDetector(
+        onTap: () {
+          // 点击空白页面关闭键盘
+          FocusScope.of(context).requestFocus(blankNode);
+        },
+        child: bigContainer,
+      ),
+    );
   }
 }

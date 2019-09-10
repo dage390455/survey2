@@ -14,6 +14,7 @@
     <application
         android:name="io.flutter.app.FlutterApplication"
         android:icon="@mipmap/logo"
+        tools:replace="android:label"
         android:label="升哲勘察">
 
         <activity
@@ -51,7 +52,6 @@
         <activity
             android:name=".wxapi.WXEntryActivity"
             android:exported="true"
-            android:label="升哲勘察"
             android:launchMode="singleTask"
             android:theme="@android:style/Theme.Translucent.NoTitleBar">
             <intent-filter>

@@ -4,9 +4,11 @@
 /// @Last Modified time: 2019-07-23
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:package_info/package_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -32,8 +34,10 @@ import 'package:sensoro_survey/model/project_info_model.dart';
 import 'package:sensoro_survey/views/survey/SurveyPointInformation/summary_construction_page.dart';
 import 'package:sensoro_survey/views/survey/common/save_data_manager.dart';
 import 'package:sensoro_survey/views/survey/common/flutter_screenutil.dart';
+import 'package:url_launcher/url_launcher.dart';
 //import 'package:fluwx/fluwx.dart' as fluwx;
-
+BasicMessageChannel<String> _basicMessageChannel =
+BasicMessageChannel("BasicMessageGetVersionChannelPlugin", StringCodec());
 class ProjectListPage extends StatefulWidget {
   String _text = "share text from fluwx";
 
@@ -70,6 +74,109 @@ class _ProjectListPageState extends State<ProjectListPage> {
 //      print(data.toString());
 //    });
   }
+}
+
+_launchURL() async {
+  if (Platform.isIOS){
+    Future<String> future = _basicMessageChannel.send("1");
+    future.then((message) {
+
+    });
+  }else{
+    const url = 'https://fir.im/sensoroSurvey';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+}
+
+Future getVersionData(BuildContext context) async {
+  BaseOptions options = BaseOptions(
+    method: "get",
+    baseUrl: "http://api.fir.im/apps/latest/5d70dd4e23389f4c4ab7a133",
+    queryParameters: {
+      "api_token": "342bc0fd7fd5b115b3db9bafbd9b02bd",
+    },
+  );
+
+  Dio netRequest = Dio(options);
+  final response = await netRequest.get('');
+  Map data = json.decode(response.toString());
+  print(data);
+  String versionShort = data["versionShort"];
+  String version = "";
+  if(Platform.isIOS){
+    Future<String> future = _basicMessageChannel.send("");
+    future.then((message) {
+
+    });
+
+    _basicMessageChannel.setMessageHandler((message) => Future<String>(() {
+      print(message);
+      //message为native传递的数据
+      if(message!=null&&message.isNotEmpty){
+        version = message;
+        if (versionShort != null && (version != versionShort)) {
+          _showConfirmationDialog(context, "更新");
+        }
+
+      }
+      //给Android端的返回值
+      return "========================收到Native消息：" + message;
+    }));
+
+  }else{
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    version = packageInfo.version;
+    if (versionShort != null && (version != versionShort)) {
+      _showConfirmationDialog(context, "更新");
+    }
+  }
+
+
+
+
+//    print(response.toString());
+
+//    Dio dio = new Dio();
+//    Response response=await dio.get("https://www.baidu.com/");
+//    print(response.data);
+}
+
+Future<bool> _showConfirmationDialog(BuildContext context, String action) {
+  final ThemeData theme = Theme.of(context);
+  return showDialog<bool>(
+    context: context,
+    barrierDismissible: true,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('有新版本更新，立即去更新'),
+        actions: <Widget>[
+          FlatButton(
+            color: theme.buttonColor,
+            child: Text(action.substring(0, 1).toUpperCase() +
+                action.substring(1, action.length)),
+            onPressed: () {
+              _launchURL();
+             Navigator.pop(context, true);
+            },
+          ),
+          new SizedBox(
+            width: 10,
+          ),
+          FlatButton(
+            child: const Text('取消'),
+            onPressed: () {
+              Navigator.pop(context, false);
+            },
+          ),
+        ],
+      );
+    },
+  );
 }
 
 _initFluwx() async {
@@ -177,6 +284,7 @@ class _State extends State<HomePage> {
         //or set color with: Color(0xFF0000FF)
         // statusBarColor: Colors.blue,
         ));
+    getVersionData(context);
   }
 
 //测试JSON ，LIST ,MAP ,MODEL的转换
