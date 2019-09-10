@@ -1,13 +1,15 @@
 //现场情况
 import 'package:flutter/material.dart';
-import 'package:sensoro_survey/views/survey/common/save_data_manager.dart';
+import 'package:flutter/services.dart';
 import 'package:sensoro_survey/views/survey/common/history_page.dart';
+import 'package:sensoro_survey/views/survey/common/save_data_manager.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 
 class SurveyPointAreaEditPage extends StatefulWidget {
   var name = "";
 
   SurveyPointAreaEditPage({this.name});
+
   @override
   _State createState() => _State(name: this.name);
 }
@@ -16,7 +18,10 @@ class _State extends State<SurveyPointAreaEditPage> {
   var historyKey = "histroySurveyPointAreaEditKey";
   var name = "";
   var isHighHistory = false;
+  var isShowError = true;
+
   _State({this.name});
+
   FocusNode blankNode = FocusNode();
   TextEditingController locationController = TextEditingController();
 
@@ -48,18 +53,15 @@ class _State extends State<SurveyPointAreaEditPage> {
             // 点击空白页面关闭键盘
             Navigator.pop(context);
           },
-          child:   Text("取消",
-            style: TextStyle(
-                color: Colors.black
-            ),
-
+          child: Text(
+            "取消",
+            style: TextStyle(color: Colors.black),
           ),
         ),
-
       ),
       actions: <Widget>[
         Container(
-          padding:  new EdgeInsets.fromLTRB(0, 0, 20, 0),
+          padding: new EdgeInsets.fromLTRB(0, 0, 20, 0),
           alignment: Alignment.center,
           child: GestureDetector(
             onTap: () {
@@ -69,18 +71,16 @@ class _State extends State<SurveyPointAreaEditPage> {
                 Navigator.of(context).pop(this.name);
               }
             },
-            child:   Text("保存",
+            child: Text(
+              "保存",
               style: TextStyle(
                 color: this.name.length > 0 ? prefix0.GREEN_COLOR : Colors.grey,
               ),
-
             ),
           ),
-
         ),
       ],
     );
-
 
     _editParentText(editText) {
       setState(() {
@@ -105,6 +105,9 @@ class _State extends State<SurveyPointAreaEditPage> {
           TextField(
             controller: locationController,
             keyboardType: TextInputType.number,
+            inputFormatters: [
+              WhitelistingTextInputFormatter(RegExp("[0-9.]")),
+            ],
             decoration: InputDecoration(
               border: InputBorder.none,
 
@@ -136,6 +139,18 @@ class _State extends State<SurveyPointAreaEditPage> {
         children: <Widget>[
           backContainer,
           new Offstage(
+            offstage: isShowError,
+            child: Padding(
+              padding: new EdgeInsets.fromLTRB(20, 8, 20, 8),
+              child: Text(
+                "请输入正确电话号码",
+                style: new TextStyle(
+                  color: Colors.red,
+                ),
+              ),
+            ),
+          ),
+          new Offstage(
             offstage: isHighHistory,
             child: HistoryPage(
                 hisoryKey: historyKey,
@@ -146,14 +161,14 @@ class _State extends State<SurveyPointAreaEditPage> {
     );
 
     return Scaffold(
-        appBar: NavBar,
-        body: GestureDetector(
-          onTap: () {
-            // 点击空白页面关闭键盘
-            FocusScope.of(context).requestFocus(blankNode);
-          },
-          child: bigContainer,
-        ),
-        );
+      appBar: NavBar,
+      body: GestureDetector(
+        onTap: () {
+          // 点击空白页面关闭键盘
+          FocusScope.of(context).requestFocus(blankNode);
+        },
+        child: bigContainer,
+      ),
+    );
   }
 }

@@ -1,8 +1,9 @@
 //现场情况
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:sensoro_survey/views/survey/common/Tools.dart';
-import 'package:sensoro_survey/views/survey/common/save_data_manager.dart';
 import 'package:sensoro_survey/views/survey/common/history_page.dart';
+import 'package:sensoro_survey/views/survey/common/save_data_manager.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 
 class EditHeadPersonPhonePage extends StatefulWidget {
@@ -50,24 +51,20 @@ class _State extends State<EditHeadPersonPhonePage> {
             // 点击空白页面关闭键盘
             Navigator.pop(context);
           },
-          child:   Text("取消",
-            style: TextStyle(
-                color: Colors.black
-            ),
-
+          child: Text(
+            "取消",
+            style: TextStyle(color: Colors.black),
           ),
         ),
-
       ),
       actions: <Widget>[
         Container(
-          padding:  new EdgeInsets.fromLTRB(0, 0, 20, 0),
+          padding: new EdgeInsets.fromLTRB(0, 0, 20, 0),
           alignment: Alignment.center,
           child: GestureDetector(
             onTap: () {
               // 点击空白页面关闭键盘
               if (this.name.length > 0) {
-
                 if (Tools.isChinaPhoneLegal(this.name)) {
                   SaveDataManger.addHistory(this.name, historyKey);
                   Navigator.of(context).pop(this.name);
@@ -76,21 +73,18 @@ class _State extends State<EditHeadPersonPhonePage> {
                     isShowError = false;
                   });
                 }
-
               }
             },
-            child:   Text("保存",
+            child: Text(
+              "保存",
               style: TextStyle(
                 color: this.name.length > 0 ? prefix0.GREEN_COLOR : Colors.grey,
               ),
-
             ),
           ),
-
         ),
       ],
     );
-
 
     _editParentText(editText) {
       setState(() {
@@ -115,6 +109,10 @@ class _State extends State<EditHeadPersonPhonePage> {
           TextField(
             controller: locationController,
             keyboardType: TextInputType.phone,
+            inputFormatters: [
+              WhitelistingTextInputFormatter.digitsOnly
+            ], //只允许输入数字
+
             decoration: InputDecoration(
               border: InputBorder.none,
 
@@ -168,14 +166,14 @@ class _State extends State<EditHeadPersonPhonePage> {
     );
 
     return Scaffold(
-        appBar: NavBar,
-        body: GestureDetector(
-          onTap: () {
-            // 点击空白页面关闭键盘
-            FocusScope.of(context).requestFocus(blankNode);
-          },
-          child: bigContainer,
-        ),
-        );
+      appBar: NavBar,
+      body: GestureDetector(
+        onTap: () {
+          // 点击空白页面关闭键盘
+          FocusScope.of(context).requestFocus(blankNode);
+        },
+        child: bigContainer,
+      ),
+    );
   }
 }
