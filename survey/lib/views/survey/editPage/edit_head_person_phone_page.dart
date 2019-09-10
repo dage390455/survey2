@@ -67,8 +67,16 @@ class _State extends State<EditHeadPersonPhonePage> {
             onTap: () {
               // 点击空白页面关闭键盘
               if (this.name.length > 0) {
-                SaveDataManger.addHistory(this.name, historyKey);
-                Navigator.of(context).pop(this.name);
+
+                if (Tools.isChinaPhoneLegal(this.name)) {
+                  SaveDataManger.addHistory(this.name, historyKey);
+                  Navigator.of(context).pop(this.name);
+                } else {
+                  setState(() {
+                    isShowError = false;
+                  });
+                }
+                
               }
             },
             child:   Text("保存",
