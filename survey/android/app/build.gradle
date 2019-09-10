@@ -120,6 +120,7 @@ dependencies {
     api 'com.amap.api:search:latest.integration'
     implementation 'androidx.core:core:1.1.0-rc02'
     implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
+    implementation 'com.github.zhouzhuo810:ZzExcelCreator:1.0.6'
 
 }
 
