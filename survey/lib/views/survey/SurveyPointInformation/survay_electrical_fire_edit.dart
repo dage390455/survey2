@@ -529,10 +529,9 @@ class _State extends State<SurvayElectricalFireEditPage> {
               height: 60,
               child: new Row(
                 children: <Widget>[
-                  Text("电箱位置",
-                    style: new TextStyle(
-                        fontSize: prefix0.fontsSize
-                    ),
+                  Text(
+                    "电箱位置",
+                    style: new TextStyle(fontSize: prefix0.fontsSize),
                   ),
                   Expanded(
                     child: Text(
@@ -540,9 +539,7 @@ class _State extends State<SurvayElectricalFireEditPage> {
                           ? fireCreatModel.page2editAddress
                           : "必填",
                       textAlign: TextAlign.right,
-                      style: new TextStyle(
-                          fontSize: prefix0.fontsSize
-                      ),
+                      style: new TextStyle(fontSize: prefix0.fontsSize),
                     ),
                   ),
                   Image.asset(
@@ -564,10 +561,9 @@ class _State extends State<SurvayElectricalFireEditPage> {
               height: 60,
               child: new Row(
                 children: <Widget>[
-                  Text("电箱用途",
-                    style: new TextStyle(
-                        fontSize: prefix0.fontsSize
-                    ),
+                  Text(
+                    "电箱用途",
+                    style: new TextStyle(fontSize: prefix0.fontsSize),
                   ),
                   Expanded(
                     child: Text(
@@ -575,9 +571,7 @@ class _State extends State<SurvayElectricalFireEditPage> {
                           ? fireCreatModel.page2editPurpose
                           : "",
                       textAlign: TextAlign.right,
-                      style: new TextStyle(
-                          fontSize: prefix0.fontsSize
-                      ),
+                      style: new TextStyle(fontSize: prefix0.fontsSize),
                     ),
                   ),
                   Image.asset(
@@ -599,12 +593,10 @@ class _State extends State<SurvayElectricalFireEditPage> {
               height: 60,
               child: new Row(
                 children: <Widget>[
-                  Text("备注",
-                    style: new TextStyle(
-                        fontSize: prefix0.fontsSize
-                    ),
+                  Text(
+                    "备注",
+                    style: new TextStyle(fontSize: prefix0.fontsSize),
                   ),
-
                 ],
               ),
             ),
@@ -638,10 +630,7 @@ class _State extends State<SurvayElectricalFireEditPage> {
               Padding(
                 child: new Text(
                   electricalItems[0],
-                  style: TextStyle(color: Colors.grey,
-                      fontSize: 18
-
-                  ),
+                  style: TextStyle(color: Colors.grey, fontSize: 18),
                 ),
                 padding: new EdgeInsets.fromLTRB(20, 20, 20, 20),
               )
@@ -750,7 +739,10 @@ class _State extends State<SurvayElectricalFireEditPage> {
                         Container(
                           alignment: Alignment.center,
                           child: fireCreatModel.editpic2.length == 0
-                              ? Text('     上传\n总开关照片')
+                              ? Text(
+                                  '上传\n总开关照片\n(必填)',
+                                  textAlign: TextAlign.center,
+                                )
                               : Image.file(File(fireCreatModel.editpic2)),
                           decoration: new BoxDecoration(
                             border: new Border.all(
@@ -1344,9 +1336,7 @@ class _State extends State<SurvayElectricalFireEditPage> {
                 child: Text(
                   "电箱照片",
                   textAlign: TextAlign.left,
-                  style: new TextStyle(
-                      fontSize: prefix0.fontsSize
-                  ),
+                  style: new TextStyle(fontSize: prefix0.fontsSize),
                 ),
               ),
             ],
@@ -1357,10 +1347,9 @@ class _State extends State<SurvayElectricalFireEditPage> {
           ),
           new Padding(
             padding: new EdgeInsets.fromLTRB(20, 10, 20, 20),
-            child: Text("至少拍摄2张清晰的电箱及空开照片，能看清空开上的数字及信息。",
-              style: new TextStyle(
-                  fontSize: prefix0.fontsSize
-              ),
+            child: Text(
+              "至少拍摄2张清晰的电箱及空开照片，能看清空开上的数字及信息。",
+              style: new TextStyle(fontSize: prefix0.fontsSize),
             ),
           ),
           Row(
@@ -1370,9 +1359,7 @@ class _State extends State<SurvayElectricalFireEditPage> {
                 child: Text(
                   "环境照片",
                   textAlign: TextAlign.left,
-                  style: new TextStyle(
-                      fontSize: prefix0.fontsSize
-                  ),
+                  style: new TextStyle(fontSize: prefix0.fontsSize),
                 ),
               ),
             ],
@@ -1383,10 +1370,9 @@ class _State extends State<SurvayElectricalFireEditPage> {
           ),
           new Padding(
             padding: new EdgeInsets.fromLTRB(20, 10, 20, 100),
-            child: Text("至少拍摄1张环境照片，可以清楚的看到电箱周围的墙面情况和离地高度。",
-              style: new TextStyle(
-                  fontSize: prefix0.fontsSize
-              ),
+            child: Text(
+              "至少拍摄1张环境照片，可以清楚的看到电箱周围的墙面情况和离地高度。",
+              style: new TextStyle(fontSize: prefix0.fontsSize),
             ),
           ),
         ],
@@ -1447,10 +1433,7 @@ class _State extends State<SurvayElectricalFireEditPage> {
                   Padding(
                     child: new Text(
                       electricalItems[1],
-                      style: TextStyle(color: Colors.grey,
-                          fontSize: 18
-
-                      ),
+                      style: TextStyle(color: Colors.grey, fontSize: 18),
                     ),
                     padding: new EdgeInsets.fromLTRB(20, 20, 20, 20),
                   )
@@ -1475,10 +1458,9 @@ class _State extends State<SurvayElectricalFireEditPage> {
               height: 60,
               child: new Row(
                 children: <Widget>[
-                  Text("配备外箱",
-                    style: new TextStyle(
-                        fontSize: prefix0.fontsSize
-                    ),
+                  Text(
+                    "配备外箱",
+                    style: new TextStyle(fontSize: prefix0.fontsSize),
                   ),
                   Expanded(
                     child: new Radio(
@@ -1490,10 +1472,9 @@ class _State extends State<SurvayElectricalFireEditPage> {
                           });
                         }),
                   ),
-                  Text("不需要\n(电箱空间足够)",
-                    style: new TextStyle(
-                        fontSize: prefix0.fontsSize
-                    ),
+                  Text(
+                    "不需要\n(电箱空间足够)",
+                    style: new TextStyle(fontSize: prefix0.fontsSize),
                   ),
                   Expanded(
                     child: new Radio(
@@ -1505,10 +1486,9 @@ class _State extends State<SurvayElectricalFireEditPage> {
                           });
                         }),
                   ),
-                  Text("需要\n(电箱空间不够)",
-                    style: new TextStyle(
-                        fontSize: prefix0.fontsSize
-                    ),
+                  Text(
+                    "需要\n(电箱空间不够)",
+                    style: new TextStyle(fontSize: prefix0.fontsSize),
                   ),
                 ],
               ),
@@ -1525,10 +1505,9 @@ class _State extends State<SurvayElectricalFireEditPage> {
               height: 60,
               child: new Row(
                 children: <Widget>[
-                  Text("电箱位置",
-                    style: new TextStyle(
-                        fontSize: prefix0.fontsSize
-                    ),
+                  Text(
+                    "电箱位置",
+                    style: new TextStyle(fontSize: prefix0.fontsSize),
                   ),
                   new Radio(
                       value: 1,
@@ -1538,10 +1517,9 @@ class _State extends State<SurvayElectricalFireEditPage> {
                           fireCreatModel.isOutSide = e;
                         });
                       }),
-                  Text("户外",
-                    style: new TextStyle(
-                        fontSize: prefix0.fontsSize
-                    ),
+                  Text(
+                    "户外",
+                    style: new TextStyle(fontSize: prefix0.fontsSize),
                   ),
                   new Radio(
                       value: 0,
@@ -1551,10 +1529,9 @@ class _State extends State<SurvayElectricalFireEditPage> {
                           fireCreatModel.isOutSide = e;
                         });
                       }),
-                  Text("户内",
-                    style: new TextStyle(
-                        fontSize: prefix0.fontsSize
-                    ),
+                  Text(
+                    "户内",
+                    style: new TextStyle(fontSize: prefix0.fontsSize),
                   ),
                 ],
               ),
@@ -1571,10 +1548,9 @@ class _State extends State<SurvayElectricalFireEditPage> {
               height: 60,
               child: new Row(
                 children: <Widget>[
-                  Text("是否需要梯子",
-                    style: new TextStyle(
-                        fontSize: prefix0.fontsSize
-                    ),
+                  Text(
+                    "是否需要梯子",
+                    style: new TextStyle(fontSize: prefix0.fontsSize),
                   ),
                   new Radio(
                       value: 0,
@@ -1584,10 +1560,9 @@ class _State extends State<SurvayElectricalFireEditPage> {
                           fireCreatModel.isNeedLadder = e;
                         });
                       }),
-                  Text("不需要",
-                    style: new TextStyle(
-                        fontSize: prefix0.fontsSize
-                    ),
+                  Text(
+                    "不需要",
+                    style: new TextStyle(fontSize: prefix0.fontsSize),
                   ),
                   new Radio(
                       value: 1,
@@ -1597,10 +1572,9 @@ class _State extends State<SurvayElectricalFireEditPage> {
                           fireCreatModel.isNeedLadder = e;
                         });
                       }),
-                  Text("需要",
-                    style: new TextStyle(
-                        fontSize: prefix0.fontsSize
-                    ),
+                  Text(
+                    "需要",
+                    style: new TextStyle(fontSize: prefix0.fontsSize),
                   ),
                 ],
               ),
@@ -1656,10 +1630,9 @@ class _State extends State<SurvayElectricalFireEditPage> {
               height: 60,
               child: new Row(
                 children: <Widget>[
-                  Text("备注",
-                    style: new TextStyle(
-                        fontSize: prefix0.fontsSize
-                    ),
+                  Text(
+                    "备注",
+                    style: new TextStyle(fontSize: prefix0.fontsSize),
                   ),
                 ],
               ),
@@ -1739,10 +1712,7 @@ class _State extends State<SurvayElectricalFireEditPage> {
                   Padding(
                     child: new Text(
                       electricalItems[2],
-                      style: TextStyle(color: Colors.grey,
-                          fontSize: 18
-
-                      ),
+                      style: TextStyle(color: Colors.grey, fontSize: 18),
                     ),
                     padding: new EdgeInsets.fromLTRB(20, 20, 20, 20),
                   )
@@ -1821,10 +1791,9 @@ class _State extends State<SurvayElectricalFireEditPage> {
               height: 60,
               child: new Row(
                 children: <Widget>[
-                  Text("报警音可否有效传播",
-                    style: new TextStyle(
-                        fontSize: prefix0.fontsSize
-                    ),
+                  Text(
+                    "报警音可否有效传播",
+                    style: new TextStyle(fontSize: prefix0.fontsSize),
                   ),
                   Expanded(
                     child: new Radio(
@@ -1836,10 +1805,9 @@ class _State extends State<SurvayElectricalFireEditPage> {
                           });
                         }),
                   ),
-                  Text("是",
-                    style: new TextStyle(
-                        fontSize: prefix0.fontsSize
-                    ),
+                  Text(
+                    "是",
+                    style: new TextStyle(fontSize: prefix0.fontsSize),
                   ),
                   Expanded(
                     child: new Radio(
@@ -1851,10 +1819,9 @@ class _State extends State<SurvayElectricalFireEditPage> {
                           });
                         }),
                   ),
-                  Text("否",
-                    style: new TextStyle(
-                        fontSize: prefix0.fontsSize
-                    ),
+                  Text(
+                    "否",
+                    style: new TextStyle(fontSize: prefix0.fontsSize),
                   ),
                 ],
               ),
@@ -1871,10 +1838,9 @@ class _State extends State<SurvayElectricalFireEditPage> {
               height: 60,
               child: new Row(
                 children: <Widget>[
-                  Text("报警是否扰民",
-                    style: new TextStyle(
-                        fontSize: prefix0.fontsSize
-                    ),
+                  Text(
+                    "报警是否扰民",
+                    style: new TextStyle(fontSize: prefix0.fontsSize),
                   ),
                   new Radio(
                       value: 1,
@@ -1884,10 +1850,9 @@ class _State extends State<SurvayElectricalFireEditPage> {
                           fireCreatModel.isNuisance = e;
                         });
                       }),
-                  Text("是",
-                    style: new TextStyle(
-                        fontSize: prefix0.fontsSize
-                    ),
+                  Text(
+                    "是",
+                    style: new TextStyle(fontSize: prefix0.fontsSize),
                   ),
                   new Radio(
                       value: 0,
@@ -1897,10 +1862,9 @@ class _State extends State<SurvayElectricalFireEditPage> {
                           fireCreatModel.isNuisance = e;
                         });
                       }),
-                  Text("否",
-                    style: new TextStyle(
-                        fontSize: prefix0.fontsSize
-                    ),
+                  Text(
+                    "否",
+                    style: new TextStyle(fontSize: prefix0.fontsSize),
                   ),
                 ],
               ),
@@ -1917,10 +1881,9 @@ class _State extends State<SurvayElectricalFireEditPage> {
               height: 60,
               child: new Row(
                 children: <Widget>[
-                  Text("是否有专人消音",
-                    style: new TextStyle(
-                        fontSize: prefix0.fontsSize
-                    ),
+                  Text(
+                    "是否有专人消音",
+                    style: new TextStyle(fontSize: prefix0.fontsSize),
                   ),
                   new Radio(
                       value: 1,
@@ -1930,10 +1893,9 @@ class _State extends State<SurvayElectricalFireEditPage> {
                           fireCreatModel.isNoiseReduction = e;
                         });
                       }),
-                  Text("是",
-                    style: new TextStyle(
-                        fontSize: prefix0.fontsSize
-                    ),
+                  Text(
+                    "是",
+                    style: new TextStyle(fontSize: prefix0.fontsSize),
                   ),
                   new Radio(
                       value: 0,
@@ -1943,10 +1905,9 @@ class _State extends State<SurvayElectricalFireEditPage> {
                           fireCreatModel.isNoiseReduction = e;
                         });
                       }),
-                  Text("否",
-                    style: new TextStyle(
-                        fontSize: prefix0.fontsSize
-                    ),
+                  Text(
+                    "否",
+                    style: new TextStyle(fontSize: prefix0.fontsSize),
                   ),
                 ],
               ),
@@ -1963,10 +1924,9 @@ class _State extends State<SurvayElectricalFireEditPage> {
               height: 60,
               child: new Row(
                 children: <Widget>[
-                  Text("备注",
-                    style: new TextStyle(
-                        fontSize: prefix0.fontsSize
-                    ),
+                  Text(
+                    "备注",
+                    style: new TextStyle(fontSize: prefix0.fontsSize),
                   ),
                 ],
               ),
@@ -2010,10 +1970,9 @@ class _State extends State<SurvayElectricalFireEditPage> {
               height: 60,
               child: new Row(
                 children: <Widget>[
-                  Text("空开层级",
-                    style: new TextStyle(
-                        fontSize: prefix0.fontsSize
-                    ),
+                  Text(
+                    "空开层级",
+                    style: new TextStyle(fontSize: prefix0.fontsSize),
                   ),
                   new Radio(
                       value: 1,
@@ -2023,10 +1982,9 @@ class _State extends State<SurvayElectricalFireEditPage> {
                           fireCreatModel.allOpenValue = e;
                         });
                       }),
-                  Text("总空开",
-                    style: new TextStyle(
-                        fontSize: prefix0.fontsSize
-                    ),
+                  Text(
+                    "总空开",
+                    style: new TextStyle(fontSize: prefix0.fontsSize),
                   ),
                   new Radio(
                       value: 0,
@@ -2036,10 +1994,9 @@ class _State extends State<SurvayElectricalFireEditPage> {
                           fireCreatModel.allOpenValue = e;
                         });
                       }),
-                  Text("分空开",
-                    style: new TextStyle(
-                        fontSize: prefix0.fontsSize
-                    ),
+                  Text(
+                    "分空开",
+                    style: new TextStyle(fontSize: prefix0.fontsSize),
                   ),
                 ],
               ),
@@ -2056,10 +2013,9 @@ class _State extends State<SurvayElectricalFireEditPage> {
               height: 60,
               child: new Row(
                 children: <Widget>[
-                  Text("空开类型",
-                    style: new TextStyle(
-                        fontSize: prefix0.fontsSize
-                    ),
+                  Text(
+                    "空开类型",
+                    style: new TextStyle(fontSize: prefix0.fontsSize),
                   ),
                   new Radio(
                       value: 1,
@@ -2070,10 +2026,9 @@ class _State extends State<SurvayElectricalFireEditPage> {
                           fireCreatModel.isZhiHui = 0;
                         });
                       }),
-                  Text("单相电",
-                    style: new TextStyle(
-                        fontSize: prefix0.fontsSize
-                    ),
+                  Text(
+                    "单相电",
+                    style: new TextStyle(fontSize: prefix0.fontsSize),
                   ),
                   new Radio(
                       value: 0,
@@ -2084,10 +2039,9 @@ class _State extends State<SurvayElectricalFireEditPage> {
                           fireCreatModel.isZhiHui = 0;
                         });
                       }),
-                  Text("三相电",
-                    style: new TextStyle(
-                        fontSize: prefix0.fontsSize
-                    ),
+                  Text(
+                    "三相电",
+                    style: new TextStyle(fontSize: prefix0.fontsSize),
                   ),
                 ],
               ),
@@ -2121,10 +2075,9 @@ class _State extends State<SurvayElectricalFireEditPage> {
                             fireCreatModel.isMolded = e;
                           });
                         }),
-                    Text("微断",
-                      style: new TextStyle(
-                          fontSize: prefix0.fontsSize
-                      ),
+                    Text(
+                      "微断",
+                      style: new TextStyle(fontSize: prefix0.fontsSize),
                     ),
                     new Radio(
                         value: 0,
@@ -2134,10 +2087,9 @@ class _State extends State<SurvayElectricalFireEditPage> {
                             fireCreatModel.isMolded = e;
                           });
                         }),
-                    Text("塑壳",
-                      style: new TextStyle(
-                          fontSize: prefix0.fontsSize
-                      ),
+                    Text(
+                      "塑壳",
+                      style: new TextStyle(fontSize: prefix0.fontsSize),
                     ),
                   ],
                 ),
@@ -2155,10 +2107,9 @@ class _State extends State<SurvayElectricalFireEditPage> {
               height: 60,
               child: new Row(
                 children: <Widget>[
-                  Text("额定电流",
-                    style: new TextStyle(
-                        fontSize: prefix0.fontsSize
-                    ),
+                  Text(
+                    "额定电流",
+                    style: new TextStyle(fontSize: prefix0.fontsSize),
                   ),
                   Expanded(
                     child: Text(
@@ -2166,9 +2117,7 @@ class _State extends State<SurvayElectricalFireEditPage> {
                           ? (fireCreatModel.current + "A")
                           : "必填",
                       textAlign: TextAlign.right,
-                      style: new TextStyle(
-                          fontSize: prefix0.fontsSize
-                      ),
+                      style: new TextStyle(fontSize: prefix0.fontsSize),
                     ),
                   ),
                   Image.asset(
@@ -2190,10 +2139,9 @@ class _State extends State<SurvayElectricalFireEditPage> {
               height: 60,
               child: new Row(
                 children: <Widget>[
-                  Text("危险线路数",
-                    style: new TextStyle(
-                        fontSize: prefix0.fontsSize
-                    ),
+                  Text(
+                    "危险线路数",
+                    style: new TextStyle(fontSize: prefix0.fontsSize),
                   ),
                   Expanded(
                     child: Text(
@@ -2201,9 +2149,7 @@ class _State extends State<SurvayElectricalFireEditPage> {
                           ? (fireCreatModel.dangerous + "条")
                           : "",
                       textAlign: TextAlign.right,
-                      style: new TextStyle(
-                          fontSize: prefix0.fontsSize
-                      ),
+                      style: new TextStyle(fontSize: prefix0.fontsSize),
                     ),
                   ),
                   Image.asset(
@@ -2232,10 +2178,9 @@ class _State extends State<SurvayElectricalFireEditPage> {
               height: 60,
               child: new Row(
                 children: <Widget>[
-                  Text("适用类型",
-                    style: new TextStyle(
-                        fontSize: prefix0.fontsSize
-                    ),
+                  Text(
+                    "适用类型",
+                    style: new TextStyle(fontSize: prefix0.fontsSize),
                   ),
                   new Radio(
                     value: 1,
@@ -2255,9 +2200,7 @@ class _State extends State<SurvayElectricalFireEditPage> {
                           color: fireCreatModel.isSingle == 1
                               ? Colors.black
                               : Colors.grey,
-                          fontSize: 14
-
-                      ),
+                          fontSize: 14),
                     ),
                   ),
                   new Radio(
@@ -2271,10 +2214,9 @@ class _State extends State<SurvayElectricalFireEditPage> {
                         }
                       }),
                   Expanded(
-                    child: Text("电气火灾\n(不支持通断)",
-                      style: new TextStyle(
-                          fontSize: 14
-                      ),
+                    child: Text(
+                      "电气火灾\n(不支持通断)",
+                      style: new TextStyle(fontSize: 14),
                     ),
                   ),
                 ],
@@ -2292,18 +2234,15 @@ class _State extends State<SurvayElectricalFireEditPage> {
               height: 60,
               child: new Row(
                 children: <Widget>[
-                  Text("温度探头数",
-                    style: new TextStyle(
-                        fontSize: prefix0.fontsSize
-                    ),
+                  Text(
+                    "温度探头数",
+                    style: new TextStyle(fontSize: prefix0.fontsSize),
                   ),
                   Expanded(
                     child: Text(
                       _getProbeCount().toString() + "个",
                       textAlign: TextAlign.right,
-                      style: new TextStyle(
-                          fontSize: prefix0.fontsSize
-                      ),
+                      style: new TextStyle(fontSize: prefix0.fontsSize),
                     ),
                   ),
                 ],
@@ -2323,18 +2262,15 @@ class _State extends State<SurvayElectricalFireEditPage> {
                 height: 60,
                 child: new Row(
                   children: <Widget>[
-                    Text("额定电流",
-                      style: new TextStyle(
-                          fontSize: prefix0.fontsSize
-                      ),
+                    Text(
+                      "额定电流",
+                      style: new TextStyle(fontSize: prefix0.fontsSize),
                     ),
                     Expanded(
                       child: Text(
                         _getRatedCurrent(),
                         textAlign: TextAlign.right,
-                        style: new TextStyle(
-                            fontSize: prefix0.fontsSize
-                        ),
+                        style: new TextStyle(fontSize: prefix0.fontsSize),
                       ),
                     ),
                   ],
@@ -2351,10 +2287,9 @@ class _State extends State<SurvayElectricalFireEditPage> {
                 height: 60,
                 child: new Row(
                   children: <Widget>[
-                    Text("额定电流",
-                      style: new TextStyle(
-                          fontSize: prefix0.fontsSize
-                      ),
+                    Text(
+                      "额定电流",
+                      style: new TextStyle(fontSize: prefix0.fontsSize),
                     ),
                     Expanded(
                       child: new Radio(
@@ -2367,10 +2302,9 @@ class _State extends State<SurvayElectricalFireEditPage> {
                             });
                           }),
                     ),
-                    Text("250A",
-                      style: new TextStyle(
-                          fontSize: prefix0.fontsSize
-                      ),
+                    Text(
+                      "250A",
+                      style: new TextStyle(fontSize: prefix0.fontsSize),
                     ),
                     Expanded(
                       child: new Radio(
@@ -2383,10 +2317,9 @@ class _State extends State<SurvayElectricalFireEditPage> {
                             });
                           }),
                     ),
-                    Text("400A",
-                      style: new TextStyle(
-                          fontSize: prefix0.fontsSize
-                      ),
+                    Text(
+                      "400A",
+                      style: new TextStyle(fontSize: prefix0.fontsSize),
                     ),
                   ],
                 ),
@@ -2409,19 +2342,15 @@ class _State extends State<SurvayElectricalFireEditPage> {
                 height: 60,
                 child: new Row(
                   children: <Widget>[
-                    Text("漏电互感器规格",
-                      style: new TextStyle(
-                          fontSize: prefix0.fontsSize
-                      ),
+                    Text(
+                      "漏电互感器规格",
+                      style: new TextStyle(fontSize: prefix0.fontsSize),
                     ),
                     Expanded(
                       child: Text(
-
                         _getLeakageCurrent(),
                         textAlign: TextAlign.right,
-                        style: new TextStyle(
-                            fontSize: prefix0.fontsSize
-                        ),
+                        style: new TextStyle(fontSize: prefix0.fontsSize),
                       ),
                     ),
                   ],
@@ -2483,10 +2412,7 @@ class _State extends State<SurvayElectricalFireEditPage> {
                   Padding(
                     child: new Text(
                       electricalItems[3],
-                      style: TextStyle(color: Colors.grey,
-                          fontSize: 18
-
-                      ),
+                      style: TextStyle(color: Colors.grey, fontSize: 18),
                     ),
                     padding: new EdgeInsets.fromLTRB(20, 20, 20, 20),
                   )
@@ -2536,11 +2462,7 @@ class _State extends State<SurvayElectricalFireEditPage> {
                       Padding(
                         child: new Text(
                           electricalItems[4],
-                          style: TextStyle(color: Colors.grey,
-                            fontSize: 18
-
-                          ),
-
+                          style: TextStyle(color: Colors.grey, fontSize: 18),
                         ),
                         padding: new EdgeInsets.fromLTRB(20, 20, 20, 20),
                       )
@@ -2766,10 +2688,9 @@ class _State extends State<SurvayElectricalFireEditPage> {
               height: 60,
               child: new Row(
                 children: <Widget>[
-                  Text("勘察点名称",
-                    style: new TextStyle(
-                        fontSize: prefix0.fontsSize
-                    ),
+                  Text(
+                    "勘察点名称",
+                    style: new TextStyle(fontSize: prefix0.fontsSize),
                   ),
                   Expanded(
                     child: Text(
@@ -2777,9 +2698,7 @@ class _State extends State<SurvayElectricalFireEditPage> {
                           ? this.fireModel.editName
                           : "必填",
                       textAlign: TextAlign.right,
-                      style: new TextStyle(
-                        fontSize: prefix0.fontsSize
-                      ),
+                      style: new TextStyle(fontSize: prefix0.fontsSize),
                     ),
                   ),
                   Image.asset(
@@ -2801,19 +2720,17 @@ class _State extends State<SurvayElectricalFireEditPage> {
               height: 60,
               child: new Row(
                 children: <Widget>[
-                  Text("勘察点用途",
-                    style: new TextStyle(
-                        fontSize: prefix0.fontsSize
-                    ),),
+                  Text(
+                    "勘察点用途",
+                    style: new TextStyle(fontSize: prefix0.fontsSize),
+                  ),
                   Expanded(
                     child: Text(
                       this.fireModel.editPurpose.length > 0
                           ? this.fireModel.editPurpose
                           : "",
                       textAlign: TextAlign.right,
-                      style: new TextStyle(
-                          fontSize: prefix0.fontsSize
-                      ),
+                      style: new TextStyle(fontSize: prefix0.fontsSize),
                     ),
                   ),
                   Image.asset(
@@ -2835,19 +2752,17 @@ class _State extends State<SurvayElectricalFireEditPage> {
               height: 60,
               child: new Row(
                 children: <Widget>[
-                  Text("具体地址",
-                    style: new TextStyle(
-                      fontSize: prefix0.fontsSize
-                  ),),
+                  Text(
+                    "具体地址",
+                    style: new TextStyle(fontSize: prefix0.fontsSize),
+                  ),
                   Expanded(
                     child: Text(
                       this.fireModel.editAddress.length > 0
                           ? this.fireModel.editAddress
                           : "",
                       textAlign: TextAlign.right,
-                      style: new TextStyle(
-                          fontSize: prefix0.fontsSize
-                      ),
+                      style: new TextStyle(fontSize: prefix0.fontsSize),
                     ),
                   ),
                   Image.asset(
@@ -2869,10 +2784,9 @@ class _State extends State<SurvayElectricalFireEditPage> {
               height: 60,
               child: new Row(
                 children: <Widget>[
-                  Text("定位地址",
-                    style: new TextStyle(
-                        fontSize: prefix0.fontsSize
-                    ),
+                  Text(
+                    "定位地址",
+                    style: new TextStyle(fontSize: prefix0.fontsSize),
                   ),
                   Expanded(
                     child: Text(
@@ -2880,9 +2794,7 @@ class _State extends State<SurvayElectricalFireEditPage> {
                           ? this.fireModel.editPosition
                           : "",
                       textAlign: TextAlign.right,
-                      style: new TextStyle(
-                          fontSize: prefix0.fontsSize
-                      ),
+                      style: new TextStyle(fontSize: prefix0.fontsSize),
                     ),
                   ),
                   Image.asset(
@@ -2911,10 +2823,9 @@ class _State extends State<SurvayElectricalFireEditPage> {
               height: 60,
               child: new Row(
                 children: <Widget>[
-                  Text("勘察点结构",
-                    style: new TextStyle(
-                        fontSize: prefix0.fontsSize
-                    ),
+                  Text(
+                    "勘察点结构",
+                    style: new TextStyle(fontSize: prefix0.fontsSize),
                   ),
                   Expanded(
                     child: Text(
@@ -2922,9 +2833,7 @@ class _State extends State<SurvayElectricalFireEditPage> {
                           ? this.fireModel.editPointStructure
                           : "",
                       textAlign: TextAlign.right,
-                      style: new TextStyle(
-                          fontSize: prefix0.fontsSize
-                      ),
+                      style: new TextStyle(fontSize: prefix0.fontsSize),
                     ),
                   ),
                   Image.asset(
@@ -2946,10 +2855,9 @@ class _State extends State<SurvayElectricalFireEditPage> {
               height: 60,
               child: new Row(
                 children: <Widget>[
-                  Text("勘察点面积(㎡)",
-                    style: new TextStyle(
-                        fontSize: prefix0.fontsSize
-                    ),
+                  Text(
+                    "勘察点面积(㎡)",
+                    style: new TextStyle(fontSize: prefix0.fontsSize),
                   ),
                   Expanded(
                     child: Text(
@@ -2957,9 +2865,7 @@ class _State extends State<SurvayElectricalFireEditPage> {
                           ? this.fireModel.editPointArea
                           : "",
                       textAlign: TextAlign.right,
-                      style: new TextStyle(
-                          fontSize: prefix0.fontsSize
-                      ),
+                      style: new TextStyle(fontSize: prefix0.fontsSize),
                     ),
                   ),
                   Image.asset(
@@ -2988,10 +2894,9 @@ class _State extends State<SurvayElectricalFireEditPage> {
               height: 60,
               child: new Row(
                 children: <Widget>[
-                  Text("现场负责人姓名",
-                    style: new TextStyle(
-                        fontSize: prefix0.fontsSize
-                    ),
+                  Text(
+                    "现场负责人姓名",
+                    style: new TextStyle(fontSize: prefix0.fontsSize),
                   ),
                   Expanded(
                     child: Text(
@@ -2999,9 +2904,7 @@ class _State extends State<SurvayElectricalFireEditPage> {
                           ? this.fireModel.headPerson
                           : "必填",
                       textAlign: TextAlign.right,
-                      style: new TextStyle(
-                          fontSize: prefix0.fontsSize
-                      ),
+                      style: new TextStyle(fontSize: prefix0.fontsSize),
                     ),
                   ),
                   Image.asset(
@@ -3023,10 +2926,9 @@ class _State extends State<SurvayElectricalFireEditPage> {
               height: 60,
               child: new Row(
                 children: <Widget>[
-                  Text("现场负责人电话",
-                    style: new TextStyle(
-                        fontSize: prefix0.fontsSize
-                    ),
+                  Text(
+                    "现场负责人电话",
+                    style: new TextStyle(fontSize: prefix0.fontsSize),
                   ),
                   Expanded(
                     child: Text(
@@ -3034,9 +2936,7 @@ class _State extends State<SurvayElectricalFireEditPage> {
                           ? this.fireModel.headPhone
                           : "必填",
                       textAlign: TextAlign.right,
-                      style: new TextStyle(
-                          fontSize: prefix0.fontsSize
-                      ),
+                      style: new TextStyle(fontSize: prefix0.fontsSize),
                     ),
                   ),
                   Image.asset(
@@ -3058,10 +2958,9 @@ class _State extends State<SurvayElectricalFireEditPage> {
               height: 60,
               child: new Row(
                 children: <Widget>[
-                  Text("老板姓名",
-                    style: new TextStyle(
-                        fontSize: prefix0.fontsSize
-                    ),
+                  Text(
+                    "老板姓名",
+                    style: new TextStyle(fontSize: prefix0.fontsSize),
                   ),
                   Expanded(
                     child: Text(
@@ -3069,9 +2968,7 @@ class _State extends State<SurvayElectricalFireEditPage> {
                           ? this.fireModel.bossName
                           : "",
                       textAlign: TextAlign.right,
-                      style: new TextStyle(
-                          fontSize: prefix0.fontsSize
-                      ),
+                      style: new TextStyle(fontSize: prefix0.fontsSize),
                     ),
                   ),
                   Image.asset(
@@ -3093,10 +2990,9 @@ class _State extends State<SurvayElectricalFireEditPage> {
               height: 60,
               child: new Row(
                 children: <Widget>[
-                  Text("老板电话",
-                    style: new TextStyle(
-                        fontSize: prefix0.fontsSize
-                    ),
+                  Text(
+                    "老板电话",
+                    style: new TextStyle(fontSize: prefix0.fontsSize),
                   ),
                   Expanded(
                     child: Text(
@@ -3104,9 +3000,7 @@ class _State extends State<SurvayElectricalFireEditPage> {
                           ? this.fireModel.bossPhone
                           : "",
                       textAlign: TextAlign.right,
-                      style: new TextStyle(
-                          fontSize: prefix0.fontsSize
-                      ),
+                      style: new TextStyle(fontSize: prefix0.fontsSize),
                     ),
                   ),
                   Image.asset(
