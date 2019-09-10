@@ -1,8 +1,11 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:core';
 import 'dart:io';
 import 'dart:ui' as ui; // 调用window拿到route判断跳转哪个界面
 
+import 'package:dio/dio.dart';
+import 'package:package_info/package_info.dart';
 import 'package:sensoro_survey/generated/application.dart';
 import 'package:sensoro_survey/generated/translations.dart';
 import 'package:flutter/services.dart';
@@ -116,8 +119,10 @@ class _MyAppState extends State<MyApp> {
 //注册页面，这个方法实现和原生的交互。
 Widget _widgetForRoute(String route) {
   print('route=$route');
-  //这一句代码改变上方状态栏字体颜色
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
+
+  //这一句代码改变上方状态栏字体颜色
+
   switch (route) {
     case 'myApp':
       return new MyApp();
@@ -151,6 +156,8 @@ Widget _widgetForRoute(String route) {
 void main() async {
   // runApp(new MyApp());
 
+
+
   print('进入了flutter');
   if (Platform.isIOS) {
     SharedPreferences.setMockInitialValues({});
@@ -163,6 +170,7 @@ void main() async {
   //这一句代码改变上方状态栏字体颜色
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
 }
+
 
 class MyApp1 extends StatelessWidget {
   Widget _home(BuildContext context) {

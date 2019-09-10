@@ -41,37 +41,44 @@ class _State extends State<EditElectricalAdressPage> {
         "电箱位置",
         style: TextStyle(color: Colors.black),
       ),
-      leading: IconButton(
-        icon: Image.asset(
-          "assets/images/back.png",
-          // height: 20,
-        ),
-        onPressed: () {
-          // SendEvent();
-          Navigator.pop(context);
-        },
-      ),
-    );
-
-    Widget bottomButton = Container(
-      color: prefix0.LIGHT_LINE_COLOR,
-      height: 60,
-      width: prefix0.screen_width,
-      child: new MaterialButton(
-        color: this.name.length > 0 ? prefix0.GREEN_COLOR : Colors.grey,
-        textColor: Colors.white,
-        child: new Text('保存',
+      leading: Container(
+        alignment: Alignment.center,
+        child: GestureDetector(
+          onTap: () {
+            // 点击空白页面关闭键盘
+            Navigator.pop(context);
+          },
+          child:   Text("取消",
             style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.normal,
-                fontSize: 20)),
-        onPressed: () {
-          if (this.name.length > 0) {
-            SaveDataManger.addHistory(this.name, historyKey);
-            Navigator.of(context).pop(this.name);
-          }
-        },
+                color: Colors.black
+            ),
+
+          ),
+        ),
+
       ),
+      actions: <Widget>[
+        Container(
+          padding:  new EdgeInsets.fromLTRB(0, 0, 20, 0),
+          alignment: Alignment.center,
+          child: GestureDetector(
+            onTap: () {
+              // 点击空白页面关闭键盘
+              if (this.name.length > 0) {
+                SaveDataManger.addHistory(this.name, historyKey);
+                Navigator.of(context).pop(this.name);
+              }
+            },
+            child:   Text("保存",
+              style: TextStyle(
+                color: this.name.length > 0 ? prefix0.GREEN_COLOR : Colors.grey,
+              ),
+
+            ),
+          ),
+
+        ),
+      ],
     );
 
     _editParentText(editText) {
@@ -147,8 +154,6 @@ class _State extends State<EditElectricalAdressPage> {
           },
           child: bigContainer,
         ),
-        bottomNavigationBar: BottomAppBar(
-          child: bottomButton,
-        ));
+        );
   }
 }
