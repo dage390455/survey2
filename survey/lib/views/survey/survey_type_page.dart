@@ -64,10 +64,11 @@ class _SurveyTypePageState extends State<SurveyTypePage> {
   Widget build(BuildContext context) {
     void _gotoInformation() async {
       // projectInfoModel model = projectInfoModel("", "", 1, "");
+      String input = "";
       final result = await Navigator.push(
         context,
         new MaterialPageRoute(
-            builder: (context) => new SurveyPointInformationPage()),
+            builder: (context) => new SurveyPointInformationPage(input: input)),
       );
 
       if (result != null) {
