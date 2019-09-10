@@ -14,7 +14,8 @@
     <application
         android:name="io.flutter.app.FlutterApplication"
         android:icon="@mipmap/logo"
-        android:label="升哲勘查">
+        tools:replace="android:label"
+        android:label="升哲勘察">
 
         <activity
             android:name="com.sensoro.survey.MainActivity"
@@ -51,7 +52,6 @@
         <activity
             android:name=".wxapi.WXEntryActivity"
             android:exported="true"
-            android:label="升哲勘查"
             android:launchMode="singleTask"
             android:theme="@android:style/Theme.Translucent.NoTitleBar">
             <intent-filter>
@@ -59,7 +59,7 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
 
-                <data android:scheme="wxa65d8bad62a982e1" />
+                <data android:scheme="wxf274fbb694ee5981" />
             </intent-filter>
         </activity>
 
