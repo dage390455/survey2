@@ -638,9 +638,8 @@ class _State extends State<SurvayElectricalFireEditPage> {
               Padding(
                 child: new Text(
                   electricalItems[0],
-                  style: TextStyle(color: prefix0.TITLE_TEXT_COLOR,
-
-                      fontSize: prefix0.fontsSize
+                  style: TextStyle(color: Colors.grey,
+                      fontSize: 18
 
                   ),
                 ),
@@ -1448,7 +1447,10 @@ class _State extends State<SurvayElectricalFireEditPage> {
                   Padding(
                     child: new Text(
                       electricalItems[1],
-                      style: TextStyle(color: prefix0.TITLE_TEXT_COLOR),
+                      style: TextStyle(color: Colors.grey,
+                          fontSize: 18
+
+                      ),
                     ),
                     padding: new EdgeInsets.fromLTRB(20, 20, 20, 20),
                   )
@@ -1737,7 +1739,10 @@ class _State extends State<SurvayElectricalFireEditPage> {
                   Padding(
                     child: new Text(
                       electricalItems[2],
-                      style: TextStyle(color: prefix0.TITLE_TEXT_COLOR),
+                      style: TextStyle(color: Colors.grey,
+                          fontSize: 18
+
+                      ),
                     ),
                     padding: new EdgeInsets.fromLTRB(20, 20, 20, 20),
                   )
@@ -2250,7 +2255,7 @@ class _State extends State<SurvayElectricalFireEditPage> {
                           color: fireCreatModel.isSingle == 1
                               ? Colors.black
                               : Colors.grey,
-                          fontSize: prefix0.fontsSize
+                          fontSize: 14
 
                       ),
                     ),
@@ -2268,7 +2273,7 @@ class _State extends State<SurvayElectricalFireEditPage> {
                   Expanded(
                     child: Text("电气火灾\n(不支持通断)",
                       style: new TextStyle(
-                          fontSize: prefix0.fontsSize
+                          fontSize: 14
                       ),
                     ),
                   ),
@@ -2478,7 +2483,10 @@ class _State extends State<SurvayElectricalFireEditPage> {
                   Padding(
                     child: new Text(
                       electricalItems[3],
-                      style: TextStyle(color: prefix0.TITLE_TEXT_COLOR),
+                      style: TextStyle(color: Colors.grey,
+                          fontSize: 18
+
+                      ),
                     ),
                     padding: new EdgeInsets.fromLTRB(20, 20, 20, 20),
                   )
