@@ -11,9 +11,9 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.WindowManager;
 import android.widget.Toast;
-
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -30,6 +30,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.util.Map;
 
 import io.flutter.app.FlutterActivity;
@@ -39,16 +40,10 @@ import io.flutter.plugin.common.StringCodec;
 import io.flutter.plugins.GeneratedPluginRegistrant;
 import io.flutter.view.FlutterNativeView;
 import io.flutter.view.FlutterView;
-import jxl.format.Alignment;
-import jxl.format.Border;
-import jxl.format.BorderLineStyle;
-import jxl.format.Colour;
-import jxl.format.VerticalAlignment;
 import jxl.read.biff.BiffException;
 import jxl.write.WritableCellFormat;
 import jxl.write.WritableFont;
 import jxl.write.WriteException;
-import me.zhouzhuo.zzexcelcreator.ColourUtil;
 import me.zhouzhuo.zzexcelcreator.ZzExcelCreator;
 import me.zhouzhuo.zzexcelcreator.ZzFormatCreator;
 
@@ -80,7 +75,7 @@ public class MainActivity extends FlutterActivity {
                 (call, result) -> {
                     //调用分享
                     if (call.method.equals("outputDocument")) {
-                        filename = "升哲勘察" + System.currentTimeMillis();
+                        filename = "升哲勘察" + System.currentTimeMillis() + ".txt";
                         boolean wxAppInstalled = api.isWXAppInstalled();
                         if (wxAppInstalled) {
 
@@ -151,19 +146,17 @@ public class MainActivity extends FlutterActivity {
     public void writeFileData(String filename, String content) {
 
         try {
-
-            FileOutputStream fos = this.openFileOutput(filename, MODE_PRIVATE);//获得FileOutputStream
-
-            //将要写入的字符串转换为byte数组
-
-            byte[] bytes = content.getBytes();
-
-            fos.write(bytes);//将byte数组写入文件
-
-            fos.close();//关闭文件输出流
-
+            File file = new File(filename);
+            if (!file.exists()) {
+                file.getParentFile().mkdirs();
+                file.createNewFile();
+            }
+            RandomAccessFile raf = new RandomAccessFile(file, "rwd");
+            raf.seek(file.length());
+            raf.write(content.getBytes());
+            raf.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e("TestFile", "Error on write File:" + e);
         }
     }
 
@@ -285,63 +278,28 @@ public class MainActivity extends FlutterActivity {
                 value = map.get(key);
                 System.out.println(key + ":" + value);
             }
-            final String col = "1";
-            final String row = "1";
-            final String str = "valuevaluevaluevalue";
 
 
             new AsyncTask<String, Void, Integer>() {
-
                 @Override
                 protected Integer doInBackground(String... params) {
-                    try {
-
-
-                        ZzExcelCreator
-                                .getInstance().createExcel(PATH, filename)
-                                .createSheet("测试1").close();
-
-                        ZzExcelCreator
-                                .getInstance()
-                                .openExcel(new File(PATH + filename + ".xls"))  //打开Excel文件
-                                .openSheet(0)                                   //打开Sheet工作表
-                                .close();
-                        //设置单元格内容格式
-                        WritableCellFormat format = ZzFormatCreator
-                                .getInstance()
-                                .createCellFont(WritableFont.ARIAL)  //设置字体
-                                .setAlignment(Alignment.CENTRE, VerticalAlignment.CENTRE)  //设置对齐方式(水平和垂直)
-                                .setFontSize(14)                    //设置字体大小
-                                .setFontColor(Colour.ROSE)          //设置字体颜色
-                                .getCellFormat();
-
-
-                        ZzExcelCreator
-                                .getInstance().openExcel(new File(PATH + filename + ".xls"))
-                                .openSheet(0)
-                                .setColumnWidth(1, 25)
-                                .setRowHeight(1, 400)
-                                .fillContent(Integer.parseInt(col), Integer.parseInt(row), str, format)
-                                .close();
-                        return 1;
-                    } catch (IOException | WriteException | BiffException e) {
-                        e.printStackTrace();
-                        return 0;
-                    }
+                    writeFileData(PATH + filename, map.toString());
+                    return 1;
                 }
 
                 @Override
                 protected void onPostExecute(Integer aVoid) {
                     super.onPostExecute(aVoid);
                     if (aVoid == 1) {
+
                         WXFileObject fileObj = new WXFileObject();
-                        fileObj.fileData = inputStreamToByte(PATH + filename + ".xls");//文件路径  
-                        fileObj.filePath = PATH + filename + ".xls";
+                        fileObj.fileData = inputStreamToByte(PATH + filename);//文件路径  
+                        fileObj.filePath = PATH + filename;
 
                         //使用媒体消息分享  
                         WXMediaMessage msg = new WXMediaMessage(fileObj);
 
-                        msg.title = filename + ".xls";
+                        msg.title = filename;
                         //发送请求  
                         SendMessageToWX.Req req = new SendMessageToWX.Req();
                         //创建唯一标识  
@@ -350,12 +308,84 @@ public class MainActivity extends FlutterActivity {
                         req.scene = SendMessageToWX.Req.WXSceneSession;
 
                         api.sendReq(req);
-                        Toast.makeText(MainActivity.this, "插入成功！", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(MainActivity.this, "插入失败！", Toast.LENGTH_SHORT).show();
                     }
                 }
-            }.execute(col, row, str);
+            }.execute();
+
+
+//            final String col = "1";
+//            final String row = "1";
+//            final String str = "valuevaluevaluevalue";
+//
+//
+//            new AsyncTask<String, Void, Integer>() {
+//
+//                @Override
+//                protected Integer doInBackground(String... params) {
+//                    try {
+//
+//
+//                        ZzExcelCreator
+//                                .getInstance().createExcel(PATH, filename)
+//                                .createSheet("测试1").close();
+//
+//                        ZzExcelCreator
+//                                .getInstance()
+//                                .openExcel(new File(PATH + filename + ".xls"))  //打开Excel文件
+//                                .openSheet(0)                                   //打开Sheet工作表
+//                                .close();
+//                        //设置单元格内容格式
+//                        WritableCellFormat format = ZzFormatCreator
+//                                .getInstance()
+//                                .createCellFont(WritableFont.ARIAL)  //设置字体
+//                                .setAlignment(Alignment.CENTRE, VerticalAlignment.CENTRE)  //设置对齐方式(水平和垂直)
+//                                .setFontSize(14)                    //设置字体大小
+//                                .setFontColor(Colour.ROSE)          //设置字体颜色
+//                                .getCellFormat();
+//
+//
+//                        ZzExcelCreator
+//                                .getInstance().openExcel(new File(PATH + filename + ".xls"))
+//                                .openSheet(0)
+//                                .setColumnWidth(1, 25)
+//                                .setRowHeight(1, 400)
+//                                .fillContent(Integer.parseInt(col), Integer.parseInt(row), str, format)
+//                                .close();
+//                        return 1;
+//                    } catch (IOException | WriteException | BiffException e) {
+//                        e.printStackTrace();
+//                        return 0;
+//                    }
+//                }
+//
+//                @Override
+//                protected void onPostExecute(Integer aVoid) {
+//                    super.onPostExecute(aVoid);
+//                    if (aVoid == 1) {
+//                        WXFileObject fileObj = new WXFileObject();
+//                        fileObj.fileData = inputStreamToByte(PATH + filename + ".xls");//文件路径  
+//                        fileObj.filePath = PATH + filename + ".xls";
+//
+//                        //使用媒体消息分享  
+//                        WXMediaMessage msg = new WXMediaMessage(fileObj);
+//
+//                        msg.title = filename + ".xls";
+//                        //发送请求  
+//                        SendMessageToWX.Req req = new SendMessageToWX.Req();
+//                        //创建唯一标识  
+//                        req.transaction = String.valueOf(System.currentTimeMillis());
+//                        req.message = msg;
+//                        req.scene = SendMessageToWX.Req.WXSceneSession;
+//
+//                        api.sendReq(req);
+//                        Toast.makeText(MainActivity.this, "插入成功！", Toast.LENGTH_SHORT).show();
+//                    } else {
+//                        Toast.makeText(MainActivity.this, "插入失败！", Toast.LENGTH_SHORT).show();
+//                    }
+//                }
+//            }.execute(col, row, str);
 
 
         } catch (Exception e) {
