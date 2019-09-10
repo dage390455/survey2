@@ -336,12 +336,12 @@ public class MainActivity extends FlutterActivity {
                     if (aVoid == 1) {
                         WXFileObject fileObj = new WXFileObject();
                         fileObj.fileData = inputStreamToByte(PATH + filename + ".xls");//文件路径  
-                        fileObj.filePath = PATH + filename;
+                        fileObj.filePath = PATH + filename + ".xls";
 
                         //使用媒体消息分享  
                         WXMediaMessage msg = new WXMediaMessage(fileObj);
 
-                        msg.title = filename;
+                        msg.title = filename + ".xls";
                         //发送请求  
                         SendMessageToWX.Req req = new SendMessageToWX.Req();
                         //创建唯一标识  
