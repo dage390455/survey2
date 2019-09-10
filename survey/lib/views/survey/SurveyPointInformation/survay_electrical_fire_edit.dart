@@ -563,7 +563,7 @@ class _State extends State<SurvayElectricalFireEditPage> {
                     child: Text(
                       fireCreatModel.page2editPurpose.length > 0
                           ? fireCreatModel.page2editPurpose
-                          : "选填",
+                          : "",
                       textAlign: TextAlign.right,
                     ),
                   ),
@@ -2001,7 +2001,7 @@ class _State extends State<SurvayElectricalFireEditPage> {
                     child: Text(
                       fireCreatModel.dangerous.length > 0
                           ? (fireCreatModel.dangerous + "条")
-                          : "选填",
+                          : "",
                       textAlign: TextAlign.right,
                     ),
                   ),
@@ -2520,6 +2520,9 @@ class _State extends State<SurvayElectricalFireEditPage> {
                           ? this.fireModel.editName
                           : "必填",
                       textAlign: TextAlign.right,
+                      style: new TextStyle(
+                        fontSize: 16
+                      ),
                     ),
                   ),
                   Image.asset(
@@ -2546,7 +2549,7 @@ class _State extends State<SurvayElectricalFireEditPage> {
                     child: Text(
                       this.fireModel.editPurpose.length > 0
                           ? this.fireModel.editPurpose
-                          : "选填",
+                          : "",
                       textAlign: TextAlign.right,
                     ),
                   ),
@@ -2574,7 +2577,7 @@ class _State extends State<SurvayElectricalFireEditPage> {
                     child: Text(
                       this.fireModel.editAddress.length > 0
                           ? this.fireModel.editAddress
-                          : "选填",
+                          : "",
                       textAlign: TextAlign.right,
                     ),
                   ),
@@ -2602,7 +2605,7 @@ class _State extends State<SurvayElectricalFireEditPage> {
                     child: Text(
                       this.fireModel.editPosition.length > 0
                           ? this.fireModel.editPosition
-                          : "选填",
+                          : "",
                       textAlign: TextAlign.right,
                     ),
                   ),
@@ -2637,7 +2640,7 @@ class _State extends State<SurvayElectricalFireEditPage> {
                     child: Text(
                       this.fireModel.editPointStructure.length > 0
                           ? this.fireModel.editPointStructure
-                          : "选填",
+                          : "",
                       textAlign: TextAlign.right,
                     ),
                   ),
@@ -2665,7 +2668,7 @@ class _State extends State<SurvayElectricalFireEditPage> {
                     child: Text(
                       this.fireModel.editPointArea.length > 0
                           ? this.fireModel.editPointArea
-                          : "选填",
+                          : "",
                       textAlign: TextAlign.right,
                     ),
                   ),
@@ -2756,7 +2759,7 @@ class _State extends State<SurvayElectricalFireEditPage> {
                     child: Text(
                       this.fireModel.bossName.length > 0
                           ? this.fireModel.bossName
-                          : "选填",
+                          : "",
                       textAlign: TextAlign.right,
                     ),
                   ),
@@ -2784,7 +2787,7 @@ class _State extends State<SurvayElectricalFireEditPage> {
                     child: Text(
                       this.fireModel.bossPhone.length > 0
                           ? this.fireModel.bossPhone
-                          : "选填",
+                          : "",
                       textAlign: TextAlign.right,
                     ),
                   ),
@@ -2835,6 +2838,7 @@ class _State extends State<SurvayElectricalFireEditPage> {
             step3,
             step4,
             step5,
+            bottomButton
           ],
         ));
 
@@ -2847,9 +2851,10 @@ class _State extends State<SurvayElectricalFireEditPage> {
           },
           child: bigContainer,
         ),
-        bottomNavigationBar: BottomAppBar(
-          child: bottomButton,
-        ));
+//        bottomNavigationBar: BottomAppBar(
+//          child: bottomButton,
+//        )
+    );
 
 //    return Scaffold(
 //      appBar: NavBar,
