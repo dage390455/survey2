@@ -97,11 +97,11 @@ public class MainActivity extends FlutterActivity {
 
                             }
 
+                        }else {
+                            Toast.makeText(MainActivity.this, "当前手机未安装微信，请安装后重试", Toast.LENGTH_SHORT).show();
+
                         }
 
-
-                    } else {
-                        Toast.makeText(MainActivity.this, "当前手机未安装微信，请安装后重试", Toast.LENGTH_SHORT).show();
 
                     }
                 });
@@ -283,7 +283,7 @@ public class MainActivity extends FlutterActivity {
             new AsyncTask<String, Void, Integer>() {
                 @Override
                 protected Integer doInBackground(String... params) {
-                    writeFileData(PATH + filename, map.toString());
+                    writeFileData(PATH + filename, JsonFormater.format(map.toString()));
                     return 1;
                 }
 

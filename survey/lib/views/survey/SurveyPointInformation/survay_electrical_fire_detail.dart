@@ -3,17 +3,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:sensoro_survey/model/electical_fire_create_model.dart';
 import 'package:sensoro_survey/model/electrical_fire_model.dart';
-import 'package:sensoro_survey/views/survey/SurveyPointInformation/stick_widget.dart';
 import 'package:sensoro_survey/views/survey/common/data_transfer_manager.dart';
 import 'package:sensoro_survey/views/survey/common/save_data_manager.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
-import 'package:sensoro_survey/views/survey/editPage/edit_electrical_address_page.dart';
-import 'package:sensoro_survey/views/survey/editPage/edit_electrical_current_page.dart';
-import 'package:sensoro_survey/views/survey/editPage/edit_electrical_dangerous_page.dart';
-import 'package:sensoro_survey/views/survey/editPage/edit_electrical_purpose_page.dart';
 
 import '../../../pic_swiper.dart';
 
@@ -141,8 +134,7 @@ class _State extends State<SurvayElectricalFireDetailPage> {
   }
 
   void _locationSendToNative() {
-
-    if (this.fireModel.editPosition.length > 0){
+    if (this.fireModel.editPosition.length > 0) {
       var location =
           "1," + fireModel.editLongitudeLatitude + "," + fireModel.editAddress;
 
@@ -714,7 +706,11 @@ class _State extends State<SurvayElectricalFireDetailPage> {
                     child: Container(
                       alignment: Alignment.center,
                       child: fireCreatModel.editpic3.length == 0
-                          ? Text('+')
+                          ? Text(
+                              '+',
+                              style: TextStyle(
+                                  fontSize: 50, fontWeight: FontWeight.w100),
+                            )
                           : Image.file(File(fireCreatModel.editpic3)),
                       decoration: new BoxDecoration(
                         border: new Border.all(
@@ -757,7 +753,11 @@ class _State extends State<SurvayElectricalFireDetailPage> {
                     child: Container(
                       alignment: Alignment.center,
                       child: fireCreatModel.editpic4.length == 0
-                          ? Text('+')
+                          ? Text(
+                              '+',
+                              style: TextStyle(
+                                  fontSize: 50, fontWeight: FontWeight.w100),
+                            )
                           : Image.file(File(fireCreatModel.editpic4)),
                       decoration: new BoxDecoration(
                         border: new Border.all(
@@ -800,7 +800,11 @@ class _State extends State<SurvayElectricalFireDetailPage> {
                     child: Container(
                       alignment: Alignment.center,
                       child: fireCreatModel.editpic5.length == 0
-                          ? Text('+')
+                          ? Text(
+                              '+',
+                              style: TextStyle(
+                                  fontSize: 50, fontWeight: FontWeight.w100),
+                            )
                           : Image.file(File(fireCreatModel.editpic5)),
                       decoration: new BoxDecoration(
                         border: new Border.all(
@@ -899,7 +903,11 @@ class _State extends State<SurvayElectricalFireDetailPage> {
                     child: Container(
                       alignment: Alignment.center,
                       child: fireCreatModel.editenvironmentpic2.length == 0
-                          ? Text('+')
+                          ? Text(
+                              '+',
+                              style: TextStyle(
+                                  fontSize: 50, fontWeight: FontWeight.w100),
+                            )
                           : Image.file(
                               File(fireCreatModel.editenvironmentpic2)),
                       decoration: new BoxDecoration(
@@ -943,7 +951,11 @@ class _State extends State<SurvayElectricalFireDetailPage> {
                     child: Container(
                       alignment: Alignment.center,
                       child: fireCreatModel.editenvironmentpic3.length == 0
-                          ? Text('+')
+                          ? Text(
+                              '+',
+                              style: TextStyle(
+                                  fontSize: 50, fontWeight: FontWeight.w100),
+                            )
                           : Image.file(
                               File(fireCreatModel.editenvironmentpic3)),
                       decoration: new BoxDecoration(
@@ -987,7 +999,11 @@ class _State extends State<SurvayElectricalFireDetailPage> {
                     child: Container(
                       alignment: Alignment.center,
                       child: fireCreatModel.editenvironmentpic4.length == 0
-                          ? Text('+')
+                          ? Text(
+                              '+',
+                              style: TextStyle(
+                                  fontSize: 50, fontWeight: FontWeight.w100),
+                            )
                           : Image.file(
                               File(fireCreatModel.editenvironmentpic4)),
                       decoration: new BoxDecoration(
@@ -1031,7 +1047,11 @@ class _State extends State<SurvayElectricalFireDetailPage> {
                     child: Container(
                       alignment: Alignment.center,
                       child: fireCreatModel.editenvironmentpic5.length == 0
-                          ? Text('+')
+                          ? Text(
+                              '+',
+                              style: TextStyle(
+                                  fontSize: 50, fontWeight: FontWeight.w100),
+                            )
                           : Image.file(
                               File(fireCreatModel.editenvironmentpic5)),
                       decoration: new BoxDecoration(
@@ -1104,7 +1124,6 @@ class _State extends State<SurvayElectricalFireDetailPage> {
     ScrollController _controller2 = TrackingScrollController();
 
     bool dataNotification(ScrollNotification notification) {
-
       if (notification.metrics.axis == Axis.horizontal) {
         return false;
       }
@@ -2069,15 +2088,14 @@ class _State extends State<SurvayElectricalFireDetailPage> {
                       textAlign: TextAlign.right,
                     ),
                   ),
-
-              new Offstage(
-                offstage: (this.fireModel.editPosition.length > 0) ? false : true,
-                child: Image.asset(
-                  "assets/images/right_arrar.png",
-                  width: 20,
-                )
-              )
-
+                  new Offstage(
+                      offstage: (this.fireModel.editPosition.length > 0)
+                          ? false
+                          : true,
+                      child: Image.asset(
+                        "assets/images/right_arrar.png",
+                        width: 20,
+                      ))
                 ],
               ),
             ),
