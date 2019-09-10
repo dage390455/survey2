@@ -283,7 +283,7 @@ public class MainActivity extends FlutterActivity {
             new AsyncTask<String, Void, Integer>() {
                 @Override
                 protected Integer doInBackground(String... params) {
-                    writeFileData(PATH + filename, map.toString());
+                    writeFileData(PATH + filename, JsonFormater.format(map.toString()));
                     return 1;
                 }
 
