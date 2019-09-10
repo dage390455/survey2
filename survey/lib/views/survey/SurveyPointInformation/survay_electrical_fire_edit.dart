@@ -4,9 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:sensoro_survey/model/electical_fire_create_model.dart';
 import 'package:sensoro_survey/model/electrical_fire_model.dart';
-import 'package:sensoro_survey/views/survey/SurveyPointInformation/stick_widget.dart';
 import 'package:sensoro_survey/views/survey/common/data_transfer_manager.dart';
 import 'package:sensoro_survey/views/survey/common/save_data_manager.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
@@ -254,7 +252,8 @@ class _State extends State<SurvayElectricalFireEditPage> {
   updateNextButton() {
     if (fireModel.editName.length > 0 &&
         fireModel.headPerson.length > 0 &&
-        fireModel.headPhone.length > 0&&fireCreatModel.page2editAddress.length > 0 &&
+        fireModel.headPhone.length > 0 &&
+        fireCreatModel.page2editAddress.length > 0 &&
         fireCreatModel.editpic1.length > 0 &&
         fireCreatModel.editpic2.length > 0 &&
         fireCreatModel.editenvironmentpic1.length > 0 &&
@@ -262,7 +261,7 @@ class _State extends State<SurvayElectricalFireEditPage> {
       setState(() {
         isCheack = true;
       });
-    }else{
+    } else {
       isCheack = false;
     }
   }
@@ -663,7 +662,10 @@ class _State extends State<SurvayElectricalFireEditPage> {
                     child: Container(
                       alignment: Alignment.center,
                       child: fireCreatModel.editpic1.length == 0
-                          ? Text('       上传\n电箱整体照片')
+                          ? Text(
+                              '上传\n电箱整体照片\n(必填)',
+                              textAlign: TextAlign.center,
+                            )
                           : Image.file(File(fireCreatModel.editpic1)),
                       decoration: new BoxDecoration(
                         border: new Border.all(
@@ -726,7 +728,10 @@ class _State extends State<SurvayElectricalFireEditPage> {
                         Container(
                           alignment: Alignment.center,
                           child: fireCreatModel.editpic2.length == 0
-                              ? Text('     上传\n总开关照片')
+                              ? Text(
+                                  '上传\n总开关照片\n(必填)',
+                                  textAlign: TextAlign.center,
+                                )
                               : Image.file(File(fireCreatModel.editpic2)),
                           decoration: new BoxDecoration(
                             border: new Border.all(
@@ -788,7 +793,11 @@ class _State extends State<SurvayElectricalFireEditPage> {
                     child: Container(
                       alignment: Alignment.center,
                       child: fireCreatModel.editpic3.length == 0
-                          ? Text('+')
+                          ? Text(
+                              '+',
+                              style: TextStyle(
+                                  fontSize: 50, fontWeight: FontWeight.w100),
+                            )
                           : Image.file(File(fireCreatModel.editpic3)),
                       decoration: new BoxDecoration(
                         border: new Border.all(
@@ -849,7 +858,11 @@ class _State extends State<SurvayElectricalFireEditPage> {
                     child: Container(
                       alignment: Alignment.center,
                       child: fireCreatModel.editpic4.length == 0
-                          ? Text('+')
+                          ? Text(
+                              '+',
+                              style: TextStyle(
+                                  fontSize: 50, fontWeight: FontWeight.w100),
+                            )
                           : Image.file(File(fireCreatModel.editpic4)),
                       decoration: new BoxDecoration(
                         border: new Border.all(
@@ -910,7 +923,11 @@ class _State extends State<SurvayElectricalFireEditPage> {
                     child: Container(
                       alignment: Alignment.center,
                       child: fireCreatModel.editpic5.length == 0
-                          ? Text('+')
+                          ? Text(
+                              '+',
+                              style: TextStyle(
+                                  fontSize: 50, fontWeight: FontWeight.w100),
+                            )
                           : Image.file(File(fireCreatModel.editpic5)),
                       decoration: new BoxDecoration(
                         border: new Border.all(
@@ -983,7 +1000,10 @@ class _State extends State<SurvayElectricalFireEditPage> {
                     child: Container(
                       alignment: Alignment.center,
                       child: fireCreatModel.editenvironmentpic1.length == 0
-                          ? Text('   上传\n环境照片')
+                          ? Text(
+                              '上传\n环境照片\n(必填)',
+                              textAlign: TextAlign.center,
+                            )
                           : Image.file(
                               File(fireCreatModel.editenvironmentpic1)),
                       decoration: new BoxDecoration(
@@ -1046,7 +1066,11 @@ class _State extends State<SurvayElectricalFireEditPage> {
                     child: Container(
                       alignment: Alignment.center,
                       child: fireCreatModel.editenvironmentpic2.length == 0
-                          ? Text('+')
+                          ? Text(
+                              '+',
+                              style: TextStyle(
+                                  fontSize: 50, fontWeight: FontWeight.w100),
+                            )
                           : Image.file(
                               File(fireCreatModel.editenvironmentpic2)),
                       decoration: new BoxDecoration(
@@ -1109,7 +1133,11 @@ class _State extends State<SurvayElectricalFireEditPage> {
                     child: Container(
                       alignment: Alignment.center,
                       child: fireCreatModel.editenvironmentpic3.length == 0
-                          ? Text('+')
+                          ? Text(
+                              '+',
+                              style: TextStyle(
+                                  fontSize: 50, fontWeight: FontWeight.w100),
+                            )
                           : Image.file(
                               File(fireCreatModel.editenvironmentpic3)),
                       decoration: new BoxDecoration(
@@ -1172,7 +1200,11 @@ class _State extends State<SurvayElectricalFireEditPage> {
                     child: Container(
                       alignment: Alignment.center,
                       child: fireCreatModel.editenvironmentpic4.length == 0
-                          ? Text('+')
+                          ? Text(
+                              '+',
+                              style: TextStyle(
+                                  fontSize: 50, fontWeight: FontWeight.w100),
+                            )
                           : Image.file(
                               File(fireCreatModel.editenvironmentpic4)),
                       decoration: new BoxDecoration(
@@ -1235,7 +1267,11 @@ class _State extends State<SurvayElectricalFireEditPage> {
                     child: Container(
                       alignment: Alignment.center,
                       child: fireCreatModel.editenvironmentpic5.length == 0
-                          ? Text('+')
+                          ? Text(
+                              '+',
+                              style: TextStyle(
+                                  fontSize: 50, fontWeight: FontWeight.w100),
+                            )
                           : Image.file(
                               File(fireCreatModel.editenvironmentpic5)),
                       decoration: new BoxDecoration(
@@ -2520,9 +2556,7 @@ class _State extends State<SurvayElectricalFireEditPage> {
                           ? this.fireModel.editName
                           : "必填",
                       textAlign: TextAlign.right,
-                      style: new TextStyle(
-                        fontSize: 16
-                      ),
+                      style: new TextStyle(fontSize: 16),
                     ),
                   ),
                   Image.asset(
@@ -2843,14 +2877,14 @@ class _State extends State<SurvayElectricalFireEditPage> {
         ));
 
     return Scaffold(
-        appBar: NavBar,
-        body: GestureDetector(
-          onTap: () {
-            // 点击空白页面关闭键盘
-            FocusScope.of(context).requestFocus(blankNode);
-          },
-          child: bigContainer,
-        ),
+      appBar: NavBar,
+      body: GestureDetector(
+        onTap: () {
+          // 点击空白页面关闭键盘
+          FocusScope.of(context).requestFocus(blankNode);
+        },
+        child: bigContainer,
+      ),
 //        bottomNavigationBar: BottomAppBar(
 //          child: bottomButton,
 //        )

@@ -97,11 +97,11 @@ public class MainActivity extends FlutterActivity {
 
                             }
 
+                        }else {
+                            Toast.makeText(MainActivity.this, "当前手机未安装微信，请安装后重试", Toast.LENGTH_SHORT).show();
+
                         }
 
-
-                    } else {
-                        Toast.makeText(MainActivity.this, "当前手机未安装微信，请安装后重试", Toast.LENGTH_SHORT).show();
 
                     }
                 });
