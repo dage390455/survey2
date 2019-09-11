@@ -44,7 +44,10 @@ import io.flutter.plugins.GeneratedPluginRegistrant;
 import io.flutter.view.FlutterNativeView;
 import io.flutter.view.FlutterView;
 import jxl.Workbook;
+import jxl.format.Alignment;
 import jxl.write.Label;
+import jxl.write.WritableCellFormat;
+import jxl.write.WritableFont;
 import jxl.write.WritableImage;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
@@ -286,8 +289,19 @@ public class MainActivity extends FlutterActivity {
                             }
 
 
+                            WritableFont font = new WritableFont(WritableFont.TIMES);
+
+
+                            font.setPointSize(16);
+
+                            WritableCellFormat format = new WritableCellFormat(font);
+
+                            format.setAlignment(Alignment.CENTRE);
                             WritableWorkbook wbook = Workbook.createWorkbook(new File(filenameTemp));
                             WritableSheet sheet = wbook.createSheet("升哲勘察", 0);
+
+                            sheet.setRowView(0, false);//第0行，行高自动扩展
+
 
                             //获取sheet对象
                             //初始化行
@@ -297,161 +311,117 @@ public class MainActivity extends FlutterActivity {
                             col = 0;
 
 
-
-
-
                             String createTime = detail.getJson().getCreateTime();
                             String remark = detail.getJson().getRemark();
                             String projectName = detail.getJson().getProjectName();
 
 
-                            sheet.addCell(new Label(0, row++, "工程名"));
-                            sheet.addCell(new Label(0, row++, "创建时间"));
-                            sheet.addCell(new Label(0, row++, "项目备注"));
+                            sheet.addCell(new Label(0, ++row, "工程名"));
+                            sheet.addCell(new Label(1, row, projectName));
+                            sheet.addCell(new Label(0, ++row, "创建时间"));
+                            sheet.addCell(new Label(1, row, createTime));
 
-
-                            row = 0;
-                            sheet.addCell(new Label(1, row++, projectName));
-                            sheet.addCell(new Label(1, row++, createTime));
-                            sheet.addCell(new Label(1, row++, remark));
+                            sheet.addCell(new Label(0, ++row, "项目备注"));
+                            sheet.addCell(new Label(1, row, remark));
 
 
                             List<Detail.JsonBean.SubListBean> subList = detail.getJson().getSubList();
 
                             for (Detail.JsonBean.SubListBean subListBean : subList) {
 
-//                                long electricalFireId = subListBean.getElectricalFireId();
-//                                sheet.addCell(new Label(0, ++row, "id"));
-//                                sheet.addCell(new Label(1, row, electricalFireId + ""));
-
                                 String editName = subListBean.getEditName();
+                                sheet.addCell(new Label(0, ++row, "勘察点信息"));
                                 if (!TextUtils.isEmpty(editName)) {
-                                    sheet.addCell(new Label(0, ++row, "勘察点信息"));
                                     sheet.addCell(new Label(1, row, editName));
                                 }
 
                                 String editPurpose = subListBean.editPurpose;
+                                sheet.addCell(new Label(0, ++row, "勘察点用途"));
                                 if (!TextUtils.isEmpty(editPurpose)) {
-                                    sheet.addCell(new Label(0, ++row, "勘察点用途"));
                                     sheet.addCell(new Label(1, row, editPurpose));
                                 }
 
                                 String address = subListBean.getEditAddress();
+                                sheet.addCell(new Label(0, ++row, "具体地址"));
                                 if (!TextUtils.isEmpty(address)) {
-                                    sheet.addCell(new Label(0, ++row, "具体地址"));
                                     sheet.addCell(new Label(1, row, address));
                                 }
 
                                 String editLongitudeLatitude = subListBean.getEditLongitudeLatitude();
+                                sheet.addCell(new Label(0, ++row, "定位位置"));
                                 if (!TextUtils.isEmpty(editLongitudeLatitude)) {
-                                    sheet.addCell(new Label(0, ++row, "定位位置"));
                                     sheet.addCell(new Label(1, row, editLongitudeLatitude));
                                 }
                                 String editPointStructure = subListBean.getEditPointStructure();
 
+                                sheet.addCell(new Label(0, ++row, "勘察点结构"));
                                 if (!TextUtils.isEmpty(editPointStructure)) {
-                                    sheet.addCell(new Label(0, ++row, "勘察点结构"));
                                     sheet.addCell(new Label(1, row, editName));
                                 }
                                 String editPointArea = subListBean.getEditPointArea();
 
+                                sheet.addCell(new Label(0, ++row, "勘察点面积"));
                                 if (!TextUtils.isEmpty(editPointArea)) {
-                                    sheet.addCell(new Label(0, ++row, "勘察点面积"));
                                     sheet.addCell(new Label(1, row, editName));
                                 }
 
+
                                 String bossName = subListBean.getBossName();
 
+                                sheet.addCell(new Label(0, ++row, "现场负责人姓名"));
                                 if (!TextUtils.isEmpty(bossName)) {
-                                    sheet.addCell(new Label(0, ++row, "老板名字"));
                                     sheet.addCell(new Label(1, row, bossName));
                                 }
+
+
                                 String bossPhone = subListBean.getBossPhone();
+                                sheet.addCell(new Label(0, ++row, "现场负责人电话"));
                                 if (!TextUtils.isEmpty(bossPhone)) {
-                                    sheet.addCell(new Label(0, ++row, "老板电话"));
                                     sheet.addCell(new Label(1, row, bossPhone));
                                 }
 
 
+                                String headPerson = subListBean.headPerson;
 
-
-                                String editenvironmentpic1 = subListBean.getEditenvironmentpic1();
-                                if (!TextUtils.isEmpty(editenvironmentpic1)) {
-                                    sheet.addCell(new Label(0, ++row, "环境第一张图片"));
-                                    Bitmap compressBm = getCompressBm(editenvironmentpic1, 800, 1024);
-                                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                                    compressBm.compress(Bitmap.CompressFormat.PNG, 75, baos);
-                                    WritableImage image = new WritableImage(1, row, 1, 1, baos.toByteArray());
-                                    sheet.setRowView(row, 1700, false); //设置行高
-                                    sheet.addImage(image);
+                                sheet.addCell(new Label(0, ++row, "老板名字"));
+                                if (!TextUtils.isEmpty(headPerson)) {
+                                    sheet.addCell(new Label(1, row, headPerson));
                                 }
 
 
-                                String editenvironmentpic2 = subListBean.getEditenvironmentpic2();
-                                if (!TextUtils.isEmpty(editenvironmentpic2)) {
-                                    sheet.addCell(new Label(0, ++row, "环境第二张图片"));
-                                    Bitmap compressBm = getCompressBm(editenvironmentpic2, 800, 1024);
-                                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                                    compressBm.compress(Bitmap.CompressFormat.PNG, 75, baos);
-                                    WritableImage image = new WritableImage(1, row, 1, 1, baos.toByteArray());
-                                    sheet.setRowView(row, 1700, false); //设置行高
-                                    sheet.addImage(image);
+                                String headPhone = subListBean.headPhone;
+
+                                sheet.addCell(new Label(0, ++row, "老板电话"));
+                                if (!TextUtils.isEmpty(headPhone)) {
+                                    sheet.addCell(new Label(1, row, headPhone));
                                 }
 
 
-                                String editenvironmentpic3 = subListBean.getEditenvironmentpic3();
+                                String page2editAddress = subListBean.page2editAddress;
 
-                                if (!TextUtils.isEmpty(editenvironmentpic3)) {
-                                    sheet.addCell(new Label(0, ++row, "环境第三张图片"));
-                                    Bitmap compressBm = getCompressBm(editenvironmentpic3, 800, 1024);
-                                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                                    compressBm.compress(Bitmap.CompressFormat.PNG, 75, baos);
-                                    WritableImage image = new WritableImage(1, row, 1, 1, baos.toByteArray());
-                                    sheet.setRowView(row, 1700, false); //设置行高
-                                    sheet.addImage(image);
-                                }
-                                String editenvironmentpic4 = subListBean.getEditenvironmentpic4();
-
-                                if (!TextUtils.isEmpty(editenvironmentpic4)) {
-                                    sheet.addCell(new Label(0, ++row, "环境第四张图片"));
-                                    Bitmap compressBm = getCompressBm(editenvironmentpic4, 800, 1024);
-                                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                                    compressBm.compress(Bitmap.CompressFormat.PNG, 75, baos);
-                                    WritableImage image = new WritableImage(1, row, 1, 1, baos.toByteArray());
-                                    sheet.setRowView(row, 1700, false); //设置行高
-                                    sheet.addImage(image);
-                                }
-                                String editenvironmentpic5 = subListBean.getEditenvironmentpic5();
-                                if (!TextUtils.isEmpty(editenvironmentpic5)) {
-                                    sheet.addCell(new Label(0, ++row, "环境第五张图片"));
-                                    Bitmap compressBm = getCompressBm(editenvironmentpic5, 800, 1024);
-                                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                                    compressBm.compress(Bitmap.CompressFormat.PNG, 75, baos);
-                                    WritableImage image = new WritableImage(1, row, 1, 1, baos.toByteArray());
-                                    sheet.setRowView(row, 1700, false); //设置行高
-                                    sheet.addImage(image);
+                                sheet.addCell(new Label(0, ++row, "电箱位置"));
+                                if (!TextUtils.isEmpty(page2editAddress)) {
+                                    sheet.addCell(new Label(1, row, page2editAddress));
                                 }
 
 
+                                String page2editPurpose = subListBean.page2editPurpose;
 
-
-
-
-                                String editOutsinPic = subListBean.getEditOutsinPic();
-                                if (!TextUtils.isEmpty(editOutsinPic)) {
-                                    sheet.addCell(new Label(0, ++row, "外箱安装位置图片"));
-
-                                    Bitmap compressBm = getCompressBm(editOutsinPic, 800, 1024);
-                                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                                    compressBm.compress(Bitmap.CompressFormat.PNG, 75, baos);
-                                    WritableImage image = new WritableImage(1, row, 1, 1, baos.toByteArray());
-                                    sheet.setRowView(row, 1700, false); //设置行高
-                                    sheet.addImage(image);
+                                sheet.addCell(new Label(0, ++row, "电箱用途"));
+                                if (!TextUtils.isEmpty(page2editPurpose)) {
+                                    sheet.addCell(new Label(1, row, page2editPurpose));
                                 }
+                                String step1Remak = subListBean.step1Remak;
+
+                                sheet.addCell(new Label(0, ++row, "电箱备注"));
+                                if (!TextUtils.isEmpty(step1Remak)) {
+                                    sheet.addCell(new Label(1, row, step1Remak));
+                                }
+
                                 String editpic1 = subListBean.getEditpic1();
 
+                                sheet.addCell(new Label(0, ++row, "电箱图片1"));
                                 if (!TextUtils.isEmpty(editpic1)) {
-                                    sheet.addCell(new Label(0, ++row, "电箱图片1"));
                                     Bitmap compressBm = getCompressBm(editpic1, 800, 1024);
                                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
                                     compressBm.compress(Bitmap.CompressFormat.PNG, 75, baos);
@@ -461,8 +431,8 @@ public class MainActivity extends FlutterActivity {
                                 }
                                 String editpic2 = subListBean.getEditpic2();
 
+                                sheet.addCell(new Label(0, ++row, "电箱图片2"));
                                 if (!TextUtils.isEmpty(editpic2)) {
-                                    sheet.addCell(new Label(0, ++row, "电箱图片2"));
                                     Bitmap compressBm = getCompressBm(editpic2, 800, 1024);
                                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
                                     compressBm.compress(Bitmap.CompressFormat.PNG, 75, baos);
@@ -506,18 +476,63 @@ public class MainActivity extends FlutterActivity {
                                     sheet.addImage(image);
                                 }
 
-                                String editPosition = subListBean.getEditPosition();
 
-                                if (!TextUtils.isEmpty(editPosition)) {
-                                    sheet.addCell(new Label(0, ++row, "定位地址"));
-                                    sheet.addCell(new Label(1, row, editName));
-                                }
-                                String editPurpose = subListBean.getEditPurpose();
-                                if (!TextUtils.isEmpty(editPurpose)) {
-                                    sheet.addCell(new Label(0, ++row, "勘察点用途"));
-                                    sheet.addCell(new Label(1, row, editName));
+                                String editenvironmentpic1 = subListBean.getEditenvironmentpic1();
+                                sheet.addCell(new Label(0, ++row, "环境第一张图片"));
+                                if (!TextUtils.isEmpty(editenvironmentpic1)) {
+                                    Bitmap compressBm = getCompressBm(editenvironmentpic1, 800, 1024);
+                                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                                    compressBm.compress(Bitmap.CompressFormat.PNG, 75, baos);
+                                    WritableImage image = new WritableImage(1, row, 1, 1, baos.toByteArray());
+                                    sheet.setRowView(row, 1700, false); //设置行高
+                                    sheet.addImage(image);
                                 }
 
+
+                                String editenvironmentpic2 = subListBean.getEditenvironmentpic2();
+                                sheet.addCell(new Label(0, ++row, "环境第二张图片"));
+                                if (!TextUtils.isEmpty(editenvironmentpic2)) {
+                                    Bitmap compressBm = getCompressBm(editenvironmentpic2, 800, 1024);
+                                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                                    compressBm.compress(Bitmap.CompressFormat.PNG, 75, baos);
+                                    WritableImage image = new WritableImage(1, row, 1, 1, baos.toByteArray());
+                                    sheet.setRowView(row, 1700, false); //设置行高
+                                    sheet.addImage(image);
+                                }
+
+
+                                String editenvironmentpic3 = subListBean.getEditenvironmentpic3();
+
+                                sheet.addCell(new Label(0, ++row, "环境第三张图片"));
+                                if (!TextUtils.isEmpty(editenvironmentpic3)) {
+                                    Bitmap compressBm = getCompressBm(editenvironmentpic3, 800, 1024);
+                                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                                    compressBm.compress(Bitmap.CompressFormat.PNG, 75, baos);
+                                    WritableImage image = new WritableImage(1, row, 1, 1, baos.toByteArray());
+                                    sheet.setRowView(row, 1700, false); //设置行高
+                                    sheet.addImage(image);
+                                }
+                                String editenvironmentpic4 = subListBean.getEditenvironmentpic4();
+
+                                sheet.addCell(new Label(0, ++row, "环境第四张图片"));
+                                if (!TextUtils.isEmpty(editenvironmentpic4)) {
+                                    Bitmap compressBm = getCompressBm(editenvironmentpic4, 800, 1024);
+                                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                                    compressBm.compress(Bitmap.CompressFormat.PNG, 75, baos);
+                                    WritableImage image = new WritableImage(1, row, 1, 1, baos.toByteArray());
+                                    sheet.setRowView(row, 1700, false); //设置行高
+                                    sheet.addImage(image);
+                                }
+                                String editenvironmentpic5 = subListBean.getEditenvironmentpic5();
+                                sheet.addCell(new Label(0, ++row, "环境第五张图片"));
+                                if (!TextUtils.isEmpty(editenvironmentpic5)) {
+                                    Bitmap compressBm = getCompressBm(editenvironmentpic5, 800, 1024);
+                                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                                    compressBm.compress(Bitmap.CompressFormat.PNG, 75, baos);
+                                    WritableImage image = new WritableImage(1, row, 1, 1, baos.toByteArray());
+                                    sheet.setRowView(row, 1700, false); //设置行高
+                                    sheet.addImage(image);
+                                }
 
                                 int isNeedCarton = subListBean.getIsNeedCarton();
                                 sheet.addCell(new Label(0, ++row, "是否需要外箱"));
@@ -532,6 +547,33 @@ public class MainActivity extends FlutterActivity {
                                 int needLadder = subListBean.isNeedLadder;
                                 sheet.addCell(new Label(0, ++row, "是否需要梯子"));
                                 sheet.addCell(new Label(1, row, needLadder == 1 ? "需要" : "不需要"));
+                                String editOutsinPic = subListBean.getEditOutsinPic();
+
+
+                                sheet.addCell(new Label(0, ++row, "外箱安装位置图片"));
+                                if (!TextUtils.isEmpty(editOutsinPic)) {
+                                    Bitmap compressBm = getCompressBm(editOutsinPic, 800, 1024);
+                                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                                    compressBm.compress(Bitmap.CompressFormat.PNG, 75, baos);
+                                    WritableImage image = new WritableImage(1, row, 1, 1, baos.toByteArray());
+                                    sheet.setRowView(row, 1700, false); //设置行高
+                                    sheet.addImage(image);
+                                }
+
+
+                                String step3Remak = subListBean.step3Remak;
+
+                                sheet.addCell(new Label(0, ++row, "安装环境备注"));
+                                if (!TextUtils.isEmpty(step3Remak)) {
+                                    sheet.addCell(new Label(1, row, step1Remak));
+                                }
+
+                                String editPosition = subListBean.getEditPosition();
+
+                                if (!TextUtils.isEmpty(editPosition)) {
+                                    sheet.addCell(new Label(0, ++row, "定位地址"));
+                                    sheet.addCell(new Label(1, row, editName));
+                                }
 
 
                                 int isEffectiveTransmission = subListBean.isEffectiveTransmission;
@@ -547,6 +589,14 @@ public class MainActivity extends FlutterActivity {
                                 int isNoiseReduction = subListBean.isNoiseReduction;
                                 sheet.addCell(new Label(0, ++row, "是否有专人消音"));
                                 sheet.addCell(new Label(1, row, isNoiseReduction == 1 ? "是" : "否"));
+
+
+                                String step4Remak = subListBean.step4Remak;
+
+                                sheet.addCell(new Label(0, ++row, "运作环境备注"));
+                                if (!TextUtils.isEmpty(step4Remak)) {
+                                    sheet.addCell(new Label(1, row, step4Remak));
+                                }
 
 
                                 int allOpenValue = subListBean.allOpenValue;
@@ -567,32 +617,34 @@ public class MainActivity extends FlutterActivity {
 
 
                                 String current = subListBean.getCurrent();
+                                sheet.addCell(new Label(0, ++row, "额定电流"));
                                 if (!TextUtils.isEmpty(current)) {
-                                    sheet.addCell(new Label(0, ++row, "额定电流"));
                                     sheet.addCell(new Label(1, row, current));
                                 }
 
-                                String currentSelect = subListBean.getCurrentSelect();
-                                if (!TextUtils.isEmpty(currentSelect)) {
-                                    sheet.addCell(new Label(0, ++row, "额定电流"));
-                                    sheet.addCell(new Label(1, row, currentSelect));
-                                }
 
                                 String dangerous = subListBean.getDangerous();
+                                sheet.addCell(new Label(0, ++row, "危险线路数"));
                                 if (!TextUtils.isEmpty(dangerous)) {
-                                    sheet.addCell(new Label(0, ++row, "危险线路数"));
                                     sheet.addCell(new Label(1, row, dangerous));
                                 }
                                 String probeNumber = subListBean.probeNumber;
+                                sheet.addCell(new Label(0, ++row, "温度探头数"));
                                 if (!TextUtils.isEmpty(probeNumber)) {
-                                    sheet.addCell(new Label(0, ++row, "温度探头数"));
                                     sheet.addCell(new Label(1, row, probeNumber));
                                 }
+                                String currentSelect = subListBean.getCurrentSelect();
+                                sheet.addCell(new Label(0, ++row, "额定电流"));
+                                if (!TextUtils.isEmpty(currentSelect)) {
+                                    sheet.addCell(new Label(1, row, currentSelect));
+                                }
+
                                 String recommendedTransformer = subListBean.recommendedTransformer;
+                                sheet.addCell(new Label(0, ++row, "漏电互感器规格"));
                                 if (!TextUtils.isEmpty(recommendedTransformer)) {
-                                    sheet.addCell(new Label(0, ++row, "漏电互感器规格"));
                                     sheet.addCell(new Label(1, row, recommendedTransformer));
                                 }
+                                sheet.setRowView(subList.indexOf(subListBean), true);//设置自动行高(i为行号)
 
 
                             }
@@ -647,9 +699,8 @@ public class MainActivity extends FlutterActivity {
                             req.scene = SendMessageToWX.Req.WXSceneSession;
 
                             api.sendReq(req);
-                            Toast.makeText(MainActivity.this, "插入成功！", Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(MainActivity.this, "插入失败！", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, "导出失败！", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }.execute();
