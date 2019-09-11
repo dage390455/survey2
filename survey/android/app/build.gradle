@@ -121,5 +121,7 @@ dependencies {
     implementation 'androidx.core:core:1.1.0-rc02'
     implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
     implementation 'com.github.zhouzhuo810:ZzExcelCreator:1.0.6'
+    compile 'com.google.code.gson:gson:2.8.4'
+
 }
 

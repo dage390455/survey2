@@ -66,7 +66,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
                 goToGetMsg();
                 break;
             case ConstantsAPI.COMMAND_SHOWMESSAGE_FROM_WX:
-                goToShowMsg((ShowMessageFromWX.Req) req);
+//                goToShowMsg((ShowMessageFromWX.Req) req);
                 break;
             default:
                 break;

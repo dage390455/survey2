@@ -4,12 +4,12 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.StrictMode;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.WindowManager;
@@ -19,18 +19,21 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.google.gson.Gson;
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
 import com.tencent.mm.opensdk.modelmsg.WXFileObject;
 import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
+import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.List;
 import java.util.Map;
 
 import io.flutter.app.FlutterActivity;
@@ -40,12 +43,12 @@ import io.flutter.plugin.common.StringCodec;
 import io.flutter.plugins.GeneratedPluginRegistrant;
 import io.flutter.view.FlutterNativeView;
 import io.flutter.view.FlutterView;
-import jxl.read.biff.BiffException;
-import jxl.write.WritableCellFormat;
-import jxl.write.WritableFont;
+import jxl.Workbook;
+import jxl.write.Label;
+import jxl.write.WritableImage;
+import jxl.write.WritableSheet;
+import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
-import me.zhouzhuo.zzexcelcreator.ZzExcelCreator;
-import me.zhouzhuo.zzexcelcreator.ZzFormatCreator;
 
 public class MainActivity extends FlutterActivity {
 
@@ -58,6 +61,7 @@ public class MainActivity extends FlutterActivity {
     private String filename;
 
     private Map<String, Map> map;
+    WritableWorkbook wbook = null;
 
     @Override
     public FlutterView createFlutterView(Context context) {
@@ -75,7 +79,7 @@ public class MainActivity extends FlutterActivity {
                 (call, result) -> {
                     //调用分享
                     if (call.method.equals("outputDocument")) {
-                        filename = "升哲勘察" + System.currentTimeMillis() + ".txt";
+                        filename = "升哲勘察" + System.currentTimeMillis();
                         boolean wxAppInstalled = api.isWXAppInstalled();
                         if (wxAppInstalled) {
 
@@ -84,6 +88,8 @@ public class MainActivity extends FlutterActivity {
                                 return;
                             }
                             map = (Map) call.arguments;
+
+
                             if (Build.VERSION.SDK_INT >= 23) {
                                 if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                                     requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0x01);
@@ -97,7 +103,7 @@ public class MainActivity extends FlutterActivity {
 
                             }
 
-                        }else {
+                        } else {
                             Toast.makeText(MainActivity.this, "当前手机未安装微信，请安装后重试", Toast.LENGTH_SHORT).show();
 
                         }
@@ -160,36 +166,6 @@ public class MainActivity extends FlutterActivity {
         }
     }
 
-    /**
-     * 分享文件
-     *
-     * @param context
-     * @param path
-     */
-    public static void shareFile(Context context, String path) {
-        if (TextUtils.isEmpty(path)) {
-            return;
-        }
-
-        checkFileUriExposure();
-
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(path)));  //传输图片或者文件 采用流的方式
-        intent.setType("*/*");   //分享文件
-        context.startActivity(Intent.createChooser(intent, "分享"));
-    }
-
-    /**
-     * 分享前必须执行本代码，主要用于兼容SDK18以上的系统
-     */
-    private static void checkFileUriExposure() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
-            StrictMode.setVmPolicy(builder.build());
-            builder.detectFileUriExposure();
-        }
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -274,124 +250,464 @@ public class MainActivity extends FlutterActivity {
                 return;
             }
             Map value = null;
-            for (String key : map.keySet()) {
-                value = map.get(key);
-                System.out.println(key + ":" + value);
-            }
+
+            JSONObject jsonObj = new JSONObject(map);
+
+            Detail detail = getDetail(jsonObj.toString());
 
 
-            new AsyncTask<String, Void, Integer>() {
-                @Override
-                protected Integer doInBackground(String... params) {
-                    writeFileData(PATH + filename, JsonFormater.format(map.toString()));
-                    return 1;
-                }
+            if (null != detail) {
 
-                @Override
-                protected void onPostExecute(Integer aVoid) {
-                    super.onPostExecute(aVoid);
-                    if (aVoid == 1) {
 
-                        WXFileObject fileObj = new WXFileObject();
-                        fileObj.fileData = inputStreamToByte(PATH + filename);//文件路径  
-                        fileObj.filePath = PATH + filename;
+                new AsyncTask<String, Void, Integer>() {
 
-                        //使用媒体消息分享  
-                        WXMediaMessage msg = new WXMediaMessage(fileObj);
+                    @Override
+                    protected Integer doInBackground(String... params) {
+                        try {
 
-                        msg.title = filename;
-                        //发送请求  
-                        SendMessageToWX.Req req = new SendMessageToWX.Req();
-                        //创建唯一标识  
-                        req.transaction = String.valueOf(System.currentTimeMillis());
-                        req.message = msg;
-                        req.scene = SendMessageToWX.Req.WXSceneSession;
 
-                        api.sendReq(req);
-                    } else {
-                        Toast.makeText(MainActivity.this, "插入失败！", Toast.LENGTH_SHORT).show();
+                            String filenameTemp = PATH + filename + ".xls";
+                            File file = new File(PATH);
+                            if (!file.exists()) {
+                                try {
+                                    //按照指定的路径创建文件夹
+                                    file.mkdirs();
+                                } catch (Exception e) {
+                                    // TODO: handle exception
+                                }
+                            }
+                            File dir = new File(filenameTemp);
+                            if (!dir.exists()) {
+                                try {
+                                    //在指定的文件夹中创建文件
+                                    dir.createNewFile();
+                                } catch (Exception e) {
+                                }
+                            }
+
+
+                            WritableWorkbook wbook = Workbook.createWorkbook(new File(filenameTemp));
+                            WritableSheet sheet = wbook.createSheet("升哲勘察", 0);
+
+                            //获取sheet对象
+                            //初始化行
+                            int row = 0;
+                            //初始化列
+                            int col = 0;
+                            col = 0;
+
+
+
+
+
+                            String createTime = detail.getJson().getCreateTime();
+                            String remark = detail.getJson().getRemark();
+                            String projectName = detail.getJson().getProjectName();
+
+
+                            sheet.addCell(new Label(0, row++, "工程名"));
+                            sheet.addCell(new Label(0, row++, "创建时间"));
+                            sheet.addCell(new Label(0, row++, "项目备注"));
+
+
+                            row = 0;
+                            sheet.addCell(new Label(1, row++, projectName));
+                            sheet.addCell(new Label(1, row++, createTime));
+                            sheet.addCell(new Label(1, row++, remark));
+
+
+                            List<Detail.JsonBean.SubListBean> subList = detail.getJson().getSubList();
+
+                            for (Detail.JsonBean.SubListBean subListBean : subList) {
+
+//                                long electricalFireId = subListBean.getElectricalFireId();
+//                                sheet.addCell(new Label(0, ++row, "id"));
+//                                sheet.addCell(new Label(1, row, electricalFireId + ""));
+
+                                String editName = subListBean.getEditName();
+                                if (!TextUtils.isEmpty(editName)) {
+                                    sheet.addCell(new Label(0, ++row, "勘察点信息"));
+                                    sheet.addCell(new Label(1, row, editName));
+                                }
+
+                                String editPurpose = subListBean.editPurpose;
+                                if (!TextUtils.isEmpty(editPurpose)) {
+                                    sheet.addCell(new Label(0, ++row, "勘察点用途"));
+                                    sheet.addCell(new Label(1, row, editPurpose));
+                                }
+
+                                String address = subListBean.getEditAddress();
+                                if (!TextUtils.isEmpty(address)) {
+                                    sheet.addCell(new Label(0, ++row, "具体地址"));
+                                    sheet.addCell(new Label(1, row, address));
+                                }
+
+                                String editLongitudeLatitude = subListBean.getEditLongitudeLatitude();
+                                if (!TextUtils.isEmpty(editLongitudeLatitude)) {
+                                    sheet.addCell(new Label(0, ++row, "定位位置"));
+                                    sheet.addCell(new Label(1, row, editLongitudeLatitude));
+                                }
+                                String editPointStructure = subListBean.getEditPointStructure();
+
+                                if (!TextUtils.isEmpty(editPointStructure)) {
+                                    sheet.addCell(new Label(0, ++row, "勘察点结构"));
+                                    sheet.addCell(new Label(1, row, editName));
+                                }
+                                String editPointArea = subListBean.getEditPointArea();
+
+                                if (!TextUtils.isEmpty(editPointArea)) {
+                                    sheet.addCell(new Label(0, ++row, "勘察点面积"));
+                                    sheet.addCell(new Label(1, row, editName));
+                                }
+
+                                String bossName = subListBean.getBossName();
+
+                                if (!TextUtils.isEmpty(bossName)) {
+                                    sheet.addCell(new Label(0, ++row, "老板名字"));
+                                    sheet.addCell(new Label(1, row, bossName));
+                                }
+                                String bossPhone = subListBean.getBossPhone();
+                                if (!TextUtils.isEmpty(bossPhone)) {
+                                    sheet.addCell(new Label(0, ++row, "老板电话"));
+                                    sheet.addCell(new Label(1, row, bossPhone));
+                                }
+
+
+
+
+                                String editenvironmentpic1 = subListBean.getEditenvironmentpic1();
+                                if (!TextUtils.isEmpty(editenvironmentpic1)) {
+                                    sheet.addCell(new Label(0, ++row, "环境第一张图片"));
+                                    Bitmap compressBm = getCompressBm(editenvironmentpic1, 800, 1024);
+                                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                                    compressBm.compress(Bitmap.CompressFormat.PNG, 75, baos);
+                                    WritableImage image = new WritableImage(1, row, 1, 1, baos.toByteArray());
+                                    sheet.setRowView(row, 1700, false); //设置行高
+                                    sheet.addImage(image);
+                                }
+
+
+                                String editenvironmentpic2 = subListBean.getEditenvironmentpic2();
+                                if (!TextUtils.isEmpty(editenvironmentpic2)) {
+                                    sheet.addCell(new Label(0, ++row, "环境第二张图片"));
+                                    Bitmap compressBm = getCompressBm(editenvironmentpic2, 800, 1024);
+                                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                                    compressBm.compress(Bitmap.CompressFormat.PNG, 75, baos);
+                                    WritableImage image = new WritableImage(1, row, 1, 1, baos.toByteArray());
+                                    sheet.setRowView(row, 1700, false); //设置行高
+                                    sheet.addImage(image);
+                                }
+
+
+                                String editenvironmentpic3 = subListBean.getEditenvironmentpic3();
+
+                                if (!TextUtils.isEmpty(editenvironmentpic3)) {
+                                    sheet.addCell(new Label(0, ++row, "环境第三张图片"));
+                                    Bitmap compressBm = getCompressBm(editenvironmentpic3, 800, 1024);
+                                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                                    compressBm.compress(Bitmap.CompressFormat.PNG, 75, baos);
+                                    WritableImage image = new WritableImage(1, row, 1, 1, baos.toByteArray());
+                                    sheet.setRowView(row, 1700, false); //设置行高
+                                    sheet.addImage(image);
+                                }
+                                String editenvironmentpic4 = subListBean.getEditenvironmentpic4();
+
+                                if (!TextUtils.isEmpty(editenvironmentpic4)) {
+                                    sheet.addCell(new Label(0, ++row, "环境第四张图片"));
+                                    Bitmap compressBm = getCompressBm(editenvironmentpic4, 800, 1024);
+                                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                                    compressBm.compress(Bitmap.CompressFormat.PNG, 75, baos);
+                                    WritableImage image = new WritableImage(1, row, 1, 1, baos.toByteArray());
+                                    sheet.setRowView(row, 1700, false); //设置行高
+                                    sheet.addImage(image);
+                                }
+                                String editenvironmentpic5 = subListBean.getEditenvironmentpic5();
+                                if (!TextUtils.isEmpty(editenvironmentpic5)) {
+                                    sheet.addCell(new Label(0, ++row, "环境第五张图片"));
+                                    Bitmap compressBm = getCompressBm(editenvironmentpic5, 800, 1024);
+                                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                                    compressBm.compress(Bitmap.CompressFormat.PNG, 75, baos);
+                                    WritableImage image = new WritableImage(1, row, 1, 1, baos.toByteArray());
+                                    sheet.setRowView(row, 1700, false); //设置行高
+                                    sheet.addImage(image);
+                                }
+
+
+
+
+
+
+                                String editOutsinPic = subListBean.getEditOutsinPic();
+                                if (!TextUtils.isEmpty(editOutsinPic)) {
+                                    sheet.addCell(new Label(0, ++row, "外箱安装位置图片"));
+
+                                    Bitmap compressBm = getCompressBm(editOutsinPic, 800, 1024);
+                                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                                    compressBm.compress(Bitmap.CompressFormat.PNG, 75, baos);
+                                    WritableImage image = new WritableImage(1, row, 1, 1, baos.toByteArray());
+                                    sheet.setRowView(row, 1700, false); //设置行高
+                                    sheet.addImage(image);
+                                }
+                                String editpic1 = subListBean.getEditpic1();
+
+                                if (!TextUtils.isEmpty(editpic1)) {
+                                    sheet.addCell(new Label(0, ++row, "电箱图片1"));
+                                    Bitmap compressBm = getCompressBm(editpic1, 800, 1024);
+                                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                                    compressBm.compress(Bitmap.CompressFormat.PNG, 75, baos);
+                                    WritableImage image = new WritableImage(1, row, 1, 1, baos.toByteArray());
+                                    sheet.setRowView(row, 1700, false); //设置行高
+                                    sheet.addImage(image);
+                                }
+                                String editpic2 = subListBean.getEditpic2();
+
+                                if (!TextUtils.isEmpty(editpic2)) {
+                                    sheet.addCell(new Label(0, ++row, "电箱图片2"));
+                                    Bitmap compressBm = getCompressBm(editpic2, 800, 1024);
+                                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                                    compressBm.compress(Bitmap.CompressFormat.PNG, 75, baos);
+                                    WritableImage image = new WritableImage(1, row, 1, 1, baos.toByteArray());
+                                    sheet.setRowView(row, 1700, false); //设置行高
+                                    sheet.addImage(image);
+                                }
+                                String editpic3 = subListBean.getEditpic3();
+
+
+                                if (!TextUtils.isEmpty(editpic3)) {
+                                    sheet.addCell(new Label(0, ++row, "电箱图片3"));
+                                    Bitmap compressBm = getCompressBm(editpic3, 800, 1024);
+                                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                                    compressBm.compress(Bitmap.CompressFormat.PNG, 75, baos);
+                                    WritableImage image = new WritableImage(1, row, 1, 1, baos.toByteArray());
+                                    sheet.setRowView(row, 1700, false); //设置行高
+                                    sheet.addImage(image);
+                                }
+                                String editpic4 = subListBean.getEditpic4();
+
+
+                                if (!TextUtils.isEmpty(editpic4)) {
+                                    sheet.addCell(new Label(0, ++row, "电箱图片4"));
+                                    Bitmap compressBm = getCompressBm(editpic4, 800, 1024);
+                                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                                    compressBm.compress(Bitmap.CompressFormat.PNG, 75, baos);
+                                    WritableImage image = new WritableImage(1, row, 1, 1, baos.toByteArray());
+                                    sheet.setRowView(row, 1700, false); //设置行高
+                                    sheet.addImage(image);
+                                }
+                                String editpic5 = subListBean.getEditpic5();
+
+                                if (!TextUtils.isEmpty(editpic5)) {
+                                    sheet.addCell(new Label(0, ++row, "电箱图片5"));
+                                    Bitmap compressBm = getCompressBm(editpic5, 800, 1024);
+                                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                                    compressBm.compress(Bitmap.CompressFormat.PNG, 75, baos);
+                                    WritableImage image = new WritableImage(1, row, 1, 1, baos.toByteArray());
+                                    sheet.setRowView(row, 1700, false); //设置行高
+                                    sheet.addImage(image);
+                                }
+
+                                String editPosition = subListBean.getEditPosition();
+
+                                if (!TextUtils.isEmpty(editPosition)) {
+                                    sheet.addCell(new Label(0, ++row, "定位地址"));
+                                    sheet.addCell(new Label(1, row, editName));
+                                }
+                                String editPurpose = subListBean.getEditPurpose();
+                                if (!TextUtils.isEmpty(editPurpose)) {
+                                    sheet.addCell(new Label(0, ++row, "勘察点用途"));
+                                    sheet.addCell(new Label(1, row, editName));
+                                }
+
+
+                                int isNeedCarton = subListBean.getIsNeedCarton();
+                                sheet.addCell(new Label(0, ++row, "是否需要外箱"));
+                                sheet.addCell(new Label(1, row, isNeedCarton == 1 ? "是" : "否"));
+
+
+                                int isOutSide = subListBean.getIsOutSide();
+                                sheet.addCell(new Label(0, ++row, "电箱位置"));
+                                sheet.addCell(new Label(1, row, isOutSide == 1 ? "户外" : "室内"));
+
+
+                                int needLadder = subListBean.isNeedLadder;
+                                sheet.addCell(new Label(0, ++row, "是否需要梯子"));
+                                sheet.addCell(new Label(1, row, needLadder == 1 ? "需要" : "不需要"));
+
+
+                                int isEffectiveTransmission = subListBean.isEffectiveTransmission;
+                                sheet.addCell(new Label(0, ++row, "报警音可否有效传播"));
+                                sheet.addCell(new Label(1, row, isEffectiveTransmission == 1 ? "是" : "否"));
+
+
+                                int isNuisance = subListBean.isNuisance;
+                                sheet.addCell(new Label(0, ++row, "是否扰民"));
+                                sheet.addCell(new Label(1, row, isNuisance == 1 ? "是" : "否"));
+
+
+                                int isNoiseReduction = subListBean.isNoiseReduction;
+                                sheet.addCell(new Label(0, ++row, "是否有专人消音"));
+                                sheet.addCell(new Label(1, row, isNoiseReduction == 1 ? "是" : "否"));
+
+
+                                int allOpenValue = subListBean.allOpenValue;
+                                sheet.addCell(new Label(0, ++row, "空开层级"));
+                                sheet.addCell(new Label(1, row, allOpenValue == 1 ? "总空开" : "分空开"));
+
+
+                                int isSingle = subListBean.isSingle;
+                                sheet.addCell(new Label(0, ++row, "空开类型"));
+                                sheet.addCell(new Label(1, row, isSingle == 1 ? "单相电" : "三相电"));
+                                int isMolded = subListBean.isMolded;
+                                sheet.addCell(new Label(0, ++row, "空开类型"));
+                                sheet.addCell(new Label(1, row, isMolded == 1 ? "微断" : "塑壳"));
+
+                                int isZhiHui = subListBean.isZhiHui;
+                                sheet.addCell(new Label(0, ++row, "适用类型"));
+                                sheet.addCell(new Label(1, row, isZhiHui == 1 ? "智慧空开（支持通断）" : "电器火灾（不支持通断）"));
+
+
+                                String current = subListBean.getCurrent();
+                                if (!TextUtils.isEmpty(current)) {
+                                    sheet.addCell(new Label(0, ++row, "额定电流"));
+                                    sheet.addCell(new Label(1, row, current));
+                                }
+
+                                String currentSelect = subListBean.getCurrentSelect();
+                                if (!TextUtils.isEmpty(currentSelect)) {
+                                    sheet.addCell(new Label(0, ++row, "额定电流"));
+                                    sheet.addCell(new Label(1, row, currentSelect));
+                                }
+
+                                String dangerous = subListBean.getDangerous();
+                                if (!TextUtils.isEmpty(dangerous)) {
+                                    sheet.addCell(new Label(0, ++row, "危险线路数"));
+                                    sheet.addCell(new Label(1, row, dangerous));
+                                }
+                                String probeNumber = subListBean.probeNumber;
+                                if (!TextUtils.isEmpty(probeNumber)) {
+                                    sheet.addCell(new Label(0, ++row, "温度探头数"));
+                                    sheet.addCell(new Label(1, row, probeNumber));
+                                }
+                                String recommendedTransformer = subListBean.recommendedTransformer;
+                                if (!TextUtils.isEmpty(recommendedTransformer)) {
+                                    sheet.addCell(new Label(0, ++row, "漏电互感器规格"));
+                                    sheet.addCell(new Label(1, row, recommendedTransformer));
+                                }
+
+
+                            }
+
+
+//                            Bitmap compressBm = getCompressBm("/storage/emulated/0/Android/data/com.sensoro.survey/files/Pictures/scaled_681e8487-1669-4996-b278-52342464831f6149127435123271730.jpg", 800, 1024);
+//                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//                            compressBm.compress(Bitmap.CompressFormat.PNG, 75, baos);
+
+
+//                            WritableImage image = new WritableImage(col++, row, 1, 1, baos.toByteArray());
+
+//                            sheet.setRowView(row, 1700, false); //设置行高
+                            // 把图片插入到sheet
+//                            sheet.addImage(image);
+                            wbook.write();
+                            wbook.close();
+
+                            Log.e("Tag======", "====" + file.length());
+
+                            return 1;
+                        } catch (IOException | WriteException e) {
+                            e.printStackTrace();
+                            return 0;
+                        } finally {
+                            try {
+                                if (wbook != null) {
+                                    wbook.close();
+                                }
+                            } catch (WriteException e) {
+                                e.printStackTrace();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
                     }
-                }
-            }.execute();
+
+                    @Override
+                    protected void onPostExecute(Integer aVoid) {
+                        super.onPostExecute(aVoid);
+                        if (aVoid == 1) {
+                            WXFileObject fileObj = new WXFileObject();
+                            fileObj.filePath = PATH + filename + ".xls";
+                            //使用媒体消息分享  
+                            WXMediaMessage msg = new WXMediaMessage(fileObj);
+                            msg.title = filename + ".xls";
+                            //发送请求  
+                            SendMessageToWX.Req req = new SendMessageToWX.Req();
+                            //创建唯一标识  
+                            req.transaction = buildTransaction(filename);
+                            req.message = msg;
+                            req.scene = SendMessageToWX.Req.WXSceneSession;
+
+                            api.sendReq(req);
+                            Toast.makeText(MainActivity.this, "插入成功！", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(MainActivity.this, "插入失败！", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }.execute();
 
 
-//            final String col = "1";
-//            final String row = "1";
-//            final String str = "valuevaluevaluevalue";
-//
-//
-//            new AsyncTask<String, Void, Integer>() {
-//
-//                @Override
-//                protected Integer doInBackground(String... params) {
-//                    try {
-//
-//
-//                        ZzExcelCreator
-//                                .getInstance().createExcel(PATH, filename)
-//                                .createSheet("测试1").close();
-//
-//                        ZzExcelCreator
-//                                .getInstance()
-//                                .openExcel(new File(PATH + filename + ".xls"))  //打开Excel文件
-//                                .openSheet(0)                                   //打开Sheet工作表
-//                                .close();
-//                        //设置单元格内容格式
-//                        WritableCellFormat format = ZzFormatCreator
-//                                .getInstance()
-//                                .createCellFont(WritableFont.ARIAL)  //设置字体
-//                                .setAlignment(Alignment.CENTRE, VerticalAlignment.CENTRE)  //设置对齐方式(水平和垂直)
-//                                .setFontSize(14)                    //设置字体大小
-//                                .setFontColor(Colour.ROSE)          //设置字体颜色
-//                                .getCellFormat();
-//
-//
-//                        ZzExcelCreator
-//                                .getInstance().openExcel(new File(PATH + filename + ".xls"))
-//                                .openSheet(0)
-//                                .setColumnWidth(1, 25)
-//                                .setRowHeight(1, 400)
-//                                .fillContent(Integer.parseInt(col), Integer.parseInt(row), str, format)
-//                                .close();
-//                        return 1;
-//                    } catch (IOException | WriteException | BiffException e) {
-//                        e.printStackTrace();
-//                        return 0;
-//                    }
-//                }
-//
-//                @Override
-//                protected void onPostExecute(Integer aVoid) {
-//                    super.onPostExecute(aVoid);
-//                    if (aVoid == 1) {
-//                        WXFileObject fileObj = new WXFileObject();
-//                        fileObj.fileData = inputStreamToByte(PATH + filename + ".xls");//文件路径  
-//                        fileObj.filePath = PATH + filename + ".xls";
-//
-//                        //使用媒体消息分享  
-//                        WXMediaMessage msg = new WXMediaMessage(fileObj);
-//
-//                        msg.title = filename + ".xls";
-//                        //发送请求  
-//                        SendMessageToWX.Req req = new SendMessageToWX.Req();
-//                        //创建唯一标识  
-//                        req.transaction = String.valueOf(System.currentTimeMillis());
-//                        req.message = msg;
-//                        req.scene = SendMessageToWX.Req.WXSceneSession;
-//
-//                        api.sendReq(req);
-//                        Toast.makeText(MainActivity.this, "插入成功！", Toast.LENGTH_SHORT).show();
-//                    } else {
-//                        Toast.makeText(MainActivity.this, "插入失败！", Toast.LENGTH_SHORT).show();
-//                    }
-//                }
-//            }.execute(col, row, str);
-
-
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
 
+    private Bitmap getCompressBm(String filename, int maxw, int maxh) {
+        Bitmap bm = null;
+        int iSamplesize = 1;
+        //第一次采样
+        BitmapFactory.Options bitmapFactoryOptions = new BitmapFactory.Options();
+        //该属性设置为true只会加载图片的边框进来，并不会加载图片具体的像素点
+        bitmapFactoryOptions.inJustDecodeBounds = true;
+        bitmapFactoryOptions.inPreferredConfig = Bitmap.Config.RGB_565;
+        bm = BitmapFactory.decodeFile(filename, bitmapFactoryOptions);
+        Log.e("Tag", "onActivityResult: 压缩之前图片的宽：" + bitmapFactoryOptions.outWidth + "--压缩之前图片的高："
+                + bitmapFactoryOptions.outHeight + "--压缩之前图片大小:" + bitmapFactoryOptions.outWidth * bitmapFactoryOptions.outHeight * 4 / 1024 + "kb");
+        int iWidth = bitmapFactoryOptions.outWidth;
+        int iHeight = bitmapFactoryOptions.outHeight;
+        //对缩放比例进行调整，直到宽和高符合我们要求为止
+        while (iWidth > maxw || iHeight > maxh) {
+            //如果宽高的任意一方的缩放比例没有达到要求，都继续增大缩放比例
+            //sampleSize应该为2的n次幂，如果给sampleSize设置的数字不是2的n次幂，那么系统会就近取
+            iSamplesize = iSamplesize * 2;//宽高均为原图的宽高的1/2  内存约为原来的1/4
+            iWidth = iWidth / iSamplesize;
+            iHeight = iHeight / iSamplesize;
+        }
+        //二次采样开始
+        //二次采样时我需要将图片加载出来显示，不能只加载图片的框架，因此inJustDecodeBounds属性要设置为false
+        bitmapFactoryOptions.inJustDecodeBounds = false;
+        bitmapFactoryOptions.inSampleSize = iSamplesize;
+        // 设置像素颜色信息
+        // bitmapFactoryOptions.inPreferredConfig = Bitmap.Config.RGB_565;
+        bm = BitmapFactory.decodeFile(filename, bitmapFactoryOptions);
+//默认的图片格式是Bitmap.Config.ARGB_8888
+        Log.e("Tag", "onActivityResult: 图片的宽：" + bm.getWidth() + "--图片的高："
+                + bm.getHeight() + "--图片大小:" + bm.getWidth() * bm.getHeight() * 4 / 1024 + "kb");
+        return bm;//返回压缩后的照片
+    }
+
+    private static String buildTransaction(String type) {
+        return (type == null) ? String.valueOf(System.currentTimeMillis()) : type + System.currentTimeMillis();
+    }
+
+
+    public static Detail getDetail(String res) {
+
+        Gson gson = new Gson();
+
+        Detail wetherBean = gson.fromJson(res, Detail.class);
+
+        return wetherBean;
+
+    }
 }
