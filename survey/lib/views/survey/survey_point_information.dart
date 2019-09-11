@@ -39,6 +39,11 @@ class _State extends State<SurveyPointInformationPage> {
     if (inputStr is Null || inputStr.length == 0) {
       this.initDescList();
     }
+
+    descList = inputStr.split("\n");
+    descList.add("                        ");
+    descList.add("                        ");
+    descList.add("                        ");
   }
 
   void initDescList() {
@@ -53,10 +58,6 @@ class _State extends State<SurveyPointInformationPage> {
     String str5 =
         "4. 其他专业性问题\n（1）场所电源的引入情况。通常会有两种方式：\n① 用电量较小的，从公变变压器直接接入低压380V交流电，或者220v交流电，再进行使用。\n② 用电量较大的，一般从高压10kv引入到自有的变压器（专变变压器），转变成380v再进行使用。\n（2）每月用电电量的多少。\n（3）现行配电设备（开关+线路）已经运行的年限及状况。\n运行时间越长，电气系统老化越严重，越会容易出现故障隐患。\n（4）配电设备，包括开关，线路的运行环境。\n例如：选型是否合理，各级线路布线方式 ，控制节点的安装情况。\n（5）客户在使用上的存在其他问题和需要。\n";
     inputStr = str1 + str2 + str3 + str4 + str5;
-    descList = inputStr.split("\n");
-    descList.add("                        ");
-    descList.add("                        ");
-    descList.add("                        ");
   }
 
   var decorationBox = DecoratedBox(
@@ -430,12 +431,10 @@ class _State extends State<SurveyPointInformationPage> {
 
 const electricalItems = [
   "1.电箱信息",
-  "2.电箱照片",
+  "2.电箱照����",
   "3.安装环境",
   "4.运作环境",
   "5.设备预选",
 ];
-
-
 
 class Continer {}
