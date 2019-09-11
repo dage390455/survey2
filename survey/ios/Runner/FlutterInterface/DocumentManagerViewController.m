@@ -12,6 +12,8 @@
 #import <ShareSDKUI/ShareSDK+SSUI.h>
 #import "WXApi.h" //微信SDK头文件
 #import <ShareSDKConnector/ShareSDKConnector.h>
+#import "Runner-Bridging-Header.h"
+
 //#import <WechatOpenSDK/WXApiObject.h>
 
 @interface DocumentManagerViewController ()
@@ -115,7 +117,7 @@
     
     
     
-    //        有的平台要客户端分享需要加此方法，例如微博
+    //有的平台要客户端分享需要加此方法，例如微博
     [shareParams SSDKEnableUseClientShare];
     
     
@@ -213,6 +215,7 @@
 -(void)documentInteractionControllerDidDismissOpenInMenu:(UIDocumentInteractionController *)controller{
     
 }
+
 
 
 @end
