@@ -16,6 +16,7 @@ import 'package:sensoro_survey/views/survey/editPage/survey_point_area.dart';
 import 'package:sensoro_survey/views/survey/editPage/survey_point_structure.dart';
 import 'package:sensoro_survey/views/survey/survey_point_information.dart';
 
+import '../survey_type_page.dart';
 import 'survay_electrical_fire_edit.dart';
 
 class SummaryConstructionPage extends StatefulWidget {
@@ -71,7 +72,7 @@ class _State extends State<SummaryConstructionPage> {
     final result = await Navigator.push(
       context,
       new MaterialPageRoute(
-          builder: (context) => new SurvayElectricalFireEditPage()),
+          builder: (context) => new SurveyTypePage()),
     );
 
     if (result != null) {
@@ -320,13 +321,20 @@ class _State extends State<SummaryConstructionPage> {
               height: 60,
               child: new Row(
                 children: <Widget>[
-                  Text("勘察点名称"),
+                  Text("勘察点名称",
+                    style: new TextStyle(
+                        fontSize: prefix0.fontsSize
+                    ),
+                  ),
                   Expanded(
                     child: Text(
                       this.fireModel.editName.length > 0
                           ? this.fireModel.editName
                           : "必填",
                       textAlign: TextAlign.right,
+                      style: new TextStyle(
+                          fontSize: prefix0.fontsSize
+                      ),
                     ),
                   ),
                   Image.asset(
@@ -348,13 +356,20 @@ class _State extends State<SummaryConstructionPage> {
               height: 60,
               child: new Row(
                 children: <Widget>[
-                  Text("勘察点用途"),
+                  Text("勘察点用途",
+                    style: new TextStyle(
+                        fontSize: prefix0.fontsSize
+                    ),
+                  ),
                   Expanded(
                     child: Text(
                       this.fireModel.editPurpose.length > 0
                           ? this.fireModel.editPurpose
-                          : "选填",
+                          : "",
                       textAlign: TextAlign.right,
+                      style: new TextStyle(
+                          fontSize: prefix0.fontsSize
+                      ),
                     ),
                   ),
                   Image.asset(
@@ -376,13 +391,20 @@ class _State extends State<SummaryConstructionPage> {
               height: 60,
               child: new Row(
                 children: <Widget>[
-                  Text("具体地址"),
+                  Text("具体地址",
+                    style: new TextStyle(
+                        fontSize: prefix0.fontsSize
+                    ),
+                  ),
                   Expanded(
                     child: Text(
                       this.fireModel.editAddress.length > 0
                           ? this.fireModel.editAddress
-                          : "选填",
+                          : "",
                       textAlign: TextAlign.right,
+                      style: new TextStyle(
+                          fontSize: prefix0.fontsSize
+                      ),
                     ),
                   ),
                   Image.asset(
@@ -404,13 +426,20 @@ class _State extends State<SummaryConstructionPage> {
               height: 60,
               child: new Row(
                 children: <Widget>[
-                  Text("定位地址"),
+                  Text("定位地址",
+                    style: new TextStyle(
+                        fontSize: prefix0.fontsSize
+                    ),
+                  ),
                   Expanded(
                     child: Text(
                       this.fireModel.editPosition.length > 0
                           ? this.fireModel.editPosition
-                          : "选填",
+                          : "",
                       textAlign: TextAlign.right,
+                      style: new TextStyle(
+                          fontSize: prefix0.fontsSize
+                      ),
                     ),
                   ),
                   Image.asset(
@@ -439,13 +468,20 @@ class _State extends State<SummaryConstructionPage> {
               height: 60,
               child: new Row(
                 children: <Widget>[
-                  Text("勘察点结构"),
+                  Text("勘察点结构",
+                    style: new TextStyle(
+                        fontSize: prefix0.fontsSize
+                    ),
+                  ),
                   Expanded(
                     child: Text(
                       this.fireModel.editPointStructure.length > 0
                           ? this.fireModel.editPointStructure
-                          : "选填",
+                          : "",
                       textAlign: TextAlign.right,
+                      style: new TextStyle(
+                          fontSize: prefix0.fontsSize
+                      ),
                     ),
                   ),
                   Image.asset(
@@ -467,13 +503,20 @@ class _State extends State<SummaryConstructionPage> {
               height: 60,
               child: new Row(
                 children: <Widget>[
-                  Text("勘察点面积(㎡)"),
+                  Text("勘察点面积(㎡)",
+                    style: new TextStyle(
+                        fontSize: prefix0.fontsSize
+                    ),
+                  ),
                   Expanded(
                     child: Text(
                       this.fireModel.editPointArea.length > 0
                           ? this.fireModel.editPointArea
-                          : "选填",
+                          : "",
                       textAlign: TextAlign.right,
+                      style: new TextStyle(
+                          fontSize: prefix0.fontsSize
+                      ),
                     ),
                   ),
                   Image.asset(
@@ -502,13 +545,20 @@ class _State extends State<SummaryConstructionPage> {
               height: 60,
               child: new Row(
                 children: <Widget>[
-                  Text("现场负责人姓名"),
+                  Text("现场负责人姓名",
+                    style: new TextStyle(
+                        fontSize: prefix0.fontsSize
+                    ),
+                  ),
                   Expanded(
                     child: Text(
                       this.fireModel.headPerson.length > 0
                           ? this.fireModel.headPerson
                           : "必填",
                       textAlign: TextAlign.right,
+                      style: new TextStyle(
+                          fontSize: prefix0.fontsSize
+                      ),
                     ),
                   ),
                   Image.asset(
@@ -530,13 +580,20 @@ class _State extends State<SummaryConstructionPage> {
               height: 60,
               child: new Row(
                 children: <Widget>[
-                  Text("现场负责人电话"),
+                  Text("现场负责人电话",
+                    style: new TextStyle(
+                        fontSize: prefix0.fontsSize
+                    ),
+                  ),
                   Expanded(
                     child: Text(
                       this.fireModel.headPhone.length > 0
                           ? this.fireModel.headPhone
                           : "必填",
                       textAlign: TextAlign.right,
+                      style: new TextStyle(
+                          fontSize: prefix0.fontsSize
+                      ),
                     ),
                   ),
                   Image.asset(
@@ -558,12 +615,19 @@ class _State extends State<SummaryConstructionPage> {
               height: 60,
               child: new Row(
                 children: <Widget>[
-                  Text("老板姓名"),
+                  Text("老板姓名",
+                    style: new TextStyle(
+                        fontSize: prefix0.fontsSize
+                    ),
+                  ),
                   Expanded(
                     child: Text(
                       this.fireModel.bossName.length > 0
                           ? this.fireModel.bossName
-                          : "选填",
+                          : "",
+                      style: new TextStyle(
+                          fontSize: prefix0.fontsSize
+                      ),
                       textAlign: TextAlign.right,
                     ),
                   ),
@@ -586,13 +650,21 @@ class _State extends State<SummaryConstructionPage> {
               height: 60,
               child: new Row(
                 children: <Widget>[
-                  Text("老板电话"),
+                  Text("老板电话",
+                    style: new TextStyle(
+                        fontSize: prefix0.fontsSize
+                    ),
+                  ),
                   Expanded(
                     child: Text(
                       this.fireModel.bossPhone.length > 0
                           ? this.fireModel.bossPhone
-                          : "选填",
+                          : "",
                       textAlign: TextAlign.right,
+
+                      style: new TextStyle(
+                          fontSize: prefix0.fontsSize
+                      ),
                     ),
                   ),
                   Image.asset(

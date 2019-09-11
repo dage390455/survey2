@@ -8,6 +8,7 @@ import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 import 'package:sensoro_survey/views/survey/const.dart';
 
 import 'Electric_box_information_page.dart';
+import 'SurveyPointInformation/survay_electrical_fire_create.dart';
 import 'SurveyPointInformation/survay_electrical_fire_edit.dart';
 import 'common/data_transfer_manager.dart';
 
@@ -81,7 +82,7 @@ class _State extends State<SurveyPointInformationPage> {
     final result = await Navigator.push(
       context,
       new MaterialPageRoute(
-          builder: (context) => new SurvayElectricalFireEditPage()),
+          builder: (context) => new SurvayElectricalFireCreatePage()),
     );
 
     if (result != null) {

@@ -164,7 +164,9 @@ class _PointListPageState extends State<PointListPage> {
   _gotoSurveyType() async {
     final result = await Navigator.push(
       context,
-      new MaterialPageRoute(builder: (context) => SurveyTypePage()),
+
+
+      new MaterialPageRoute(builder: (context) => SummaryConstructionPage()),
     );
 
     if (result != null) {
