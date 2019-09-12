@@ -226,9 +226,9 @@
 
 - (void)makeExcel :(NSDictionary*)json{
     [self shareInit];
-    NSString *rootPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).lastObject;
-    NSString *path = [NSString stringWithFormat:@"%@/test_exl.txt",rootPath];
-    lxw_workbook  *workbook   = workbook_new([path fileSystemRepresentation]);
+    NSString *documentPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask, YES) objectAtIndex:0];
+    NSString *path = [documentPath stringByAppendingPathComponent:@"c_demo.xlsx"];
+    lxw_workbook  *workbook   = workbook_new([path UTF8String]);
     
     /* Set up some worksheets. */
     lxw_worksheet *worksheet1 = workbook_add_worksheet(workbook, "sheet1");
@@ -402,7 +402,7 @@
     
 //    NSString *itemPath1=[[NSBundle mainBundle] pathForResource:@"location_me" ofType:@"png"];
 //    const char *image = [itemPath1 UTF8String];
-    
+     workbook_close(workbook);
     //文件数据
     WXFileObject *fileObj = [WXFileObject object];
 //    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"shareFile" ofType:@"pdf"];
