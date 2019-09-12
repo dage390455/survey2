@@ -104,31 +104,13 @@ class _AddProjectPageState extends State<AddProjectPage> {
   @override
   Widget build(BuildContext context) {
     editName() async {
-      componentModel model =
-          componentModel("项目名称", "projectName", "", {"placeHoder": "默认输入这些"});
-      final result = await Navigator.push(
-        context,
-        new MaterialPageRoute(
-            builder: (context) => new TextInputPage(
-                  model: model,
-                )),
-      );
-
-      if (result != null) {
-        String name = result as String;
-
-        // updateNextButton();
-        setState(() {
-          this.name = name;
-        });
-      }
-
-      return;
+      // componentModel model =
+      //     componentModel("项目名称", "projectName", "", {"placeHoder": "默认输入这些"});
       // final result = await Navigator.push(
       //   context,
       //   new MaterialPageRoute(
-      //       builder: (context) => new EditProjectNamePage(
-      //             name: this.name,
+      //       builder: (context) => new TextInputPage(
+      //             model: model,
       //           )),
       // );
 
@@ -140,6 +122,24 @@ class _AddProjectPageState extends State<AddProjectPage> {
       //     this.name = name;
       //   });
       // }
+
+      // return;
+      final result = await Navigator.push(
+        context,
+        new MaterialPageRoute(
+            builder: (context) => new EditProjectNamePage(
+                  name: this.name,
+                )),
+      );
+
+      if (result != null) {
+        String name = result as String;
+
+        // updateNextButton();
+        setState(() {
+          this.name = name;
+        });
+      }
     }
 
     Widget emptyContainer = Container(
