@@ -11,11 +11,14 @@ import 'package:flutter/material.dart';
 import 'package:event_bus/event_bus.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:sensoro_survey/component/text_input.dart';
+import 'package:sensoro_survey/model/component_configure_model.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 import 'package:sensoro_survey/views/survey/const.dart';
 import 'package:sensoro_survey/views/survey/editPage/edit_project_name_page.dart';
 import 'package:sensoro_survey/widgets/progressHud.dart';
 import 'package:sensoro_survey/model/project_info_model.dart';
+import 'package:sensoro_survey/component/component.dart';
 
 //import 'package:sensoro_survey/views/survey/editPage/edit_project_name_page.dart';
 import 'package:sensoro_survey/views/survey/common/save_data_manager.dart';
@@ -101,11 +104,13 @@ class _AddProjectPageState extends State<AddProjectPage> {
   @override
   Widget build(BuildContext context) {
     editName() async {
+      componentModel model =
+          componentModel("项目名称", "projectName", "", {"placeHoder": "默认输入这些"});
       final result = await Navigator.push(
         context,
         new MaterialPageRoute(
-            builder: (context) => new EditProjectNamePage(
-                  name: this.name,
+            builder: (context) => new TextInputPage(
+                  model: model,
                 )),
       );
 
@@ -117,6 +122,24 @@ class _AddProjectPageState extends State<AddProjectPage> {
           this.name = name;
         });
       }
+
+      return;
+      // final result = await Navigator.push(
+      //   context,
+      //   new MaterialPageRoute(
+      //       builder: (context) => new EditProjectNamePage(
+      //             name: this.name,
+      //           )),
+      // );
+
+      // if (result != null) {
+      //   String name = result as String;
+
+      //   // updateNextButton();
+      //   setState(() {
+      //     this.name = name;
+      //   });
+      // }
     }
 
     Widget emptyContainer = Container(
