@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface DocumentManagerViewController : UIViewController<UIDocumentInteractionControllerDelegate>
@@ -15,6 +16,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) UIDocumentInteractionController *documentController;
 - (void) outputTxt: (NSDictionary*)json;
 +(void)openFileAndSave:(NSString*)filePath;
+
+
 @end
 
 NS_ASSUME_NONNULL_END
