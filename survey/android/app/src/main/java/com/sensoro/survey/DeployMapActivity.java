@@ -69,17 +69,22 @@ public class DeployMapActivity extends Activity implements AMap.OnCameraChangeLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_deploy_map);
         mActivity = this;
-            setTheme(R.style.MyTheme);
+        setTheme(R.style.MyTheme);
         //取消bar
 //        ActionBar supportActionBar = mActivity.getSupportActionBar();
 //        if (supportActionBar != null) {
 //            supportActionBar.hide();
 //        }
 
-        if (!TextUtils.isEmpty(getIntent().getStringExtra("isReadOnly"))){
+
+        if (!TextUtils.isEmpty(getIntent().getStringExtra("isReadOnly"))) {
             isReadOnly = Integer.parseInt(getIntent().getStringExtra("isReadOnly"));
-            lan = Double.parseDouble(getIntent().getStringExtra("lan"));
-            log = Double.parseDouble(getIntent().getStringExtra("log"));
+            if (!TextUtils.isEmpty(getIntent().getStringExtra("lan"))) {
+                lan = Double.parseDouble(getIntent().getStringExtra("lan"));
+            }
+            if (!TextUtils.isEmpty(getIntent().getStringExtra("log"))) {
+                log = Double.parseDouble(getIntent().getStringExtra("log"));
+            }
         }
         iniView();
         locate();
@@ -98,12 +103,12 @@ public class DeployMapActivity extends Activity implements AMap.OnCameraChangeLi
         includeTextTitleTvTitle.setText("位置");
 
 
-         if(isReadOnly == 0){
-             includeTextTitleTvSubtitle.setVisibility(View.VISIBLE);
+        if (isReadOnly == 0) {
+            includeTextTitleTvSubtitle.setVisibility(View.VISIBLE);
 
-             includeTextTitleTvSubtitle.setText("保存");
+            includeTextTitleTvSubtitle.setText("保存");
 
-         }
+        }
 
 
         includeTextTitleTvSubtitle.setOnClickListener(new View.OnClickListener() {
@@ -330,7 +335,7 @@ public class DeployMapActivity extends Activity implements AMap.OnCameraChangeLi
         aMap.setOnMarkerClickListener(this);
         aMap.setInfoWindowAdapter(this);
 
-        if(isReadOnly==0){
+        if (isReadOnly == 0) {
             aMap.setOnCameraChangeListener(this);
         }
 
@@ -377,7 +382,7 @@ public class DeployMapActivity extends Activity implements AMap.OnCameraChangeLi
                 .anchor(0.5f, 1)
                 .draggable(true);
         deviceMarker = aMap.addMarker(markerOption);
-        if(lan>0){
+        if (lan > 0) {
             double lat = lastKnownLocation.getLatitude();//获取纬度
             double lon = lastKnownLocation.getLongitude();//获取经度
 //
@@ -395,7 +400,7 @@ public class DeployMapActivity extends Activity implements AMap.OnCameraChangeLi
             System.out.println("====>onCameraChangeFinish=>" + lp.getLatitude() + "=====" + lp.getLongitude());
 //                    deviceMarker.setPosition(cameraPosition.target);
             geocoderSearch.getFromLocationAsyn(query);
-        }else {
+        } else {
             if (lastKnownLocation != null) {
                 double lat = lastKnownLocation.getLatitude();//获取纬度
                 double lon = lastKnownLocation.getLongitude();//获取经度
@@ -474,7 +479,7 @@ public class DeployMapActivity extends Activity implements AMap.OnCameraChangeLi
                     locationMarker.setPosition(latLng);
                 }
 
-                if(isReadOnly==0){
+                if (isReadOnly == 0) {
                     deviceMarker.setPosition(latLng);
                 }
 
