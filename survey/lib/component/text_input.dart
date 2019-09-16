@@ -6,7 +6,7 @@ import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 import 'package:sensoro_survey/model/component_configure_model.dart';
 
 class TextInputPage extends StatefulWidget {
-  componentModel model = componentModel("", "", "", {});
+  componentModel model = componentModel("", "", "", "", {});
 
   TextInputPage({this.model});
   @override
@@ -14,10 +14,11 @@ class TextInputPage extends StatefulWidget {
 }
 
 class _State extends State<TextInputPage> {
-  componentModel input = componentModel("", "", "", {});
+  componentModel input = componentModel("", "", "", "", {});
   String historyKey = "";
   String name = "";
   String placeHoder = "";
+  String value = "";
   Map extroInfo = {};
   FocusNode blankNode = FocusNode();
   var isHighHistory = false;
@@ -29,6 +30,7 @@ class _State extends State<TextInputPage> {
   void initState() {
     name = this.input.name;
     historyKey = this.input.code;
+    value = this.input.value;
     extroInfo = this.input.extraInfo;
     if (extroInfo is Map) {
       placeHoder = extroInfo["placeHoder"];
@@ -36,7 +38,9 @@ class _State extends State<TextInputPage> {
     // placeHoder = extroInfo["placeHoder"];
 
     // TODO: implement initState
-    locationController.text = this.name;
+    if (this.value.length > 0) {
+      locationController.text = this.value;
+    }
     locationController.addListener(() {
       isHighHistory = false;
     });
@@ -45,13 +49,51 @@ class _State extends State<TextInputPage> {
 
   @override
   Widget build(BuildContext context) {
+    //弹出的提示框
+    Container popC = new Container(
+      child: Center(
+        child: PopupMenuButton(
+//              icon: Icon(Icons.home),
+          child: Text("abc"),
+          tooltip: "长按提示",
+          initialValue: "hot",
+          padding: EdgeInsets.all(0.0),
+          itemBuilder: (BuildContext context) {
+            return <PopupMenuItem<String>>[
+              PopupMenuItem<String>(
+                child: Text("热度"),
+                value: "hot",
+              ),
+              PopupMenuItem<String>(
+                child: Text("最新"),
+                value: "new",
+              ),
+            ];
+          },
+          onSelected: (String action) {
+            switch (action) {
+              case "hot":
+                print("热度");
+                break;
+              case "new":
+                print("最新");
+                break;
+            }
+          },
+          onCanceled: () {
+            print("onCanceled");
+          },
+        ),
+      ),
+    );
+
     Widget NavBar = AppBar(
       elevation: 1.0,
       centerTitle: true,
       brightness: Brightness.light,
       backgroundColor: Colors.white,
       title: Text(
-        name,
+        this.name,
         style: TextStyle(color: Colors.black),
       ),
       leading: Container(
@@ -74,15 +116,16 @@ class _State extends State<TextInputPage> {
           child: GestureDetector(
             onTap: () {
               // 点击空白页面关闭键盘
-              if (this.name.length > 0) {
-                SaveDataManger.addHistory(this.name, historyKey);
-                Navigator.of(context).pop(this.name);
+              if (this.value.length > 0) {
+                SaveDataManger.addHistory(this.value, historyKey);
+                Navigator.of(context).pop(this.value);
               }
             },
             child: Text(
               "保存",
               style: TextStyle(
-                color: this.name.length > 0 ? prefix0.GREEN_COLOR : Colors.grey,
+                color:
+                    this.value.length > 0 ? prefix0.GREEN_COLOR : Colors.grey,
               ),
             ),
           ),
@@ -95,7 +138,7 @@ class _State extends State<TextInputPage> {
       height: 60,
       width: prefix0.screen_width,
       child: new MaterialButton(
-        color: this.name.length > 0 ? prefix0.GREEN_COLOR : Colors.grey,
+        color: this.value.length > 0 ? prefix0.GREEN_COLOR : Colors.grey,
         textColor: Colors.white,
         child: new Text('保存',
             style: TextStyle(
@@ -103,9 +146,9 @@ class _State extends State<TextInputPage> {
                 fontWeight: FontWeight.normal,
                 fontSize: 20)),
         onPressed: () {
-          if (this.name.length > 0) {
-            SaveDataManger.addHistory(this.name, historyKey);
-            Navigator.of(context).pop(this.name);
+          if (this.value.length > 0) {
+            SaveDataManger.addHistory(this.value, historyKey);
+            Navigator.of(context).pop(this.value);
           }
         },
       ),
@@ -113,7 +156,7 @@ class _State extends State<TextInputPage> {
 
     _editParentText(editText) {
       setState(() {
-        this.name = editText;
+        this.value = editText;
         locationController.text = editText;
 //        locationController.selection(TextSelection.fromPosition(TextPosition(
 //            affinity: TextAffinity.downstream,
@@ -142,7 +185,7 @@ class _State extends State<TextInputPage> {
             ),
             autofocus: false,
             onChanged: (val) {
-              name = val;
+              this.value = val;
 
               setState(() {});
             },

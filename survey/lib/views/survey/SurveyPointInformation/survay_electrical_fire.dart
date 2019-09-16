@@ -254,36 +254,35 @@ class _State extends State<SurvayElectricalFirePage> {
   }
 
   updateNextButton() {
-
-    if(fireCreatModel.page2editAddress.length>0){
+    if (fireCreatModel.page2editAddress.length > 0) {
       setState(() {
         isStep1 = true;
       });
-    }else{
+    } else {
       setState(() {
         isStep1 = false;
       });
     }
 
-    if(isStep1&&fireCreatModel.editpic1.length > 0 &&
-        fireCreatModel.editpic2.length > 0){
+    if (isStep1 &&
+        fireCreatModel.editpic1.length > 0 &&
+        fireCreatModel.editpic2.length > 0) {
       setState(() {
         isStep2 = true;
       });
-    }else{
+    } else {
       isStep2 = false;
     }
 
-
-   if(isStep1&&isStep2&&fireCreatModel.editenvironmentpic1.length > 0){
+    if (isStep1 && isStep2 && fireCreatModel.editenvironmentpic1.length > 0) {
       isStep3 = true;
-    }else{
+    } else {
       isStep3 = false;
     }
 
-    if(isStep1&&isStep2&&isStep3){
+    if (isStep1 && isStep2 && isStep3) {
       isStep4 = true;
-    }else{
+    } else {
       isStep4 = false;
     }
 
@@ -294,67 +293,60 @@ class _State extends State<SurvayElectricalFirePage> {
         fireCreatModel.current.length > 0) {
       setState(() {
         isCheack = true;
-
       });
-
-    }else{
+    } else {
       setState(() {
         isCheack = false;
-
       });
     }
-    if(checkIndex == 0){
-      if(isStep1){
+    if (checkIndex == 0) {
+      if (isStep1) {
         setState(() {
-          buttonColor =  prefix0.GREEN_COLOR;
+          buttonColor = prefix0.GREEN_COLOR;
         });
-      }else{
+      } else {
         setState(() {
-          buttonColor =  Colors.grey;
-        });
-      }
-    }
-     else if(checkIndex == 1){
-      if(isStep2){
-        setState(() {
-          buttonColor =  prefix0.GREEN_COLOR;
-        });
-      }else{
-        setState(() {
-          buttonColor =  Colors.grey;
+          buttonColor = Colors.grey;
         });
       }
-    }
-    else  if(checkIndex == 2){
-      if(isStep3){
+    } else if (checkIndex == 1) {
+      if (isStep2) {
         setState(() {
-          buttonColor =  prefix0.GREEN_COLOR;
+          buttonColor = prefix0.GREEN_COLOR;
         });
-      }else{
+      } else {
         setState(() {
-          buttonColor =  Colors.grey;
-        });
-      }
-    }
-    else  if(checkIndex == 3){
-      if(isStep4){
-        setState(() {
-          buttonColor =  prefix0.GREEN_COLOR;
-        });
-      }else{
-        setState(() {
-          buttonColor =  Colors.grey;
+          buttonColor = Colors.grey;
         });
       }
-    }
-    else if(checkIndex == 4){
-      if(isCheack){
+    } else if (checkIndex == 2) {
+      if (isStep3) {
         setState(() {
-          buttonColor =  prefix0.GREEN_COLOR;
+          buttonColor = prefix0.GREEN_COLOR;
         });
-      }else{
+      } else {
         setState(() {
-          buttonColor =  Colors.grey;
+          buttonColor = Colors.grey;
+        });
+      }
+    } else if (checkIndex == 3) {
+      if (isStep4) {
+        setState(() {
+          buttonColor = prefix0.GREEN_COLOR;
+        });
+      } else {
+        setState(() {
+          buttonColor = Colors.grey;
+        });
+      }
+    } else if (checkIndex == 4) {
+      if (isCheack) {
+        setState(() {
+          buttonColor = prefix0.GREEN_COLOR;
+        });
+      } else {
+        setState(() {
+          buttonColor = Colors.grey;
         });
       }
     }
@@ -540,7 +532,8 @@ class _State extends State<SurvayElectricalFirePage> {
 //    });
     }
   }
-  var buttonColor =  prefix0.GREEN_COLOR;
+
+  var buttonColor = prefix0.GREEN_COLOR;
   @override
   Widget build(BuildContext context) {
     Widget NavBar = AppBar(
@@ -571,24 +564,24 @@ class _State extends State<SurvayElectricalFirePage> {
       child: new MaterialButton(
         color: buttonColor,
         textColor: Colors.white,
-        child: this.checkIndex ==4 ? new Text('完成',
-            style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.normal,
-                fontSize: 20)):new Text('下一步',
-            style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.normal,
-            fontSize: 20)
-        ),
+        child: this.checkIndex == 4
+            ? new Text('完成',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.normal,
+                    fontSize: 20))
+            : new Text('下一步',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.normal,
+                    fontSize: 20)),
         onPressed: () {
-          
-          if(checkIndex==4){
+          if (checkIndex == 4) {
             if (this.isCheack) {
               if (DataTransferManager.shared.isEditModel) {
                 for (int i = 0;
-                i < DataTransferManager.shared.project.subList.length;
-                i++) {
+                    i < DataTransferManager.shared.project.subList.length;
+                    i++) {
                   Map map = DataTransferManager.shared.project.subList[i];
 
                   ElectricalFireModel model = ElectricalFireModel.fromJson(map);
@@ -610,9 +603,10 @@ class _State extends State<SurvayElectricalFirePage> {
 
               Navigator.of(context).pop("1");
             }
-          }else{
-            _pageController.animateToPage(checkIndex+1,
-                duration: const Duration(milliseconds: 300), curve: Curves.ease);
+          } else {
+            _pageController.animateToPage(checkIndex + 1,
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.ease);
           }
         },
       ),
@@ -1658,7 +1652,7 @@ class _State extends State<SurvayElectricalFirePage> {
           ),
           GestureDetector(
             onTap: takePhoto11,
-            //写入方法名称就可以了，但是是无参的
+            //写入方法名称就可以了，但是是���参的
             onTapUp: (_) {
               setState(() {
                 editIndex = -1;
@@ -1896,7 +1890,7 @@ class _State extends State<SurvayElectricalFirePage> {
             height: 1,
           ),
           GestureDetector(
-//            onTap: editPurpose,//写入方法名称就可以了，但是是无参的
+//            onTap: editPurpose,//写入方法名称���可以了，但是是无参的
             child: Container(
               alignment: Alignment.center,
               height: 60,
@@ -2479,10 +2473,8 @@ class _State extends State<SurvayElectricalFirePage> {
 
     var mPageView = new PageView.builder(
       controller: _pageController,
-      onPageChanged: (current){
-
+      onPageChanged: (current) {
         setState(() {
-
           checkIndex = current;
         });
         updateNextButton();

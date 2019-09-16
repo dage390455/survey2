@@ -11,6 +11,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:event_bus/event_bus.dart';
 import 'package:flutter/services.dart';
+import 'package:sensoro_survey/model/component_configure_model.dart';
 import 'package:sensoro_survey/model/electrical_fire_model.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 import 'package:sensoro_survey/views/survey/const.dart';
@@ -22,6 +23,7 @@ import 'package:sensoro_survey/generated/customCalendar/lib/model/date_model.dar
 import 'package:sensoro_survey/model/project_info_model.dart';
 import 'package:sensoro_survey/views/survey/common/save_data_manager.dart';
 import 'package:sensoro_survey/views/survey/survey_type_page.dart';
+import 'package:sensoro_survey/views/survey/add_all_type_page.dart';
 
 import 'SurveyPointInformation/summary_construction_page.dart';
 import 'SurveyPointInformation/survay_electrical_fire_detail.dart';
@@ -164,9 +166,23 @@ class _PointListPageState extends State<PointListPage> {
   _gotoSurveyType() async {
     final result = await Navigator.push(
       context,
-
-
       new MaterialPageRoute(builder: (context) => SummaryConstructionPage()),
+    );
+
+    if (result != null) {
+      String name = result as String;
+
+      if (name == "1") {
+        setState(() {});
+      }
+    }
+  }
+
+  _gotoAddAllPage() async {
+    componentModel model = componentModel("", "", "", "", {});
+    final result = await Navigator.push(
+      context,
+      new MaterialPageRoute(builder: (context) => AddAllPage(input: model)),
     );
 
     if (result != null) {
@@ -357,6 +373,7 @@ class _PointListPageState extends State<PointListPage> {
                   DataTransferManager.shared.project = input;
                   DataTransferManager.shared.creatModel();
                   _gotoSurveyType();
+                  // _gotoAddAllPage();
                 },
               ),
             ),

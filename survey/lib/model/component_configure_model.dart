@@ -1,8 +1,9 @@
 class componentModel {
   String name;
   String code;
+  var value;
   String type;
-  Map extraInfo;
+  Map<String, dynamic> extraInfo;
 
-  componentModel(this.name, this.code, this.type, extraInfo);
+  componentModel(this.name, this.code, this.value, this.type, this.extraInfo);
 }
