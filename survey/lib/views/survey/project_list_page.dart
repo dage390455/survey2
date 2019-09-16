@@ -35,9 +35,12 @@ import 'package:sensoro_survey/views/survey/SurveyPointInformation/summary_const
 import 'package:sensoro_survey/views/survey/common/save_data_manager.dart';
 import 'package:sensoro_survey/views/survey/common/flutter_screenutil.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:sensoro_survey/net/api/app_api.dart';
+
 //import 'package:fluwx/fluwx.dart' as fluwx;
 BasicMessageChannel<String> _basicMessageChannel =
-BasicMessageChannel("BasicMessageGetVersionChannelPlugin", StringCodec());
+    BasicMessageChannel("BasicMessageGetVersionChannelPlugin", StringCodec());
+
 class ProjectListPage extends StatefulWidget {
   String _text = "share text from fluwx";
 
@@ -77,12 +80,10 @@ class _ProjectListPageState extends State<ProjectListPage> {
 }
 
 _launchURL() async {
-  if (Platform.isIOS){
+  if (Platform.isIOS) {
     Future<String> future = _basicMessageChannel.send("1");
-    future.then((message) {
-
-    });
-  }else{
+    future.then((message) {});
+  } else {
     const url = 'https://fir.im/sensoroSurvey';
     if (await canLaunch(url)) {
       await launch(url);
@@ -90,7 +91,6 @@ _launchURL() async {
       throw 'Could not launch $url';
     }
   }
-
 }
 
 Future getVersionData(BuildContext context) async {
@@ -108,36 +108,29 @@ Future getVersionData(BuildContext context) async {
   print(data);
   String versionShort = data["versionShort"];
   String version = "";
-  if(Platform.isIOS){
+  if (Platform.isIOS) {
     Future<String> future = _basicMessageChannel.send("");
-    future.then((message) {
-
-    });
+    future.then((message) {});
 
     _basicMessageChannel.setMessageHandler((message) => Future<String>(() {
-      print(message);
-      //message为native传递的数据
-      if(message!=null&&message.isNotEmpty){
-        version = message;
-        if (versionShort != null && (version != versionShort)) {
-          _showConfirmationDialog(context, "更新");
-        }
-
-      }
-      //给Android端的返回值
-      return "========================收到Native消息：" + message;
-    }));
-
-  }else{
+          print(message);
+          //message为native传递的数据
+          if (message != null && message.isNotEmpty) {
+            version = message;
+            if (versionShort != null && (version != versionShort)) {
+              _showConfirmationDialog(context, "更新");
+            }
+          }
+          //给Android端的返回值
+          return "========================收到Native消息：" + message;
+        }));
+  } else {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     version = packageInfo.version;
     if (versionShort != null && (version != versionShort)) {
       _showConfirmationDialog(context, "更新");
     }
   }
-
-
-
 
 //    print(response.toString());
 
@@ -161,7 +154,7 @@ Future<bool> _showConfirmationDialog(BuildContext context, String action) {
                 action.substring(1, action.length)),
             onPressed: () {
               _launchURL();
-             Navigator.pop(context, true);
+              Navigator.pop(context, true);
             },
           ),
           new SizedBox(
@@ -210,6 +203,8 @@ class _State extends State<HomePage> {
   final bool confirmDismiss = true;
   List<String> dateFilterList = new List();
   static Map<String, dynamic> headers = {};
+  static Map<String, dynamic> params = {};
+  static String urlStr = "";
 
   CalendarController controller;
   TextEditingController searchController = TextEditingController();
@@ -327,6 +322,32 @@ class _State extends State<HomePage> {
 
   void deleteData(int index) async {
     String hisoryKey = "projectList";
+  }
+
+  void _getListNetCall() async {
+    if (dataList.length == 0) {
+    } else {}
+    ResultData resultData = await AppApi.getInstance()
+        .getListNetCall(context, true, urlStr, headers, params);
+    if (resultData.isSuccess()) {
+      // _stopLoading();
+      int errcode = resultData.response["errcode"].toInt();
+      if (errcode == 0) {
+        isFrist = false;
+        if (resultData.response["data"] is List) {
+          List resultList = resultData.response["data"];
+          if (resultList.length > 0) {
+            setState(() {
+              dataList.addAll(resultList);
+            });
+          }
+        }
+
+        if (resultData.response["total"] is int) {
+          listTotalCount = resultData.response["total"];
+        }
+      } else {}
+    }
   }
 
   void _onEvent(Object value) {

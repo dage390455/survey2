@@ -182,7 +182,7 @@ class _PointListPageState extends State<PointListPage> {
     componentModel model = componentModel("", "", "", "", {});
     final result = await Navigator.push(
       context,
-      new MaterialPageRoute(builder: (context) => AddAllPage(input: model)),
+      new MaterialPageRoute(builder: (context) => AddAllPage1(input: model)),
     );
 
     if (result != null) {
@@ -372,8 +372,8 @@ class _PointListPageState extends State<PointListPage> {
                 onPressed: () {
                   DataTransferManager.shared.project = input;
                   DataTransferManager.shared.creatModel();
-                  _gotoSurveyType();
-                  // _gotoAddAllPage();
+                  // _gotoSurveyType();
+                  _gotoAddAllPage();
                 },
               ),
             ),

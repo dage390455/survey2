@@ -3,6 +3,7 @@ library basicnetservice;
 export 'package:sensoro_survey/net/NetService/net_service.dart';
 import 'package:flutter/widgets.dart';
 import 'package:sensoro_survey/net/NetService/net_service.dart';
+import 'package:sensoro_survey/net/api/net_config.dart';
 
 import 'basic_net_service.dart';
 
@@ -43,13 +44,8 @@ class AppApi extends BasicNetService {
     // Map<String, dynamic> param = params;
     // Map param = params;
 
-    ///?app=weather.future&weaid=1&&appkey=10003&sign=b59bc3ef6191eb9f747dd4e83c99f2a4&format=json
-    // param["app"] = "weather.future";
-    // param["weaid"] = "1";
-    // param["appkey"] = "10003";
-    // param["sign"] = "b59bc3ef6191eb9f747dd4e83c99f2a4";
-    // param["format"] = "json";
-    ResultData resultData = await get(urlStr,
+    String wholeUrl = NetConfig.baseUrl + urlStr;
+    ResultData resultData = await get(wholeUrl,
         headers: headers,
         params: params,
         context: context,
