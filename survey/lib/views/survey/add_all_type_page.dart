@@ -261,10 +261,50 @@ class itemClassState extends State<itemClass> {
   itemClassState(this.model);
 
   TextEditingController step1remarkController = TextEditingController();
-
+  BasicMessageChannel<String> _basicMessageChannel =
+  BasicMessageChannel("BasicMessageChannelPlugin", StringCodec());
   @override
   void initState() {
+
+    _basicMessageChannel.setMessageHandler((message) => Future<String>(() {
+      print(message);
+      //message为native传递的数据
+      if(message!=null&&message.isNotEmpty){
+        List list = message.split(",");
+        if (list.length ==3){
+          setState(() {
+            model.extraInfo["editLongitudeLatitude"] = list[0] + "," + list[1];
+            model.extraInfo["editPosition"] = list[2];
+          });
+        }
+
+      }
+      //给Android端的返回值
+      return "========================收到Native消息：" + message;
+    }));
+
     super.initState();
+  }
+
+
+  void _sendToNative() {
+
+    var location = "0," + "," +","+ "";
+    if(model.extraInfo["editLongitudeLatitude"]!=null){
+      location = "0," + model.extraInfo["editLongitudeLatitude"] +","+ "";
+    }
+
+
+    Future<String> future = _basicMessageChannel.send(location);
+    future.then((message) {
+      print("========================" + message);
+    });
+
+
+  }
+
+  editLoction() async {
+    _sendToNative();
   }
 
   @override
@@ -275,9 +315,36 @@ class itemClassState extends State<itemClass> {
       width: 0,
     );
 
-    Widget mapContainer = Container(
-      height: 0,
-      width: 0,
+    Widget mapContainer =  GestureDetector(
+      onTap: editLoction, //写入方法名称就可以了，但是是无参的
+      child: Container(
+        alignment: Alignment.center,
+        height: 60,
+        child: new Row(
+          children: <Widget>[
+            Text("定位地址",
+              style: new TextStyle(
+                  fontSize: prefix0.fontsSize
+              ),
+            ),
+            Expanded(
+              child: Text(
+                this.model.extraInfo["editPosition"] !=null
+                    ? this.model.extraInfo["editPosition"]
+                    : "",
+                textAlign: TextAlign.right,
+                style: new TextStyle(
+                    fontSize: prefix0.fontsSize
+                ),
+              ),
+            ),
+            Image.asset(
+              "assets/images/right_arrar.png",
+              width: 20,
+            )
+          ],
+        ),
+      ),
     );
 
     Widget imageContainer = Container(
@@ -466,9 +533,12 @@ class itemClassState extends State<itemClass> {
       //复选框
       return checkBoxContainer;
     } else if (this.model.type == "image") {
+
       //添加图片
       return imageContainer;
     } else if (this.model.type == "map") {
+
+
       //高德地图或百度地图
       return mapContainer;
     } else if (this.model.type == "dataPicker") {
