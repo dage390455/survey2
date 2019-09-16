@@ -32,11 +32,11 @@
 
 //字符串的导出（写入到文件）
 - (void) outputTxt:(NSDictionary*)json{
-//    [[[UIAlertView alloc] initWithTitle:@"提示"
-//                                message:@"导出的文件如果包含图片，会需要一点时间，请耐心等待"
-//                               delegate:nil
-//                      cancelButtonTitle:@"确定"
-//                      otherButtonTitles:nil] show];
+    //    [[[UIAlertView alloc] initWithTitle:@"提示"
+    //                                message:@"导出的文件如果包含图片，会需要一点时间，请耐心等待"
+    //                               delegate:nil
+    //                      cancelButtonTitle:@"确定"
+    //                      otherButtonTitles:nil] show];
     [self makeExcel:json];
     return;
     NSError *error;
@@ -56,7 +56,7 @@
     NSString *path = [NSString stringWithFormat:@"%@/%ld.txt",rootPath,projectId];
     self.path = path;
     //文件不存在会自动创建，文件夹不存在则不会自动创建会报错
-//    NSString *path = @"/Users/gx/Desktop/test_export.txt";
+    //    NSString *path = @"/Users/gx/Desktop/test_export.txt";
     NSError *error1;
     jsonString = [jsonString stringByReplacingOccurrencesOfString:@"," withString:@";"];
     [jsonString writeToFile:path atomically:YES encoding:NSUTF8StringEncoding error:&error1];
@@ -128,33 +128,33 @@
     [shareParams SSDKEnableUseClientShare];
     
     
-//    [ShareSDK showShareActionSheet:nil
-//                             items:@[@(SSDKPlatformSubTypeWechatSession),
-//                                     @(SSDKPlatformSubTypeWechatTimeline)]
-//                       shareParams:shareParams
-//               onShareStateChanged:^(SSDKResponseState state, SSDKPlatformType platformType, NSDictionary *userData, SSDKContentEntity *contentEntity, NSError *error, BOOL end) {
-//                   switch (state) {
-//                       case SSDKResponseStateBegin:
-//                           break;
-//                       case SSDKResponseStateSuccess:
-//                           if (platformType == SSDKPlatformTypeCopy) {
-//                               NSLog(@"复制成功");
-//                           }else{
-//                               NSLog(@"分享成功");
-//                           }
-//                           break;
-//                       case  SSDKResponseStateFail:
-//                           if (platformType == SSDKPlatformTypeCopy) {
-//                               NSLog(@"复制失败");
-//                           }else{
-//                               NSLog(@"分享失败");
-//                           }
-//                           NSLog(@"失败：%@", error);
-//                           break;
-//                       default:
-//                           break;
-//                   }
-//               }];
+    //    [ShareSDK showShareActionSheet:nil
+    //                             items:@[@(SSDKPlatformSubTypeWechatSession),
+    //                                     @(SSDKPlatformSubTypeWechatTimeline)]
+    //                       shareParams:shareParams
+    //               onShareStateChanged:^(SSDKResponseState state, SSDKPlatformType platformType, NSDictionary *userData, SSDKContentEntity *contentEntity, NSError *error, BOOL end) {
+    //                   switch (state) {
+    //                       case SSDKResponseStateBegin:
+    //                           break;
+    //                       case SSDKResponseStateSuccess:
+    //                           if (platformType == SSDKPlatformTypeCopy) {
+    //                               NSLog(@"复制成功");
+    //                           }else{
+    //                               NSLog(@"分享成功");
+    //                           }
+    //                           break;
+    //                       case  SSDKResponseStateFail:
+    //                           if (platformType == SSDKPlatformTypeCopy) {
+    //                               NSLog(@"复制失败");
+    //                           }else{
+    //                               NSLog(@"分享失败");
+    //                           }
+    //                           NSLog(@"失败：%@", error);
+    //                           break;
+    //                       default:
+    //                           break;
+    //                   }
+    //               }];
 }
 
 #pragma mark - Share
@@ -201,7 +201,7 @@
         NSString *str = dataarr[0];
         str = [str stringByReplacingOccurrencesOfString:@"," withString:@";"];
         [[NSUserDefaults standardUserDefaults] setObject:str forKey:@"histroySurveysiteProjectname"];
-
+        
     }
 }
 
@@ -212,7 +212,7 @@
 }
 
 -(void)documentInteractionController:(UIDocumentInteractionController *)controller willBeginSendingToApplication:(NSString *)application{
-
+    
 }
 
 -(void)documentInteractionController:(UIDocumentInteractionController *)controller didEndSendingToApplication:(NSString *)application{
@@ -232,20 +232,20 @@
     
     /* Set up some worksheets. */
     lxw_worksheet *worksheet1 = workbook_add_worksheet(workbook, "sheet1");
-//    lxw_worksheet *worksheet2 = workbook_add_worksheet(workbook, NULL);
-//    lxw_worksheet *worksheet3 = workbook_add_worksheet(workbook, NULL);
-//    lxw_worksheet *worksheet4 = workbook_add_worksheet(workbook, NULL);
+    //    lxw_worksheet *worksheet2 = workbook_add_worksheet(workbook, NULL);
+    //    lxw_worksheet *worksheet3 = workbook_add_worksheet(workbook, NULL);
+    //    lxw_worksheet *worksheet4 = workbook_add_worksheet(workbook, NULL);
     
     
     /* Set the tab colors. */
     worksheet_set_tab_color(worksheet1, LXW_COLOR_WHITE);
-//    worksheet_set_tab_color(worksheet2, LXW_COLOR_GREEN);
-//    worksheet_set_tab_color(worksheet3, 0xFF9900); /* Orange. */
+    //    worksheet_set_tab_color(worksheet2, LXW_COLOR_GREEN);
+    //    worksheet_set_tab_color(worksheet3, 0xFF9900); /* Orange. */
     NSMutableArray *list =[[NSMutableArray alloc]init];
     
     int column =0;
     for(NSString* key  in json.allKeys){
-
+        
         id  value = [json objectForKey:key];
         NSString* key1 = [key stringByReplacingOccurrencesOfString:@"id" withString:@"项目编号"];
         key1 = [key1 stringByReplacingOccurrencesOfString:@"projectName" withString:@"项目名称"];
@@ -336,7 +336,6 @@
             key1 = [key1 stringByReplacingOccurrencesOfString:@"page4" withString:@""];
             key1 = [key1 stringByReplacingOccurrencesOfString:@"page5" withString:@""];
             
-
             
             if(value ==nil ||value==NULL||value ==0){
                 NSString *str =[NSString stringWithFormat:@"%@:",key1];
@@ -395,20 +394,21 @@
     
     column++;
     
-//    worksheet_write_string(worksheet1, 0, 0, "哈哈哈", NULL);
-//    worksheet_write_string(worksheet1, 0, 1, "你好", nil);
-//    worksheet_write_string(worksheet1, 0, 2, "就是", nil);
-//    worksheet_write_string(worksheet1, 0, 3, "这样", nil);
-//    worksheet_write_string(worksheet1, 0, 4, "的", nil);
+
+    //    worksheet_write_string(worksheet1, 0, 0, "哈哈哈", NULL);
+    //    worksheet_write_string(worksheet1, 0, 1, "你好", nil);
+    //    worksheet_write_string(worksheet1, 0, 2, "就是", nil);
+    //    worksheet_write_string(worksheet1, 0, 3, "这样", nil);
+    //    worksheet_write_string(worksheet1, 0, 4, "的", nil);
     
-//    NSString *itemPath1=[[NSBundle mainBundle] pathForResource:@"location_me" ofType:@"png"];
-//    const char *image = [itemPath1 UTF8String];
-     workbook_close(workbook);
+    //    NSString *itemPath1=[[NSBundle mainBundle] pathForResource:@"location_me" ofType:@"png"];
+    //    const char *image = [itemPath1 UTF8String];
+    workbook_close(workbook);
     //文件数据
     WXFileObject *fileObj = [WXFileObject object];
-//    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"shareFile" ofType:@"pdf"];
+    //    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"shareFile" ofType:@"pdf"];
     NSData *data = [NSData dataWithContentsOfFile:path];
- 
+    
     
     fileObj.fileData =data;
     //多媒体消息
