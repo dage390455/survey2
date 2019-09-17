@@ -54,7 +54,7 @@ class _mutilCheckState extends State<MutilCheck> {
                 widget.title,
                 style: TextStyle(fontSize: 17),
               ),
-              padding: EdgeInsets.fromLTRB(0, 10, 20, 0),
+              padding: EdgeInsets.fromLTRB(0, 13, 20, 0),
             ),
             Expanded(
               child: Wrap(
