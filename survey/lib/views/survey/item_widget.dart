@@ -45,7 +45,6 @@ class itemClassState extends State<itemClass> {
     }
 
     if (model.type == "map") {
-      return;
       _basicMessageChannel.setMessageHandler((message) => Future<String>(() {
             print(message);
             //message为native传递的数据
