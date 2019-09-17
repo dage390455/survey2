@@ -11,6 +11,8 @@ class MutilCheck extends StatefulWidget {
   }) : super();
 
   final List<MutilCheckModel> dataList;
+
+  ///单选true、多选false
   final bool isSingle;
   final String title;
 
