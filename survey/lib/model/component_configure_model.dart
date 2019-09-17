@@ -10,8 +10,8 @@ class componentModel {
   String placeholder;
   String validate_rule; //正则表达式
   String type; //所属业务类型
-  int page_no;
-  int order_no;
+  double page_no;
+  double order_no;
   String page_name;
   String data_url; //数据URL
   // Map<String, dynamic> extraInfo;
@@ -44,14 +44,14 @@ class componentModel {
           json['risk_id'],
           json['comp_code'],
           json['comp_type'],
-          json['options'],
-          json['placeholder'],
-          json['validate_rule'],
+          json['options'] == null ? "" : json['options'],
+          json['placeholder'] == null ? "" : json['placeholder'],
+          json['validate_rule'] == null ? "" : json['validate_rule'],
           json['type'],
           json['page_no'],
           json['order_no'],
           json['page_name'],
-          json['data_url'],
+          json['data_url'] == null ? "" : json['data_url'],
           // json['extraInfo'],
         );
 }

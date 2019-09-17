@@ -31,7 +31,7 @@ class itemClassState extends State<itemClass> {
   BasicMessageChannel<String> _basicMessageChannel =
       BasicMessageChannel("BasicMessageChannelPlugin", StringCodec());
   BasicMessageChannel<String> _takePicBasicMessageChannel =
-  BasicMessageChannel("BasicMessageChannelPluginPickImage", StringCodec());
+      BasicMessageChannel("BasicMessageChannelPluginPickImage", StringCodec());
   var picImagesArray = [
     {"title": "环境照片", "picPath": ""},
     {"title": "环境照片", "picPath": ""},
@@ -40,10 +40,14 @@ class itemClassState extends State<itemClass> {
   int editIndex = -1;
   int picImageIndex = 0;
   Map extraInfo = {};
+  String options = "";
+  List<String> optionList = [];
 
   @override
   void initState() {
     this.model = model;
+    options = this.model.options;
+    optionList = options.split(";");
     if (model.variable_value != null && model.variable_value.length > 0) {
       extraInfo = json.decode(model.variable_value);
     }
@@ -71,16 +75,16 @@ class itemClassState extends State<itemClass> {
           }));
     }
 
-   if(this.model.comp_code == "photo"){
-     _takePicBasicMessageChannel.setMessageHandler((message) => Future<String>(() {
-       print(message);
-       //message为native传递的数据
-       _resentpics(message);
-       //给Android端的返回值
-       return "========================收到Native消息：" + message;
-     }));
-   }
-
+    if (this.model.comp_code == "photo") {
+      _takePicBasicMessageChannel
+          .setMessageHandler((message) => Future<String>(() {
+                print(message);
+                //message为native传递的数据
+                _resentpics(message);
+                //给Android端的返回值
+                return "========================收到Native消息：" + message;
+              }));
+    }
 
     super.initState();
   }
@@ -99,7 +103,6 @@ class itemClassState extends State<itemClass> {
       );
     }
   }
-
 
   //向native发送消息
   void _sendtakePicToNative() {
@@ -126,21 +129,16 @@ class itemClassState extends State<itemClass> {
       String picPath = item["picPath"];
       String picTitle = item["title"];
       item["picPath"] = urlString;
-      setState(() {
-
-      });
+      setState(() {});
     }
   }
 
-
   /*拍照*/
   takePhoto(int index) async {
-
-
     Map item = picImagesArray[index];
 
     String picPath = item["picPath"];
-    if(picPath.length>0){
+    if (picPath.length > 0) {
       List<PicSwiperItem> list = new List();
       PicSwiperItem picSwiperItem = PicSwiperItem("");
       list.clear();
@@ -154,17 +152,13 @@ class itemClassState extends State<itemClass> {
               builder: (context) => new PicSwiper(index: 0, pics: list)),
         );
       }
-    }else{
+    } else {
       picImageIndex = index;
       openGallery();
     }
-
-
-
   }
 
-
-  bool isHaveSelectPic(int index){
+  bool isHaveSelectPic(int index) {
     Map item = picImagesArray[index];
 
     String picPath = item["picPath"];
@@ -235,7 +229,7 @@ class itemClassState extends State<itemClass> {
         itemCount: picImagesArray.length,
         itemBuilder: (context, index) {
           return GestureDetector(
-              onTap:() {
+              onTap: () {
                 takePhoto(index);
               },
               //写入方法名称就可以了，但是是无参的
@@ -278,7 +272,7 @@ class itemClassState extends State<itemClass> {
                   Row(
                     children: <Widget>[
                       new Offstage(
-                          offstage: isHaveSelectPic(index)?false:true,
+                          offstage: isHaveSelectPic(index) ? false : true,
                           child: new IconButton(
                             icon: new Image.asset(
                                 "assets/images/picture_del.png"),
@@ -287,8 +281,7 @@ class itemClassState extends State<itemClass> {
                               setState(() {
                                 Map item = picImagesArray[index];
                                 item["picPath"] = "";
-                              }
-                              );
+                              });
                             },
                           )),
                     ],
@@ -360,6 +353,17 @@ class itemClassState extends State<itemClass> {
           ),
         ));
 
+    List<PopupMenuItem<String>> popItemList() {
+      List<PopupMenuItem<String>> list = [];
+
+      for (int i = 0; i < optionList.length; i++) {
+        list.add(new PopupMenuItem<String>(
+            child: new Text(optionList[i]), value: i.toString()));
+      }
+
+      return list;
+    }
+
 //弹出的选择LIST
     Container popView = new Container(
       alignment: Alignment.center,
@@ -393,35 +397,15 @@ class itemClassState extends State<itemClass> {
           initialValue: "hot",
           offset: Offset(0.2, 0),
           padding: EdgeInsets.only(top: 0.0, bottom: 0, left: 100, right: 0),
-          itemBuilder: (BuildContext context) {
-            return <PopupMenuItem<String>>[
-              PopupMenuItem<String>(
-                child: Text("热度"),
-                value: "hot",
-              ),
-              PopupMenuItem<String>(
-                child: Text("最新"),
-                value: "new",
-              ),
-              PopupMenuItem<String>(
-                child: Text("对对对"),
-                value: "new",
-              ),
-            ];
-          },
-          onSelected: (String action) {
-            switch (action) {
-              case "hot":
-                print("热度");
-                this.model.variable_value = "热度";
-                setState(() {});
-                break;
-              case "new":
-                print("最新");
-                this.model.variable_value = "最新";
-                setState(() {});
-                break;
-            }
+
+          itemBuilder: (context) =>
+              <PopupMenuItem<String>>[]..addAll(popItemList()),
+
+          onSelected: (String s) {
+            setState(() {
+              this.model.variable_value = optionList[int.parse(s)];
+              // choosedModel = cars[int.parse(action)];
+            });
           },
           onCanceled: () {
             print("onCanceled");
@@ -472,8 +456,6 @@ class itemClassState extends State<itemClass> {
             ]));
 
     _gotoTextInput(componentModel model) async {
-      // componentModel model = componentModel(
-      //     "项目名称", "projectName", this.name, "text", {"placeHoder": "默认输入这些"});
       final result = await Navigator.push(
         context,
         new MaterialPageRoute(

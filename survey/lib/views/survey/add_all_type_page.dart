@@ -142,7 +142,7 @@ class _AddAllPageState1 extends State<AddAllPage1> {
       backgroundColor: Colors.white,
       centerTitle: true,
       title: Text(
-        "项目信息",
+        "勘察点信息",
         style: TextStyle(color: Colors.black),
       ),
       leading: IconButton(
@@ -207,6 +207,7 @@ class _AddAllPageState1 extends State<AddAllPage1> {
               ]),
             );
           }
+
           return new Container(
             padding:
                 const EdgeInsets.only(top: 0.0, bottom: 0, left: 20, right: 20),
