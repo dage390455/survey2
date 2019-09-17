@@ -19,7 +19,12 @@ class _State extends State<TextInputPage> {
   String name = "";
   String placeHoder = "";
   String value = "";
+  String comp_type = "";
+  var isShowError = true;
+  String errorInfo = "";
   Map extroInfo = {};
+  TextInputType inputType = TextInputType.text;
+
   FocusNode blankNode = FocusNode();
   var isHighHistory = false;
   _State({this.input});
@@ -32,6 +37,19 @@ class _State extends State<TextInputPage> {
     historyKey = this.input.variable_code;
     value = this.input.variable_value;
     placeHoder = this.input.placeholder;
+    comp_type = this.input.comp_type;
+    if (comp_type == "mobile") {
+      inputType = TextInputType.phone;
+    }
+    if (comp_type == "float") {
+      inputType = TextInputType.numberWithOptions(decimal: true);
+    }
+    if (comp_type == "integer") {
+      inputType = TextInputType.number;
+    }
+    if (comp_type == "email") {
+      inputType = TextInputType.emailAddress;
+    }
     // placeHoder = extroInfo["placeHoder"];
 
     // TODO: implement initState
@@ -46,44 +64,6 @@ class _State extends State<TextInputPage> {
 
   @override
   Widget build(BuildContext context) {
-    //弹出的提示框
-    Container popC = new Container(
-      child: Center(
-        child: PopupMenuButton(
-//              icon: Icon(Icons.home),
-          child: Text("abc"),
-          tooltip: "长按提示",
-          initialValue: "hot",
-          padding: EdgeInsets.all(0.0),
-          itemBuilder: (BuildContext context) {
-            return <PopupMenuItem<String>>[
-              PopupMenuItem<String>(
-                child: Text("热度"),
-                value: "hot",
-              ),
-              PopupMenuItem<String>(
-                child: Text("最新"),
-                value: "new",
-              ),
-            ];
-          },
-          onSelected: (String action) {
-            switch (action) {
-              case "hot":
-                print("热度");
-                break;
-              case "new":
-                print("最新");
-                break;
-            }
-          },
-          onCanceled: () {
-            print("onCanceled");
-          },
-        ),
-      ),
-    );
-
     Widget NavBar = AppBar(
       elevation: 1.0,
       centerTitle: true,
@@ -114,6 +94,24 @@ class _State extends State<TextInputPage> {
             onTap: () {
               // 点击空白页面关闭键盘
               if (this.value.length > 0) {
+                //plain-普通文本mobile-手机号码email-电子邮件float-浮点型integer-整型
+
+                if (comp_type == "mobile") {
+                  if (this.value.length != 11) {
+                    isShowError = false;
+                    errorInfo = "请输入正确的手机号";
+                    setState(() {});
+                    return;
+                  }
+                }
+                if (comp_type == "email") {
+                  if (!this.value.contains("@")) {
+                    isShowError = false;
+                    errorInfo = "请输入正确的邮箱地址";
+                    setState(() {});
+                    return;
+                  }
+                }
                 SaveDataManger.addHistory(this.value, historyKey);
                 Navigator.of(context).pop(this.value);
               }
@@ -173,7 +171,7 @@ class _State extends State<TextInputPage> {
         children: <Widget>[
           TextField(
             controller: locationController,
-            keyboardType: TextInputType.text,
+            keyboardType: this.inputType,
             decoration: InputDecoration(
               border: InputBorder.none,
 
@@ -204,6 +202,18 @@ class _State extends State<TextInputPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           backContainer,
+          new Offstage(
+            offstage: isShowError,
+            child: Padding(
+              padding: new EdgeInsets.fromLTRB(20, 8, 20, 8),
+              child: Text(
+                "请输入正确电话号码",
+                style: new TextStyle(
+                  color: Colors.red,
+                ),
+              ),
+            ),
+          ),
           new Offstage(
             offstage: isHighHistory,
             child: HistoryPage(
