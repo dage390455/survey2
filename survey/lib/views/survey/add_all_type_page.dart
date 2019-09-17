@@ -65,6 +65,11 @@ class _AddAllPageState1 extends State<AddAllPage1> {
     dataList.add(model);
 
     model = componentModel("", "", "", "", {});
+    model.name = "日期选择器";
+    model.type = "datePicker";
+    dataList.add(model);
+
+    model = componentModel("", "", "", "", {});
     model.name = "添加图片";
     model.type = "image";
     dataList.add(model);
@@ -82,11 +87,6 @@ class _AddAllPageState1 extends State<AddAllPage1> {
     model = componentModel("", "", "", "", {});
     model.name = "复选框";
     model.type = "checkBox";
-    dataList.add(model);
-
-    model = componentModel("", "", "", "", {});
-    model.name = "日期选择器";
-    model.type = "datePicker";
     dataList.add(model);
 
     // initDetailList();

@@ -1,6 +1,9 @@
-import 'package:sensoro_survey/model/component_configure_model.dart';
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:sensoro_survey/generated/customCalendar/default_style_page.dart';
+import 'package:sensoro_survey/generated/customCalendar/lib/flutter_custom_calendar.dart';
+import 'package:sensoro_survey/generated/customCalendar/lib/model/date_model.dart';
+import 'package:sensoro_survey/model/component_configure_model.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 import 'package:sensoro_survey/views/survey/const.dart';
 import 'package:sensoro_survey/component/text_input.dart';
@@ -66,7 +69,6 @@ class itemClassState extends State<itemClass> {
   }
   @override
   Widget build(BuildContext context) {
-    //弹出的选择LIST
     Widget emptyContainer = Container(
       height: 0,
       width: 0,
@@ -92,11 +94,56 @@ class itemClassState extends State<itemClass> {
       width: 0,
     );
 
-    Widget datePickerContainer = Container(
-      height: 0,
-      width: 0,
-    );
+    //调用日历
+    _showCalendar() async {
+      //调用flutter日历控件
+      final result = await Navigator.push(
+        context,
+        new MaterialPageRoute(builder: (context) => new DefaultStylePage()),
+      );
 
+      if (result != null) {
+        if (result is DateModel) {
+          DateModel dateModel = result;
+          model.value =
+              "${dateModel.year}." + "${dateModel.month}." + "${dateModel.day}";
+          setState(() {});
+        }
+      }
+      return;
+    }
+
+    Widget datePickerContainer = GestureDetector(
+        //zyg onTap带参数事件
+        onTap: () {
+          _showCalendar();
+        },
+        child: new Container(
+          alignment: Alignment.center,
+          height: 60,
+          child: new Row(
+            children: <Widget>[
+              Text(
+                this.model.name,
+                textAlign: TextAlign.right,
+                style: TextStyle(color: Colors.black, fontSize: 17),
+              ),
+              Expanded(
+                child: Text(
+                  model.value.length > 0 ? model.value : "必填",
+                  textAlign: TextAlign.right,
+                  style: TextStyle(color: Colors.black, fontSize: 17),
+                ),
+              ),
+              Image.asset(
+                "assets/images/right_arrar.png",
+                width: 20,
+              )
+            ],
+          ),
+        ));
+
+//弹出的选择LIST
     Container popView = new Container(
       alignment: Alignment.center,
       height: 60,
@@ -147,9 +194,11 @@ class itemClassState extends State<itemClass> {
             switch (action) {
               case "hot":
                 print("热度");
+                this.model.value = "热度";
                 break;
               case "new":
                 print("最新");
+                this.model.value = "最新";
                 break;
             }
           },
@@ -268,7 +317,7 @@ class itemClassState extends State<itemClass> {
     } else if (this.model.type == "map") {
       //高德地图或百度地图
       return mapContainer;
-    } else if (this.model.type == "dataPicker") {
+    } else if (this.model.type == "datePicker") {
       //日期选择
       return datePickerContainer;
     } else {

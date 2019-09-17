@@ -39,7 +39,23 @@ class _DefaultStylePageState extends State<DefaultStylePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        elevation: 1.0,
+        brightness: Brightness.light,
+        backgroundColor: Colors.white,
+        centerTitle: true,
+        title: Text(
+          "日期选择",
+          style: TextStyle(color: Colors.black),
+        ),
+        leading: IconButton(
+          icon: Image.asset(
+            "assets/images/back.png",
+            // height: 20,
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ),
       body: new Container(
         child: new Column(
@@ -52,7 +68,7 @@ class _DefaultStylePageState extends State<DefaultStylePage> {
                     onPressed: () {
                       controller.moveToPreviousMonth();
                     }),
-                new Text(text),
+                // new Text(text),
                 new IconButton(
                     icon: Icon(Icons.navigate_next),
                     onPressed: () {
@@ -63,16 +79,18 @@ class _DefaultStylePageState extends State<DefaultStylePage> {
             CalendarViewWidget(
               calendarController: controller,
             ),
-            new Text(
-                "单选模式\n选中的时间:\n${controller.getSingleSelectCalendar().toString()}"),
+            // new Text(
+            //     "单选模式\n选中的时间:\n${controller.getSingleSelectCalendar().toString()}"),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.of(context).pop(controller.getSingleSelectCalendar());
+        },
         tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+        child: Icon(Icons.done),
+      ),
     );
   }
 }
