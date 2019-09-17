@@ -1,5 +1,7 @@
+import 'dart:io';
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:sensoro_survey/generated/customCalendar/default_style_page.dart';
 import 'package:sensoro_survey/generated/customCalendar/lib/flutter_custom_calendar.dart';
 import 'package:sensoro_survey/generated/customCalendar/lib/model/date_model.dart';
@@ -21,11 +23,81 @@ class itemClassState extends State<itemClass> {
   componentModel model;
   itemClassState(this.model);
 
+
   TextEditingController step1remarkController = TextEditingController();
+  BasicMessageChannel<String> _basicMessageChannel =
+  BasicMessageChannel("BasicMessageChannelPlugin", StringCodec());
+
+
+  var picImagesArray = [{"title":"环境照片","picPath":""},{"title":"环境照片","picPath":""},{"title":"环境照片","picPath":""} ];
+  int editIndex = -1;
+  int picImageIndex = 0;
 
   @override
   void initState() {
+    if(model.type == "map"){
+      _basicMessageChannel.setMessageHandler((message) => Future<String>(() {
+        print(message);
+        //message为native传递的数据
+        if(message!=null&&message.isNotEmpty){
+          List list = message.split(",");
+          if (list.length ==3){
+            if(model.type == "map"){
+              if (model.extraInfo ==null){
+                model.extraInfo = new Map();
+              }
+              model.extraInfo["editLongitudeLatitude"] = list[0] + "," + list[1];
+              model.value = list[2];
+
+              setState(() {});
+            }
+
+          }
+        }
+        //给Android端的返回值
+        return "========================收到Native消息：" + message;
+      }));
+    }
+
+
     super.initState();
+  }
+
+
+  Widget getItembyIndex(int index){
+    Map item = picImagesArray[index];
+
+    String picPath = item["picPath"];
+    String picTitle = item["title"];
+    if(picPath.length>0){
+      return Image.file(File(picPath));
+    }else{
+      return  Text(
+        picTitle,
+        textAlign: TextAlign.center,
+      );
+    }
+  }
+
+
+  void _sendToNative() {
+
+    var location = "0," + "," +","+ "";
+    if(model.extraInfo["editLongitudeLatitude"]!=null){
+      location = "0," + model.extraInfo["editLongitudeLatitude"] +","+ "";
+    }
+
+
+    Future<String> future = _basicMessageChannel.send(location);
+    future.then((message) {
+      print("========================" + message);
+    });
+
+
+  }
+
+  editLoction() async {
+    _sendToNative();
   }
 
   @override
@@ -35,14 +107,106 @@ class itemClassState extends State<itemClass> {
       width: 0,
     );
 
-    Widget mapContainer = Container(
-      height: 0,
-      width: 0,
+    Widget mapContainer =  GestureDetector(
+      onTap: editLoction, //写入方法名称就可以了，但是是无参的
+      child: Container(
+        alignment: Alignment.center,
+        height: 60,
+        child: new Row(
+          children: <Widget>[
+            Text(model.name,
+              style: TextStyle(color: Colors.black, fontSize: 17),
+            ),
+            Expanded(
+              child: Text(
+                model.value.length>0
+                    ? model.value
+                    : "",
+                textAlign: TextAlign.right,
+                style: new TextStyle(
+                    fontSize: prefix0.fontsSize
+                ),
+              ),
+            ),
+            Image.asset(
+              "assets/images/right_arrar.png",
+              width: 20,
+            )
+          ],
+        ),
+      ),
     );
 
+
     Widget imageContainer = Container(
-      height: 0,
-      width: 0,
+      color: Colors.white,
+      padding: new EdgeInsets.fromLTRB(20, 0, 20, 0),
+      height: 150,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: picImagesArray.length,
+        itemBuilder: (context, index) {
+          return   GestureDetector(
+              onTap:null,
+              //写入方法名称就可以了，但是是无参的
+              onTapUp: (_) {
+                setState(() {
+                  editIndex = -1;
+                });
+              },
+              onTapCancel: () {
+                setState(() {
+                  editIndex = -1;
+                });
+              },
+              onTapDown: (_) {
+                setState(() {
+                  editIndex = index;
+                });
+              },
+              child: Stack(
+                alignment: const Alignment(0.9, -1.1),
+                children: <Widget>[
+                  new Padding(
+                    padding: new EdgeInsets.fromLTRB(0, 10, 20, 0),
+                    child: Container(
+                      alignment: Alignment.center,
+                      child: getItembyIndex(index),
+                      decoration: new BoxDecoration(
+                        border: new Border.all(
+                            width: 1.0,
+                            color:(editIndex == index
+                                ? Colors.green
+                                : prefix0.LINE_COLOR)),
+                        borderRadius:
+                        new BorderRadius.all(new Radius.circular(5.0)),
+                      ),
+                      width: 150,
+                      height: 150,
+                    ),
+                  ),
+                  Row(
+                    children: <Widget>[
+                      new Offstage(
+                          offstage:false,
+                          child: new IconButton(
+                            icon: new Image.asset(
+                                "assets/images/picture_del.png"),
+                            tooltip: 'Increase volume by 10%',
+                            onPressed: () {
+//                              setState(() {
+//                                fireCreatModel.editenvironmentpic1 = "";
+//                              }
+//                              );
+                            },
+                          )),
+                    ],
+                  )
+                ],
+              ));
+        },
+      ),
+
     );
 
     Widget ratioContainer = Container(

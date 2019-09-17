@@ -54,6 +54,7 @@ class _State extends State<SurvayElectricalFireCreatePage> {
 
   @override
   void initState() {
+
     _basicMessageChannel.setMessageHandler((message) => Future<String>(() {
           print(message);
           //message为native传递的数据

@@ -15,7 +15,7 @@ Color LIGHT_LINE_COLOR = Color(0xFFF4F4F4);
 Color FENGE_LINE_COLOR = Color(0xFFDFDFDF);
 Color GREEN_COLOR = Color(0xFF1DBB99);
 
-double fontsSize = 16;
+double fontsSize = 17;
 
 // Colors
 const Color blueLogin = Color.fromRGBO(30, 182, 218, 1.0);
