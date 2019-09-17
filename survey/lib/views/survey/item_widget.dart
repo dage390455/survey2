@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:sensoro_survey/generated/customCalendar/default_style_page.dart';
 import 'package:sensoro_survey/generated/customCalendar/lib/flutter_custom_calendar.dart';
 import 'package:sensoro_survey/generated/customCalendar/lib/model/date_model.dart';
@@ -10,6 +11,8 @@ import 'package:sensoro_survey/model/component_configure_model.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 import 'package:sensoro_survey/views/survey/const.dart';
 import 'package:sensoro_survey/component/text_input.dart';
+
+import '../../pic_swiper.dart';
 
 //适配多种控件的配置
 class itemClass extends StatefulWidget {
@@ -27,7 +30,8 @@ class itemClassState extends State<itemClass> {
   TextEditingController step1remarkController = TextEditingController();
   BasicMessageChannel<String> _basicMessageChannel =
       BasicMessageChannel("BasicMessageChannelPlugin", StringCodec());
-
+  BasicMessageChannel<String> _takePicBasicMessageChannel =
+  BasicMessageChannel("BasicMessageChannelPluginPickImage", StringCodec());
   var picImagesArray = [
     {"title": "环境照片", "picPath": ""},
     {"title": "环境照片", "picPath": ""},
@@ -67,6 +71,17 @@ class itemClassState extends State<itemClass> {
           }));
     }
 
+   if(this.model.comp_code == "photo"){
+     _takePicBasicMessageChannel.setMessageHandler((message) => Future<String>(() {
+       print(message);
+       //message为native传递的数据
+       _resentpics(message);
+       //给Android端的返回值
+       return "========================收到Native消息：" + message;
+     }));
+   }
+
+
     super.initState();
   }
 
@@ -82,6 +97,82 @@ class itemClassState extends State<itemClass> {
         picTitle,
         textAlign: TextAlign.center,
       );
+    }
+  }
+
+
+  //向native发送消息
+  void _sendtakePicToNative() {
+    Future<String> future = _takePicBasicMessageChannel.send("");
+    future.then((message) {
+      print("========================" + message);
+    });
+
+//    super.initState();
+  }
+
+  openGallery() async {
+    _sendtakePicToNative();
+    var image = await ImagePicker.pickImage(source: ImageSource.camera);
+    if (null != image) {
+      _resentpics(image.uri.path.toString());
+    }
+  }
+
+  _resentpics(String urlString) {
+    if (urlString.isNotEmpty) {
+      Map item = picImagesArray[picImageIndex];
+
+      String picPath = item["picPath"];
+      String picTitle = item["title"];
+      item["picPath"] = urlString;
+      setState(() {
+
+      });
+    }
+  }
+
+
+  /*拍照*/
+  takePhoto(int index) async {
+
+
+    Map item = picImagesArray[index];
+
+    String picPath = item["picPath"];
+    if(picPath.length>0){
+      List<PicSwiperItem> list = new List();
+      PicSwiperItem picSwiperItem = PicSwiperItem("");
+      list.clear();
+      picSwiperItem.picUrl = picPath;
+
+      list.add(picSwiperItem);
+      if (picSwiperItem.picUrl.isNotEmpty) {
+        final result = await Navigator.push(
+          context,
+          new MaterialPageRoute(
+              builder: (context) => new PicSwiper(index: 0, pics: list)),
+        );
+      }
+    }else{
+      picImageIndex = index;
+      openGallery();
+    }
+
+
+
+  }
+
+
+  bool isHaveSelectPic(int index){
+    Map item = picImagesArray[index];
+
+    String picPath = item["picPath"];
+    String picTitle = item["title"];
+    if (picPath.length > 0) {
+      return true;
+    } else {
+      return false;
     }
   }
 
@@ -144,7 +235,9 @@ class itemClassState extends State<itemClass> {
         itemCount: picImagesArray.length,
         itemBuilder: (context, index) {
           return GestureDetector(
-              onTap: null,
+              onTap:() {
+                takePhoto(index);
+              },
               //写入方法名称就可以了，但是是无参的
               onTapUp: (_) {
                 setState(() {
@@ -185,16 +278,17 @@ class itemClassState extends State<itemClass> {
                   Row(
                     children: <Widget>[
                       new Offstage(
-                          offstage: false,
+                          offstage: isHaveSelectPic(index)?false:true,
                           child: new IconButton(
                             icon: new Image.asset(
                                 "assets/images/picture_del.png"),
                             tooltip: 'Increase volume by 10%',
                             onPressed: () {
-//                              setState(() {
-//                                fireCreatModel.editenvironmentpic1 = "";
-//                              }
-//                              );
+                              setState(() {
+                                Map item = picImagesArray[index];
+                                item["picPath"] = "";
+                              }
+                              );
                             },
                           )),
                     ],
