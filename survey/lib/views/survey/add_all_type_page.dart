@@ -267,48 +267,44 @@ class itemClass extends StatefulWidget {
 class itemClassState extends State<itemClass> {
   componentModel model;
   itemClassState(this.model);
+  Map extraInfo = {};
 
   TextEditingController step1remarkController = TextEditingController();
   BasicMessageChannel<String> _basicMessageChannel =
-  BasicMessageChannel("BasicMessageChannelPlugin", StringCodec());
+      BasicMessageChannel("BasicMessageChannelPlugin", StringCodec());
   @override
   void initState() {
-
+    extraInfo = json.decode(model.variable_value);
     _basicMessageChannel.setMessageHandler((message) => Future<String>(() {
-      print(message);
-      //message为native传递的数据
-      if(message!=null&&message.isNotEmpty){
-        List list = message.split(",");
-        if (list.length ==3){
-          setState(() {
-            model.extraInfo["editLongitudeLatitude"] = list[0] + "," + list[1];
-            model.extraInfo["editPosition"] = list[2];
-          });
-        }
-
-      }
-      //给Android端的返回值
-      return "========================收到Native消息：" + message;
-    }));
+          print(message);
+          //message为native传递的数据
+          if (message != null && message.isNotEmpty) {
+            List list = message.split(",");
+            if (list.length == 3) {
+              setState(() {
+                extraInfo["editLongitudeLatitude"] = list[0] + "," + list[1];
+                extraInfo["editPosition"] = list[2];
+              });
+            }
+          }
+          //给Android端的返回值
+          return "========================收到Native消息：" + message;
+        }));
 
     super.initState();
   }
 
-
   void _sendToNative() {
-
-    var location = "0," + "," +","+ "";
-    if(model.extraInfo["editLongitudeLatitude"]!=null){
-      location = "0," + model.extraInfo["editLongitudeLatitude"] +","+ "";
+    var location = "0," + "," + "," + "";
+    Map extraInfo = json.decode(model.variable_value);
+    if (extraInfo["editLongitudeLatitude"] != null) {
+      location = "0," + extraInfo["editLongitudeLatitude"] + "," + "";
     }
-
 
     Future<String> future = _basicMessageChannel.send(location);
     future.then((message) {
       print("========================" + message);
     });
-
-
   }
 
   editLoction() async {
@@ -323,27 +319,24 @@ class itemClassState extends State<itemClass> {
       width: 0,
     );
 
-    Widget mapContainer =  GestureDetector(
+    Widget mapContainer = GestureDetector(
       onTap: editLoction, //写入方法名称就可以了，但是是无参的
       child: Container(
         alignment: Alignment.center,
         height: 60,
         child: new Row(
           children: <Widget>[
-            Text("定位地址",
-              style: new TextStyle(
-                  fontSize: prefix0.fontsSize
-              ),
+            Text(
+              "定位地址",
+              style: new TextStyle(fontSize: prefix0.fontsSize),
             ),
             Expanded(
               child: Text(
-                this.model.extraInfo["editPosition"] !=null
-                    ? this.model.extraInfo["editPosition"]
+                extraInfo["editPosition"] != null
+                    ? this.extraInfo["editPosition"]
                     : "",
                 textAlign: TextAlign.right,
-                style: new TextStyle(
-                    fontSize: prefix0.fontsSize
-                ),
+                style: new TextStyle(fontSize: prefix0.fontsSize),
               ),
             ),
             Image.asset(
@@ -384,13 +377,15 @@ class itemClassState extends State<itemClass> {
           child: new Row(
             children: <Widget>[
               Text(
-                model.name,
+                model.variable_name,
                 textAlign: TextAlign.right,
                 style: TextStyle(color: Colors.black, fontSize: 17),
               ),
               Expanded(
                 child: Text(
-                  model.value.length > 0 ? model.value : "点击选择",
+                  model.variable_value.length > 0
+                      ? model.variable_value
+                      : "点击选择",
                   textAlign: TextAlign.right,
                   style: TextStyle(color: Colors.black, fontSize: 17),
                 ),
@@ -473,7 +468,7 @@ class itemClassState extends State<itemClass> {
                 maxLines: 5,
                 autofocus: false,
                 onChanged: (val) {
-                  model.value = val;
+                  model.variable_value = val;
                   // setState(() {});
                 },
               ),
@@ -493,7 +488,7 @@ class itemClassState extends State<itemClass> {
       if (result != null) {
         String name = result as String;
         setState(() {
-          this.model.value = name;
+          this.model.variable_value = name;
         });
       }
     }
@@ -509,13 +504,13 @@ class itemClassState extends State<itemClass> {
           child: new Row(
             children: <Widget>[
               Text(
-                this.model.name,
+                this.model.variable_name,
                 textAlign: TextAlign.right,
                 style: TextStyle(color: Colors.black, fontSize: 17),
               ),
               Expanded(
                 child: Text(
-                  model.value.length > 0 ? model.value : "必填",
+                  model.variable_value.length > 0 ? model.variable_value : "必填",
                   textAlign: TextAlign.right,
                   style: TextStyle(color: Colors.black, fontSize: 17),
                 ),
@@ -541,12 +536,9 @@ class itemClassState extends State<itemClass> {
       //复选框
       return checkBoxContainer;
     } else if (this.model.type == "image") {
-
       //添加图片
       return imageContainer;
     } else if (this.model.type == "map") {
-
-
       //高德地图或百度地图
       return mapContainer;
     } else if (this.model.type == "dataPicker") {
