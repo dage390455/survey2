@@ -1,6 +1,7 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
-import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -8,16 +9,17 @@ import 'package:sensoro_survey/generated/customCalendar/default_style_page.dart'
 import 'package:sensoro_survey/generated/customCalendar/lib/flutter_custom_calendar.dart';
 import 'package:sensoro_survey/generated/customCalendar/lib/model/date_model.dart';
 import 'package:sensoro_survey/model/component_configure_model.dart';
+import 'package:sensoro_survey/model/mutilcheck_model.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
-import 'package:sensoro_survey/views/survey/const.dart';
-import 'package:sensoro_survey/widgets/text_input.dart';
 import 'package:sensoro_survey/widgets/mutil_check.dart';
+import 'package:sensoro_survey/widgets/text_input.dart';
 
 import '../../pic_swiper.dart';
 
 //适配多种控件的配置
 class itemClass extends StatefulWidget {
   componentModel model;
+
   itemClass({Key key, @required this.model}) : super(key: key);
 
   @override
@@ -26,6 +28,7 @@ class itemClass extends StatefulWidget {
 
 class itemClassState extends State<itemClass> {
   componentModel model;
+
   itemClassState(this.model);
 
   TextEditingController step1remarkController = TextEditingController();
@@ -41,14 +44,18 @@ class itemClassState extends State<itemClass> {
   int editIndex = -1;
   int picImageIndex = 0;
   Map extraInfo = {};
-  String options = "";
   List<String> optionList = [];
+  List<MutilCheckModel> mutilmodelList = [];
 
   @override
   void initState() {
     this.model = model;
-    options = this.model.options;
-    optionList = options.split(";");
+    optionList = model.options.split(";");
+
+    for (int i = 0; i < optionList.length; i++) {
+      mutilmodelList.add(new MutilCheckModel(optionList[i], false));
+    }
+
     if (model.variable_value != null && model.variable_value.length > 0) {
       extraInfo = json.decode(model.variable_value);
     }
@@ -293,19 +300,11 @@ class itemClassState extends State<itemClass> {
       ),
     );
 
-    MutilCheck ratioContainer = MutilCheck(
-      title: model.variable_name,
-      dataList: null,
-      isSingle: true,
-    );
-
-    ratioContainer.getSelecedList();
-
-    MutilCheck checkBoxContainer = MutilCheck(
-      title: "title名称",
-      dataList: null,
-      isSingle: true,
-    );
+//    MutilCheck mutilCheck = MutilCheck(
+//      title: "title名称",
+//      dataList: null,
+//      isSingle: false,
+//    );
 
     //调用日历
     _showCalendar() async {
@@ -506,6 +505,16 @@ class itemClassState extends State<itemClass> {
             ],
           ),
         ));
+    MutilCheck ratioContainer = MutilCheck(
+      title: model.variable_name,
+      dataList: mutilmodelList,
+      isSingle: true,
+    );
+    MutilCheck mutilCheck = MutilCheck(
+      title: model.variable_name,
+      dataList: mutilmodelList,
+      isSingle: false,
+    );
 
     if (this.model.comp_code == "select_list") {
       return popView;
@@ -520,7 +529,7 @@ class itemClassState extends State<itemClass> {
     } else if (this.model.comp_code == "check_option" &&
         this.model.comp_type == "checkbox") {
       //复选框
-      return ratioContainer;
+      return mutilCheck;
     } else if (this.model.comp_code == "photo") {
       //添加图片
       return imageContainer;
