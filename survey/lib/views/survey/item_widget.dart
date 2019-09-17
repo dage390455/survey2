@@ -294,19 +294,17 @@ class itemClassState extends State<itemClass> {
     );
 
     MutilCheck ratioContainer = MutilCheck(
-      title: "title名称",
+      title: model.variable_name,
       dataList: null,
       isSingle: true,
     );
 
-    // Widget ratioContainer = Container(
-    //   height: 0,
-    //   width: 0,
-    // );
+    ratioContainer.getSelecedList();
 
-    Widget checkBoxContainer = Container(
-      height: 0,
-      width: 0,
+    MutilCheck checkBoxContainer = MutilCheck(
+      title: "title名称",
+      dataList: null,
+      isSingle: true,
     );
 
     //调用日历
@@ -515,12 +513,14 @@ class itemClassState extends State<itemClass> {
       return textView;
     } else if (this.model.comp_code == "text_field") {
       return textInput;
-    } else if (this.model.comp_code == "ratio") {
+    } else if (this.model.comp_code == "check_option" &&
+        this.model.comp_type == "radio") {
       //单选框
       return ratioContainer;
-    } else if (this.model.comp_code == "check_option") {
+    } else if (this.model.comp_code == "check_option" &&
+        this.model.comp_type == "checkbox") {
       //复选框
-      return checkBoxContainer;
+      return ratioContainer;
     } else if (this.model.comp_code == "photo") {
       //添加图片
       return imageContainer;
