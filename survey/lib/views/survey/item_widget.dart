@@ -44,14 +44,14 @@ class itemClassState extends State<itemClass> {
       extraInfo = json.decode(model.variable_value);
     }
 
-    if (model.type == "map") {
+    if (this.model.comp_code == "map_location") {
       _basicMessageChannel.setMessageHandler((message) => Future<String>(() {
             print(message);
             //message为native传递的数据
             if (message != null && message.isNotEmpty) {
               List list = message.split(",");
               if (list.length == 3) {
-                if (model.type == "map") {
+                if (this.model.comp_code == "map_location") {
                   if (extraInfo == null) {
                     extraInfo = new Map();
                   }
@@ -137,7 +137,7 @@ class itemClassState extends State<itemClass> {
 
     Widget imageContainer = Container(
       color: Colors.white,
-      padding: new EdgeInsets.fromLTRB(20, 0, 20, 0),
+      padding: new EdgeInsets.fromLTRB(20, 0, 20, 10),
       height: 150,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
