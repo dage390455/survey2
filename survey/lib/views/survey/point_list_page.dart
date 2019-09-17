@@ -216,7 +216,10 @@ class _PointListPageState extends State<PointListPage> {
 
   _gotoAddAllPage() async {
     List<dynamic> input = ComponentConfig.confiureList;
+
+
     final result = await Navigator.push(
+
       context,
       new MaterialPageRoute(builder: (context) => AddAllPage1(input: input)),
     );

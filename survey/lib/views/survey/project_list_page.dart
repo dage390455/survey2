@@ -605,12 +605,14 @@ class _State extends State<HomePage> {
     initScreenPhysics(context);
     MediaQueryData mediaQuery = MediaQuery.of(context);
     void _gotoPoint(int index) async {
-      // projectInfoModel model = projectInfoModel("", "", 1, "");
-      final result = await Navigator.push(
-        context,
-        new MaterialPageRoute(
-            builder: (context) => new PointListPage(input: dataList[index])),
+      final result = await  Navigator.of(context,rootNavigator: true).push(
+          CupertinoPageRoute(
+              builder: (BuildContext context) {
+                return new PointListPage(input: dataList[index]);
+              }
+          )
       );
+
 
       if (result != null) {
         String name = result as String;
@@ -623,11 +625,13 @@ class _State extends State<HomePage> {
     }
 
     void _editProject(projectInfoModel model) async {
-      // projectInfoModel model = projectInfoModel("", "", 1, "");
-      final result = await Navigator.push(
-        context,
-        new MaterialPageRoute(
-            builder: (context) => new AddProjectPage(input: model)),
+
+      final result = await  Navigator.of(context,rootNavigator: true).push(
+          CupertinoPageRoute(
+              builder: (BuildContext context) {
+                return new AddProjectPage(input: model);
+              }
+          )
       );
 
       if (result != null) {
@@ -642,10 +646,13 @@ class _State extends State<HomePage> {
 
     void _addProject() async {
       projectInfoModel model = projectInfoModel("", "", 1, "", []);
-      final result = await Navigator.push(
-        context,
-        new MaterialPageRoute(
-            builder: (context) => new AddProjectPage(input: model)),
+
+      final result = Navigator.of(context,rootNavigator: true).push(
+          CupertinoPageRoute(
+              builder: (BuildContext context) {
+                return new AddProjectPage(input: model);
+              }
+          )
       );
 
       if (result != null) {
@@ -1160,10 +1167,7 @@ class _State extends State<HomePage> {
           },
           child: bodyContiner,
         ),
-        bottomNavigationBar: BottomAppBar(
-          child: bottomButton,
-        )
-        // bottomSheet: bottomButton,
+         bottomSheet: bottomButton,
         );
   }
 }

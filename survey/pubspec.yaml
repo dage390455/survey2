@@ -88,7 +88,14 @@ flutter:
   - assets/images/right_arrar.png
   - assets/images/take_photo_prompt.png
   - assets/images/picture_del.png
-
+  - assets/images/alarm_home_sel.png
+  - assets/images/alarm_home.png
+  - assets/images/foult_home_sel.png
+  - assets/images/foult_home.png
+  - assets/images/home_sel.png
+  - assets/images/home.png
+  - assets/images/manage_home_sel.png
+  - assets/images/manage_home.png
   fonts:
   - family: FlamanteRoma
     fonts:

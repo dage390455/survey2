@@ -25,6 +25,8 @@ import 'package:sensoro_survey/views/survey/project_list_page.dart';
 import 'package:sensoro_survey/views/survey/electric_install_page.dart';
 import 'package:sensoro_survey/views/survey/survey_point_information.dart';
 
+import 'home_content_page.dart';
+
 const int ThemeColor = 0xFFC91B3A;
 var db;
 
@@ -141,7 +143,7 @@ Widget _widgetForRoute(String route) {
       setIsEnglish(true);
       return new ElectricInstallPage();
     case 'projectList':
-      return new ProjectListPage();
+      return new HomeContentPage();
     case 'surveyInformation':
       return new SurveyPointInformationPage();
     default:

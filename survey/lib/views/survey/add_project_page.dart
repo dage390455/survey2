@@ -282,9 +282,7 @@ class _AddProjectPageState extends State<AddProjectPage> {
                 ]),
           ),
         ),
-        bottomNavigationBar: BottomAppBar(
-          child: bottomButton,
-        )
+       bottomSheet: bottomButton,
         // bottomSheet: bottomButton,
         );
   }
