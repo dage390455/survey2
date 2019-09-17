@@ -24,7 +24,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 import 'package:sensoro_survey/views/survey/const.dart';
 import 'package:sensoro_survey/views/survey/survey_point_information.dart';
-import 'package:sensoro_survey/widgets/progressHud.dart';
+import 'package:sensoro_survey/widgets/progress_hud.dart';
 import 'package:sensoro_survey/generated/easyRefresh/easy_refresh.dart';
 import 'package:sensoro_survey/generated/customCalendar/multi_select_style_page.dart';
 import 'package:sensoro_survey/generated/customCalendar/lib/flutter_custom_calendar.dart';
@@ -37,6 +37,7 @@ import 'package:sensoro_survey/views/survey/common/save_data_manager.dart';
 import 'package:sensoro_survey/views/survey/common/flutter_screenutil.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:sensoro_survey/net/api/app_api.dart';
+import 'package:sensoro_survey/widgets/component.dart';
 
 //import 'package:fluwx/fluwx.dart' as fluwx;
 BasicMessageChannel<String> _basicMessageChannel =
@@ -326,16 +327,17 @@ class _State extends State<HomePage> {
     String hisoryKey = "projectList";
   }
 
-  void getListNetCall() async {
-    urlStr = NetConfig.baseUrl + NetConfig.riskUrl1;
-    if (dataList.length == 0) {
-    } else {}
+  void getConfigureListNetCall() async {
+    String urlStr = NetConfig.riskUrl1;
+    Map<String, dynamic> headers = {};
+    Map<String, dynamic> params = {};
+
     ResultData resultData = await AppApi.getInstance()
         .getListNetCall(context, true, urlStr, headers, params);
     if (resultData.isSuccess()) {
       // _stopLoading();
-      int errcode = resultData.response["errcode"].toInt();
-      if (errcode == 0) {
+      int code = resultData.response["code"].toInt();
+      if (code == 200) {
         isFrist = false;
         if (resultData.response["data"] is List) {
           List resultList = resultData.response["data"];
@@ -346,10 +348,15 @@ class _State extends State<HomePage> {
           }
         }
 
-        if (resultData.response["total"] is int) {
-          listTotalCount = resultData.response["total"];
+        if (resultData.response["data"] is Map) {
+          Map resultMap = resultData.response["data"];
+          if (resultMap["records"] is List) {
+            List<dynamic> configureList = resultMap["records"];
+            ComponentConfig.confiureList = configureList;
+            //本地化存储
+          }
         }
-      } else {}
+      }
     }
   }
 
@@ -605,14 +612,10 @@ class _State extends State<HomePage> {
     initScreenPhysics(context);
     MediaQueryData mediaQuery = MediaQuery.of(context);
     void _gotoPoint(int index) async {
-      final result = await  Navigator.of(context,rootNavigator: true).push(
-          CupertinoPageRoute(
-              builder: (BuildContext context) {
-                return new PointListPage(input: dataList[index]);
-              }
-          )
-      );
-
+      final result = await Navigator.of(context, rootNavigator: true)
+          .push(CupertinoPageRoute(builder: (BuildContext context) {
+        return new PointListPage(input: dataList[index]);
+      }));
 
       if (result != null) {
         String name = result as String;
@@ -625,14 +628,10 @@ class _State extends State<HomePage> {
     }
 
     void _editProject(projectInfoModel model) async {
-
-      final result = await  Navigator.of(context,rootNavigator: true).push(
-          CupertinoPageRoute(
-              builder: (BuildContext context) {
-                return new AddProjectPage(input: model);
-              }
-          )
-      );
+      final result = await Navigator.of(context, rootNavigator: true)
+          .push(CupertinoPageRoute(builder: (BuildContext context) {
+        return new AddProjectPage(input: model);
+      }));
 
       if (result != null) {
         String name = result as String;
@@ -647,13 +646,10 @@ class _State extends State<HomePage> {
     void _addProject() async {
       projectInfoModel model = projectInfoModel("", "", 1, "", []);
 
-      final result = Navigator.of(context,rootNavigator: true).push(
-          CupertinoPageRoute(
-              builder: (BuildContext context) {
-                return new AddProjectPage(input: model);
-              }
-          )
-      );
+      final result = Navigator.of(context, rootNavigator: true)
+          .push(CupertinoPageRoute(builder: (BuildContext context) {
+        return new AddProjectPage(input: model);
+      }));
 
       if (result != null) {
         String name = result as String;
@@ -1159,15 +1155,15 @@ class _State extends State<HomePage> {
     );
 
     return Scaffold(
-        appBar: navBar,
-        body: GestureDetector(
-          onTap: () {
-            // 点击空白页面关闭键盘
-            FocusScope.of(context).requestFocus(blankNode);
-          },
-          child: bodyContiner,
-        ),
-         bottomSheet: bottomButton,
-        );
+      appBar: navBar,
+      body: GestureDetector(
+        onTap: () {
+          // 点击空白页面关闭键盘
+          FocusScope.of(context).requestFocus(blankNode);
+        },
+        child: bodyContiner,
+      ),
+      bottomSheet: bottomButton,
+    );
   }
 }

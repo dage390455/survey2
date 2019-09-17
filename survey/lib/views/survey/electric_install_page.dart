@@ -12,7 +12,7 @@ import 'package:event_bus/event_bus.dart';
 import 'package:flutter/services.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 import 'package:sensoro_survey/views/survey/const.dart';
-import 'package:sensoro_survey/widgets/progressHud.dart';
+import 'package:sensoro_survey/widgets/progress_hud.dart';
 
 class ElectricInstallPage extends StatefulWidget {
   _ElectricInstallPageState createState() => _ElectricInstallPageState();

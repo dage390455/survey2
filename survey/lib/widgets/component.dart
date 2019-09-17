@@ -1,4 +1,4 @@
-import 'package:sensoro_survey/component/text_input.dart';
+import 'package:sensoro_survey/widgets/text_input.dart';
 
 class ComponentConfig {
   static List<dynamic> confiureList;

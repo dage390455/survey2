@@ -12,12 +12,12 @@ import 'package:flutter/material.dart';
 import 'package:event_bus/event_bus.dart';
 import 'package:sensoro_survey/net/api/net_config.dart';
 import 'package:flutter/services.dart';
-import 'package:sensoro_survey/component/component.dart';
+import 'package:sensoro_survey/widgets/component.dart';
 import 'package:sensoro_survey/model/component_configure_model.dart';
 import 'package:sensoro_survey/model/electrical_fire_model.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 import 'package:sensoro_survey/views/survey/const.dart';
-import 'package:sensoro_survey/widgets/progressHud.dart';
+import 'package:sensoro_survey/widgets/progress_hud.dart';
 import 'package:sensoro_survey/generated/customCalendar/multi_select_style_page.dart';
 import 'package:sensoro_survey/generated/easyRefresh/easy_refresh.dart';
 import 'package:sensoro_survey/generated/customCalendar/lib/flutter_custom_calendar.dart';
@@ -157,6 +157,7 @@ class _PointListPageState extends State<PointListPage> {
           if (resultMap["records"] is List) {
             List<dynamic> configureList = resultMap["records"];
             ComponentConfig.confiureList = configureList;
+            //本地化存储
           }
         }
       }
@@ -217,9 +218,7 @@ class _PointListPageState extends State<PointListPage> {
   _gotoAddAllPage() async {
     List<dynamic> input = ComponentConfig.confiureList;
 
-
     final result = await Navigator.push(
-
       context,
       new MaterialPageRoute(builder: (context) => AddAllPage1(input: input)),
     );

@@ -24,7 +24,7 @@ import 'package:sensoro_survey/generated/translations.dart';
 import 'package:sensoro_survey/generated/application.dart';
 import 'package:sensoro_survey/net/api/app_api.dart';
 import 'package:sensoro_survey/net/api/bean/weather_bean.dart';
-import 'package:sensoro_survey/widgets/progressHud.dart';
+import 'package:sensoro_survey/widgets/progress_hud.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 import 'package:sensoro_survey/views/survey/const.dart';
 

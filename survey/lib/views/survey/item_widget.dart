@@ -10,7 +10,8 @@ import 'package:sensoro_survey/generated/customCalendar/lib/model/date_model.dar
 import 'package:sensoro_survey/model/component_configure_model.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 import 'package:sensoro_survey/views/survey/const.dart';
-import 'package:sensoro_survey/component/text_input.dart';
+import 'package:sensoro_survey/widgets/text_input.dart';
+import 'package:sensoro_survey/widgets/mutil_check.dart';
 
 import '../../pic_swiper.dart';
 
@@ -64,7 +65,7 @@ class itemClassState extends State<itemClass> {
                     extraInfo = new Map();
                   }
                   extraInfo["editLongitudeLatitude"] = list[0] + "," + list[1];
-                  model.variable_value = list[2];
+                  this.model.variable_value = list[2];
 
                   setState(() {});
                 }
@@ -292,10 +293,16 @@ class itemClassState extends State<itemClass> {
       ),
     );
 
-    Widget ratioContainer = Container(
-      height: 0,
-      width: 0,
+    MutilCheck ratioContainer = MutilCheck(
+      title: "title名称",
+      dataList: null,
+      isSingle: true,
     );
+
+    // Widget ratioContainer = Container(
+    //   height: 0,
+    //   width: 0,
+    // );
 
     Widget checkBoxContainer = Container(
       height: 0,
