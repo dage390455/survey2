@@ -207,20 +207,18 @@ class _AddAllPageState1 extends State<AddAllPage1> {
               ]),
             );
           }
-
-          var gestureDetector = GestureDetector(
-            //zyg onTap带参数事件
-            onTap: () {
-              // addAttribute(index);
-            },
-
-            child: itemClass(model: model),
-          );
           return new Container(
             padding:
                 const EdgeInsets.only(top: 0.0, bottom: 0, left: 20, right: 20),
             child: new Column(children: <Widget>[
-              gestureDetector,
+              GestureDetector(
+                //zyg onTap带参数事件
+                onTap: () {
+                  // addAttribute(index);
+                },
+
+                child: itemClass(model: model),
+              ),
 
               //分割线
               Container(

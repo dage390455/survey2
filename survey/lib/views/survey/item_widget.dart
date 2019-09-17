@@ -39,8 +39,13 @@ class itemClassState extends State<itemClass> {
 
   @override
   void initState() {
-    extraInfo = json.decode(model.variable_value);
+    this.model = model;
+    if (model.variable_value != null && model.variable_value.length > 0) {
+      extraInfo = json.decode(model.variable_value);
+    }
+
     if (model.type == "map") {
+      return;
       _basicMessageChannel.setMessageHandler((message) => Future<String>(() {
             print(message);
             //message为native传递的数据

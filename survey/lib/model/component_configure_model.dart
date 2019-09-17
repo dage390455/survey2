@@ -39,7 +39,7 @@ class componentModel {
       : this(
           json['variable_name'],
           json['variable_code'],
-          json['variable_value'],
+          json['variable_value'] == null ? "" : json['variable_value'],
           json['is_required'],
           json['risk_id'],
           json['comp_code'],
