@@ -6,7 +6,7 @@ import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 import 'package:sensoro_survey/model/component_configure_model.dart';
 
 class TextInputPage extends StatefulWidget {
-  componentModel model = componentModel("", "", "", "", {});
+  componentModel model;
 
   TextInputPage({this.model});
   @override
@@ -14,7 +14,7 @@ class TextInputPage extends StatefulWidget {
 }
 
 class _State extends State<TextInputPage> {
-  componentModel input = componentModel("", "", "", "", {});
+  componentModel input;
   String historyKey = "";
   String name = "";
   String placeHoder = "";
@@ -28,13 +28,10 @@ class _State extends State<TextInputPage> {
 
   @override
   void initState() {
-    name = this.input.name;
-    historyKey = this.input.code;
-    value = this.input.value;
-    extroInfo = this.input.extraInfo;
-    if (extroInfo is Map) {
-      placeHoder = extroInfo["placeHoder"];
-    }
+    name = this.input.variable_name;
+    historyKey = this.input.variable_code;
+    value = this.input.variable_value;
+    placeHoder = this.input.placeholder;
     // placeHoder = extroInfo["placeHoder"];
 
     // TODO: implement initState

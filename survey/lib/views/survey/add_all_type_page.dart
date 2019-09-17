@@ -23,7 +23,7 @@ import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 import 'package:sensoro_survey/views/survey/const.dart';
 
 class AddAllPage1 extends StatefulWidget {
-  componentModel input;
+  List<dynamic> input;
   AddAllPage1({Key key, @required this.input}) : super(key: key);
 
   @override
@@ -31,11 +31,11 @@ class AddAllPage1 extends StatefulWidget {
 }
 
 class _AddAllPageState1 extends State<AddAllPage1> {
-  componentModel input;
+  List<dynamic> input;
   _AddAllPageState1({this.input});
 
   bool isCheck = false;
-  List<componentModel> dataList = [];
+  List<dynamic> dataList = [];
 
   //组件即将销毁时调用
   @override
@@ -48,46 +48,50 @@ class _AddAllPageState1 extends State<AddAllPage1> {
   void initState() {
     super.initState();
 
-    componentModel model = componentModel("", "", "", "", {});
+    // componentModel model = componentModel("", "", "", "", {});
 
-    model.name = "输入文本";
-    model.type = "textInput";
-    dataList.add(model);
+    // model.variable_name = "输入文本";
+    // model.type = "textInput";
+    // dataList.add(model);
 
-    model = componentModel("", "", "", "", {});
-    model.name = "大输入框";
-    model.type = "textView";
-    dataList.add(model);
+    // model = componentModel("", "", "", "", {});
+    // model.variable_name = "大输入框";
+    // model.type = "textView";
+    // dataList.add(model);
 
-    model = componentModel("", "", "", "", {});
-    model.name = "弹出选择菜单";
-    model.type = "popList";
-    dataList.add(model);
+    // model = componentModel("", "", "", "", {});
+    // model.variable_name = "弹出选择菜单";
+    // model.type = "popList";
+    // dataList.add(model);
 
-    model = componentModel("", "", "", "", {});
-    model.name = "日期选择器";
-    model.type = "datePicker";
-    dataList.add(model);
+    // model = componentModel("", "", "", "", {});
+    // model.variable_name = "日期选择器";
+    // model.type = "datePicker";
+    // dataList.add(model);
 
-    model = componentModel("", "", "", "", {});
-    model.name = "添加图片";
-    model.type = "image";
-    dataList.add(model);
+    // model = componentModel("", "", "", "", {});
+    // model.variable_name = "添加图片";
+    // model.type = "image";
+    // dataList.add(model);
 
-    model = componentModel("", "", "", "", {});
-    model.name = "跳转地图";
-    model.type = "map";
-    dataList.add(model);
+    // model = componentModel("", "", "", "", {});
+    // model.variable_name = "跳转地图";
+    // model.type = "map";
+    // dataList.add(model);
 
-    model = componentModel("", "", "", "", {});
-    model.name = "单选圆按钮";
-    model.type = "ratio";
-    dataList.add(model);
+    // model = componentModel("", "", "", "", {});
+    // model.variable_name = "单选圆按钮";
+    // model.type = "ratio";
+    // dataList.add(model);
 
-    model = componentModel("", "", "", "", {});
-    model.name = "复选框";
-    model.type = "checkBox";
-    dataList.add(model);
+    // model = componentModel("", "", "", "", {});
+    // model.variable_name = "复选框";
+    // model.type = "checkBox";
+    // dataList.add(model);
+
+    if (ComponentConfig.confiureList.length > 0) {
+      dataList = ComponentConfig.confiureList;
+    }
 
     // initDetailList();
 
@@ -175,7 +179,11 @@ class _AddAllPageState1 extends State<AddAllPage1> {
         // separatorBuilder: (BuildContext context, int index) =>
         // Divider(height: 1.0, color: Colors.grey, indent: 20), // 添加分割线
         itemBuilder: (BuildContext context, int index) {
-          componentModel model = dataList[index];
+          componentModel model;
+          if (dataList[index] is Map) {
+            Map json = dataList[index] as Map;
+            model = componentModel.fromJson(json);
+          }
 
           // print("rebuild index =$index");
           if (dataList.length == 0) {

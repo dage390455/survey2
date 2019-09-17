@@ -10,7 +10,9 @@ import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
 import 'package:event_bus/event_bus.dart';
+import 'package:sensoro_survey/net/api/net_config.dart';
 import 'package:flutter/services.dart';
+import 'package:sensoro_survey/component/component.dart';
 import 'package:sensoro_survey/model/component_configure_model.dart';
 import 'package:sensoro_survey/model/electrical_fire_model.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
@@ -29,6 +31,7 @@ import 'SurveyPointInformation/summary_construction_page.dart';
 import 'SurveyPointInformation/survay_electrical_fire_detail.dart';
 import 'SurveyPointInformation/survay_electrical_fire_edit.dart';
 import 'common/data_transfer_manager.dart';
+import 'package:sensoro_survey/net/api/app_api.dart';
 
 class PointListPage extends StatefulWidget {
   projectInfoModel input;
@@ -98,6 +101,7 @@ class _PointListPageState extends State<PointListPage> {
       if (!_focusNode.hasFocus) {}
     });
 
+    getConfigureListNetCall();
     // initDetailList();
 
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
@@ -124,6 +128,38 @@ class _PointListPageState extends State<PointListPage> {
       dataList.add(model);
       // var a = 'dd';
       // a = cityDetailArrays[index].name;
+    }
+  }
+
+  void getConfigureListNetCall() async {
+    String urlStr = NetConfig.riskUrl1;
+    Map<String, dynamic> headers = {};
+    Map<String, dynamic> params = {};
+
+    ResultData resultData = await AppApi.getInstance()
+        .getListNetCall(context, true, urlStr, headers, params);
+    if (resultData.isSuccess()) {
+      // _stopLoading();
+      int code = resultData.response["code"].toInt();
+      if (code == 200) {
+        isFrist = false;
+        if (resultData.response["data"] is List) {
+          List resultList = resultData.response["data"];
+          if (resultList.length > 0) {
+            setState(() {
+              dataList.addAll(resultList);
+            });
+          }
+        }
+
+        if (resultData.response["data"] is Map) {
+          Map resultMap = resultData.response["data"];
+          if (resultMap["records"] is List) {
+            List<dynamic> configureList = resultMap["records"];
+            ComponentConfig.confiureList = configureList;
+          }
+        }
+      }
     }
   }
 
@@ -179,10 +215,10 @@ class _PointListPageState extends State<PointListPage> {
   }
 
   _gotoAddAllPage() async {
-    componentModel model = componentModel("", "", "", "", {});
+    List<dynamic> input = ComponentConfig.confiureList;
     final result = await Navigator.push(
       context,
-      new MaterialPageRoute(builder: (context) => AddAllPage1(input: model)),
+      new MaterialPageRoute(builder: (context) => AddAllPage1(input: input)),
     );
 
     if (result != null) {

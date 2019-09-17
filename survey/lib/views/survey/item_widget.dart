@@ -230,7 +230,7 @@ class itemClassState extends State<itemClass> {
       if (result != null) {
         if (result is DateModel) {
           DateModel dateModel = result;
-          model.value =
+          model.variable_value =
               "${dateModel.year}." + "${dateModel.month}." + "${dateModel.day}";
           setState(() {});
         }
@@ -249,13 +249,15 @@ class itemClassState extends State<itemClass> {
           child: new Row(
             children: <Widget>[
               Text(
-                this.model.name,
+                this.model.variable_name,
                 textAlign: TextAlign.right,
                 style: TextStyle(color: Colors.black, fontSize: 17),
               ),
               Expanded(
                 child: Text(
-                  model.value.length > 0 ? model.value : "必填",
+                  model.variable_value.length > 0
+                      ? model.variable_value
+                      : "点击选择",
                   textAlign: TextAlign.right,
                   style: TextStyle(color: Colors.black, fontSize: 17),
                 ),
@@ -278,13 +280,15 @@ class itemClassState extends State<itemClass> {
           child: new Row(
             children: <Widget>[
               Text(
-                model.name,
+                model.variable_name,
                 textAlign: TextAlign.right,
                 style: TextStyle(color: Colors.black, fontSize: 17),
               ),
               Expanded(
                 child: Text(
-                  model.value.length > 0 ? model.value : "点击选择",
+                  model.variable_value.length > 0
+                      ? model.variable_value
+                      : "点击选择",
                   textAlign: TextAlign.right,
                   style: TextStyle(color: Colors.black, fontSize: 17),
                 ),
@@ -319,11 +323,13 @@ class itemClassState extends State<itemClass> {
             switch (action) {
               case "hot":
                 print("热度");
-                this.model.value = "热度";
+                this.model.variable_value = "热度";
+                setState(() {});
                 break;
               case "new":
                 print("最新");
-                this.model.value = "最新";
+                this.model.variable_value = "最新";
+                setState(() {});
                 break;
             }
           },
@@ -369,7 +375,7 @@ class itemClassState extends State<itemClass> {
                 maxLines: 5,
                 autofocus: false,
                 onChanged: (val) {
-                  model.value = val;
+                  model.variable_value = val;
                   // setState(() {});
                 },
               ),
@@ -389,7 +395,7 @@ class itemClassState extends State<itemClass> {
       if (result != null) {
         String name = result as String;
         setState(() {
-          this.model.value = name;
+          this.model.variable_value = name;
         });
       }
     }
@@ -405,13 +411,13 @@ class itemClassState extends State<itemClass> {
           child: new Row(
             children: <Widget>[
               Text(
-                this.model.name,
+                this.model.variable_name,
                 textAlign: TextAlign.right,
                 style: TextStyle(color: Colors.black, fontSize: 17),
               ),
               Expanded(
                 child: Text(
-                  model.value.length > 0 ? model.value : "必填",
+                  model.variable_value.length > 0 ? model.variable_value : "必填",
                   textAlign: TextAlign.right,
                   style: TextStyle(color: Colors.black, fontSize: 17),
                 ),
@@ -424,25 +430,25 @@ class itemClassState extends State<itemClass> {
           ),
         ));
 
-    if (this.model.type == "popList") {
+    if (this.model.comp_code == "select_list") {
       return popView;
-    } else if (this.model.type == "textView") {
+    } else if (this.model.comp_code == "text_view") {
       return textView;
-    } else if (this.model.type == "textInput") {
+    } else if (this.model.comp_code == "text_field") {
       return textInput;
-    } else if (this.model.type == "ratio") {
+    } else if (this.model.comp_code == "ratio") {
       //单选框
       return ratioContainer;
-    } else if (this.model.type == "checkbox") {
+    } else if (this.model.comp_code == "check_option") {
       //复选框
       return checkBoxContainer;
-    } else if (this.model.type == "image") {
+    } else if (this.model.comp_code == "photo") {
       //添加图片
       return imageContainer;
-    } else if (this.model.type == "map") {
+    } else if (this.model.comp_code == "map_location") {
       //高德地图或百度地图
       return mapContainer;
-    } else if (this.model.type == "datePicker") {
+    } else if (this.model.comp_code == "date_picker") {
       //日期选择
       return datePickerContainer;
     } else {

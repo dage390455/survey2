@@ -9,6 +9,7 @@ import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:package_info/package_info.dart';
+import 'package:sensoro_survey/net/api/net_config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -256,6 +257,7 @@ class _State extends State<HomePage> {
     // });
 
     loadLocalData();
+    // getListNetCall();
 
     controller = new CalendarController();
     controller.addMonthChangeListener(
@@ -324,7 +326,8 @@ class _State extends State<HomePage> {
     String hisoryKey = "projectList";
   }
 
-  void _getListNetCall() async {
+  void getListNetCall() async {
+    urlStr = NetConfig.baseUrl + NetConfig.riskUrl1;
     if (dataList.length == 0) {
     } else {}
     ResultData resultData = await AppApi.getInstance()
