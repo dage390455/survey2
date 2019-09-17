@@ -46,9 +46,9 @@
             android:name="com.sensoro.survey.LocationEdtitActivtiy"
             android:theme="@style/LaunchTheme"></activity>
         <activity
-            android:name="com.sensoro.survey.DeployMapActivity"
+            android:name="com.sensoro.survey.AdministrativeActivity"
             android:theme="@style/LaunchTheme"></activity>
-        <!--<service android:name="com.amap.api.location.APSService" />-->
+        <service android:name="com.amap.api.location.APSService" />
         <activity
             android:name=".wxapi.WXEntryActivity"
             android:exported="true"
