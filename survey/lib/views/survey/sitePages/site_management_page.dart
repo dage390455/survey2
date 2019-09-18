@@ -27,6 +27,7 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
   CalendarController controller;
   TextEditingController searchController = TextEditingController();
   List<SitePageModel> dataList = [];
+
   void _startManagePage(SitePageModel data) async {
     DataTransferManager.shared.creatModel();
     final result = await Navigator.of(context, rootNavigator: true)
