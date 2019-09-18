@@ -24,18 +24,19 @@ class LocationEditController: UIViewController {
     var SN : String = "";
     var lon : Double = 0;
     var lat : Double = 0;
-
-
+    
+    @IBOutlet weak var cityLocationLabel: UILabel!
+    
     var readOnly : Bool = false;//标识是否只用来显示位置，
     var repositionDeviceOnly : Bool = false; //是否只是编辑设备位置
-//    var deployType : DeployType = .device;//记录部署类型，部署基站时，并不需要相应的ChannelMask设定。
-//    var record : DeployRecord! = nil;
+    //    var deployType : DeployType = .device;//记录部署类型，部署基站时，并不需要相应的ChannelMask设定。
+    //    var record : DeployRecord! = nil;
     
     var completion : ((_ lat : Double, _ lon : Double, _ address : String, _ channelMask : [UInt32])->Void)?
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         var navItems = [NavigationHeader.Item]();
         navItems.append(NavigationHeader.Item(type: .button,
                                               id: "",
@@ -47,7 +48,7 @@ class LocationEditController: UIViewController {
         
         
         navItems.append(NavigationHeader.Item(type: .title, id: localString("定位地址"), action: nil));
-
+        
         if readOnly == false {
             let item = NavigationHeader.Item(type: .button,
                                              id: "",
@@ -61,7 +62,7 @@ class LocationEditController: UIViewController {
         navBar.initContents(items: navItems);
         
         initMap();
-
+        
         if repositionDeviceOnly == false {
             if readOnly == true {
                 //地图全铺，并且挡住保存按钮，😛
@@ -72,21 +73,21 @@ class LocationEditController: UIViewController {
     
     deinit {
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
     /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
+     // MARK: - Navigation
+     
+     // In a storyboard-based application, you will often want to do a little preparation before navigation
+     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+     // Get the new view controller using segue.destinationViewController.
+     // Pass the selected object to the new view controller.
+     }
+     */
     
     func initMap() -> Void {
         if mapView != nil {
@@ -139,7 +140,7 @@ class LocationEditController: UIViewController {
         request.requireExtension = true;
         search.aMapReGoecodeSearch(request);
     }
-
+    
     @IBAction func locationMe(_ sender: Any) {
         
         if readOnly {
@@ -148,7 +149,7 @@ class LocationEditController: UIViewController {
             mapView.setCenter(mapView.userLocation.coordinate, animated: true);
         }
     }
-
+    
     func ok() {
         var address = "";
         if let temp = centerAnn.title {
@@ -183,15 +184,15 @@ extension LocationEditController : MAMapViewDelegate, AMapSearchDelegate {
             if centerAnn != nil {
                 centerAnn.coordinate = mapView.region.center;
             }
-
-//            DispatchQueue.main.async {
-//                self.updateLocationInfo(lon: mapView.region.center.longitude, lat: mapView.region.center.latitude);
-//            }
+            
+            //            DispatchQueue.main.async {
+            //                self.updateLocationInfo(lon: mapView.region.center.longitude, lat: mapView.region.center.latitude);
+            //            }
         }
     }
     
     func mapViewDidFailLoadingMap(_ mapView: MAMapView!, withError error: Error!) {
-//        mapTip.isHidden = false;
+        //        mapTip.isHidden = false;
         mapView.isHidden = true;
     }
     
@@ -200,19 +201,19 @@ extension LocationEditController : MAMapViewDelegate, AMapSearchDelegate {
             if centerAnn != nil {
                 centerAnn.coordinate = mapView.region.center;
             }
-//            DispatchQueue.main.async {
-//                self.updateLocationInfo(lon: self.centerAnn.coordinate.longitude,
-//                                        lat: self.centerAnn.coordinate.latitude);
-//            }
+            //            DispatchQueue.main.async {
+            //                self.updateLocationInfo(lon: self.centerAnn.coordinate.longitude,
+            //                                        lat: self.centerAnn.coordinate.latitude);
+            //            }
         }
     }
-
+    
     func mapView(_ mapView: MAMapView!, mapDidMoveByUser wasUserAction: Bool) {
         if readOnly == false {//显示状态下不能编辑相应的位置
             if centerAnn != nil {
                 centerAnn.coordinate = mapView.region.center;
             }
-
+            
             DispatchQueue.main.async {
                 self.updateLocationInfo(lon: mapView.region.center.longitude, lat: mapView.region.center.latitude);
             }
@@ -224,18 +225,19 @@ extension LocationEditController : MAMapViewDelegate, AMapSearchDelegate {
             if centerAnn != nil {
                 centerAnn.coordinate = mapView.region.center;
             }
-
-//            DispatchQueue.main.async {
-//                self.updateLocationInfo(lon: mapView.region.center.longitude, lat: mapView.region.center.latitude);
-//            }
+            
+            //            DispatchQueue.main.async {
+            //                self.updateLocationInfo(lon: mapView.region.center.longitude, lat: mapView.region.center.latitude);
+            //            }
         }
     }
     
     func onReGeocodeSearchDone(_ request: AMapReGeocodeSearchRequest!, response: AMapReGeocodeSearchResponse!) {
-
+        
         if centerAnn != nil {
-//                print(response.regeocode.formattedAddress )
+            //                print(response.regeocode.formattedAddress )
             centerAnn.title = getCustomAddress(components:response.regeocode.addressComponent);
+            self.cityLocationLabel.text = getProvinceAddress(components:response.regeocode.addressComponent);
             
             if centerAnn.annotationView != nil && centerAnn.annotationView.calloutView != nil {
                 centerAnn.annotationView.udpateCalloutTitle(title:centerAnn.title);
@@ -270,6 +272,26 @@ extension LocationEditController : MAMapViewDelegate, AMapSearchDelegate {
         
         return nil;
     }
+    
+    
+    
+    //通过统一的规则从高德返回的地址中获取到一个描述
+    public func getProvinceAddress(components : AMapAddressComponent) -> String {
+        var ret = "";
+        
+        if components.province != nil { ret += components.province; }
+        if components.city != nil {
+            if components.city != components.province {
+                ret += components.city;
+            }
+        }
+        if components.district != nil { ret += components.district; }
+        
+        
+        return ret;
+    }
+    
+    
 }
 
 
