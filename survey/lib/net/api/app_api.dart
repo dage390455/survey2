@@ -53,4 +53,23 @@ class AppApi extends BasicNetService {
     // resultData.toast();
     return resultData;
   }
+
+  Future<ResultData> postListNetCall(
+      BuildContext context,
+      bool showProgress,
+      String urlStr,
+      Map<String, dynamic> headers,
+      Map<String, dynamic> params) async {
+    // Map<String, dynamic> param = params;
+    // Map param = params;
+
+    String wholeUrl = NetConfig.baseUrl + urlStr;
+    ResultData resultData = await post(wholeUrl,
+        headers: headers,
+        params: params,
+        context: context,
+        showLoad: showProgress);
+    // resultData.toast();
+    return resultData;
+  }
 }

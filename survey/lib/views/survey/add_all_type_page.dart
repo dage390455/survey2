@@ -114,12 +114,19 @@ class _AddAllPageState1 extends State<AddAllPage1> {
   }
 
   void updateConfigureListNetCall() async {
-    String urlStr = NetConfig.riskUrl1;
+    String urlStr = NetConfig.updateRiskValueUrl;
     Map<String, dynamic> headers = {};
-    Map<String, dynamic> params = {};
+    Map<String, dynamic> data1 = {
+      "risk_id": "1",
+      "variable_code": "name",
+      "variable_value": "郑家杰"
+    };
+    // Map<String, dynamic> data1 = {"risk_id": "1", "variable_code": "name", "variable_value": "郑家杰"};
+    List<Map<String, dynamic>> list = [data1];
+    Map<String, dynamic> params = {"data": list};
 
     ResultData resultData = await AppApi.getInstance()
-        .getListNetCall(context, true, urlStr, headers, params);
+        .postListNetCall(context, true, urlStr, headers, params);
     if (resultData.isSuccess()) {
       // _stopLoading();
       int code = resultData.response["code"].toInt();
@@ -180,9 +187,10 @@ class _AddAllPageState1 extends State<AddAllPage1> {
           errorInfo = "请填写${model.variable_name}";
           showErrorMsg(errorInfo);
         });
-        return;
       }
     }
+
+    updateConfigureListNetCall();
   }
 
   @override
