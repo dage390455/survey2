@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 import 'package:sensoro_survey/views/survey/sitePages/Model/SitePageModel.dart';
 
-import 'const.dart';
+import '../const.dart';
 import 'creat_building_page.dart';
 
 class ManagementPage extends StatefulWidget {
