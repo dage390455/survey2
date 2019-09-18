@@ -14,6 +14,7 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/rendering.dart';
 import 'package:sensoro_survey/views/survey/const.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:oktoast/oktoast.dart';
 
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -94,26 +95,28 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return new MaterialApp(
-      title: 'title',
-      theme: new ThemeData(
-        primaryColor: Color(ThemeColor),
-        backgroundColor: Color(0xFFEFEFEF),
-        accentColor: Color(0xFF888888),
-        textTheme: TextTheme(
-          //设置Material的默认字体样式
-          body1: TextStyle(color: Color(0xFF888888), fontSize: 16.0),
+    return OKToast(
+      child: new MaterialApp(
+        title: 'title',
+        theme: new ThemeData(
+          primaryColor: Color(ThemeColor),
+          backgroundColor: Color(0xFFEFEFEF),
+          accentColor: Color(0xFF888888),
+          textTheme: TextTheme(
+            //设置Material的默认字体样式
+            body1: TextStyle(color: Color(0xFF888888), fontSize: 16.0),
+          ),
+          iconTheme: IconThemeData(
+            color: Color(ThemeColor),
+            size: 35.0,
+          ),
         ),
-        iconTheme: IconThemeData(
-          color: Color(ThemeColor),
-          size: 35.0,
-        ),
+        home: new Scaffold(body: showWelcomePage()),
+        //去掉debug logo
+        debugShowCheckedModeBanner: false,
+        // onGenerateRoute: Application.router.generator,
+        // navigatorObservers: <NavigatorObserver>[Analytics.observer],
       ),
-      home: new Scaffold(body: showWelcomePage()),
-      //去掉debug logo
-      debugShowCheckedModeBanner: false,
-      // onGenerateRoute: Application.router.generator,
-      // navigatorObservers: <NavigatorObserver>[Analytics.observer],
     );
   }
 }
@@ -158,12 +161,9 @@ Widget _widgetForRoute(String route) {
 void main() async {
   // runApp(new MyApp());
 
-
-
   print('进入了flutter');
   if (Platform.isIOS) {
     SharedPreferences.setMockInitialValues({});
-
   }
   //选择打开哪个页面
   runApp(_widgetForRoute(ui.window.defaultRouteName));
@@ -173,7 +173,6 @@ void main() async {
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
 }
 
-
 class MyApp1 extends StatelessWidget {
   Widget _home(BuildContext context) {
     return new MyHomePage(title: 'Flutter Demo Home Page');
@@ -181,15 +180,17 @@ class MyApp1 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new MaterialApp(
-      title: 'Flutter Demo',
-      theme: new ThemeData(
-        primarySwatch: Colors.blue,
+    return OKToast(
+      child: new MaterialApp(
+        title: 'Flutter Demo',
+        theme: new ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        routes: <String, WidgetBuilder>{
+          "/home": (BuildContext context) => new MyHomePage(),
+        },
+        home: _home(context),
       ),
-      routes: <String, WidgetBuilder>{
-        "/home": (BuildContext context) => new MyHomePage(),
-      },
-      home: _home(context),
     );
   }
 }

@@ -14,6 +14,7 @@ import 'package:sensoro_survey/widgets/text_input.dart';
 import 'package:sensoro_survey/model/component_configure_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:oktoast/oktoast.dart';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:event_bus/event_bus.dart';
@@ -22,6 +23,8 @@ import 'package:sensoro_survey/widgets/component.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 import 'package:sensoro_survey/views/survey/const.dart';
 import 'package:sensoro_survey/views/survey/item_widget.dart';
+import 'package:sensoro_survey/net/api/app_api.dart';
+import 'package:sensoro_survey/net/api/net_config.dart';
 
 class AddAllPage1 extends StatefulWidget {
   List<dynamic> input;
@@ -34,9 +37,13 @@ class AddAllPage1 extends StatefulWidget {
 class _AddAllPageState1 extends State<AddAllPage1> {
   List<dynamic> input;
   _AddAllPageState1({this.input});
+  bool isAllCheck = false;
 
   bool isCheck = false;
   List<dynamic> dataList = [];
+  Timer _changeTimer;
+  bool isErrorShowing = false;
+  String errorInfo = "";
 
   //组件即将销毁时调用
   @override
@@ -91,15 +98,91 @@ class _AddAllPageState1 extends State<AddAllPage1> {
     // dataList.add(model);
 
     if (ComponentConfig.confiureList.length > 0) {
-      dataList = ComponentConfig.confiureList;
+      for (int i = 0; i < ComponentConfig.confiureList.length; i++) {
+        Map json = ComponentConfig.confiureList[i] as Map;
+        componentModel model = componentModel.fromJson(json);
+        if (model != null) {
+          dataList.add(model);
+        }
+      }
     }
-
-    // initDetailList();
 
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
         //or set color with: Color(0xFF0000FF)
         // statusBarColor: Colors.blue,
         ));
+  }
+
+  void updateConfigureListNetCall() async {
+    String urlStr = NetConfig.riskUrl1;
+    Map<String, dynamic> headers = {};
+    Map<String, dynamic> params = {};
+
+    ResultData resultData = await AppApi.getInstance()
+        .getListNetCall(context, true, urlStr, headers, params);
+    if (resultData.isSuccess()) {
+      // _stopLoading();
+      int code = resultData.response["code"].toInt();
+      if (code == 200) {
+        if (resultData.response["data"] is List) {
+          List resultList = resultData.response["data"];
+          if (resultList.length > 0) {
+            setState(() {
+              dataList.addAll(resultList);
+            });
+          }
+        }
+
+        if (resultData.response["data"] is Map) {
+          Map resultMap = resultData.response["data"];
+          if (resultMap["records"] is List) {
+            List<dynamic> configureList = resultMap["records"];
+            ComponentConfig.confiureList = configureList;
+
+            //本地化存储
+            String jsonStr = "";
+            for (Map map in configureList) {
+              String str = json.encode(map);
+              if (jsonStr.length == 0) {
+                jsonStr = str;
+              } else {
+                jsonStr = jsonStr + ';' + str;
+              }
+            }
+            // saveConfigureList(jsonStr);
+          }
+        }
+      }
+    }
+  }
+
+  void showErrorMsg(String str) {
+    setState(() {
+      isErrorShowing = true;
+    });
+
+    _changeTimer = new Timer(Duration(milliseconds: 2000), () {
+      isErrorShowing = false;
+      errorInfo = "";
+    });
+
+    _changeTimer = new Timer(Duration(milliseconds: 2300), () {
+      setState(() {});
+    });
+  }
+
+  void updateConfigureList() {
+    for (int i = 0; i < dataList.length; i++) {
+      componentModel model = dataList[i];
+      if (model.is_required == 'YES' && model.variable_value.length == 0) {
+        setState(() {
+          isAllCheck = false;
+          errorInfo = "请填写${model.variable_name}";
+          showErrorMsg(errorInfo);
+        });
+        return;
+      }
+    }
   }
 
   @override
@@ -119,7 +202,7 @@ class _AddAllPageState1 extends State<AddAllPage1> {
       height: 60,
       width: prefix0.screen_width,
       child: new MaterialButton(
-        color: isCheck == true ? prefix0.GREEN_COLOR : Colors.grey,
+        color: prefix0.GREEN_COLOR,
         textColor: Colors.white,
         child: new Text("完成",
             style: TextStyle(
@@ -127,6 +210,10 @@ class _AddAllPageState1 extends State<AddAllPage1> {
                 fontWeight: FontWeight.normal,
                 fontSize: 20)),
         onPressed: () {
+          showToast("hello world");
+          // Fluttertoast.showToast(msg: "成功获取本周天气, 显示周一天气");
+          this.updateConfigureList();
+
           // getBookName;
           // if (this.name.length > 0) {
           // saveInfoInLocal();
@@ -156,36 +243,35 @@ class _AddAllPageState1 extends State<AddAllPage1> {
       ),
     );
 
-    Widget step1 = Container(
-        color: prefix0.LIGHT_LINE_COLOR,
+    Widget errorC = Container(
+        // color: Colors.white,
         child: new Column(
-          children: <Widget>[
-            new Row(children: <Widget>[
-              Padding(
-                child: new Text(
-                  "电刑",
-                  style: TextStyle(color: Colors.grey, fontSize: 18),
-                ),
-                padding: new EdgeInsets.fromLTRB(20, 20, 20, 20),
-              )
-            ]),
-            // container,
-          ],
-        ));
+      children: <Widget>[
+        Padding(
+          child: new Text(
+            this.errorInfo,
+            style: TextStyle(color: Colors.red, fontSize: 16),
+          ),
+          padding: new EdgeInsets.fromLTRB(20, 20, 20, 20),
+        ),
+
+        //分割线
+        Container(
+            width: prefix0.screen_width - 40,
+            height: 1.0,
+            color: FENGE_LINE_COLOR),
+
+        // container,
+      ],
+    ));
 
     Widget myListView = new ListView.builder(
         physics: new AlwaysScrollableScrollPhysics()
             .applyTo(new BouncingScrollPhysics()), // 这个是用来控制能否在不满屏的状态下滚动的属性
-        itemCount: dataList.length == 0 ? 1 : dataList.length,
+        itemCount: dataList.length == 0 ? 1 : dataList.length + 1,
         // separatorBuilder: (BuildContext context, int index) =>
         // Divider(height: 1.0, color: Colors.grey, indent: 20), // 添加分割线
         itemBuilder: (BuildContext context, int index) {
-          componentModel model;
-          if (dataList[index] is Map) {
-            Map json = dataList[index] as Map;
-            model = componentModel.fromJson(json);
-          }
-
           // print("rebuild index =$index");
           if (dataList.length == 0) {
             return new Container(
@@ -207,6 +293,11 @@ class _AddAllPageState1 extends State<AddAllPage1> {
               ]),
             );
           }
+
+          if (index == 0) {
+            return isErrorShowing == true ? errorC : emptyContainer;
+          }
+          componentModel model = dataList[index - 1];
 
           return new Container(
             padding:

@@ -99,6 +99,13 @@ class FlutterProjectListViewController: FlutterBaseViewController,UIDocumentInte
         }
     }
     
+    func loadLocalConfigureList() -> Void{
+        let userDefaults = UserDefaults.standard;
+        if let str = userDefaults.object(forKey: "configureList") {
+            self.mEventSink?(["name":"sendConfigureList","configureListStr":str] )
+        }
+    }
+    
     @objc func openFileAndSave(nofi : Notification){
         let urlstr = nofi.userInfo!["url"] as! NSString;
         var url : NSURL? = NSURL(string: urlstr as String);
@@ -170,6 +177,16 @@ class FlutterProjectListViewController: FlutterBaseViewController,UIDocumentInte
                 }
 //                self.showCalendar();
             }
+            else if ("saveConfigureList" == call.method) {
+                if let arguments:NSDictionary = call.arguments as! NSDictionary{
+                    
+                    if  let str = arguments["value"] as? NSString,let key = arguments["key"] as? NSString{
+                        let userDefaults = UserDefaults.standard;
+                        userDefaults.set(str, forKey: key as String);
+
+                    }
+                }
+            }
             else if ("saveHistoryList" == call.method) {
                 if let arguments:NSDictionary = call.arguments as! NSDictionary{
                     
@@ -198,8 +215,8 @@ class FlutterProjectListViewController: FlutterBaseViewController,UIDocumentInte
         if str == "sendProjectList"{
             self.loadLocalProjectList();
             self.loadLocalHistoryList();
+            self.loadLocalConfigureList();
         }
-        
         
         events("我来自native222")
         return nil

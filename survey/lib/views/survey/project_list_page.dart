@@ -9,6 +9,7 @@ import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:package_info/package_info.dart';
+import 'package:sensoro_survey/model/component_configure_model.dart';
 import 'package:sensoro_survey/net/api/net_config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -19,6 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:event_bus/event_bus.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:oktoast/oktoast.dart';
 //import 'package:fluwx/fluwx.dart' as fluwx;
 
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
@@ -58,14 +60,17 @@ class _ProjectListPageState extends State<ProjectListPage> {
   Widget build(BuildContext context) {
     //要使用路由，根控件就不能是MaterialApp，否则跳转都会无效，解决方法：将 MaterialApp 内容
     // 再使用 StatelessWeight 或 StatefulWeight 包裹一层
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      // title: Text("Flutter Layout Demo"),
-      title: "Flutter Layout Demo",
+    return OKToast(
+      // 这一步
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        // title: Text("Flutter Layout Demo"),
+        title: "Flutter Layout Demo",
 
-      //   // bottomSheet: bottomButton,
-      // ) // This trailing comma makes auto-formatting nicer for build methods.
-      home: HomePage(),
+        //   // bottomSheet: bottomButton,
+        // ) // This trailing comma makes auto-formatting nicer for build methods.
+        home: HomePage(),
+      ),
     );
   }
 
@@ -234,7 +239,7 @@ class _State extends State<HomePage> {
     super.dispose();
   }
 
-  // 创建一个给native的channel (类似iOS的通知）
+  // 创�������������一个给native的channel (类似iOS的通知）
   // static const methodChannel = const MethodChannel('com.pages.your/task_test');
   @override
   void initState() {
@@ -258,7 +263,7 @@ class _State extends State<HomePage> {
     // });
 
     loadLocalData();
-    // getListNetCall();
+    getConfigureListNetCall();
 
     controller = new CalendarController();
     controller.addMonthChangeListener(
@@ -353,7 +358,19 @@ class _State extends State<HomePage> {
           if (resultMap["records"] is List) {
             List<dynamic> configureList = resultMap["records"];
             ComponentConfig.confiureList = configureList;
+
             //本地化存储
+            String jsonStr = "";
+            for (Map map in configureList) {
+              String str = json.encode(map);
+              str = str.replaceAll(';', ';;');
+              if (jsonStr.length == 0) {
+                jsonStr = str;
+              } else {
+                jsonStr = jsonStr + ';' + str;
+              }
+            }
+            _saveConfigureList(jsonStr);
           }
         }
       }
@@ -484,6 +501,35 @@ class _State extends State<HomePage> {
         SaveDataManger.addProjectHistory(historyStr, historyKey);
       }
 
+      if (name == "sendConfigureList") {
+        String listStr = dic["configureListStr"].toString();
+        List<String> list = listStr.split(';');
+        String historyKey = 'configureList';
+
+        List<Map<String, dynamic>> configureList = [];
+        for (int i = 0; i < list.length; i++) {
+          String str = list[i];
+          if (str.length > 0) {
+            if (str == null || str.length < 3) {
+              continue;
+            }
+            str = str.replaceAll(';;', ',');
+            String str1 = '[' + str + ']';
+            List<dynamic> jsonList = jsonDecode(str1);
+            if (jsonList.length > 0) {
+              Map<String, dynamic> map = jsonList[0];
+              configureList.add(map);
+            }
+          }
+        }
+
+        String historyStr = "";
+
+        if (configureList.length > 0) {
+          ComponentConfig.confiureList = configureList;
+        }
+      }
+
       setState(() {});
       return;
     }
@@ -534,14 +580,13 @@ class _State extends State<HomePage> {
     Map<String, dynamic> map = {
       "json": json,
     };
-//    StringBuffer stringBuffer = new StringBuffer();
-//    map.forEach((String key, dynamic value) {
-//      stringBuffer..write(value);
-//      stringBuffer..write("\n");
-//    });
-//    print(stringBuffer.toString());
-//    showWxDialog(stringBuffer.toString());
     await methodChannel.invokeMethod('outputDocument', map);
+  }
+
+  //用原生保存配置列表
+  _saveConfigureList(String str) async {
+    Map<String, dynamic> map = {"value": str, "key": "configureList"};
+    await methodChannel.invokeMethod('saveConfigureList', map);
   }
 
   /**
@@ -715,7 +760,8 @@ class _State extends State<HomePage> {
               setState(() {});
             }),
 
-        contentPadding: EdgeInsets.fromLTRB(3.0, 20.0, 3.0, 10.0), //设置显示本的一个内边距
+        contentPadding:
+            EdgeInsets.fromLTRB(3.0, 20.0, 3.0, 10.0), //设置���示本的一个内边距
 // //                border: InputBorder.none,//取默认的下划线边框
       ),
     );
@@ -925,7 +971,7 @@ class _State extends State<HomePage> {
                         child: Row(
                             //Row 中mainAxisAlignment是水平的，Column中是垂直的
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            //表示所有的子件都是从左到顺序排列，这是默认值
+                            //表���所有的子件都是从左到顺序排列，这是默认值
                             textDirection: TextDirection.ltr,
                             children: <Widget>[
                               //这决定了左对齐

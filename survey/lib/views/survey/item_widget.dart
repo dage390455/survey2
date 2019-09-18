@@ -300,12 +300,6 @@ class itemClassState extends State<itemClass> {
       ),
     );
 
-//    MutilCheck mutilCheck = MutilCheck(
-//      title: "title名称",
-//      dataList: null,
-//      isSingle: false,
-//    );
-
     //调用日历
     _showCalendar() async {
       //调用flutter日历控件
@@ -345,6 +339,7 @@ class itemClassState extends State<itemClass> {
                   model.variable_value.length > 0
                       ? model.variable_value
                       : "点击选择",
+                      : model.is_required == "YES" ? "必填" : "",
                   textAlign: TextAlign.right,
                   style: TextStyle(color: Colors.black, fontSize: 17),
                 ),
@@ -387,6 +382,7 @@ class itemClassState extends State<itemClass> {
                   model.variable_value.length > 0
                       ? model.variable_value
                       : "点击选择",
+                      : model.is_required == "YES" ? "必填" : "",
                   textAlign: TextAlign.right,
                   style: TextStyle(color: Colors.black, fontSize: 17),
                 ),
@@ -433,6 +429,7 @@ class itemClassState extends State<itemClass> {
                     children: <Widget>[
                       Text(
                         "备注",
+                        model.variable_name,
                         style: new TextStyle(fontSize: prefix0.fontsSize),
                       ),
                     ],
@@ -449,6 +446,9 @@ class itemClassState extends State<itemClass> {
                       borderSide: BorderSide(color: Colors.transparent)),
 //                  labelText: '备注',
                   hintText: '无',
+                  hintText: model.variable_value.length > 0
+                      ? model.variable_value
+                      : model.is_required == "YES" ? "必填" : "",
                 ),
                 maxLines: 5,
                 autofocus: false,
@@ -494,6 +494,9 @@ class itemClassState extends State<itemClass> {
               Expanded(
                 child: Text(
                   model.variable_value.length > 0 ? model.variable_value : "必填",
+                  model.variable_value.length > 0
+                      ? model.variable_value
+                      : model.is_required == "YES" ? "必填" : "",
                   textAlign: TextAlign.right,
                   style: TextStyle(color: Colors.black, fontSize: 17),
                 ),

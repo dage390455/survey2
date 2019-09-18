@@ -7,10 +7,10 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:oktoast/oktoast.dart';
 
 import 'package:flutter/material.dart';
 import 'package:event_bus/event_bus.dart';
-import 'package:sensoro_survey/net/api/net_config.dart';
 import 'package:flutter/services.dart';
 import 'package:sensoro_survey/widgets/component.dart';
 import 'package:sensoro_survey/model/component_configure_model.dart';
@@ -32,6 +32,7 @@ import 'SurveyPointInformation/survay_electrical_fire_detail.dart';
 import 'SurveyPointInformation/survay_electrical_fire_edit.dart';
 import 'common/data_transfer_manager.dart';
 import 'package:sensoro_survey/net/api/app_api.dart';
+import 'package:sensoro_survey/net/api/net_config.dart';
 
 class PointListPage extends StatefulWidget {
   projectInfoModel input;
@@ -773,76 +774,79 @@ class _PointListPageState extends State<PointListPage> {
       ),
     );
 
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      // title: Text("Flutter Layout Demo"),
-      title: "Flutter Layout Demo",
-      home: Scaffold(
-          appBar: navBar,
-          body: GestureDetector(
-            onTap: () {
-              // 点击空白页面关闭键盘
-              FocusScope.of(context).requestFocus(blankNode);
-            },
-            child: Container(
-              color: Colors.white,
-              // height: 140, //高不填会自适应
-              padding:
-                  const EdgeInsets.only(top: 0.0, bottom: 0, left: 0, right: 0),
-              child: Column(
-                //这行决定了左对齐
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  !calendaring
-                      ? emptyContainer
-                      : Container(
-                          color: Colors.white,
-                          // height: 140, //高度不填会自适应
-                          padding: const EdgeInsets.only(
-                              top: 3.0, bottom: 3, left: 20, right: 10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Text(
-                                // "$beginTimeStr ~ $endTimeStr",
-                                dateFilterStr.length > 0 ? dateFilterStr : "",
-                                textAlign: TextAlign.start,
-                                style: TextStyle(
-                                    color: prefix0.BLACK_TEXT_COLOR,
-                                    fontWeight: FontWeight.normal,
-                                    fontSize: 12),
-                              ),
-                              IconButton(
-                                icon: Image.asset(
-                                  "assets/images/close_black.png",
-                                  color: Colors.black,
+    return OKToast(
+      // 这一步
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        // title: Text("Flutter Layout Demo"),
+        title: "Flutter Layout Demo",
+        home: Scaffold(
+            appBar: navBar,
+            body: GestureDetector(
+              onTap: () {
+                // 点击空白页面关闭键盘
+                FocusScope.of(context).requestFocus(blankNode);
+              },
+              child: Container(
+                color: Colors.white,
+                // height: 140, //高不填会自适应
+                padding: const EdgeInsets.only(
+                    top: 0.0, bottom: 0, left: 0, right: 0),
+                child: Column(
+                  //这行决定了左对齐
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    !calendaring
+                        ? emptyContainer
+                        : Container(
+                            color: Colors.white,
+                            // height: 140, //高度不填会自适应
+                            padding: const EdgeInsets.only(
+                                top: 3.0, bottom: 3, left: 20, right: 10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Text(
+                                  // "$beginTimeStr ~ $endTimeStr",
+                                  dateFilterStr.length > 0 ? dateFilterStr : "",
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                      color: prefix0.BLACK_TEXT_COLOR,
+                                      fontWeight: FontWeight.normal,
+                                      fontSize: 12),
                                 ),
-                                onPressed: () {
-                                  calendaring = false;
-                                  this.dateFilterList.clear();
-                                  this.dateFilterStr = "";
-                                  setState(() {});
-                                },
-                              ),
-                            ],
+                                IconButton(
+                                  icon: Image.asset(
+                                    "assets/images/close_black.png",
+                                    color: Colors.black,
+                                  ),
+                                  onPressed: () {
+                                    calendaring = false;
+                                    this.dateFilterList.clear();
+                                    this.dateFilterStr = "";
+                                    setState(() {});
+                                  },
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                  //分割线
-                  Container(
-                      width: prefix0.screen_width,
-                      height: 1.0,
-                      color: FENGE_LINE_COLOR),
-                  Expanded(
-                    child: myListView,
-                  ),
-                ],
+                    //分割线
+                    Container(
+                        width: prefix0.screen_width,
+                        height: 1.0,
+                        color: FENGE_LINE_COLOR),
+                    Expanded(
+                      child: myListView,
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-          bottomNavigationBar: BottomAppBar(
-            child: bottomButton,
-          )), // This trailing comma makes auto-formatting nicer for build methods.
+            bottomNavigationBar: BottomAppBar(
+              child: bottomButton,
+            )), // This trailing comma makes auto-formatting nicer for build methods.
+      ),
     );
   }
 }
