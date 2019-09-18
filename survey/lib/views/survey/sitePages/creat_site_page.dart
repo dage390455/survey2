@@ -17,6 +17,7 @@ import 'package:sensoro_survey/views/survey/editPage/survey_point_area.dart';
 import 'package:sensoro_survey/views/survey/editPage/survey_point_structure.dart';
 import 'package:sensoro_survey/views/survey/survey_point_information.dart';
 
+import '../const.dart';
 import '../survey_type_page.dart';
 import 'Model/SitePageModel.dart';
 
@@ -30,7 +31,7 @@ class _State extends State<CreatSitePage> {
       BasicMessageChannel("BasicMessageChannelPlugin", StringCodec());
 
   SitePageModel fireModel = SitePageModel();
-
+  FocusNode blankNode = FocusNode();
   var isCheack = false;
   TextEditingController remarkController = TextEditingController();
 
@@ -363,23 +364,13 @@ class _State extends State<CreatSitePage> {
               ),
             ),
           ),
-        ],
-      ),
-    );
-
-    Widget bigContainer = Container(
-      color: prefix0.LIGHT_LINE_COLOR,
-      padding: new EdgeInsets.fromLTRB(0, 0, 0, 0),
-      child: new ListView(
-        scrollDirection: Axis.vertical,
-        children: <Widget>[
-          new Padding(
-            padding: new EdgeInsets.fromLTRB(0, 0, 0, 0),
-            child: container,
+          Container(
+            color: prefix0.LINE_COLOR,
+            height: 1,
           ),
           Container(
             color: Colors.white,
-            padding: new EdgeInsets.fromLTRB(20, 0, 20, 40),
+            padding: new EdgeInsets.fromLTRB(0, 0, 0, 40),
             child: Column(
               children: <Widget>[
                 GestureDetector(
@@ -397,35 +388,68 @@ class _State extends State<CreatSitePage> {
                     ),
                   ),
                 ),
-                TextField(
-                  controller: remarkController,
-                  keyboardType: TextInputType.text,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(2.0),
-                        borderSide: BorderSide(color: Colors.transparent)),
-                    hintText: 'xccx',
+                Container(
+                   height: 120,
+                  decoration: BoxDecoration(
+                    border: new Border.all(color: LIGHT_TEXT_COLOR, width: 0.5),
                   ),
-                  maxLines: 5,
-//                  autofocus: false,
-                  onChanged: (val) {
-                    fireModel.remark = val;
-                    setState(() {});
-                  },
+                  child: TextField(
+                    //文本输入控件
+                    onChanged: (val) {
+                      fireModel.remark = val;
+                      setState(() {});
+                    },
+                    controller: remarkController,
+                    keyboardType: TextInputType.text,
+                    textAlign: TextAlign.start,
+                    minLines: 1,
+                    maxLines: 10,
+                    style: new TextStyle(
+                      fontSize: 15.0,
+                      color: prefix0.BLACK_TEXT_COLOR,
+                    ),
+                    decoration: new InputDecoration(
+                      border: InputBorder.none,
+                      // border: new Border.all(color: LIGHT_TEXT_COLOR, width: 0.5),
+                      hintText: "",
+                      contentPadding: EdgeInsets.fromLTRB(
+                          20.0, 20.0, 10.0, 10.0), //设置显示文本的一个内边距
+// //                border: InputBorder.none,//取消默认的下划线边框
+                    ),
+                  ),
                 ),
               ],
             ),
           ),
-          Padding(
-            padding: new EdgeInsets.fromLTRB(0, 0, 0, 100),
-          )
+        ],
+      ),
+    );
+
+    Widget bigContainer = Container(
+      color: prefix0.LIGHT_LINE_COLOR,
+      padding: new EdgeInsets.fromLTRB(0, 0, 0, 0),
+      child: new ListView(
+        scrollDirection: Axis.vertical,
+        children: <Widget>[
+          new Padding(
+            padding: new EdgeInsets.fromLTRB(0, 0, 0, 0),
+            child: container,
+          ),
+
+
         ],
       ),
     );
 
     return Scaffold(
       appBar: NavBar,
-      body: bigContainer,
+      body: GestureDetector(
+        onTap: () {
+          // 点击空白页面关闭键盘
+          FocusScope.of(context).requestFocus(blankNode);
+        },
+        child: bigContainer,
+      ),
     );
   }
 
