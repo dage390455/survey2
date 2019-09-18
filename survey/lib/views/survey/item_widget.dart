@@ -45,16 +45,11 @@ class itemClassState extends State<itemClass> {
   int picImageIndex = 0;
   Map extraInfo = {};
   List<String> optionList = [];
-  List<MutilCheckModel> mutilmodelList = [];
 
   @override
   void initState() {
     this.model = model;
     optionList = model.options.split(";");
-
-    for (int i = 0; i < optionList.length; i++) {
-      mutilmodelList.add(new MutilCheckModel(optionList[i], false));
-    }
 
     if (model.variable_value != null && model.variable_value.length > 0) {
       extraInfo = json.decode(model.variable_value);
@@ -338,7 +333,6 @@ class itemClassState extends State<itemClass> {
                 child: Text(
                   model.variable_value.length > 0
                       ? model.variable_value
-                      : "点击选择",
                       : model.is_required == "YES" ? "必填" : "",
                   textAlign: TextAlign.right,
                   style: TextStyle(color: Colors.black, fontSize: 17),
@@ -381,7 +375,6 @@ class itemClassState extends State<itemClass> {
                 child: Text(
                   model.variable_value.length > 0
                       ? model.variable_value
-                      : "点击选择",
                       : model.is_required == "YES" ? "必填" : "",
                   textAlign: TextAlign.right,
                   style: TextStyle(color: Colors.black, fontSize: 17),
@@ -428,7 +421,6 @@ class itemClassState extends State<itemClass> {
                   child: new Row(
                     children: <Widget>[
                       Text(
-                        "备注",
                         model.variable_name,
                         style: new TextStyle(fontSize: prefix0.fontsSize),
                       ),
@@ -445,7 +437,6 @@ class itemClassState extends State<itemClass> {
                       borderRadius: BorderRadius.circular(2.0),
                       borderSide: BorderSide(color: Colors.transparent)),
 //                  labelText: '备注',
-                  hintText: '无',
                   hintText: model.variable_value.length > 0
                       ? model.variable_value
                       : model.is_required == "YES" ? "必填" : "",
@@ -493,7 +484,6 @@ class itemClassState extends State<itemClass> {
               ),
               Expanded(
                 child: Text(
-                  model.variable_value.length > 0 ? model.variable_value : "必填",
                   model.variable_value.length > 0
                       ? model.variable_value
                       : model.is_required == "YES" ? "必填" : "",
@@ -510,12 +500,14 @@ class itemClassState extends State<itemClass> {
         ));
     MutilCheck ratioContainer = MutilCheck(
       title: model.variable_name,
-      dataList: mutilmodelList,
+      dataList: List<MutilCheckModel>.generate(
+          optionList.length, (i) => new MutilCheckModel(optionList[i], false)),
       isSingle: true,
     );
     MutilCheck mutilCheck = MutilCheck(
       title: model.variable_name,
-      dataList: mutilmodelList,
+      dataList: List<MutilCheckModel>.generate(
+          optionList.length, (i) => new MutilCheckModel(optionList[i], false)),
       isSingle: false,
     );
 
