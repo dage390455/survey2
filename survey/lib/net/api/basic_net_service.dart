@@ -25,9 +25,12 @@ class BasicNetService extends NetService {
     Map<String, dynamic> basicParam = await getBasicParam();
     basicParam["timeStamp"] =
         (new DateTime.now().millisecondsSinceEpoch ~/ 1000).toString();
+    //参数不加agent和timStamp
+    basicParam = {};
     if (params != null) {
       basicParam.addAll(params);
     }
+
     // ShowParam showParam = new ShowParam(
     //     show: showLoad, barrierDismissible: false, showBackground: false);
     // LoadingDialogUtil.showLoadingDialog(context, showParam);

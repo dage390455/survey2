@@ -44,58 +44,19 @@ class _AddAllPageState1 extends State<AddAllPage1> {
   Timer _changeTimer;
   bool isErrorShowing = false;
   String errorInfo = "";
+  // List<dynamic> confiureValueList = []; //带值的配置列表
 
   //组件即将销毁时调用
   @override
   void dispose() {
 //    dataList.clear();
+    _changeTimer.cancel();
     super.dispose();
   }
 
   @override
   void initState() {
     super.initState();
-
-    // componentModel model = componentModel("", "", "", "", {});
-
-    // model.variable_name = "输入文本";
-    // model.type = "textInput";
-    // dataList.add(model);
-
-    // model = componentModel("", "", "", "", {});
-    // model.variable_name = "大输入框";
-    // model.type = "textView";
-    // dataList.add(model);
-
-    // model = componentModel("", "", "", "", {});
-    // model.variable_name = "弹出选择菜单";
-    // model.type = "popList";
-    // dataList.add(model);
-
-    // model = componentModel("", "", "", "", {});
-    // model.variable_name = "日期选择器";
-    // model.type = "datePicker";
-    // dataList.add(model);
-
-    // model = componentModel("", "", "", "", {});
-    // model.variable_name = "添加图片";
-    // model.type = "image";
-    // dataList.add(model);
-
-    // model = componentModel("", "", "", "", {});
-    // model.variable_name = "跳转地图";
-    // model.type = "map";
-    // dataList.add(model);
-
-    // model = componentModel("", "", "", "", {});
-    // model.variable_name = "单选圆按钮";
-    // model.type = "ratio";
-    // dataList.add(model);
-
-    // model = componentModel("", "", "", "", {});
-    // model.variable_name = "复选框";
-    // model.type = "checkBox";
-    // dataList.add(model);
 
     if (ComponentConfig.confiureList.length > 0) {
       for (int i = 0; i < ComponentConfig.confiureList.length; i++) {
@@ -115,14 +76,25 @@ class _AddAllPageState1 extends State<AddAllPage1> {
 
   void updateConfigureListNetCall() async {
     String urlStr = NetConfig.updateRiskValueUrl;
-    Map<String, dynamic> headers = {};
-    Map<String, dynamic> data1 = {
-      "risk_id": "1",
-      "variable_code": "name",
-      "variable_value": "郑家杰"
-    };
-    // Map<String, dynamic> data1 = {"risk_id": "1", "variable_code": "name", "variable_value": "郑家杰"};
-    List<Map<String, dynamic>> list = [data1];
+    Map<String, dynamic> headers = {"Content-Type": "application/json"};
+    //从dataList取数据
+
+    List<Map<String, dynamic>> list = [];
+    for (int i = 0; i < dataList.length; i++) {
+      componentModel model = dataList[i];
+      Map<String, dynamic> json = {};
+      json["risk_id"] = model.risk_id;
+      json["variable_code"] = model.variable_code;
+      json["variable_value"] = model.variable_value;
+      // Map<String, dynamic> json = model.toJson();
+      list.add(json);
+    }
+    // Map<String, dynamic> data1 = {
+    //   "risk_id": "1",
+    //   "variable_code": "name",
+    //   "variable_value": "郑家杰"
+    // };
+
     Map<String, dynamic> params = {"data": list};
 
     ResultData resultData = await AppApi.getInstance()
@@ -131,34 +103,15 @@ class _AddAllPageState1 extends State<AddAllPage1> {
       // _stopLoading();
       int code = resultData.response["code"].toInt();
       if (code == 200) {
-        if (resultData.response["data"] is List) {
-          List resultList = resultData.response["data"];
-          if (resultList.length > 0) {
-            setState(() {
-              dataList.addAll(resultList);
-            });
-          }
-        }
-
-        if (resultData.response["data"] is Map) {
-          Map resultMap = resultData.response["data"];
-          if (resultMap["records"] is List) {
-            List<dynamic> configureList = resultMap["records"];
-            ComponentConfig.confiureList = configureList;
-
-            //本地化存储
-            String jsonStr = "";
-            for (Map map in configureList) {
-              String str = json.encode(map);
-              if (jsonStr.length == 0) {
-                jsonStr = str;
-              } else {
-                jsonStr = jsonStr + ';' + str;
-              }
-            }
-            // saveConfigureList(jsonStr);
-          }
-        }
+        var msg = "数据上传成功";
+        errorInfo = msg;
+        showErrorMsg(errorInfo);
+        showToast(errorInfo);
+        // Navigator.of(context).pop("");
+      } else {
+        var msg = resultData.response["msg"];
+        errorInfo = msg;
+        showErrorMsg(msg);
       }
     }
   }
@@ -218,7 +171,6 @@ class _AddAllPageState1 extends State<AddAllPage1> {
                 fontWeight: FontWeight.normal,
                 fontSize: 20)),
         onPressed: () {
-          showToast("hello world");
           // Fluttertoast.showToast(msg: "成功获取本周天气, 显示周一天气");
           this.updateConfigureList();
 
@@ -328,15 +280,22 @@ class _AddAllPageState1 extends State<AddAllPage1> {
             ]),
           );
         });
-
-    return Scaffold(
-        appBar: navBar,
-        body: myListView,
-        bottomNavigationBar: BottomAppBar(
-          child: bottomButton,
-        )
-        // bottomSheet: bottomButton,
-        );
+    return OKToast(
+      // 这一步
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        // title: Text("Flutter Layout Demo"),
+        title: "Flutter Layout Demo",
+        home: Scaffold(
+            appBar: navBar,
+            body: myListView,
+            bottomNavigationBar: BottomAppBar(
+              child: bottomButton,
+            )
+            // bottomSheet: bottomButton,
+            ),
+      ),
+    );
     // TODO: implement build
     return null;
   }

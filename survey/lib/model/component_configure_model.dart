@@ -54,4 +54,22 @@ class componentModel {
           json['data_url'] == null ? "" : json['data_url'],
           // json['extraInfo'],
         );
+
+  Map<String, dynamic> toJson() => {
+        "variable_name": this.variable_name,
+        "variable_code": this.variable_code,
+        "variable_value": this.variable_value,
+        "is_required": this.is_required,
+        "risk_id": this.risk_id,
+        "comp_code": this.comp_code, //组件编码
+        "comp_type": this.comp_type, //组件类型
+        "options": this.options,
+        "placeholder": this.placeholder,
+        "validate_rule": this.validate_rule, //正则表达式
+        "type": this.type, //所属业务类型
+        "page_no": this.page_no,
+        "order_no": this.order_no,
+        "page_name": this.page_name,
+        "data_url": this.data_url,
+      };
 }

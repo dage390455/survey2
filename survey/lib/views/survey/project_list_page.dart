@@ -691,7 +691,7 @@ class _State extends State<HomePage> {
     void _addProject() async {
       projectInfoModel model = projectInfoModel("", "", 1, "", []);
 
-      final result = Navigator.of(context, rootNavigator: true)
+      final result = await Navigator.of(context, rootNavigator: true)
           .push(CupertinoPageRoute(builder: (BuildContext context) {
         return new AddProjectPage(input: model);
       }));
