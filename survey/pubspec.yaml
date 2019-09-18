@@ -97,6 +97,7 @@ flutter:
   - assets/images/home.png
   - assets/images/manage_home_sel.png
   - assets/images/manage_home.png
+  - assets/images/arrow_folddown.png
   fonts:
   - family: FlamanteRoma
     fonts:

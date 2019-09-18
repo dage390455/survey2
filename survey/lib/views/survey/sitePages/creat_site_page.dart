@@ -186,6 +186,23 @@ class _State extends State<CreatSitePage> {
       _sendToNative();
     }
 
+    String _getAreaString(){
+
+      switch(fireModel.siteType){
+
+        case SiteType.area:
+           return "区域";
+          break;
+        case SiteType.building:
+          return "建筑";
+          break;
+        case SiteType.unkonw:
+          return "请选择场所层级";
+          break;
+      }
+
+    }
+
     Widget container = Container(
       color: Colors.white,
       padding: new EdgeInsets.fromLTRB(20, 0, 20, 0),
@@ -238,15 +255,13 @@ class _State extends State<CreatSitePage> {
                   ),
                   Expanded(
                     child: Text(
-                      this.fireModel.siteName.length > 0
-                          ? this.fireModel.siteName
-                          : "必填",
+                      _getAreaString(),
                       textAlign: TextAlign.right,
                       style: new TextStyle(fontSize: prefix0.fontsSize),
                     ),
                   ),
                   Image.asset(
-                    "assets/images/right_arrar.png",
+                    "assets/images/arrow_folddown.png",
                     width: 20,
                   )
                 ],
