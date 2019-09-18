@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 import 'package:sensoro_survey/views/survey/sitePages/Model/SitePageModel.dart';
 
@@ -66,39 +67,10 @@ class _ManagementPageState extends State<ManagementPage> {
               ]),
             );
           }
-          return Dismissible(
-            background: Container(
-                color: Colors.red,
-                child: Center(
-                  child: Text(
-                    "删除",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                )),
-            key: Key("$index"),
-            onDismissed: (DismissDirection direction) {
-              if (direction == DismissDirection.endToStart) {
-                //这里处理数据
-                print("这里���理数据");
-                //本地存储也去掉
-//                String historyKey = 'projectList';
-//                Map<String, dynamic> map = model.toJson();
-//                String jsonStr = json.encode(map);
-//
-//                SaveDataManger.deleteHistory(
-//                  jsonStr,
-//                  historyKey,
-//                  model.projectId,
-//                );
-//                setState(() {
-//                  dataList.removeAt(index);
-//                });
-              }
-            },
-            direction: DismissDirection.endToStart,
-            // direction: DismissDirection.up,
 
-            // confirmDismiss: confirmDismiss1,
+          return Slidable(
+            actionPane: SlidableDrawerActionPane(),
+            actionExtentRatio: 0.25,
             child: new Container(
               color: Colors.white,
               padding:
@@ -148,6 +120,16 @@ class _ManagementPageState extends State<ManagementPage> {
                         color: FENGE_LINE_COLOR),
                   ]),
             ),
+            secondaryActions: <Widget>[
+              IconSlideAction(
+                caption: '删除',
+                color: Colors.red,
+                icon: Icons.delete,
+                onTap: () => setState(() {
+                  listmodel.removeAt(index);
+                }),
+              ),
+            ],
           );
         });
 
