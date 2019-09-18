@@ -32,6 +32,7 @@ class _State extends State<CreatSitePage> {
   SitePageModel fireModel = SitePageModel();
 
   var isCheack = false;
+  TextEditingController remarkController = TextEditingController();
 
   @override
   void initState() {
@@ -52,7 +53,7 @@ class _State extends State<CreatSitePage> {
           //给Android端的返回值
           return "========================收到Native消息：" + message;
         }));
-
+    remarkController.text = fireModel.remark;
     super.initState();
   }
 
@@ -298,6 +299,50 @@ class _State extends State<CreatSitePage> {
             padding: new EdgeInsets.fromLTRB(0, 0, 0, 0),
             child: container,
           ),
+          Container(
+            color: Colors.white,
+            padding: new EdgeInsets.fromLTRB(20, 0, 20, 40),
+            child: Column(
+              children: <Widget>[
+                GestureDetector(
+//            onTap: editAddress,//写入方法名称就可以了，但是是无参的
+                  child: Container(
+                    alignment: Alignment.center,
+                    height: 60,
+                    child: new Row(
+                      children: <Widget>[
+                        Text(
+                          "备注",
+                          style: new TextStyle(fontSize: prefix0.fontsSize),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                TextField(
+                  controller: remarkController,
+                  keyboardType: TextInputType.text,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(2.0),
+                        borderSide: BorderSide(color: Colors.transparent)),
+                    hintText: 'xccx',
+                  ),
+                  maxLines: 5,
+//                  autofocus: false,
+                  onChanged: (val) {
+                    fireModel.remark = val;
+                    setState(() {});
+                  },
+                ),
+              ],
+            ),
+          ),
+
+          Padding(
+            padding: new EdgeInsets.fromLTRB(0, 0, 0, 100),
+          )
+
         ],
       ),
     );
