@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:sensoro_survey/views/survey/site_management_page.dart';
+import 'package:sensoro_survey/views/survey/sitePages/site_management_page.dart';
 
 import 'views/survey/project_list_page.dart';
 
