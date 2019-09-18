@@ -27,11 +27,11 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
   CalendarController controller;
   TextEditingController searchController = TextEditingController();
   List<SitePageModel> dataList = [];
-  void _startManagePage(String data) async {
+  void _startManagePage(SitePageModel data) async {
     DataTransferManager.shared.creatModel();
     final result = await Navigator.of(context, rootNavigator: true)
         .push(CupertinoPageRoute(builder: (BuildContext context) {
-      return new ManagementPage(title: data);
+      return new ManagementPage(sitePageModel: data);
     }));
 
     if (result != null) {
@@ -296,7 +296,7 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
                                     textColor: Colors.white,
                                     child: new Text('管理'),
                                     onPressed: () {
-                                      _startManagePage(dataList[index].siteName);
+                                      _startManagePage(dataList[index]);
                                     },
                                   ),
 //                                  new RaisedButton(
@@ -370,32 +370,31 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
           ),
 
           new Offstage(
-              offstage: false,
-              child:
-              Padding(
-                padding: const EdgeInsets.all(20),
-                child: GestureDetector(
-                  onTap: _creatSite,
-                  child: Container(
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(3.0), //3像素圆角
-                        border: Border.all(color: Colors.grey),
-                        boxShadow: [
-                          //阴影
-                          BoxShadow(color: Colors.white, blurRadius: 4.0)
-                        ]),
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                      child: Text(
-                        "+ 场所",
-                        textAlign: TextAlign.start,
-                        style: TextStyle(color: Colors.grey),
-                      ),
+            offstage: false,
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: GestureDetector(
+                onTap: _creatSite,
+                child: Container(
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(3.0), //3像素圆角
+                      border: Border.all(color: Colors.grey),
+                      boxShadow: [
+                        //阴影
+                        BoxShadow(color: Colors.white, blurRadius: 4.0)
+                      ]),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                    child: Text(
+                      "+ 场所",
+                      textAlign: TextAlign.start,
+                      style: TextStyle(color: Colors.grey),
                     ),
                   ),
                 ),
               ),
+            ),
           ),
 
           //分割线

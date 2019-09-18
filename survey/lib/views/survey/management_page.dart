@@ -1,33 +1,37 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:sensoro_survey/views/survey/common/data_transfer_manager.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
+import 'package:sensoro_survey/views/survey/sitePages/Model/SitePageModel.dart';
 
 import 'const.dart';
 import 'creat_building_page.dart';
 
 class ManagementPage extends StatefulWidget {
-  ManagementPage({Key key, this.title}) : super(key: key);
+  ManagementPage({Key key, this.sitePageModel}) : super(key: key);
 
-  final String title;
+  final SitePageModel sitePageModel;
 
   @override
-  _ManagementPageState createState() => _ManagementPageState();
+  _ManagementPageState createState() => _ManagementPageState(sitePageModel);
 }
 
 class _ManagementPageState extends State<ManagementPage> {
-  void _creatbuilding() async {
-    DataTransferManager.shared.creatModel();
+  SitePageModel model = SitePageModel();
+  List<SitePageModel> listmodel = [];
 
+  _ManagementPageState(SitePageModel sitePageModel) {
+    listmodel = sitePageModel.listplace;
+  }
+
+  void _creatbuilding() async {
     final result = await Navigator.of(context, rootNavigator: true)
         .push(CupertinoPageRoute(builder: (BuildContext context) {
       return new CreatbuildingPage();
     }));
 
     if (result != null) {
-      String name = result as String;
-      if (name == "refreshList") {}
-      // this.name = name;
+      SitePageModel sitePageModel = result as SitePageModel;
+      listmodel.add(sitePageModel);
       setState(() {});
     }
   }
@@ -37,12 +41,31 @@ class _ManagementPageState extends State<ManagementPage> {
     Widget myListView = new ListView.builder(
         physics: new AlwaysScrollableScrollPhysics()
             .applyTo(new BouncingScrollPhysics()), // 这个是用来控制能否在不屏的状态下滚动的属性
-        itemCount: dataList.length == 0 ? 1 : dataList.length,
+        itemCount: listmodel.length == 0 ? 1 : listmodel.length,
         // separatorBuilder: (BuildContext context, int index) =>
         // Divider(height: 1.0, color: Colors.grey, indent: 20), // 添加分割线
         itemBuilder: (BuildContext context, int index) {
           // print("rebuild index =$index");
-
+          if (listmodel.length == 0) {
+            return new Container(
+              padding: const EdgeInsets.only(
+                  top: 80.0, bottom: 0, left: 0, right: 0),
+              child: new Column(children: <Widget>[
+                new Image(
+                  image: new AssetImage("assets/images/nocontent.png"),
+                  width: 120,
+                  height: 120,
+                  // fit: BoxFit.fitWidth,
+                ),
+                Text("暂无建筑",
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                        color: prefix0.LIGHT_TEXT_COLOR,
+                        fontWeight: FontWeight.normal,
+                        fontSize: 17)),
+              ]),
+            );
+          }
           return Dismissible(
             background: Container(
                 color: Colors.red,
@@ -100,7 +123,7 @@ class _ManagementPageState extends State<ManagementPage> {
                                         CrossAxisAlignment.start,
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: <Widget>[
-                                      Text(dataList[index],
+                                      Text(listmodel[index].siteName,
                                           textAlign: TextAlign.start,
                                           style: TextStyle(
                                               color: prefix0.BLACK_TEXT_COLOR,
@@ -162,7 +185,7 @@ class _ManagementPageState extends State<ManagementPage> {
 
     return new Scaffold(
         appBar: new AppBar(
-          title: new Text(widget.title),
+          title: new Text(widget.sitePageModel.siteName),
           centerTitle: true,
           leading: IconButton(
             icon: Image.asset(
@@ -177,5 +200,3 @@ class _ManagementPageState extends State<ManagementPage> {
         body: body);
   }
 }
-
-const dataList = ["1号楼", "2号楼", "3号楼", "4号楼", "5号楼"];

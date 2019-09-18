@@ -105,7 +105,7 @@ public class AdministrativeActivity extends Activity implements AMap.OnCameraCha
         includeTextTitleTvTitle = findViewById(R.id.include_text_title_tv_title);
         includeTextTitleImvArrowsLeft = findViewById(R.id.include_text_title_imv_arrows_left);
         tmDeployMap = findViewById(R.id.tm_deploy_map);
-        includeTextTitleTvTitle.setText("行政区域");
+        includeTextTitleTvTitle.setText("定位位置");
 
 
         if (isReadOnly == 0) {

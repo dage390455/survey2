@@ -6,7 +6,22 @@
     android:orientation="vertical">
 
     <include layout="@layout/item_include_text_title" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
 
+        android:background="@color/gray"></View>
+    <TextView
+        android:hint="定位位置"
+
+        android:padding="20dp"
+        android:id="@+id/administrative_areas_tv"
+        android:layout_width="match_parent"
+
+        android:textColor="@color/black"
+        android:layout_height="wrap_content">
+
+    </TextView>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -33,14 +48,5 @@
     </RelativeLayout>
 
 
-    <TextView
-        android:hint="行政区域"
 
-        android:padding="20dp"
-        android:id="@+id/administrative_areas_tv"
-        android:layout_width="match_parent"
-
-        android:layout_height="wrap_content">
-
-    </TextView>
 </LinearLayout>
