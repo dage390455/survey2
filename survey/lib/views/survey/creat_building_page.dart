@@ -16,6 +16,8 @@ class _State extends State<CreatbuildingPage> {
 
   SitePageModel sitePageModel = SitePageModel();
 
+  bool isCheack = false;
+
   @override
   void initState() {
     _basicMessageChannel.setMessageHandler((message) => Future<String>(() {
@@ -27,6 +29,7 @@ class _State extends State<CreatbuildingPage> {
               setState(() {
                 sitePageModel.editLongitudeLatitude = list[0] + "," + list[1];
                 sitePageModel.editPosition = list[2];
+                _updateSaveState();
               });
             }
           }
@@ -80,13 +83,14 @@ class _State extends State<CreatbuildingPage> {
           alignment: Alignment.center,
           child: GestureDetector(
             onTap: () {
-              Navigator.of(context).pop(this.sitePageModel);
+              if (this.isCheack) {
+                Navigator.of(context).pop(this.sitePageModel);
+              }
             },
             child: Text(
               "保存",
               style: TextStyle(
-//                color: this.name.length > 0 ? prefix0.GREEN_COLOR : Colors.grey,
-                color: Colors.grey,
+                color: this.isCheack ? prefix0.GREEN_COLOR : Colors.grey,
               ),
             ),
           ),
@@ -110,6 +114,8 @@ class _State extends State<CreatbuildingPage> {
         String name = result as String;
 
         this.sitePageModel.siteName = name;
+        _updateSaveState();
+
         setState(() {});
       }
     }
@@ -207,5 +213,14 @@ class _State extends State<CreatbuildingPage> {
       appBar: NavBar,
       body: bigContainer,
     );
+  }
+
+  _updateSaveState() {
+    if (sitePageModel.siteName.length > 0 &&
+        sitePageModel.editPosition.length > 0) {
+      this.isCheack = true;
+    } else {
+      this.isCheack = false;
+    }
   }
 }
