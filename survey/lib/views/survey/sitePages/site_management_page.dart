@@ -166,8 +166,6 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
       ],
     );
 
-
-
     Widget myListView = new ListView.builder(
         physics: new AlwaysScrollableScrollPhysics()
             .applyTo(new BouncingScrollPhysics()), // 这个是用来控制能否在不屏的状态下滚动的属性
@@ -211,6 +209,9 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
               if (direction == DismissDirection.endToStart) {
                 //这里处理数据
                 print("这里���理数据");
+                setState(() {
+                  dataList.removeAt(index);
+                });
                 //本地存储也去掉
 //                String historyKey = 'projectList';
 //                Map<String, dynamic> map = model.toJson();
