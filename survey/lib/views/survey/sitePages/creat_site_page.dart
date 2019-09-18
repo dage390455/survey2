@@ -115,7 +115,7 @@ class _State extends State<CreatSitePage> {
       ),
       actions: <Widget>[
         Container(
-          padding: new EdgeInsets.fromLTRB(0, 0, 20, 0),
+          padding: new EdgeInsets.fromLTRB(0, 0, 0, 0),
           alignment: Alignment.center,
           child: GestureDetector(
             onTap: () {
@@ -124,12 +124,15 @@ class _State extends State<CreatSitePage> {
                 Navigator.of(context).pop(this.fireModel);
               }
             },
-            child: Text(
-              "保存",
-              style: TextStyle(
-                color: this.isCheack ? prefix0.GREEN_COLOR : Colors.grey,
+            child: Padding(
+              padding: new EdgeInsets.fromLTRB(20, 20, 20, 20),
+              child: Text(
+                "保存",
+                style: TextStyle(
+                  color: this.isCheack ? prefix0.GREEN_COLOR : Colors.grey,
+                ),
               ),
-            ),
+            )
           ),
         ),
       ],
@@ -245,32 +248,7 @@ class _State extends State<CreatSitePage> {
             color: prefix0.LINE_COLOR,
             height: 1,
           ),
-//          GestureDetector(
-//            onTap: editPurpose, //写入方法名称就可以了，但是是无参的
-//            child: Container(
-//              alignment: Alignment.center,
-//              height: 60,
-//              child: new Row(
-//                children: <Widget>[
-//                  Text(
-//                    "场所层级",
-//                    style: new TextStyle(fontSize: prefix0.fontsSize),
-//                  ),
-//                  Expanded(
-//                    child: Text(
-//                      _getAreaString(),
-//                      textAlign: TextAlign.right,
-//                      style: new TextStyle(fontSize: prefix0.fontsSize),
-//                    ),
-//                  ),
-//                  Image.asset(
-//                    "assets/images/arrow_folddown.png",
-//                    width: 20,
-//                  )
-//                ],
-//              ),
-//            ),
-//          ),
+
 
           new Container(
             alignment: Alignment.center,

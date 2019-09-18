@@ -265,7 +265,7 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
                                     textColor: Colors.white,
                                     child: new Text('编辑'),
                                     onPressed: () {
-                                      _creatSite(dataList[index],true);
+                                      _creatSite(dataList[index],false);
                                     },
                                   ),
                                   new RaisedButton(
@@ -314,7 +314,7 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
               ),
             ],
           );
-          
+
         });
 
     Widget bodyContiner = new Container(
@@ -404,4 +404,4 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
   }
 }
 
-//const dataList = ["场所1", "场所2", "场所3", "场所4", "场所5", "场所6", "场所7", "场所8"];
+
