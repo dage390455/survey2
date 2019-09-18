@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:sensoro_survey/generated/customCalendar/lib/controller.dart';
 import 'package:sensoro_survey/views/survey/common/data_transfer_manager.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
@@ -195,49 +196,16 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
             );
           }
 
-          return Dismissible(
-            background: Container(
-                color: Colors.red,
-                child: Center(
-                  child: Text(
-                    "删除",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                )),
-            key: Key("$index"),
-            onDismissed: (DismissDirection direction) {
-              if (direction == DismissDirection.endToStart) {
-                //这里处理数据
-                print("这里���理数据");
-                setState(() {
-                  dataList.removeAt(index);
-                });
-                //本地存储也去掉
-//                String historyKey = 'projectList';
-//                Map<String, dynamic> map = model.toJson();
-//                String jsonStr = json.encode(map);
-//
-//                SaveDataManger.deleteHistory(
-//                  jsonStr,
-//                  historyKey,
-//                  model.projectId,
-//                );
-//                setState(() {
-//                  dataList.removeAt(index);
-//                });
-              }
-            },
-            direction: DismissDirection.endToStart,
-            // direction: DismissDirection.up,
-
-            // confirmDismiss: confirmDismiss1,
+          return Slidable(
+            actionPane: SlidableDrawerActionPane(),
+            actionExtentRatio: 0.25,
             child: new Container(
               color: Colors.white,
               padding:
-                  const EdgeInsets.only(top: 0.0, bottom: 0, left: 0, right: 0),
+              const EdgeInsets.only(top: 0.0, bottom: 0, left: 0, right: 0),
               child: new Column(
 
-                  //这行决定了对齐
+                //这行决定了对齐
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
@@ -254,7 +222,7 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
                         padding: const EdgeInsets.only(
                             top: 0.0, bottom: 0, left: 20, right: 20),
                         child: Row(
-                            //Row 中mainAxisAlignment是水平的，Column中是垂直的
+                          //Row 中mainAxisAlignment是水平的，Column中是垂直的
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             //表示所有的子件都是从左到顺序排列，这是默认值
                             textDirection: TextDirection.ltr,
@@ -264,7 +232,7 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
                                 child: Container(
                                   child: Column(
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    CrossAxisAlignment.start,
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: <Widget>[
                                       //这个位置用ListTile就会报错
@@ -297,7 +265,7 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
                                     textColor: Colors.white,
                                     child: new Text('编辑'),
                                     onPressed: () {
-                                  _creatSite(dataList[index],true);
+                                      _creatSite(dataList[index],true);
                                     },
                                   ),
                                   new RaisedButton(
@@ -335,7 +303,18 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
                         color: FENGE_LINE_COLOR),
                   ]),
             ),
+            secondaryActions: <Widget>[
+              IconSlideAction(
+                caption: '删除',
+                color: Colors.red,
+                icon: Icons.delete,
+                onTap: () => setState(() {
+                  dataList.removeAt(index);
+                }),
+              ),
+            ],
           );
+          
         });
 
     Widget bodyContiner = new Container(
