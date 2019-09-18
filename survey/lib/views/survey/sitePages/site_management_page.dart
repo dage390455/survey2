@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 
-import 'const.dart';
+import '../const.dart';
 
 class SiteManagementPage extends StatefulWidget {
   SiteManagementPage({Key key, this.title}) : super(key: key);
@@ -208,6 +208,7 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
 
 
 const dataList = [
+  "场所1",
   "场所2",
   "场所3",
   "场所4",
