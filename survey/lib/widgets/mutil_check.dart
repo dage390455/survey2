@@ -18,11 +18,11 @@ class MutilCheck extends StatefulWidget {
 
   ///获取选中的集合
   getSelecedList() {
-    List<MutilCheckModel> selectedList = [];
+    List<String> selectedList = [];
 
     for (int i = 0; i < dataList.length; i++) {
       if (dataList[i].isChecked) {
-        selectedList.add(dataList[i]);
+        selectedList.add(dataList[i].name);
       }
     }
 
@@ -50,8 +50,11 @@ class _mutilCheckState extends State<MutilCheck> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Padding(
-              child: Text(widget.title),
-              padding: EdgeInsets.all(16.0),
+              child: Text(
+                widget.title,
+                style: TextStyle(fontSize: 17),
+              ),
+              padding: EdgeInsets.fromLTRB(0, 13, 20, 0),
             ),
             Expanded(
               child: Wrap(
@@ -63,7 +66,7 @@ class _mutilCheckState extends State<MutilCheck> {
                       Text(widget.dataList[index].name),
                       Checkbox(
                           tristate: false,
-                          activeColor: Colors.red,
+                          activeColor: Colors.blue,
                           value: widget.dataList[index].isChecked,
                           onChanged: (bool bol) {
                             if (widget.isSingle) {

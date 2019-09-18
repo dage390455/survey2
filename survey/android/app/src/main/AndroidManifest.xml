@@ -48,6 +48,9 @@
         <activity
             android:name="com.sensoro.survey.AdministrativeActivity"
             android:theme="@style/LaunchTheme"></activity>
+        <activity
+            android:name="com.sensoro.survey.DeployMapActivity"
+            android:theme="@style/LaunchTheme"></activity>
         <service android:name="com.amap.api.location.APSService" />
         <activity
             android:name=".wxapi.WXEntryActivity"
