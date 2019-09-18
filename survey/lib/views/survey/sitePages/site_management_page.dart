@@ -43,18 +43,29 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
     }
   }
 
-  void _creatSite() async {
+  void _creatSite(SitePageModel model,bool isCreat) async {
     DataTransferManager.shared.creatModel();
     final result = await Navigator.of(context, rootNavigator: true)
         .push(CupertinoPageRoute(builder: (BuildContext context) {
-      return new CreatSitePage();
+      return new CreatSitePage(fireModel: model,isCreatSite: isCreat);
     }));
 
     if (result != null) {
       SitePageModel name = result as SitePageModel;
 
+      for (int i = 0;i<dataList.length;i++){
+        SitePageModel model = dataList[i];
+        if(model.sitePageModelId == name.sitePageModelId){
+          dataList.removeAt(i);
+          break;
+        }
+      }
+
+
+       dataList.add(name);
+
       // this.name = name;
-      dataList.add(name);
+
       setState(() {});
     }
   }
@@ -267,12 +278,6 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
                                       new SizedBox(
                                         height: 2,
                                       ),
-//                                      Text("",
-//                                          textAlign: TextAlign.start,
-//                                          style: TextStyle(
-//                                              color: prefix0.BLACK_TEXT_COLOR,
-//                                              fontWeight: FontWeight.normal,
-//                                              fontSize: 17)),
                                     ],
                                   ),
                                 ),
@@ -291,7 +296,7 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
                                     textColor: Colors.white,
                                     child: new Text('编辑'),
                                     onPressed: () {
-//                                      _editProject(model);
+                                  _creatSite(dataList[index],true);
                                     },
                                   ),
                                   new RaisedButton(
@@ -377,7 +382,9 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
             child: Padding(
               padding: const EdgeInsets.all(20),
               child: GestureDetector(
-                onTap: _creatSite,
+                onTap: (){
+                  _creatSite(new SitePageModel(),true);
+                },
                 child: Container(
                   alignment: Alignment.center,
                   decoration: BoxDecoration(

@@ -22,14 +22,19 @@ import '../survey_type_page.dart';
 import 'Model/SitePageModel.dart';
 
 class CreatSitePage extends StatefulWidget {
+  SitePageModel fireModel = SitePageModel();
+  bool isCreatSite = false;
+
+  CreatSitePage({this.fireModel,this.isCreatSite});
+
   @override
-  _State createState() => _State();
+  _State createState() => _State(fireModel: fireModel);
 }
 
 class _State extends State<CreatSitePage> {
   BasicMessageChannel<String> _basicMessageChannel =
       BasicMessageChannel("BasicMessageChannelPlugin", StringCodec());
-
+  _State({this.fireModel});
   SitePageModel fireModel = SitePageModel();
   FocusNode blankNode = FocusNode();
   var isCheack = false;
@@ -92,7 +97,7 @@ class _State extends State<CreatSitePage> {
       brightness: Brightness.light,
       backgroundColor: Colors.white,
       title: Text(
-        "新建场所",
+        widget.isCreatSite?"新建场所":"编辑场所",
         style: TextStyle(color: Colors.black),
       ),
       leading: Container(
