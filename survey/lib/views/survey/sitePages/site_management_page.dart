@@ -369,32 +369,32 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
 
           new Offstage(
               offstage: false,
-              child: GestureDetector(
-                onTap: () {
-                  _creatSite();
-                },
-                child: new Padding(
-                  padding: new EdgeInsets.fromLTRB(20, 20, 20, 20),
+              child:
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: GestureDetector(
+                  onTap: _creatSite,
                   child: Container(
                     alignment: Alignment.center,
-//                padding: new EdgeInsets.fromLTRB(20, 10, 10, 20),
-                    height: 60,
-                    decoration: new BoxDecoration(
-                        border: new Border.all(
-                            width: 1.0, color: prefix0.LINE_COLOR)),
-
-                    child: Text(
-                      // "$beginTimeStr ~ $endTimeStr",
-                      "+ 场所  ",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: prefix0.LIGHT_TEXT_COLOR,
-                          fontWeight: FontWeight.normal,
-                          fontSize: 17),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(3.0), //3像素圆角
+                        border: Border.all(color: Colors.grey),
+                        boxShadow: [
+                          //阴影
+                          BoxShadow(color: Colors.white, blurRadius: 4.0)
+                        ]),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                      child: Text(
+                        "+ 场所",
+                        textAlign: TextAlign.start,
+                        style: TextStyle(color: Colors.grey),
+                      ),
                     ),
                   ),
                 ),
-              )),
+              ),
+          ),
 
           //分割线
           Container(
