@@ -18,7 +18,7 @@ import 'package:sensoro_survey/views/survey/editPage/survey_point_structure.dart
 import 'package:sensoro_survey/views/survey/survey_point_information.dart';
 
 import '../survey_type_page.dart';
-
+import 'Model/SitePageModel.dart';
 
 class CreatSitePage extends StatefulWidget {
   @override
@@ -29,7 +29,7 @@ class _State extends State<CreatSitePage> {
   BasicMessageChannel<String> _basicMessageChannel =
       BasicMessageChannel("BasicMessageChannelPlugin", StringCodec());
 
-  ElectricalFireModel fireModel = DataTransferManager.shared.fireCreatModel;
+  SitePageModel fireModel = SitePageModel();
 
   var isCheack = false;
 
@@ -39,15 +39,15 @@ class _State extends State<CreatSitePage> {
     _basicMessageChannel.setMessageHandler((message) => Future<String>(() {
           print(message);
           //message为native传递的数据
-          if(message!=null&&message.isNotEmpty){
+          if (message != null && message.isNotEmpty) {
             List list = message.split(",");
-            if (list.length ==3){
+            if (list.length == 3) {
               setState(() {
                 fireModel.editLongitudeLatitude = list[0] + "," + list[1];
                 fireModel.editPosition = list[2];
+                updateNextButton();
               });
             }
-
           }
           //给Android端的返回值
           return "========================收到Native消息：" + message;
@@ -58,22 +58,19 @@ class _State extends State<CreatSitePage> {
 
   //向native发送消息
   void _sendToNative() {
-
-    var location = "0," + fireModel.editLongitudeLatitude +","+ fireModel.editAddress;
+    var location =
+        "0," + fireModel.editLongitudeLatitude + "," + fireModel.editPosition;
 
     Future<String> future = _basicMessageChannel.send(location);
     future.then((message) {
       print("========================" + message);
     });
-
-
   }
 
   nextStep() async {
     final result = await Navigator.push(
       context,
-      new MaterialPageRoute(
-          builder: (context) => new SurveyTypePage()),
+      new MaterialPageRoute(builder: (context) => new SurveyTypePage()),
     );
 
     if (result != null) {
@@ -103,33 +100,30 @@ class _State extends State<CreatSitePage> {
             // 点击空白页面关闭键盘
             Navigator.pop(context);
           },
-          child:   Text("取消",
-            style: TextStyle(
-                color: Colors.black
-            ),
-
+          child: Text(
+            "取消",
+            style: TextStyle(color: Colors.black),
           ),
         ),
-
       ),
       actions: <Widget>[
         Container(
-          padding:  new EdgeInsets.fromLTRB(0, 0, 20, 0),
+          padding: new EdgeInsets.fromLTRB(0, 0, 20, 0),
           alignment: Alignment.center,
           child: GestureDetector(
             onTap: () {
               // 点击空白页面关闭键盘
-
+              if (this.isCheack) {
+                Navigator.of(context).pop(this.fireModel);
+              }
             },
-            child:   Text("保存",
+            child: Text(
+              "保存",
               style: TextStyle(
-//                color: this.name.length > 0 ? prefix0.GREEN_COLOR : Colors.grey,
-                color: Colors.grey,
+                color: this.isCheack ? prefix0.GREEN_COLOR : Colors.grey,
               ),
-
             ),
           ),
-
         ),
       ],
     );
@@ -139,7 +133,7 @@ class _State extends State<CreatSitePage> {
         context,
         new MaterialPageRoute(
             builder: (context) => new EditContentPage(
-                  name: this.fireModel.editName,
+                  name: this.fireModel.siteName,
                   title: "场所名称",
                   hintText: "请输入场所名称，例如：望京Soho T1",
                   historyKey: "siteCreatHistoryKey",
@@ -149,46 +143,28 @@ class _State extends State<CreatSitePage> {
       if (result != null) {
         String name = result as String;
 
-        this.fireModel.editName = name;
+        this.fireModel.siteName = name;
         updateNextButton();
         setState(() {});
       }
     }
 
     editPurpose() async {
-      final result = await Navigator.push(
-        context,
-        new MaterialPageRoute(
-            builder: (context) => new EditPurposePage(
-                  name: this.fireModel.editPurpose,
-                )),
-      );
-
-      if (result != null) {
-        String name = result as String;
-
-        this.fireModel.editPurpose = name;
-        updateNextButton();
-        setState(() {});
-      }
-    }
-
-    editAddress() async {
-      final result = await Navigator.push(
-        context,
-        new MaterialPageRoute(
-            builder: (context) => new EditAdressPage(
-                  name: this.fireModel.editAddress,
-                )),
-      );
-
-      if (result != null) {
-        String name = result as String;
-
-        this.fireModel.editAddress = name;
-        updateNextButton();
-        setState(() {});
-      }
+//      final result = await Navigator.push(
+//        context,
+//        new MaterialPageRoute(
+//            builder: (context) => new EditPurposePage(
+//                  name: this.fireModel.editPurpose,
+//                )),
+//      );
+//
+//      if (result != null) {
+//        String name = result as String;
+//
+//        this.fireModel.editPurpose = name;
+//        updateNextButton();
+//        setState(() {});
+//      }
     }
 
     editLoction() async {
@@ -209,114 +185,6 @@ class _State extends State<CreatSitePage> {
       _sendToNative();
     }
 
-    editStructure() async {
-      final result = await Navigator.push(
-        context,
-        new MaterialPageRoute(
-            builder: (context) => new SurveyPointStructureEditPage(
-                  name: this.fireModel.editPointStructure,
-                )),
-      );
-
-      if (result != null) {
-        String name = result as String;
-
-        this.fireModel.editPointStructure = name;
-        updateNextButton();
-        setState(() {});
-      }
-    }
-
-    editAre() async {
-      final result = await Navigator.push(
-        context,
-        new MaterialPageRoute(
-            builder: (context) => new SurveyPointAreaEditPage(
-                  name: this.fireModel.editPointArea,
-                )),
-      );
-
-      if (result != null) {
-        String name = result as String;
-
-        this.fireModel.editPointArea = name;
-        updateNextButton();
-        setState(() {});
-      }
-    }
-
-    editheadName() async {
-      final result = await Navigator.push(
-        context,
-        new MaterialPageRoute(
-            builder: (context) => new EditHeadPersonPage(
-                  name: this.fireModel.headPerson,
-                )),
-      );
-
-      if (result != null) {
-        String name = result as String;
-
-        this.fireModel.headPerson = name;
-        updateNextButton();
-        setState(() {});
-      }
-    }
-
-    editheadPhone() async {
-      final result = await Navigator.push(
-        context,
-        new MaterialPageRoute(
-            builder: (context) => new EditHeadPersonPhonePage(
-                  name: this.fireModel.headPhone,
-                )),
-      );
-
-      if (result != null) {
-        String name = result as String;
-
-        this.fireModel.headPhone = name;
-        updateNextButton();
-        setState(() {});
-      }
-    }
-
-    editBossName() async {
-      final result = await Navigator.push(
-        context,
-        new MaterialPageRoute(
-            builder: (context) => new EditBossPersonPage(
-                  name: this.fireModel.bossName,
-                )),
-      );
-
-      if (result != null) {
-        String name = result as String;
-
-        this.fireModel.bossName = name;
-        updateNextButton();
-        setState(() {});
-      }
-    }
-
-    editBossPhone() async {
-      final result = await Navigator.push(
-        context,
-        new MaterialPageRoute(
-            builder: (context) => new EditBossPersonPhonePage(
-                  name: this.fireModel.bossPhone,
-                )),
-      );
-
-      if (result != null) {
-        String name = result as String;
-
-        this.fireModel.bossPhone = name;
-        updateNextButton();
-        setState(() {});
-      }
-    }
-
     Widget container = Container(
       color: Colors.white,
       padding: new EdgeInsets.fromLTRB(20, 0, 20, 0),
@@ -331,20 +199,17 @@ class _State extends State<CreatSitePage> {
               height: 60,
               child: new Row(
                 children: <Widget>[
-                  Text("场所名称",
-                    style: new TextStyle(
-                        fontSize: prefix0.fontsSize
-                    ),
+                  Text(
+                    "场所名称",
+                    style: new TextStyle(fontSize: prefix0.fontsSize),
                   ),
                   Expanded(
                     child: Text(
-                      this.fireModel.editName.length > 0
-                          ? this.fireModel.editName
+                      this.fireModel.siteName.length > 0
+                          ? this.fireModel.siteName
                           : "必填",
                       textAlign: TextAlign.right,
-                      style: new TextStyle(
-                          fontSize: prefix0.fontsSize
-                      ),
+                      style: new TextStyle(fontSize: prefix0.fontsSize),
                     ),
                   ),
                   Image.asset(
@@ -366,20 +231,17 @@ class _State extends State<CreatSitePage> {
               height: 60,
               child: new Row(
                 children: <Widget>[
-                  Text("场所层级",
-                    style: new TextStyle(
-                        fontSize: prefix0.fontsSize
-                    ),
+                  Text(
+                    "场所层级",
+                    style: new TextStyle(fontSize: prefix0.fontsSize),
                   ),
                   Expanded(
                     child: Text(
-                      this.fireModel.editPurpose.length > 0
-                          ? this.fireModel.editPurpose
+                      this.fireModel.siteName.length > 0
+                          ? this.fireModel.siteName
                           : "必填",
                       textAlign: TextAlign.right,
-                      style: new TextStyle(
-                          fontSize: prefix0.fontsSize
-                      ),
+                      style: new TextStyle(fontSize: prefix0.fontsSize),
                     ),
                   ),
                   Image.asset(
@@ -394,7 +256,6 @@ class _State extends State<CreatSitePage> {
             color: prefix0.LINE_COLOR,
             height: 1,
           ),
-
           GestureDetector(
             onTap: editLoction, //写入方法名称就可以了，但是是无参的
             child: Container(
@@ -402,10 +263,9 @@ class _State extends State<CreatSitePage> {
               height: 60,
               child: new Row(
                 children: <Widget>[
-                  Text("行政区域",
-                    style: new TextStyle(
-                        fontSize: prefix0.fontsSize
-                    ),
+                  Text(
+                    "行政区域",
+                    style: new TextStyle(fontSize: prefix0.fontsSize),
                   ),
                   Expanded(
                     child: Text(
@@ -413,9 +273,7 @@ class _State extends State<CreatSitePage> {
                           ? this.fireModel.editPosition
                           : "必填",
                       textAlign: TextAlign.right,
-                      style: new TextStyle(
-                          fontSize: prefix0.fontsSize
-                      ),
+                      style: new TextStyle(fontSize: prefix0.fontsSize),
                     ),
                   ),
                   Image.asset(
@@ -430,8 +288,6 @@ class _State extends State<CreatSitePage> {
       ),
     );
 
-
-
     Widget bigContainer = Container(
       color: prefix0.LIGHT_LINE_COLOR,
       padding: new EdgeInsets.fromLTRB(0, 0, 0, 0),
@@ -442,7 +298,6 @@ class _State extends State<CreatSitePage> {
             padding: new EdgeInsets.fromLTRB(0, 0, 0, 0),
             child: container,
           ),
-
         ],
       ),
     );
@@ -450,14 +305,13 @@ class _State extends State<CreatSitePage> {
     return Scaffold(
       appBar: NavBar,
       body: bigContainer,
-
     );
   }
 
   updateNextButton() {
-    if (fireModel.editName.length > 0 &&
-        fireModel.headPerson.length > 0 &&
-        fireModel.headPhone.length > 0) {
+    if (fireModel.siteName.length > 0 &&
+//        fireModel.siteName.length > 0 &&
+        fireModel.editPosition.length > 0) {
       this.isCheack = true;
     } else {
       this.isCheack = false;

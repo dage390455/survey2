@@ -4,6 +4,7 @@ import 'package:sensoro_survey/generated/customCalendar/lib/controller.dart';
 import 'package:sensoro_survey/views/survey/common/data_transfer_manager.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 import 'package:sensoro_survey/views/survey/management_page.dart';
+import 'package:sensoro_survey/views/survey/sitePages/Model/SitePageModel.dart';
 import 'package:sensoro_survey/views/survey/sitePages/creat_site_page.dart';
 
 import '../const.dart';
@@ -25,7 +26,7 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
   String dateFilterStr = "";
   CalendarController controller;
   TextEditingController searchController = TextEditingController();
-
+  List<SitePageModel> dataList = [];
   void _startManagePage(String data) async {
     DataTransferManager.shared.creatModel();
     final result = await Navigator.of(context, rootNavigator: true)
@@ -49,9 +50,10 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
     }));
 
     if (result != null) {
-      String name = result as String;
-      if (name == "refreshList") {}
+      SitePageModel name = result as SitePageModel;
+
       // this.name = name;
+      dataList.add(name);
       setState(() {});
     }
   }
@@ -171,7 +173,7 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
                   height: 120,
                   // fit: BoxFit.fitWidth,
                 ),
-                Text("没有任何已创建的项目，请添加一个新项目",
+                Text("暂无场所",
                     textAlign: TextAlign.start,
                     style: TextStyle(
                         color: prefix0.LIGHT_TEXT_COLOR,
@@ -252,7 +254,7 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
                                     children: <Widget>[
                                       //这个位置用ListTile就会报错
                                       // Expanded(
-                                      Text(dataList[index],
+                                      Text(dataList[index].siteName,
                                           textAlign: TextAlign.start,
                                           style: TextStyle(
                                               color: prefix0.BLACK_TEXT_COLOR,
@@ -294,7 +296,7 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
                                     textColor: Colors.white,
                                     child: new Text('管理'),
                                     onPressed: () {
-                                      _startManagePage(dataList[index]);
+                                      _startManagePage(dataList[index].siteName);
                                     },
                                   ),
 //                                  new RaisedButton(
@@ -413,4 +415,4 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
   }
 }
 
-const dataList = ["场所1", "场所2", "场所3", "场所4", "场所5", "场所6", "场所7", "场所8"];
+//const dataList = ["场所1", "场所2", "场所3", "场所4", "场所5", "场所6", "场所7", "场所8"];
