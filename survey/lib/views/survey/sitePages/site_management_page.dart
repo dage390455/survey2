@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:sensoro_survey/generated/customCalendar/lib/controller.dart';
 import 'package:sensoro_survey/views/survey/common/data_transfer_manager.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
-import 'package:sensoro_survey/views/survey/management_page.dart';
 import 'package:sensoro_survey/views/survey/sitePages/Model/SitePageModel.dart';
 import 'package:sensoro_survey/views/survey/sitePages/creat_site_page.dart';
+import 'package:sensoro_survey/views/survey/sitePages/management_page.dart';
 
 import '../const.dart';
 
