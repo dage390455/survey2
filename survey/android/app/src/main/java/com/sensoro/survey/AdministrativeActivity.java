@@ -258,69 +258,69 @@ public class AdministrativeActivity extends Activity implements AMap.OnCameraCha
 
 
         administrativeAreasTv.setText(stringBuffer.toString());
-        administrativeAreasTv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-                pickerViewUtil.showPickerView(AdministrativeActivity.this, administrativeAreasTv.getText().toString());
-                pickerViewUtil.setOnPickerViewResListener(new PickerViewUtil.OnPickerViewResListener() {
-                    @Override
-                    public void onSelectedRes(String res) {
-                        administrativeAreasTv.setText(res);
-
-                        // TODO: 2019-09-17 移动地图
-
-                        GeocodeSearch geocodeSearch = new GeocodeSearch(AdministrativeActivity.this);
-                        geocodeSearch.setOnGeocodeSearchListener(new GeocodeSearch.OnGeocodeSearchListener() {
-                            @Override
-                            public void onRegeocodeSearched(RegeocodeResult regeocodeResult, int i) {
-
-                            }
-
-                            @Override
-                            public void onGeocodeSearched(GeocodeResult geocodeResult, int i) {
-
-                                if (i == 1000) {
-                                    if (geocodeResult != null && geocodeResult.getGeocodeAddressList() != null &&
-
-                                            geocodeResult.getGeocodeAddressList().size() > 0) {
-                                        GeocodeAddress geocodeAddress = geocodeResult.getGeocodeAddressList().get(0);
-
-                                        double latitude = geocodeAddress.getLatLonPoint().getLatitude();//纬度
-
-                                        double longititude = geocodeAddress.getLatLonPoint().getLongitude();//经度
-
-
-                                        LatLng latLng = new LatLng(latitude, longititude);
-                                        //可视化区域，将指定位置指定到屏幕中心位置
-                                        CameraUpdate update = CameraUpdateFactory
-                                                .newCameraPosition(new CameraPosition(latLng, 15, 0, 0));
-                                        aMap.moveCamera(update);
-                                        if (locationMarker != null) {
-                                            locationMarker.setPosition(latLng);
-                                        }
-
-                                    } else {
-
-                                        Toast.makeText(AdministrativeActivity.this, "地名出错", Toast.LENGTH_SHORT).show();
-
-
-                                    }
-
-                                }
-                            }
-                        });
-
-                        GeocodeQuery geocodeQuery = new GeocodeQuery(res, "29");
-                        geocodeSearch.getFromLocationNameAsyn(geocodeQuery);
-
-
-                    }
-                });
-
-            }
-        });
+//        administrativeAreasTv.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//
+//                pickerViewUtil.showPickerView(AdministrativeActivity.this, administrativeAreasTv.getText().toString());
+//                pickerViewUtil.setOnPickerViewResListener(new PickerViewUtil.OnPickerViewResListener() {
+//                    @Override
+//                    public void onSelectedRes(String res) {
+//                        administrativeAreasTv.setText(res);
+//
+//                        // TODO: 2019-09-17 移动地图
+//
+//                        GeocodeSearch geocodeSearch = new GeocodeSearch(AdministrativeActivity.this);
+//                        geocodeSearch.setOnGeocodeSearchListener(new GeocodeSearch.OnGeocodeSearchListener() {
+//                            @Override
+//                            public void onRegeocodeSearched(RegeocodeResult regeocodeResult, int i) {
+//
+//                            }
+//
+//                            @Override
+//                            public void onGeocodeSearched(GeocodeResult geocodeResult, int i) {
+//
+//                                if (i == 1000) {
+//                                    if (geocodeResult != null && geocodeResult.getGeocodeAddressList() != null &&
+//
+//                                            geocodeResult.getGeocodeAddressList().size() > 0) {
+//                                        GeocodeAddress geocodeAddress = geocodeResult.getGeocodeAddressList().get(0);
+//
+//                                        double latitude = geocodeAddress.getLatLonPoint().getLatitude();//纬度
+//
+//                                        double longititude = geocodeAddress.getLatLonPoint().getLongitude();//经度
+//
+//
+//                                        LatLng latLng = new LatLng(latitude, longititude);
+//                                        //可视化区域，将指定位置指定到屏幕中心位置
+//                                        CameraUpdate update = CameraUpdateFactory
+//                                                .newCameraPosition(new CameraPosition(latLng, 15, 0, 0));
+//                                        aMap.moveCamera(update);
+//                                        if (locationMarker != null) {
+//                                            locationMarker.setPosition(latLng);
+//                                        }
+//
+//                                    } else {
+//
+//                                        Toast.makeText(AdministrativeActivity.this, "地名出错", Toast.LENGTH_SHORT).show();
+//
+//
+//                                    }
+//
+//                                }
+//                            }
+//                        });
+//
+//                        GeocodeQuery geocodeQuery = new GeocodeQuery(res, "29");
+//                        geocodeSearch.getFromLocationNameAsyn(geocodeQuery);
+//
+//
+//                    }
+//                });
+//
+//            }
+//        });
         //
         //
         String township = regeocodeAddress.getTownship();// 乡镇

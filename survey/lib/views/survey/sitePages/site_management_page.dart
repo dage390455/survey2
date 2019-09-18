@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:sensoro_survey/generated/customCalendar/lib/controller.dart';
 import 'package:sensoro_survey/views/survey/common/data_transfer_manager.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
+import 'package:sensoro_survey/views/survey/management_page.dart';
 import 'package:sensoro_survey/views/survey/sitePages/creat_site_page.dart';
 
 import '../const.dart';
@@ -25,6 +26,21 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
   CalendarController controller;
   TextEditingController searchController = TextEditingController();
 
+  void _startManagePage(String data) async {
+    DataTransferManager.shared.creatModel();
+    final result = await Navigator.of(context, rootNavigator: true)
+        .push(CupertinoPageRoute(builder: (BuildContext context) {
+      return new ManagementPage(title: data);
+    }));
+
+    if (result != null) {
+      String name = result as String;
+      if (name == "refreshList") {}
+      // this.name = name;
+      setState(() {});
+    }
+  }
+
   void _creatSite() async {
     DataTransferManager.shared.creatModel();
     final result = await Navigator.of(context, rootNavigator: true)
@@ -34,9 +50,7 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
 
     if (result != null) {
       String name = result as String;
-      if (name == "refreshList") {
-
-      }
+      if (name == "refreshList") {}
       // this.name = name;
       setState(() {});
     }
@@ -280,7 +294,7 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
                                     textColor: Colors.white,
                                     child: new Text('管理'),
                                     onPressed: () {
-//                                      _outputDocument(index);
+                                      _startManagePage(dataList[index]);
                                     },
                                   ),
 //                                  new RaisedButton(
@@ -354,38 +368,33 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
           ),
 
           new Offstage(
-            offstage: false,
-            child:GestureDetector(
-              onTap: (){
-                _creatSite();
-              },
-              child: new Padding(
-                padding:new EdgeInsets.fromLTRB(20, 20, 20, 20) ,
-                child: Container(
-                  alignment: Alignment.center,
+              offstage: false,
+              child: GestureDetector(
+                onTap: () {
+                  _creatSite();
+                },
+                child: new Padding(
+                  padding: new EdgeInsets.fromLTRB(20, 20, 20, 20),
+                  child: Container(
+                    alignment: Alignment.center,
 //                padding: new EdgeInsets.fromLTRB(20, 10, 10, 20),
-                  height: 60,
-                  decoration: new BoxDecoration(
-                      border: new Border.all(
-                          width: 1.0,
-                          color: prefix0.LINE_COLOR)),
+                    height: 60,
+                    decoration: new BoxDecoration(
+                        border: new Border.all(
+                            width: 1.0, color: prefix0.LINE_COLOR)),
 
-
-
-                  child: Text(
-                    // "$beginTimeStr ~ $endTimeStr",
-                    "+ 场所  ",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: prefix0.LIGHT_TEXT_COLOR,
-                        fontWeight: FontWeight.normal,
-                        fontSize: 17),
+                    child: Text(
+                      // "$beginTimeStr ~ $endTimeStr",
+                      "+ 场所  ",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: prefix0.LIGHT_TEXT_COLOR,
+                          fontWeight: FontWeight.normal,
+                          fontSize: 17),
+                    ),
                   ),
-                ) ,
-              ),
-            )
-
-          ),
+                ),
+              )),
 
           //分割线
           Container(

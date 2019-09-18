@@ -130,7 +130,7 @@ public class MainActivity extends FlutterActivity {
                 if (o != null) {
                     String location = o + "";
                     String[] strArr = location.split(",");
-                    Intent intent = new Intent(MainActivity.this, DeployMapActivity.class);
+                    Intent intent = new Intent(MainActivity.this, AdministrativeActivity.class);
                     if (strArr.length == 4) {
                         intent.putExtra("isReadOnly", strArr[0]);
                         intent.putExtra("lan", strArr[1]);
