@@ -133,7 +133,7 @@ class _PointListPageState extends State<PointListPage> {
   }
 
   void getConfigureListNetCall() async {
-    String urlStr = NetConfig.riskUrl1;
+    String urlStr = NetConfig.riskUrl;
     Map<String, dynamic> headers = {};
     Map<String, dynamic> params = {};
 

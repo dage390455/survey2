@@ -333,7 +333,7 @@ class _State extends State<HomePage> {
   }
 
   void getConfigureListNetCall() async {
-    String urlStr = NetConfig.riskUrl1;
+    String urlStr = NetConfig.riskUrl;
     Map<String, dynamic> headers = {};
     Map<String, dynamic> params = {};
 
