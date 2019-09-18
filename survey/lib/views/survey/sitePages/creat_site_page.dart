@@ -186,12 +186,10 @@ class _State extends State<CreatSitePage> {
       _sendToNative();
     }
 
-    String _getAreaString(){
-
-      switch(fireModel.siteType){
-
+    String _getAreaString() {
+      switch (fireModel.siteType) {
         case SiteType.area:
-           return "区域";
+          return "区域";
           break;
         case SiteType.building:
           return "建筑";
@@ -200,7 +198,6 @@ class _State extends State<CreatSitePage> {
           return "请选择场所层级";
           break;
       }
-
     }
 
     Widget container = Container(
@@ -242,32 +239,98 @@ class _State extends State<CreatSitePage> {
             color: prefix0.LINE_COLOR,
             height: 1,
           ),
-          GestureDetector(
-            onTap: editPurpose, //写入方法名称就可以了，但是是无参的
-            child: Container(
-              alignment: Alignment.center,
-              height: 60,
-              child: new Row(
-                children: <Widget>[
-                  Text(
-                    "场所层级",
-                    style: new TextStyle(fontSize: prefix0.fontsSize),
-                  ),
-                  Expanded(
-                    child: Text(
-                      _getAreaString(),
+//          GestureDetector(
+//            onTap: editPurpose, //写入方法名称就可以了，但是是无参的
+//            child: Container(
+//              alignment: Alignment.center,
+//              height: 60,
+//              child: new Row(
+//                children: <Widget>[
+//                  Text(
+//                    "场所层级",
+//                    style: new TextStyle(fontSize: prefix0.fontsSize),
+//                  ),
+//                  Expanded(
+//                    child: Text(
+//                      _getAreaString(),
+//                      textAlign: TextAlign.right,
+//                      style: new TextStyle(fontSize: prefix0.fontsSize),
+//                    ),
+//                  ),
+//                  Image.asset(
+//                    "assets/images/arrow_folddown.png",
+//                    width: 20,
+//                  )
+//                ],
+//              ),
+//            ),
+//          ),
+
+          new Container(
+            alignment: Alignment.center,
+            height: 60,
+            child: Center(
+              child: PopupMenuButton(
+//              icon: Icon(Icons.home),
+                child: new Row(
+                  children: <Widget>[
+                    Text(
+                      "场所层级",
                       textAlign: TextAlign.right,
-                      style: new TextStyle(fontSize: prefix0.fontsSize),
+                      style: TextStyle(color: Colors.black, fontSize: 17),
                     ),
-                  ),
-                  Image.asset(
-                    "assets/images/arrow_folddown.png",
-                    width: 20,
-                  )
-                ],
+                    Expanded(
+                      child: Text(
+                        _getAreaString(),
+                        textAlign: TextAlign.right,
+                        style: TextStyle(color: Colors.black, fontSize: 17),
+                      ),
+                    ),
+                    Image.asset(
+                      "assets/images/arrow_folddown.png",
+                      width: 20,
+                    )
+                  ],
+                ),
+                tooltip: "长按提示",
+                initialValue: "hot",
+                offset: Offset(0.2, 0),
+                padding:
+                    EdgeInsets.only(top: 0.0, bottom: 0, left: 100, right: 0),
+
+                itemBuilder: (BuildContext context) {
+                  return <PopupMenuItem<String>>[
+                    PopupMenuItem<String>(
+                      child: Text("区域"),
+                      value: "1",
+                    ),
+                    PopupMenuItem<String>(
+                      child: Text("建筑"),
+                      value: "0",
+                    ),
+                  ];
+                },
+
+                onSelected: (String s) {
+                  switch (s) {
+                    case "1":
+                      fireModel.siteType = SiteType.area;
+                      break;
+                    case "0":
+                      fireModel.siteType = SiteType.building;
+                      break;
+                  }
+                  setState(() {
+                    // choosedModel = cars[int.parse(action)];
+                  });
+                },
+                onCanceled: () {
+                  print("onCanceled");
+                },
               ),
             ),
           ),
+
           Container(
             color: prefix0.LINE_COLOR,
             height: 1,
@@ -353,11 +416,9 @@ class _State extends State<CreatSitePage> {
               ],
             ),
           ),
-
           Padding(
             padding: new EdgeInsets.fromLTRB(0, 0, 0, 100),
           )
-
         ],
       ),
     );
@@ -370,7 +431,7 @@ class _State extends State<CreatSitePage> {
 
   updateNextButton() {
     if (fireModel.siteName.length > 0 &&
-//        fireModel.siteName.length > 0 &&
+        fireModel.siteType != SiteType.unkonw &&
         fireModel.editPosition.length > 0) {
       this.isCheack = true;
     } else {
