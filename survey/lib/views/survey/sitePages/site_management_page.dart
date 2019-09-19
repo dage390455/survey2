@@ -9,6 +9,7 @@ import 'package:sensoro_survey/views/survey/sitePages/creat_site_page.dart';
 import 'package:sensoro_survey/views/survey/sitePages/management_page.dart';
 
 import '../const.dart';
+import 'dynamic_creat_page.dart';
 
 class SiteManagementPage extends StatefulWidget {
   SiteManagementPage({Key key, this.title}) : super(key: key);
@@ -70,6 +71,23 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
       setState(() {});
     }
   }
+
+
+  void _createDynamic() async {
+
+    final result = await Navigator.of(context, rootNavigator: true)
+        .push(CupertinoPageRoute(builder: (BuildContext context) {
+      return new DynamicCreatePage();
+    }));
+
+    if (result != null) {
+
+
+      setState(() {});
+    }
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -158,11 +176,7 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
               // height: 20,
             ),
             onPressed: () {
-//              _showCalendar();
-//              eventChannel
-//                  .receiveBroadcastStream("showCalendar")
-//                  .listen(_onEvent, onError: _onError);
-              // do nothing
+              _createDynamic();
             }),
       ],
     );
@@ -350,7 +364,8 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
                       "assets/images/close_black.png",
                       color: Colors.black,
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                    },
                   ),
                 ],
               ),
