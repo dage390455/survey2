@@ -13,7 +13,6 @@ import 'package:sensoro_survey/model/mutilcheck_model.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 import 'package:sensoro_survey/widgets/mutil_check.dart';
 import 'package:sensoro_survey/widgets/text_input.dart';
-
 import '../../pic_swiper.dart';
 
 //适配多种控件的配置
@@ -475,7 +474,9 @@ class itemClassState extends State<itemClass> {
         child: new Container(
           alignment: Alignment.center,
           height: 60,
+          // child: Expanded(
           child: new Row(
+            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(
                 this.model.variable_name,
@@ -484,9 +485,11 @@ class itemClassState extends State<itemClass> {
               ),
               Expanded(
                 child: Text(
-                  model.variable_value.length > 0
-                      ? model.variable_value
-                      : model.is_required == "YES" ? "必填" : "",
+                  // model.variable_value.length > 0
+                  //     ? model.variable_value
+                  //     : model.is_required == "YES" ? "必填" : "",
+
+                  model.variable_value.length > 0 ? model.variable_value : "",
                   textAlign: TextAlign.right,
                   style: TextStyle(color: Colors.black, fontSize: 17),
                 ),
@@ -497,6 +500,7 @@ class itemClassState extends State<itemClass> {
               )
             ],
           ),
+          // ),
         ));
     MutilCheck ratioContainer = MutilCheck(
       title: model.variable_name,
