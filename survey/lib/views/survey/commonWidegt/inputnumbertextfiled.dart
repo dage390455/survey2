@@ -1,15 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 
 class inputnumbertextfiled extends StatefulWidget {
   final String title;
-  final int intputType;
+  final int intputtype;
   final callbacktext;
   final onChanged;
+  TextEditingController _editingController = TextEditingController();
 
-  const inputnumbertextfiled(
-      {Key key, this.title, this.intputType, this.callbacktext, this.onChanged})
+  inputnumbertextfiled(
+      {Key key, this.title, this.intputtype, this.callbacktext, this.onChanged})
       : super(key: key);
 
   @override
@@ -19,13 +21,11 @@ class inputnumbertextfiled extends StatefulWidget {
 }
 
 class _inputnumbertextfiledState extends State<inputnumbertextfiled> {
-  final TextEditingController _editingController = TextEditingController();
-
   @override
   void initState() {
     super.initState();
-    _editingController.addListener(() {
-      widget.callbacktext(_editingController.text);
+    widget._editingController.addListener(() {
+      widget.callbacktext(widget._editingController.text);
     });
   }
 
@@ -43,16 +43,18 @@ class _inputnumbertextfiledState extends State<inputnumbertextfiled> {
             ),
             Expanded(
               child: TextField(
-                controller: _editingController,
+                controller: widget._editingController,
                 onChanged: (v) {
                   widget.onChanged(v);
                 },
 
-//                inputFormatters: [
-//                  widget.intputType == 0
-//                      ? WhitelistingTextInputFormatter.digitsOnly
-//                      : null
-//                ],
+                keyboardType: widget.intputtype == 1
+                    ? TextInputType.number
+                    : TextInputType.text,
+
+                inputFormatters: widget.intputtype == 1
+                    ? [WhitelistingTextInputFormatter.digitsOnly]
+                    : null,
                 //只允许输入数字
                 textAlign: TextAlign.right,
                 decoration: InputDecoration(
