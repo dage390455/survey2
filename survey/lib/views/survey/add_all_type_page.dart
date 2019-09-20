@@ -58,6 +58,8 @@ class _AddAllPageState1 extends State<AddAllPage1> {
   bool isErrorShowing = false;
   String errorInfo = "";
   String name1 = "";
+  int selectIndex;
+  componentModel selectModel;
 
   TextEditingController step1remarkController = TextEditingController();
   BasicMessageChannel<String> _basicMessageChannel =
@@ -94,37 +96,37 @@ class _AddAllPageState1 extends State<AddAllPage1> {
     }
 
     // if (this.model.comp_code == "map_location") {
-    //   _basicMessageChannel.setMessageHandler((message) => Future<String>(() {
-    //         print(message);
-    //         //message为native传递的数据
-    //         if (message != null && message.isNotEmpty) {
-    //           List list = message.split(",");
-    //           if (list.length == 3) {
-    //             if (this.model.comp_code == "map_location") {
-    //               if (extraInfo == null) {
-    //                 extraInfo = new Map();
-    //               }
-    //               extraInfo["editLongitudeLatitude"] = list[0] + "," + list[1];
-    //               this.model.variable_value = list[2];
+    _basicMessageChannel.setMessageHandler((message) => Future<String>(() {
+          print(message);
+          //message为native传递的数据
+          if (message != null && message.isNotEmpty) {
+            List list = message.split(",");
+            if (list.length == 3) {
+              if (selectModel.comp_code == "map_location") {
+                if (extraInfo == null) {
+                  extraInfo = new Map();
+                }
+                extraInfo["editLongitudeLatitude"] = list[0] + "," + list[1];
+                selectModel.variable_value = list[2];
 
-    //               setState(() {});
-    //             }
-    //           }
-    //         }
-    //         //给Android端的返回值
-    //         return "========================收到Native消息：" + message;
-    //       }));
+                setState(() {});
+              }
+            }
+          }
+          //给Android端的返回值
+          return "========================收到Native消息：" + message;
+        }));
     // }
 
     // if (this.model.comp_code == "photo") {
-    //   _takePicBasicMessageChannel
-    //       .setMessageHandler((message) => Future<String>(() {
-    //             print(message);
-    //             //message为native传递的数据
-    //             _resentpics(message);
-    //             //给Android端的返回值
-    //             return "========================收到Native消息：" + message;
-    //           }));
+    _takePicBasicMessageChannel
+        .setMessageHandler((message) => Future<String>(() {
+              print(message);
+              //message为native传递的数据
+              _resentpics(message);
+              //给Android端的返回值
+              return "========================收到Native消息：" + message;
+            }));
     // }
 
     super.initState();
@@ -196,6 +198,7 @@ class _AddAllPageState1 extends State<AddAllPage1> {
           errorInfo = "请填写${model.variable_name}";
           showErrorMsg(errorInfo);
         });
+        return;
       }
     }
 
@@ -344,7 +347,10 @@ class _AddAllPageState1 extends State<AddAllPage1> {
       List<String> optionList = model.options.split(";");
 
       Widget mapContainer = GestureDetector(
-        onTap: editLoction, //写入方法名称就可以了，但是是无参的
+        onTap: () {
+          selectModel = model;
+          editLoction();
+        }, //写入方法名称就可以了，但是是无参的
         child: Container(
           alignment: Alignment.center,
           height: 60,
@@ -799,7 +805,7 @@ class _AddAllPageState1 extends State<AddAllPage1> {
                 const EdgeInsets.only(top: 0.0, bottom: 0, left: 20, right: 20),
             child: new Column(children: <Widget>[
               itemDraw(model),
-              //由于绘制顺序的问题，单独类绘制的方式有BUG，放弃,绘制都写在同一个build里
+              //由于绘制顺序的问题，单独类绘制的方式有BUG，暂弃用,绘制都写在同一个build里
               // itemClass(model: model),
 
               //   //分割线

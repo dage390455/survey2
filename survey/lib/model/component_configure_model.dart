@@ -10,8 +10,8 @@ class componentModel {
   String placeholder;
   String validate_rule; //正则表达式
   String type; //所属业务类型
-  double page_no;
-  double order_no;
+  int page_no;
+  int order_no;
   String page_name;
   String data_url; //数据URL
   // Map<String, dynamic> extraInfo;
