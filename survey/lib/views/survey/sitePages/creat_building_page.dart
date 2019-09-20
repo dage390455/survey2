@@ -205,6 +205,7 @@ class _State extends State<CreatbuildingPage> {
           ),
           inputnumbertextfiled(
             title: "建筑面积(㎡)",
+            intputtype: 0,
             onChanged: (text) {},
             callbacktext: (text) {},
           ),
@@ -214,6 +215,7 @@ class _State extends State<CreatbuildingPage> {
           ),
           inputnumbertextfiled(
             title: "建筑高度(m)",
+            intputtype: 1,
             callbacktext: (text) {
               print(text + "建筑高度");
             },
@@ -224,7 +226,7 @@ class _State extends State<CreatbuildingPage> {
           ),
           inputnumbertextfiled(
             title: "地上楼层数(层)",
-            intputType: 1,
+            intputtype: 1,
             callbacktext: (text) {
               print(text + "地上楼层数");
             },
@@ -235,7 +237,7 @@ class _State extends State<CreatbuildingPage> {
           ),
           inputnumbertextfiled(
             title: "地下楼层数(层)",
-            intputType: 0,
+            intputtype: 1,
             callbacktext: (text) {
               print(text + "地下楼层数");
             },
