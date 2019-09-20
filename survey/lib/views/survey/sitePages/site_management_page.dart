@@ -71,6 +71,19 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
 
       setState(() {});
     }
+
+
+
+  }
+
+  _getData(){
+
+    for (int i = 0;i<5;i++){
+      var sitePage =  new SitePageModel();
+      sitePage.siteName = "望京soho T1";
+
+      dataList.add(sitePage);
+    }
   }
 
   void _createDynamic() async {
@@ -82,6 +95,14 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
     if (result != null) {
       setState(() {});
     }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+
+    super.initState();
+    _getData();
   }
 
   @override
@@ -245,14 +266,14 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
                   ]),
             ),
             secondaryActions: <Widget>[
-              IconSlideAction(
-                caption: '删除',
-                color: Colors.red,
-                icon: Icons.delete,
-                onTap: () => setState(() {
-                  dataList.removeAt(index);
-                }),
-              ),
+//              IconSlideAction(
+//                caption: '删除',
+//                color: Colors.red,
+//                icon: Icons.delete,
+//                onTap: () => setState(() {
+//                  dataList.removeAt(index);
+//                }),
+//              ),
             ],
           );
         });
@@ -264,7 +285,7 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
     Widget bodyContiner = new Container(
       color: Colors.white,
       // height: 140, //高度不填会自适应
-      padding: const EdgeInsets.only(top: 0.0, bottom: 0, left: 0, right: 0),
+      padding: const EdgeInsets.only(top: 0.0, bottom: 120, left: 0, right: 0),
       child: Column(
         //这行决定了左对齐
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -342,7 +363,7 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
             child: Padding(
               padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
               child: Text(
-                "+ 场所",
+                "+ 区域",
                 textAlign: TextAlign.start,
                 style: TextStyle(color: Colors.grey),
               ),

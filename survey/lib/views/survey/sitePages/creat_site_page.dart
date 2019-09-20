@@ -97,7 +97,7 @@ class _State extends State<CreatSitePage> {
       brightness: Brightness.light,
       backgroundColor: Colors.white,
       title: Text(
-        widget.isCreatSite?"新建场所":"编辑场所",
+        widget.isCreatSite?"新建区域":"编辑区域",
         style: TextStyle(color: Colors.black),
       ),
       leading: Container(
@@ -127,7 +127,7 @@ class _State extends State<CreatSitePage> {
             child: Padding(
               padding: new EdgeInsets.fromLTRB(20, 20, 20, 20),
               child: Text(
-                "保存",
+                "完成",
                 style: TextStyle(
                   color: this.isCheack ? prefix0.GREEN_COLOR : Colors.grey,
                 ),
