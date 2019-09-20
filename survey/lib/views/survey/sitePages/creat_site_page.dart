@@ -216,34 +216,37 @@ class _State extends State<CreatSitePage> {
 //           mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          GestureDetector(
-            onTap: editName, //写入方法名称就可以了，但是是无参的
-            child: Container(
-              alignment: Alignment.center,
-              height: 60,
-              child: new Row(
-                children: <Widget>[
-                  Text(
-                    "场所名称",
-                    style: new TextStyle(fontSize: prefix0.fontsSize),
-                  ),
-                  Expanded(
-                    child: Text(
-                      this.fireModel.siteName.length > 0
-                          ? this.fireModel.siteName
-                          : "必填",
-                      textAlign: TextAlign.right,
-                      style: new TextStyle(fontSize: prefix0.fontsSize),
-                    ),
-                  ),
-                  Image.asset(
-                    "assets/images/right_arrar.png",
-                    width: 20,
-                  )
-                ],
-              ),
-            ),
-          ),
+//          GestureDetector(
+//            onTap: editName, //写入方法名称就可以了，但是是无参的
+//            child: Container(
+//              alignment: Alignment.center,
+//              height: 60,
+//              child: new Row(
+//                children: <Widget>[
+//                  Text(
+//                    "场所名称",
+//                    style: new TextStyle(fontSize: prefix0.fontsSize),
+//                  ),
+//                  Expanded(
+//                    child: Text(
+//                      this.fireModel.siteName.length > 0
+//                          ? this.fireModel.siteName
+//                          : "必填",
+//                      textAlign: TextAlign.right,
+//                      style: new TextStyle(fontSize: prefix0.fontsSize),
+//                    ),
+//                  ),
+//                  Image.asset(
+//                    "assets/images/right_arrar.png",
+//                    width: 20,
+//                  )
+//                ],
+//              ),
+//            ),
+//          ),
+
+
+
           Container(
             color: prefix0.LINE_COLOR,
             height: 1,
