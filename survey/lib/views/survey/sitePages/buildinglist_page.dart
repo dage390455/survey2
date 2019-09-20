@@ -25,6 +25,7 @@ class _BuildingListPageState extends State<BuildingListPage> {
     listmodel = sitePageModel.listplace;
   }
 
+  ///新建建筑
   void _creatbuilding() async {
     final result = await Navigator.of(context, rootNavigator: true)
         .push(CupertinoPageRoute(builder: (BuildContext context) {
@@ -36,6 +37,20 @@ class _BuildingListPageState extends State<BuildingListPage> {
       listmodel.add(sitePageModel);
       setState(() {});
     }
+  }
+
+  ///区域
+  void _openEreaPage() async {
+//    final result = await Navigator.of(context, rootNavigator: true)
+//        .push(CupertinoPageRoute(builder: (BuildContext context) {
+//      return new CreatbuildingPage();
+//    }));
+//
+//    if (result != null) {
+//      SitePageModel sitePageModel = result as SitePageModel;
+//      listmodel.add(sitePageModel);
+//      setState(() {});
+//    }
   }
 
   @override
@@ -185,6 +200,23 @@ class _BuildingListPageState extends State<BuildingListPage> {
               Navigator.pop(context);
             },
           ),
+          actions: <Widget>[
+            Container(
+              padding: new EdgeInsets.fromLTRB(0, 0, 20, 0),
+              alignment: Alignment.center,
+              child: GestureDetector(
+                onTap: () {
+                  _openEreaPage();
+                },
+                child: Text(
+                  "详情",
+                  style: TextStyle(
+                    color: prefix0.GREEN_COLOR,
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
         body: body);
   }

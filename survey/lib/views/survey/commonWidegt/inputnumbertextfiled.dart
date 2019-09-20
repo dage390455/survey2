@@ -55,7 +55,9 @@ class _inputnumbertextfiledState extends State<inputnumbertextfiled> {
                     : TextInputType.text,
 
                 inputFormatters: widget.intputtype == 1
-                    ? [WhitelistingTextInputFormatter.digitsOnly]
+                    ? [
+                        WhitelistingTextInputFormatter(RegExp("[0-9.]")),
+                      ]
                     : null,
                 //只允许输入数字
                 textAlign: TextAlign.right,
