@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:sensoro_survey/model/electrical_fire_model.dart';
 import 'package:sensoro_survey/views/survey/SurveyPointInformation/survay_electrical_fire.dart';
 import 'package:sensoro_survey/views/survey/common/data_transfer_manager.dart';
+import 'package:sensoro_survey/views/survey/commonWidegt/inputnumbertextfiled.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 import 'package:sensoro_survey/views/survey/editPage/edit_address_page.dart';
 import 'package:sensoro_survey/views/survey/editPage/edit_boss_person_page.dart';
@@ -244,7 +245,13 @@ class _State extends State<CreatSitePage> {
 //              ),
 //            ),
 //          ),
-
+          inputnumbertextfiled(
+            title: "区域名称",
+            intputtype: 0,
+            callbacktext: (text) {
+              print(text + "请输入区域名称");
+            },
+          ),
 
 
           Container(
