@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:sensoro_survey/generated/customCalendar/lib/controller.dart';
+import 'package:sensoro_survey/views/survey/SharedView/SearchView.dart';
 import 'package:sensoro_survey/views/survey/common/data_transfer_manager.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 import 'package:sensoro_survey/views/survey/sitePages/Model/SitePageModel.dart';
@@ -24,9 +25,10 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
   bool calendaring = false;
   String beginTimeStr = "";
   String endTimeStr = "";
-  String searchStr = "";
+
   String dateFilterStr = "";
   CalendarController controller;
+  String searchStr = "";
   TextEditingController searchController = TextEditingController();
   List<SitePageModel> dataList = [];
 
@@ -45,26 +47,25 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
     }
   }
 
-  void _creatSite(SitePageModel model,bool isCreat) async {
+  void _creatSite(SitePageModel model, bool isCreat) async {
     DataTransferManager.shared.creatModel();
     final result = await Navigator.of(context, rootNavigator: true)
         .push(CupertinoPageRoute(builder: (BuildContext context) {
-      return new CreatSitePage(fireModel: model,isCreatSite: isCreat);
+      return new CreatSitePage(fireModel: model, isCreatSite: isCreat);
     }));
 
     if (result != null) {
       SitePageModel name = result as SitePageModel;
 
-      for (int i = 0;i<dataList.length;i++){
+      for (int i = 0; i < dataList.length; i++) {
         SitePageModel model = dataList[i];
-        if(model.sitePageModelId == name.sitePageModelId){
+        if (model.sitePageModelId == name.sitePageModelId) {
           dataList.removeAt(i);
           break;
         }
       }
 
-
-       dataList.add(name);
+      dataList.add(name);
 
       // this.name = name;
 
@@ -72,22 +73,16 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
     }
   }
 
-
   void _createDynamic() async {
-
     final result = await Navigator.of(context, rootNavigator: true)
         .push(CupertinoPageRoute(builder: (BuildContext context) {
       return new DynamicCreatePage();
     }));
 
     if (result != null) {
-
-
       setState(() {});
     }
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -155,30 +150,8 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
       //   style: TextStyle(
       //       color: BLACK_TEXT_COLOR, fontWeight: FontWeight.bold, fontSize: 16),
       // ),
-      title: Container(
-        height: 40,
-        width: prefix0.screen_width,
-        // color: prefix0.LIGHT_LINE_COLOR,
-        decoration: BoxDecoration(
-          color: prefix0.FENGE_LINE_COLOR,
-          borderRadius: BorderRadius.circular(20.0),
-        ),
-        // height: 140, //高度不填会适应
-        padding:
-            const EdgeInsets.only(top: 0.0, bottom: 0, left: 20, right: 10),
-        child: searchbar,
-      ),
-      actions: <Widget>[
-        IconButton(
-            // icon: Icon(Icons.date_range, color: Colors.black),
-            icon: Image.asset(
-              "assets/images/calendar_black.png",
-              // height: 20,
-            ),
-            onPressed: () {
-              _createDynamic();
-            }),
-      ],
+      title: Text("区域名称"),
+      actions: <Widget>[],
     );
 
     Widget myListView = new ListView.builder(
@@ -216,10 +189,10 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
             child: new Container(
               color: Colors.white,
               padding:
-              const EdgeInsets.only(top: 0.0, bottom: 0, left: 0, right: 0),
+                  const EdgeInsets.only(top: 0.0, bottom: 0, left: 0, right: 0),
               child: new Column(
 
-                //这行决定了对齐
+                  //这行决定了对齐
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
@@ -230,13 +203,16 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
                     ),
 
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        _startManagePage(dataList[index]);
+                      },
                       child: Container(
+                        height: 80,
                         color: Colors.white,
                         padding: const EdgeInsets.only(
                             top: 0.0, bottom: 0, left: 20, right: 20),
                         child: Row(
-                          //Row 中mainAxisAlignment是水平的，Column中是垂直的
+                            //Row 中mainAxisAlignment是水平的，Column中是垂直的
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             //表示所有的子件都是从左到顺序排列，这是默认值
                             textDirection: TextDirection.ltr,
@@ -244,66 +220,17 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
                               //这决定了左对齐
                               Expanded(
                                 child: Container(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: <Widget>[
-                                      //这个位置用ListTile就会报错
-                                      // Expanded(
-                                      Text(dataList[index].siteName,
-                                          textAlign: TextAlign.start,
-                                          style: TextStyle(
-                                              color: prefix0.BLACK_TEXT_COLOR,
-                                              fontWeight: FontWeight.normal,
-                                              fontSize: 17)),
-                                      // ),
-                                      new SizedBox(
-                                        height: 2,
-                                      ),
-                                    ],
-                                  ),
+                                  child: Text(dataList[index].siteName,
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                          color: prefix0.BLACK_TEXT_COLOR,
+                                          fontWeight: FontWeight.normal,
+                                          fontSize: 17)),
                                 ),
                               ),
 
                               new SizedBox(
                                 width: 10,
-                              ),
-
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: <Widget>[
-                                  new RaisedButton(
-                                    color: Colors.lightBlue,
-                                    textColor: Colors.white,
-                                    child: new Text('编辑'),
-                                    onPressed: () {
-                                      _creatSite(dataList[index],false);
-                                    },
-                                  ),
-                                  new RaisedButton(
-                                    color: Colors.lightBlue,
-                                    textColor: Colors.white,
-                                    child: new Text('管理'),
-                                    onPressed: () {
-                                      _startManagePage(dataList[index]);
-                                    },
-                                  ),
-//                                  new RaisedButton(
-//                                    color: prefix0.LIGHT_TEXT_COLOR,
-//                                    textColor: Colors.white,
-//                                    child: new Text('入口'),
-//                                    onPressed: () {
-//                                      Navigator.push(
-//                                        context,
-//                                        new MaterialPageRoute(
-//                                            builder: (context) =>
-//                                                new SurveyPointInformationPage()),
-//                                      );
-//                                    },
-//                                  ),
-                                ],
                               ),
                             ]),
                       ),
@@ -328,8 +255,11 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
               ),
             ],
           );
-
         });
+
+    _searchAction(String text) {
+      print("........................." + text);
+    }
 
     Widget bodyContiner = new Container(
       color: Colors.white,
@@ -364,42 +294,18 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
                       "assets/images/close_black.png",
                       color: Colors.black,
                     ),
-                    onPressed: () {
-                    },
+                    onPressed: () {},
                   ),
                 ],
               ),
             ),
           ),
 
-          new Offstage(
-            offstage: false,
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: GestureDetector(
-                onTap: (){
-                  _creatSite(new SitePageModel(),true);
-                },
-                child: Container(
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(3.0), //3像素圆角
-                      border: Border.all(color: Colors.grey),
-                      boxShadow: [
-                        //阴影
-                        BoxShadow(color: Colors.white, blurRadius: 4.0)
-                      ]),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                    child: Text(
-                      "+ 场所",
-                      textAlign: TextAlign.start,
-                      style: TextStyle(color: Colors.grey),
-                    ),
-                  ),
-                ),
-              ),
-            ),
+          Padding(
+            padding: new EdgeInsets.fromLTRB(20, 20, 20, 20),
+            child: new SearchView(
+                hitText: "区域名称",
+                searchAction: (editText) => _searchAction(editText)),
           ),
 
           //分割线
@@ -415,8 +321,41 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
       ),
     );
 
-    return new Scaffold(appBar: navBar, body: bodyContiner);
+    Widget of = new Offstage(
+      offstage: false,
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: GestureDetector(
+          onTap: () {
+            _creatSite(new SitePageModel(), true);
+          },
+          child: Container(
+            height: 40,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(3.0), //3像素圆角
+                border: Border.all(color: Colors.grey),
+                boxShadow: [
+                  //阴影
+                  BoxShadow(color: Colors.white, blurRadius: 4.0)
+                ]),
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+              child: Text(
+                "+ 场所",
+                textAlign: TextAlign.start,
+                style: TextStyle(color: Colors.grey),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    return new Scaffold(
+      appBar: navBar,
+      body: bodyContiner,
+      bottomSheet: of,
+    );
   }
 }
-
-
