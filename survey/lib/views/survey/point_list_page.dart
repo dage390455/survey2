@@ -102,7 +102,8 @@ class _PointListPageState extends State<PointListPage> {
       if (!_focusNode.hasFocus) {}
     });
 
-    getConfigureListNetCall();
+    // getConfigureListNetCall();
+    getConfigureValueListNetCall();
     // initDetailList();
 
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
@@ -134,6 +135,39 @@ class _PointListPageState extends State<PointListPage> {
 
   void getConfigureListNetCall() async {
     String urlStr = NetConfig.riskUrl;
+    Map<String, dynamic> headers = {};
+    Map<String, dynamic> params = {};
+
+    ResultData resultData = await AppApi.getInstance()
+        .getListNetCall(context, true, urlStr, headers, params);
+    if (resultData.isSuccess()) {
+      // _stopLoading();
+      int code = resultData.response["code"].toInt();
+      if (code == 200) {
+        isFrist = false;
+        if (resultData.response["data"] is List) {
+          List resultList = resultData.response["data"];
+          if (resultList.length > 0) {
+            setState(() {
+              dataList.addAll(resultList);
+            });
+          }
+        }
+
+        if (resultData.response["data"] is Map) {
+          Map resultMap = resultData.response["data"];
+          if (resultMap["records"] is List) {
+            List<dynamic> configureList = resultMap["records"];
+            ComponentConfig.confiureList = configureList;
+            //本地化存储
+          }
+        }
+      }
+    }
+  }
+
+  void getConfigureValueListNetCall() async {
+    String urlStr = NetConfig.riskValueUrl;
     Map<String, dynamic> headers = {};
     Map<String, dynamic> params = {};
 
@@ -370,22 +404,22 @@ class _PointListPageState extends State<PointListPage> {
           Navigator.pop(context);
         },
       ),
-      actions: <Widget>[
-        IconButton(
-            // icon: Icon(Icons.date_range, color: Colors.black),
-            icon: Image.asset(
-              "assets/images/calendar_black.png",
-              // height: 20,
-            ),
-            tooltip: '日期筛选',
-            onPressed: () {
-              _showCalendar();
-              eventChannel
-                  .receiveBroadcastStream("showCalendar")
-                  .listen(_onEvent, onError: _onError);
-              // do nothing
-            }),
-      ],
+      // actions: <Widget>[
+      //   IconButton(
+      //       // icon: Icon(Icons.date_range, color: Colors.black),
+      //       icon: Image.asset(
+      //         "assets/images/calendar_black.png",
+      //         // height: 20,
+      //       ),
+      //       tooltip: '日期筛选',
+      //       onPressed: () {
+      //         _showCalendar();
+      //         eventChannel
+      //             .receiveBroadcastStream("showCalendar")
+      //             .listen(_onEvent, onError: _onError);
+      //         // do nothing
+      //       }),
+      // ],
     );
 
     Widget bottomButton = Container(
@@ -411,8 +445,8 @@ class _PointListPageState extends State<PointListPage> {
                 onPressed: () {
                   DataTransferManager.shared.project = input;
                   DataTransferManager.shared.creatModel();
-                  // _gotoSurveyType();
-                  _gotoAddAllPage();
+                  _gotoSurveyType();
+                  // _gotoAddAllPage();
                 },
               ),
             ),

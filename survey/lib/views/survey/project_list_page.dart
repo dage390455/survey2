@@ -789,22 +789,22 @@ class _State extends State<HomePage> {
             const EdgeInsets.only(top: 0.0, bottom: 0, left: 20, right: 10),
         child: searchbar,
       ),
-      actions: <Widget>[
-        IconButton(
-            // icon: Icon(Icons.date_range, color: Colors.black),
-            icon: Image.asset(
-              "assets/images/calendar_black.png",
-              // height: 20,
-            ),
-            tooltip: '日期筛选',
-            onPressed: () {
-              _showCalendar();
-              eventChannel
-                  .receiveBroadcastStream("showCalendar")
-                  .listen(_onEvent, onError: _onError);
-              // do nothing
-            }),
-      ],
+      // actions: <Widget>[
+      //   IconButton(
+      //       // icon: Icon(Icons.date_range, color: Colors.black),
+      //       icon: Image.asset(
+      //         "assets/images/calendar_black.png",
+      //         // height: 20,
+      //       ),
+      //       tooltip: '日期筛选',
+      //       onPressed: () {
+      //         _showCalendar();
+      //         eventChannel
+      //             .receiveBroadcastStream("showCalendar")
+      //             .listen(_onEvent, onError: _onError);
+      //         // do nothing
+      //       }),
+      // ],
     );
 
     Future<bool> _showConfirmationDialog(BuildContext context, String action) {
