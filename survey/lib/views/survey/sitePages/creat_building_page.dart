@@ -2,11 +2,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:sensoro_survey/views/survey/commonWidegt/inputnumbertextfiled.dart';
+import 'package:sensoro_survey/views/survey/commonWidegt/remarktextfiled.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 import 'package:sensoro_survey/views/survey/editPage/edit_content_page.dart';
 import 'package:sensoro_survey/views/survey/sitePages/Model/SitePageModel.dart';
-import 'package:sensoro_survey/views/survey/sitePages/inputnumbertextfiled.dart';
-import 'package:sensoro_survey/views/survey/sitePages/remarktextfiled.dart';
 
 class CreatbuildingPage extends StatefulWidget {
   @override
@@ -224,6 +224,7 @@ class _State extends State<CreatbuildingPage> {
           ),
           inputnumbertextfiled(
             title: "地上楼层数(层)",
+            intputType: 1,
             callbacktext: (text) {
               print(text + "地上楼层数");
             },
@@ -234,6 +235,7 @@ class _State extends State<CreatbuildingPage> {
           ),
           inputnumbertextfiled(
             title: "地下楼层数(层)",
+            intputType: 0,
             callbacktext: (text) {
               print(text + "地下楼层数");
             },

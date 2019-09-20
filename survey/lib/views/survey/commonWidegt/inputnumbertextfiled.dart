@@ -4,11 +4,12 @@ import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 
 class inputnumbertextfiled extends StatefulWidget {
   final String title;
+  final int intputType;
   final callbacktext;
   final onChanged;
 
   const inputnumbertextfiled(
-      {Key key, this.title, this.callbacktext, this.onChanged})
+      {Key key, this.title, this.intputType, this.callbacktext, this.onChanged})
       : super(key: key);
 
   @override
@@ -46,7 +47,13 @@ class _inputnumbertextfiledState extends State<inputnumbertextfiled> {
                 onChanged: (v) {
                   widget.onChanged(v);
                 },
-                keyboardType: TextInputType.number,
+
+//                inputFormatters: [
+//                  widget.intputType == 0
+//                      ? WhitelistingTextInputFormatter.digitsOnly
+//                      : null
+//                ],
+                //只允许输入数字
                 textAlign: TextAlign.right,
                 decoration: InputDecoration(
                   border: InputBorder.none,
