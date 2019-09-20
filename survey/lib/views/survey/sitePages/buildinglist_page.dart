@@ -7,6 +7,7 @@ import 'package:sensoro_survey/views/survey/sitePages/Model/SitePageModel.dart';
 
 import '../const.dart';
 import 'creat_building_page.dart';
+import 'creat_site_page.dart';
 
 class BuildingListPage extends StatefulWidget {
   BuildingListPage({Key key, this.sitePageModel}) : super(key: key);
@@ -41,16 +42,17 @@ class _BuildingListPageState extends State<BuildingListPage> {
 
   ///区域
   void _openEreaPage() async {
-//    final result = await Navigator.of(context, rootNavigator: true)
-//        .push(CupertinoPageRoute(builder: (BuildContext context) {
-//      return new CreatbuildingPage();
-//    }));
-//
-//    if (result != null) {
-//      SitePageModel sitePageModel = result as SitePageModel;
-//      listmodel.add(sitePageModel);
-//      setState(() {});
-//    }
+    final result = await Navigator.of(context, rootNavigator: true)
+        .push(CupertinoPageRoute(builder: (BuildContext context) {
+      return new CreatSitePage(fireModel: model, isCreatSite: false);
+    }));
+
+    if (result != null) {
+      SitePageModel sitePageModel = result as SitePageModel;
+      sitePageModel.listplace = model.listplace;
+      model = sitePageModel;
+      setState(() {});
+    }
   }
 
   @override

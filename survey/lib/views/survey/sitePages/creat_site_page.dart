@@ -44,6 +44,7 @@ class _State extends State<CreatSitePage> {
   @override
   void initState() {
     updateNextButton();
+
     _basicMessageChannel.setMessageHandler((message) => Future<String>(() {
           print(message);
           //message为native传递的数据
@@ -245,85 +246,32 @@ class _State extends State<CreatSitePage> {
 //              ),
 //            ),
 //          ),
-          inputnumbertextfiled(
-            title: "区域名称",
-            intputtype: 0,
-            callbacktext: (text) {
-              print(text + "请输入区域名称");
-            },
+         new Container(
+           height: 60,
+           child: Row(
+             children: <Widget>[
+               Text("*",
+                 style: TextStyle(
+                   color: Colors.red
+                 ),
+               ),
+               Expanded(
+                 child: inputnumbertextfiled(
+                   title: "区域名称",
+                   intputtype: 0,
+                   callbacktext: (text) {
+                     this.fireModel.siteName = text;
+                     setState(() {
+
+                     });
+                     print(text + "请输入区域名称");
+                   },
+                 ),
+               )
+            ],
           ),
+        ),
 
-
-          Container(
-            color: prefix0.LINE_COLOR,
-            height: 1,
-          ),
-
-
-          new Container(
-            alignment: Alignment.center,
-            height: 60,
-            child: Center(
-              child: PopupMenuButton(
-//              icon: Icon(Icons.home),
-                child: new Row(
-                  children: <Widget>[
-                    Text(
-                      "场所层级",
-                      textAlign: TextAlign.right,
-                      style: TextStyle(color: Colors.black, fontSize: 17),
-                    ),
-                    Expanded(
-                      child: Text(
-                        _getAreaString(),
-                        textAlign: TextAlign.right,
-                        style: TextStyle(color: Colors.black, fontSize: 17),
-                      ),
-                    ),
-                    Image.asset(
-                      "assets/images/arrow_folddown.png",
-                      width: 20,
-                    )
-                  ],
-                ),
-                tooltip: "长按提示",
-                initialValue: "hot",
-                offset: Offset(0.2, 0),
-                padding:
-                    EdgeInsets.only(top: 0.0, bottom: 0, left: 100, right: 0),
-
-                itemBuilder: (BuildContext context) {
-                  return <PopupMenuItem<String>>[
-                    PopupMenuItem<String>(
-                      child: Text("区域"),
-                      value: "1",
-                    ),
-                    PopupMenuItem<String>(
-                      child: Text("建筑"),
-                      value: "0",
-                    ),
-                  ];
-                },
-
-                onSelected: (String s) {
-                  switch (s) {
-                    case "1":
-                      fireModel.siteType = SiteType.area;
-                      break;
-                    case "0":
-                      fireModel.siteType = SiteType.building;
-                      break;
-                  }
-                  setState(() {
-                    // choosedModel = cars[int.parse(action)];
-                  });
-                },
-                onCanceled: () {
-                  print("onCanceled");
-                },
-              ),
-            ),
-          ),
 
           Container(
             color: prefix0.LINE_COLOR,
@@ -336,6 +284,11 @@ class _State extends State<CreatSitePage> {
               height: 60,
               child: new Row(
                 children: <Widget>[
+                  Text("*",
+                    style: TextStyle(
+                        color: Colors.red
+                    ),
+                  ),
                   Text(
                     "行政区域",
                     style: new TextStyle(fontSize: prefix0.fontsSize),
@@ -356,6 +309,21 @@ class _State extends State<CreatSitePage> {
                 ],
               ),
             ),
+          ),
+          Container(
+            color: prefix0.LINE_COLOR,
+            height: 1,
+          ),
+
+          inputnumbertextfiled(
+            title: "面积(m²)",
+            intputtype: 1,
+            callbacktext: (text) {
+              this.fireModel.area = text;
+              setState(() {
+
+              });
+            },
           ),
           Container(
             color: prefix0.LINE_COLOR,
@@ -448,7 +416,6 @@ class _State extends State<CreatSitePage> {
 
   updateNextButton() {
     if (fireModel.siteName.length > 0 &&
-        fireModel.siteType != SiteType.unkonw &&
         fireModel.editPosition.length > 0) {
       this.isCheack = true;
     } else {

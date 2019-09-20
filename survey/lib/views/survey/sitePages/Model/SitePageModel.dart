@@ -8,7 +8,7 @@ class SitePageModel {
   String creatDate = "";
   SiteType siteType = SiteType.unkonw;
   String editPosition = ""; //定位地址
-
+  String area = "";
 //  SitePageModel(this.siteName, this.editPosition, this.editLongitudeLatitude,
 //      this.remark);
 
