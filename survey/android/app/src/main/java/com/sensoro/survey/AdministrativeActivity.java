@@ -22,6 +22,7 @@ import com.amap.api.location.AMapLocationListener;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.CameraUpdate;
 import com.amap.api.maps.CameraUpdateFactory;
+import com.amap.api.maps.CoordinateConverter;
 import com.amap.api.maps.TextureMapView;
 import com.amap.api.maps.model.BitmapDescriptor;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
@@ -120,9 +121,16 @@ public class AdministrativeActivity extends Activity implements AMap.OnCameraCha
             @Override
             public void onClick(View v) {
                 LatLng position = deviceMarker.getPosition();
+
+                CoordinateConverter converter = new CoordinateConverter(AdministrativeActivity.this);
+                converter.from(CoordinateConverter.CoordType.BAIDU);
+                converter.coord(position);
+                LatLng desLatLng = converter.convert();
                 if (null != position) {
                     String title = deviceMarker.getTitle();
                     Intent intent = new Intent();
+
+
                     intent.putExtra("title", title);
                     intent.putExtra("latitude", position.latitude);
                     intent.putExtra("longitude", position.longitude);

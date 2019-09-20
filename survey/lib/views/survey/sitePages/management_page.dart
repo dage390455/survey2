@@ -135,6 +135,9 @@ class _ManagementPageState extends State<ManagementPage> {
 
     Column body = Column(
       children: <Widget>[
+        Expanded(
+          child: myListView,
+        ),
         Padding(
           padding: const EdgeInsets.all(20),
           child: GestureDetector(
@@ -151,16 +154,13 @@ class _ManagementPageState extends State<ManagementPage> {
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                 child: Text(
-                  "+ 建筑",
+                  "+ 新建建筑",
                   textAlign: TextAlign.start,
                   style: TextStyle(color: Colors.grey),
                 ),
               ),
             ),
           ),
-        ),
-        Expanded(
-          child: myListView,
         ),
       ],
     );

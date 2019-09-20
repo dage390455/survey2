@@ -1,9 +1,12 @@
 //现场情况
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 import 'package:sensoro_survey/views/survey/editPage/edit_content_page.dart';
 import 'package:sensoro_survey/views/survey/sitePages/Model/SitePageModel.dart';
+import 'package:sensoro_survey/views/survey/sitePages/inputnumbertextfiled.dart';
+import 'package:sensoro_survey/views/survey/sitePages/remarktextfiled.dart';
 
 class CreatbuildingPage extends StatefulWidget {
   @override
@@ -17,9 +20,12 @@ class _State extends State<CreatbuildingPage> {
   SitePageModel sitePageModel = SitePageModel();
 
   bool isCheack = false;
+  TextEditingController _unameController;
 
   @override
   void initState() {
+    _unameController = TextEditingController();
+
     _basicMessageChannel.setMessageHandler((message) => Future<String>(() {
           print(message);
           //message为native传递的数据
@@ -130,16 +136,18 @@ class _State extends State<CreatbuildingPage> {
       child: Column(
 //           mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.max,
+
         children: <Widget>[
           GestureDetector(
-            onTap: editName, //写入方法名称就可以了，但是是无参的
+            onTap: editName,
             child: Container(
               alignment: Alignment.center,
               height: 60,
               child: new Row(
                 children: <Widget>[
                   Text(
-                    "场所名称",
+                    "建筑名称",
                     style: new TextStyle(fontSize: prefix0.fontsSize),
                   ),
                   Expanded(
@@ -171,7 +179,7 @@ class _State extends State<CreatbuildingPage> {
               child: new Row(
                 children: <Widget>[
                   Text(
-                    "行政区域",
+                    "建筑位置",
                     style: new TextStyle(fontSize: prefix0.fontsSize),
                   ),
                   Expanded(
@@ -191,6 +199,54 @@ class _State extends State<CreatbuildingPage> {
               ),
             ),
           ),
+          Container(
+            color: prefix0.LINE_COLOR,
+            height: 1,
+          ),
+          inputnumbertextfiled(
+            title: "建筑面积(㎡)",
+            onChanged: (text) {},
+            callbacktext: (text) {},
+          ),
+          Container(
+            color: prefix0.LINE_COLOR,
+            height: 10,
+          ),
+          inputnumbertextfiled(
+            title: "建筑高度(m)",
+            callbacktext: (text) {
+              print(text + "建筑高度");
+            },
+          ),
+          Container(
+            color: prefix0.LINE_COLOR,
+            height: 1,
+          ),
+          inputnumbertextfiled(
+            title: "地上楼层数(层)",
+            callbacktext: (text) {
+              print(text + "地上楼层数");
+            },
+          ),
+          Container(
+            color: prefix0.LINE_COLOR,
+            height: 1,
+          ),
+          inputnumbertextfiled(
+            title: "地下楼层数(层)",
+            callbacktext: (text) {
+              print(text + "地下楼层数");
+            },
+          ),
+          Container(
+            color: prefix0.LINE_COLOR,
+            height: 1,
+          ),
+          remarktextfiled(
+            callbacktext: (text) {
+              print(text + "备注");
+            },
+          )
         ],
       ),
     );
