@@ -16,6 +16,7 @@ class MutilCheck1 extends StatefulWidget {
   final bool isSingle;
   final String title;
 
+
   ///获取选中的集合
   getSelecedList() {
     List<String> selectedList = [];
