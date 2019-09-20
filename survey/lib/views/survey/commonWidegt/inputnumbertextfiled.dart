@@ -5,12 +5,18 @@ import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 
 class inputnumbertextfiled extends StatefulWidget {
   final String title;
+  final String defaultText;
   final int intputtype;
   final callbacktext;
   final onChanged;
 
   inputnumbertextfiled(
-      {Key key, this.title, this.intputtype, this.callbacktext, this.onChanged})
+      {Key key,
+      this.title,
+      this.intputtype,
+      this.callbacktext,
+      this.onChanged,
+      this.defaultText})
       : super(key: key);
 
   @override
@@ -26,6 +32,7 @@ class _inputnumbertextfiledState extends State<inputnumbertextfiled> {
   void initState() {
     super.initState();
 
+    _editingController.text = widget.defaultText;
     _editingController.addListener(() {
       widget.callbacktext(_editingController.text);
     });

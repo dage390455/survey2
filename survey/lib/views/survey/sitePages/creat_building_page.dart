@@ -20,12 +20,9 @@ class _State extends State<CreatbuildingPage> {
   SitePageModel sitePageModel = SitePageModel();
 
   bool isCheack = false;
-  TextEditingController _unameController;
 
   @override
   void initState() {
-    _unameController = TextEditingController();
-
     _basicMessageChannel.setMessageHandler((message) => Future<String>(() {
           print(message);
           //message为native传递的数据
@@ -132,125 +129,146 @@ class _State extends State<CreatbuildingPage> {
 
     Widget container = Container(
       color: Colors.white,
-      padding: new EdgeInsets.fromLTRB(20, 0, 20, 0),
       child: Column(
 //           mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.max,
 
         children: <Widget>[
-          GestureDetector(
-            onTap: editName,
-            child: Container(
-              alignment: Alignment.center,
-              height: 60,
-              child: new Row(
-                children: <Widget>[
-                  Text(
-                    "建筑名称",
-                    style: new TextStyle(fontSize: prefix0.fontsSize),
-                  ),
-                  Expanded(
-                    child: Text(
-                      this.sitePageModel.siteName.length > 0
-                          ? this.sitePageModel.siteName
-                          : "必填",
-                      textAlign: TextAlign.right,
-                      style: new TextStyle(fontSize: prefix0.fontsSize),
+          Padding(
+            padding: new EdgeInsets.fromLTRB(20, 0, 20, 0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                GestureDetector(
+                  onTap: editName,
+                  child: Container(
+                    alignment: Alignment.center,
+                    height: 60,
+                    child: new Row(
+                      children: <Widget>[
+                        Text(
+                          "建筑名称",
+                          style: new TextStyle(fontSize: prefix0.fontsSize),
+                        ),
+                        Expanded(
+                          child: Text(
+                            this.sitePageModel.siteName.length > 0
+                                ? this.sitePageModel.siteName
+                                : "必填",
+                            textAlign: TextAlign.right,
+                            style: new TextStyle(fontSize: prefix0.fontsSize),
+                          ),
+                        ),
+                        Image.asset(
+                          "assets/images/right_arrar.png",
+                          width: 20,
+                        )
+                      ],
                     ),
                   ),
-                  Image.asset(
-                    "assets/images/right_arrar.png",
-                    width: 20,
-                  )
-                ],
-              ),
-            ),
-          ),
-          Container(
-            color: prefix0.LINE_COLOR,
-            height: 1,
-          ),
-          GestureDetector(
-            onTap: editLoction, //写入方法名称就可以了，但是是无参的
-            child: Container(
-              alignment: Alignment.center,
-              height: 60,
-              child: new Row(
-                children: <Widget>[
-                  Text(
-                    "建筑位置",
-                    style: new TextStyle(fontSize: prefix0.fontsSize),
-                  ),
-                  Expanded(
-                    child: Text(
-                      this.sitePageModel.editPosition.length > 0
-                          ? this.sitePageModel.editPosition
-                          : "必填",
-                      textAlign: TextAlign.right,
-                      style: new TextStyle(fontSize: prefix0.fontsSize),
+                ),
+                Container(
+                  color: prefix0.LINE_COLOR,
+                  height: 1,
+                ),
+                GestureDetector(
+                  onTap: editLoction, //写入方法名称就可以了，但是是无参的
+                  child: Container(
+                    alignment: Alignment.center,
+                    height: 60,
+                    child: new Row(
+                      children: <Widget>[
+                        Text(
+                          "建筑位置",
+                          style: new TextStyle(fontSize: prefix0.fontsSize),
+                        ),
+                        Expanded(
+                          child: Text(
+                            this.sitePageModel.editPosition.length > 0
+                                ? this.sitePageModel.editPosition
+                                : "必填",
+                            textAlign: TextAlign.right,
+                            style: new TextStyle(fontSize: prefix0.fontsSize),
+                          ),
+                        ),
+                        Image.asset(
+                          "assets/images/right_arrar.png",
+                          width: 20,
+                        )
+                      ],
                     ),
                   ),
-                  Image.asset(
-                    "assets/images/right_arrar.png",
-                    width: 20,
-                  )
-                ],
-              ),
+                ),
+                Container(
+                  color: prefix0.LINE_COLOR,
+                  height: 1,
+                ),
+                inputnumbertextfiled(
+                  title: "建筑面积(㎡)",
+                  intputtype: 0,
+                  onChanged: (text) {},
+                  callbacktext: (text) {},
+                ),
+              ],
             ),
-          ),
-          Container(
-            color: prefix0.LINE_COLOR,
-            height: 1,
-          ),
-          inputnumbertextfiled(
-            title: "建筑面积(㎡)",
-            intputtype: 0,
-            onChanged: (text) {},
-            callbacktext: (text) {},
           ),
           Container(
             color: prefix0.LINE_COLOR,
             height: 10,
           ),
-          inputnumbertextfiled(
-            title: "建筑高度(m)",
-            intputtype: 1,
-            callbacktext: (text) {
-              print(text + "建筑高度");
-            },
+          Padding(
+              padding: new EdgeInsets.fromLTRB(20, 0, 20, 0),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.max,
+                  children: <Widget>[
+                    inputnumbertextfiled(
+                      title: "建筑高度(m)",
+                      intputtype: 1,
+                      callbacktext: (text) {
+                        print(text + "建筑高度");
+                      },
+                    ),
+                    Container(
+                      color: prefix0.LINE_COLOR,
+                      height: 1,
+                    ),
+                    inputnumbertextfiled(
+                      title: "地上楼层数(层)",
+                      intputtype: 1,
+                      callbacktext: (text) {
+                        print(text + "地上楼层数");
+                      },
+                    ),
+                    Container(
+                      color: prefix0.LINE_COLOR,
+                      height: 1,
+                    ),
+                    inputnumbertextfiled(
+                      title: "地下楼层数(层)",
+                      intputtype: 1,
+                      callbacktext: (text) {
+                        print(text + "地下楼层数");
+                      },
+                    ),
+                  ])),
+          Padding(
+            padding: new EdgeInsets.fromLTRB(0, 0, 0, 0),
+            child: Container(
+              color: prefix0.LINE_COLOR,
+              height: 10,
+            ),
           ),
-          Container(
-            color: prefix0.LINE_COLOR,
-            height: 1,
+          Padding(
+            padding: new EdgeInsets.fromLTRB(20, 0, 20, 0),
+            child: remarktextfiled(
+              callbacktext: (text) {
+                print(text + "备注");
+              },
+            ),
           ),
-          inputnumbertextfiled(
-            title: "地上楼层数(层)",
-            intputtype: 1,
-            callbacktext: (text) {
-              print(text + "地上楼层数");
-            },
-          ),
-          Container(
-            color: prefix0.LINE_COLOR,
-            height: 1,
-          ),
-          inputnumbertextfiled(
-            title: "地下楼层数(层)",
-            intputtype: 1,
-            callbacktext: (text) {
-              print(text + "地下楼层数");
-            },
-          ),
-          Container(
-            color: prefix0.LINE_COLOR,
-            height: 1,
-          ),
-          remarktextfiled(
-            callbacktext: (text) {
-              print(text + "备注");
-            },
-          )
         ],
       ),
     );
