@@ -6,8 +6,8 @@ import 'package:sensoro_survey/views/survey/common/data_transfer_manager.dart';
 import 'package:sensoro_survey/views/survey/commonWidegt/SearchView.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 import 'package:sensoro_survey/views/survey/sitePages/Model/SitePageModel.dart';
+import 'package:sensoro_survey/views/survey/sitePages/buildinglist_page.dart';
 import 'package:sensoro_survey/views/survey/sitePages/creat_site_page.dart';
-import 'package:sensoro_survey/views/survey/sitePages/management_page.dart';
 
 import '../const.dart';
 import 'dynamic_creat_page.dart';
@@ -36,7 +36,7 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
     DataTransferManager.shared.creatModel();
     final result = await Navigator.of(context, rootNavigator: true)
         .push(CupertinoPageRoute(builder: (BuildContext context) {
-      return new ManagementPage(sitePageModel: data);
+      return new BuildingListPage(sitePageModel: data);
     }));
 
     if (result != null) {
@@ -71,15 +71,11 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
 
       setState(() {});
     }
-
-
-
   }
 
-  _getData(){
-
-    for (int i = 0;i<5;i++){
-      var sitePage =  new SitePageModel();
+  _getData() {
+    for (int i = 0; i < 5; i++) {
+      var sitePage = new SitePageModel();
       sitePage.siteName = "望京soho T1";
 
       dataList.add(sitePage);

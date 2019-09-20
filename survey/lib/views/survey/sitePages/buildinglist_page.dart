@@ -1,26 +1,27 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:sensoro_survey/views/survey/commonWidegt/SearchView.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 import 'package:sensoro_survey/views/survey/sitePages/Model/SitePageModel.dart';
 
 import '../const.dart';
 import 'creat_building_page.dart';
 
-class ManagementPage extends StatefulWidget {
-  ManagementPage({Key key, this.sitePageModel}) : super(key: key);
+class BuildingListPage extends StatefulWidget {
+  BuildingListPage({Key key, this.sitePageModel}) : super(key: key);
 
   final SitePageModel sitePageModel;
 
   @override
-  _ManagementPageState createState() => _ManagementPageState(sitePageModel);
+  _BuildingListPageState createState() => _BuildingListPageState(sitePageModel);
 }
 
-class _ManagementPageState extends State<ManagementPage> {
+class _BuildingListPageState extends State<BuildingListPage> {
   SitePageModel model = SitePageModel();
   List<SitePageModel> listmodel = [];
 
-  _ManagementPageState(SitePageModel sitePageModel) {
+  _BuildingListPageState(SitePageModel sitePageModel) {
     listmodel = sitePageModel.listplace;
   }
 
@@ -135,6 +136,12 @@ class _ManagementPageState extends State<ManagementPage> {
 
     Column body = Column(
       children: <Widget>[
+        Padding(
+          padding: new EdgeInsets.fromLTRB(20, 20, 20, 20),
+          child: new SearchView(
+              hitText: "建筑名称",
+              searchAction: (editText) => _searchAction(editText)),
+        ),
         Expanded(
           child: myListView,
         ),
@@ -181,4 +188,10 @@ class _ManagementPageState extends State<ManagementPage> {
         ),
         body: body);
   }
+}
+
+_searchAction(editText) {
+  print("==建筑列表"
+          "=" +
+      editText);
 }
