@@ -8,7 +8,6 @@ class inputnumbertextfiled extends StatefulWidget {
   final int intputtype;
   final callbacktext;
   final onChanged;
-  TextEditingController _editingController = TextEditingController();
 
   inputnumbertextfiled(
       {Key key, this.title, this.intputtype, this.callbacktext, this.onChanged})
@@ -21,11 +20,14 @@ class inputnumbertextfiled extends StatefulWidget {
 }
 
 class _inputnumbertextfiledState extends State<inputnumbertextfiled> {
+  TextEditingController _editingController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
-    widget._editingController.addListener(() {
-      widget.callbacktext(widget._editingController.text);
+
+    _editingController.addListener(() {
+      widget.callbacktext(_editingController.text);
     });
   }
 
@@ -43,7 +45,7 @@ class _inputnumbertextfiledState extends State<inputnumbertextfiled> {
             ),
             Expanded(
               child: TextField(
-                controller: widget._editingController,
+                controller: _editingController,
                 onChanged: (v) {
                   widget.onChanged(v);
                 },
