@@ -20,6 +20,11 @@
 		EA86FB672307D7FB00ED8C17 /* CustomAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA86FB642307D7FB00ED8C17 /* CustomAnnotationView.swift */; };
 		EA86FB682307D7FB00ED8C17 /* CustomPointAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA86FB652307D7FB00ED8C17 /* CustomPointAnnotation.swift */; };
 		EA86FB692307D7FB00ED8C17 /* MapCalloutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA86FB662307D7FB00ED8C17 /* MapCalloutView.swift */; };
+		EAA8F7392335FF900092D81E /* CitySelectMangager.m in Sources */ = {isa = PBXBuildFile; fileRef = EAA8F7382335FF900092D81E /* CitySelectMangager.m */; };
+		EAA8F73B233603500092D81E /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = EAA8F73A233603500092D81E /* libsqlite3.0.tbd */; };
+		EAA8F73D2336054B0092D81E /* selectCity.db in Resources */ = {isa = PBXBuildFile; fileRef = EAA8F73C2336054B0092D81E /* selectCity.db */; };
+		EAA8F73F23361C3C0092D81E /* cityPic.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EAA8F73E23361C3C0092D81E /* cityPic.storyboard */; };
+		EAA8F74223361D630092D81E /* SelectCityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EAA8F74123361D630092D81E /* SelectCityViewController.m */; };
 		EE06774023223112001750E2 /* Station.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE06773423223112001750E2 /* Station.swift */; };
 		EE06774A23223CD1001750E2 /* LocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE06774823223CD1001750E2 /* LocationViewController.swift */; };
 		EE06774B23223CD1001750E2 /* LocationEditController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE06774923223CD1001750E2 /* LocationEditController.swift */; };
@@ -82,6 +87,13 @@
 		EA86FB642307D7FB00ED8C17 /* CustomAnnotationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomAnnotationView.swift; sourceTree = "<group>"; };
 		EA86FB652307D7FB00ED8C17 /* CustomPointAnnotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomPointAnnotation.swift; sourceTree = "<group>"; };
 		EA86FB662307D7FB00ED8C17 /* MapCalloutView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapCalloutView.swift; sourceTree = "<group>"; };
+		EAA8F7372335FF900092D81E /* CitySelectMangager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CitySelectMangager.h; sourceTree = "<group>"; };
+		EAA8F7382335FF900092D81E /* CitySelectMangager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CitySelectMangager.m; sourceTree = "<group>"; };
+		EAA8F73A233603500092D81E /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
+		EAA8F73C2336054B0092D81E /* selectCity.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = selectCity.db; sourceTree = "<group>"; };
+		EAA8F73E23361C3C0092D81E /* cityPic.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = cityPic.storyboard; sourceTree = "<group>"; };
+		EAA8F74023361D630092D81E /* SelectCityViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SelectCityViewController.h; sourceTree = "<group>"; };
+		EAA8F74123361D630092D81E /* SelectCityViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SelectCityViewController.m; sourceTree = "<group>"; };
 		EE06773423223112001750E2 /* Station.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Station.swift; sourceTree = "<group>"; };
 		EE06774823223CD1001750E2 /* LocationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationViewController.swift; sourceTree = "<group>"; };
 		EE06774923223CD1001750E2 /* LocationEditController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationEditController.swift; sourceTree = "<group>"; };
@@ -119,6 +131,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EAA8F73B233603500092D81E /* libsqlite3.0.tbd in Frameworks */,
 				9705A1C61CF904A100538489 /* Flutter.framework in Frameworks */,
 				EE84349D230E62FA0078082F /* MOBFoundation.framework in Frameworks */,
 				EE843496230E62BE0078082F /* ShareSDKConfigFile.framework in Frameworks */,
@@ -139,6 +152,7 @@
 		890A47CB6EB659125B15B673 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				EAA8F73A233603500092D81E /* libsqlite3.0.tbd */,
 				AB5D17741830B32B584DA7E3 /* Pods_Runner.framework */,
 			);
 			name = Frameworks;
@@ -219,7 +233,13 @@
 		EE06773023223112001750E2 /* Utility */ = {
 			isa = PBXGroup;
 			children = (
+				EAA8F73C2336054B0092D81E /* selectCity.db */,
 				EE06773423223112001750E2 /* Station.swift */,
+				EAA8F7372335FF900092D81E /* CitySelectMangager.h */,
+				EAA8F7382335FF900092D81E /* CitySelectMangager.m */,
+				EAA8F73E23361C3C0092D81E /* cityPic.storyboard */,
+				EAA8F74023361D630092D81E /* SelectCityViewController.h */,
+				EAA8F74123361D630092D81E /* SelectCityViewController.m */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -395,6 +415,8 @@
 				3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */,
 				9740EEB41CF90195004384FC /* Debug.xcconfig in Resources */,
 				EE843494230E62BE0078082F /* ShareSDK.bundle in Resources */,
+				EAA8F73D2336054B0092D81E /* selectCity.db in Resources */,
+				EAA8F73F23361C3C0092D81E /* cityPic.storyboard in Resources */,
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
 				EE843491230E62BE0078082F /* README.txt in Resources */,
 				EE843495230E62BE0078082F /* ShareSDKUI.bundle in Resources */,
@@ -459,6 +481,7 @@
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 				"${BUILT_PRODUCTS_DIR}/city_pickers/city_pickers.framework",
 				"${BUILT_PRODUCTS_DIR}/flutter_downloader/flutter_downloader.framework",
+				"${BUILT_PRODUCTS_DIR}/flutter_picker/flutter_picker.framework",
 				"${BUILT_PRODUCTS_DIR}/flutter_webview_plugin/flutter_webview_plugin.framework",
 				"${BUILT_PRODUCTS_DIR}/fluttertoast/fluttertoast.framework",
 				"${BUILT_PRODUCTS_DIR}/image_picker/image_picker.framework",
@@ -480,6 +503,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/city_pickers.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/flutter_downloader.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/flutter_picker.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/flutter_webview_plugin.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/fluttertoast.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/image_picker.framework",
@@ -543,10 +567,12 @@
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,
 				EE65BD5922FD8C5500C7C340 /* FlutterSplashViewController.swift in Sources */,
 				EE06774023223112001750E2 /* Station.swift in Sources */,
+				EAA8F7392335FF900092D81E /* CitySelectMangager.m in Sources */,
 				EA86FB682307D7FB00ED8C17 /* CustomPointAnnotation.swift in Sources */,
 				EE9F3EDC230280B800536CC1 /* GeneratedPluginRegistrant.m in Sources */,
 				EA86FB672307D7FB00ED8C17 /* CustomAnnotationView.swift in Sources */,
 				EE65BD5622FD8C5500C7C340 /* FlutterTestViewController.swift in Sources */,
+				EAA8F74223361D630092D81E /* SelectCityViewController.m in Sources */,
 				EE65BD5722FD8C5500C7C340 /* NetworkManager-Flutter.swift in Sources */,
 				EE866CFB23052A1000F757D0 /* FlutterProjectListViewController.swift in Sources */,
 				EE843478230E407E0078082F /* DocumentManagerViewController.m in Sources */,

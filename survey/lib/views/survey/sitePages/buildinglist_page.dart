@@ -24,6 +24,7 @@ class _BuildingListPageState extends State<BuildingListPage> {
 
   _BuildingListPageState(SitePageModel sitePageModel) {
     listmodel = sitePageModel.listplace;
+    model = sitePageModel;
   }
 
   ///新建建筑

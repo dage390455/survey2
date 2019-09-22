@@ -33,12 +33,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import io.flutter.app.FlutterActivity;
 import io.flutter.plugin.common.BasicMessageChannel;
 import io.flutter.plugin.common.MethodChannel;
+import io.flutter.plugin.common.StandardMessageCodec;
 import io.flutter.plugin.common.StringCodec;
 import io.flutter.plugins.GeneratedPluginRegistrant;
 import io.flutter.view.FlutterNativeView;
@@ -65,7 +67,7 @@ public class MainActivity extends FlutterActivity {
 
     private Map<String, Map> map;
     WritableWorkbook wbook = null;
-
+    BasicMessageChannel locationChannel;
     @Override
     public FlutterView createFlutterView(Context context) {
 
@@ -114,6 +116,33 @@ public class MainActivity extends FlutterActivity {
 
                     }
                 });
+
+
+        final BasicMessageChannel locationChannel = new BasicMessageChannel(flutterView, "BasicMessageChannelPluginGetCity", StandardMessageCodec.INSTANCE);
+        locationChannel.setMessageHandler((o, reply) ->
+
+        {
+
+//            DBHelper helper = new DBHelper(MainActivity.this,"selectCity",null,1);
+//            try {
+//                helper.createDataBase();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//
+//
+//            List citys = helper.getcityList("000000");
+
+//             CityPickView cityPickView =   new  CityPickView();
+//             cityPickView.showCitySelect(MainActivity.this);
+
+            Intent intent = new Intent(MainActivity.this,SelectCityActivity.class);
+            startActivityForResult(intent,10000);
+
+
+            reply.reply("我来自 " + " !! 使用的是 BasicMessageChannel 方式");
+        });
+        this.locationChannel = locationChannel;
 
 
         final BasicMessageChannel channel = new BasicMessageChannel<String>(flutterView, "BasicMessageChannelPlugin", StringCodec.INSTANCE);
@@ -174,7 +203,7 @@ public class MainActivity extends FlutterActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == RESULT_OK) {
+        if (resultCode == RESULT_OK&&requestCode== MAPCODE) {
             if (requestCode == MAPCODE) {
                 double latitude = data.getDoubleExtra("latitude", -1);
                 double longitude = data.getDoubleExtra("longitude", -1);
@@ -186,7 +215,14 @@ public class MainActivity extends FlutterActivity {
             }
         }
 
+        if (resultCode == RESULT_OK&&requestCode== 10000){
 
+
+            List list = Transmission.getInstance().list;
+            this.locationChannel.send(list);
+
+
+        }
     }
 
     @Override

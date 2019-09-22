@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:sensoro_survey/generated/customCalendar/lib/controller.dart';
 import 'package:sensoro_survey/views/survey/common/data_transfer_manager.dart';
@@ -8,12 +9,14 @@ import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 import 'package:sensoro_survey/views/survey/sitePages/Model/SitePageModel.dart';
 import 'package:sensoro_survey/views/survey/sitePages/buildinglist_page.dart';
 import 'package:sensoro_survey/views/survey/sitePages/creat_site_page.dart';
+import 'package:sensoro_survey/views/survey/sitePages/sqflite_page.dart';
 
 import '../const.dart';
 import 'dynamic_creat_page.dart';
 
 class SiteManagementPage extends StatefulWidget {
   SiteManagementPage({Key key, this.title}) : super(key: key);
+
 
   final String title;
 
@@ -22,6 +25,10 @@ class SiteManagementPage extends StatefulWidget {
 }
 
 class _SiteManagementPageState extends State<SiteManagementPage> {
+
+  BasicMessageChannel  _locationBasicMessageChannel =
+  BasicMessageChannel("BasicMessageChannelPluginGetCity", StandardMessageCodec());
+
   bool calendaring = false;
   String beginTimeStr = "";
   String endTimeStr = "";
@@ -73,6 +80,17 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
     }
   }
 
+  void _textSql() async {
+
+    Future<String> future = _locationBasicMessageChannel.send("000000");
+    future.then((message) {
+      print("========================" + message);
+    });
+  }
+
+
+
+
   _getData() {
     for (int i = 0; i < 5; i++) {
       var sitePage = new SitePageModel();
@@ -98,6 +116,14 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
     // TODO: implement initState
 
     super.initState();
+    _locationBasicMessageChannel.setMessageHandler((message) => Future<String>(() {
+      print(message);
+      //message为native传递的数据
+      //给Android端的返回值
+      return "========================收到Native消息：" + message;
+    }));
+
+
     _getData();
   }
 
@@ -157,6 +183,8 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
       ),
     );
 
+
+
     Widget navBar = AppBar(
       elevation: 1.0,
       brightness: Brightness.light,
@@ -168,7 +196,28 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
       //       color: BLACK_TEXT_COLOR, fontWeight: FontWeight.bold, fontSize: 16),
       // ),
       title: Text("区域名称"),
-      actions: <Widget>[],
+      actions: <Widget>[
+        Container(
+          padding: new EdgeInsets.fromLTRB(0, 0, 0, 0),
+          alignment: Alignment.center,
+          child: GestureDetector(
+              onTap: () {
+                // 点击空白页面关闭键盘
+                _textSql();
+              },
+              child: Padding(
+                padding: new EdgeInsets.fromLTRB(20, 20, 20, 20),
+                child: Text(
+                  "地图",
+                  style: TextStyle(
+                    color: Colors.grey,
+                  ),
+                ),
+              )
+          ),
+        ),
+
+      ],
     );
 
     Widget myListView = new ListView.builder(

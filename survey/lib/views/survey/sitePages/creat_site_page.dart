@@ -1,4 +1,5 @@
 //现场情况
+import 'package:city_pickers/city_pickers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sensoro_survey/model/electrical_fire_model.dart';
@@ -35,6 +36,9 @@ class CreatSitePage extends StatefulWidget {
 class _State extends State<CreatSitePage> {
   BasicMessageChannel<String> _basicMessageChannel =
       BasicMessageChannel("BasicMessageChannelPlugin", StringCodec());
+
+  BasicMessageChannel  _locationBasicMessageChannel =
+  BasicMessageChannel("BasicMessageChannelPluginGetCity", StandardMessageCodec());
   _State({this.fireModel});
   SitePageModel fireModel = SitePageModel();
   FocusNode blankNode = FocusNode();
@@ -44,7 +48,31 @@ class _State extends State<CreatSitePage> {
   @override
   void initState() {
     updateNextButton();
+    _locationBasicMessageChannel.setMessageHandler((message) => Future<String>(() {
+      print(message);
 
+      if(message is List){
+        List list = message;
+
+        String prince = list[0]["name"];
+        String city = list[1]["name"];
+        String area = list[2]["name"];
+
+        fireModel.editPosition = prince+city+area;
+        updateNextButton();
+        setState(() {
+
+        });
+
+      }
+
+
+
+
+      //message为native传递的数据
+      //给Android端的返回值
+      return "========================收到Native消息：" + message;
+    }));
     _basicMessageChannel.setMessageHandler((message) => Future<String>(() {
           print(message);
           //message为native传递的数据
@@ -91,6 +119,16 @@ class _State extends State<CreatSitePage> {
     }
   }
 
+  void _textSql() async {
+
+    Future<String> future = _locationBasicMessageChannel.send("000000");
+    future.then((message) {
+      print("========================" + message);
+    });
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     Widget NavBar = AppBar(
@@ -99,7 +137,7 @@ class _State extends State<CreatSitePage> {
       brightness: Brightness.light,
       backgroundColor: Colors.white,
       title: Text(
-        widget.isCreatSite?"新建区域":"编辑区域",
+        widget.isCreatSite?"新建区域":"区域详情",
         style: TextStyle(color: Colors.black),
       ),
       leading: Container(
@@ -180,21 +218,19 @@ class _State extends State<CreatSitePage> {
     }
 
     editLoction() async {
-//       final result = await Navigator.push(
-//         context,
-//         new MaterialPageRoute(builder: (context) => new EditLoctionPage(name: this.location,)),
-//       );
+//      _sendToNative();
+      _textSql();
+//      Result result = await CityPickers.showCityPicker(
+//        context: context,
+//        height: 200,
 //
-//       if (result!=null){
-//         String name = result as String;
+//      );
 //
-//         this.location = name;
-//         updateNextButton();
-//         setState(() {
-//
-//         });
-//       }
-      _sendToNative();
+//      if(result != null){
+//        setState(() {
+//          fireModel.editPosition = result.provinceName + "-" + result.cityName + "-" + result.areaName;
+//        });
+//      }
     }
 
     String _getAreaString() {
@@ -218,34 +254,6 @@ class _State extends State<CreatSitePage> {
 //           mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-//          GestureDetector(
-//            onTap: editName, //写入方法名称就可以了，但是是无参的
-//            child: Container(
-//              alignment: Alignment.center,
-//              height: 60,
-//              child: new Row(
-//                children: <Widget>[
-//                  Text(
-//                    "场所名称",
-//                    style: new TextStyle(fontSize: prefix0.fontsSize),
-//                  ),
-//                  Expanded(
-//                    child: Text(
-//                      this.fireModel.siteName.length > 0
-//                          ? this.fireModel.siteName
-//                          : "必填",
-//                      textAlign: TextAlign.right,
-//                      style: new TextStyle(fontSize: prefix0.fontsSize),
-//                    ),
-//                  ),
-//                  Image.asset(
-//                    "assets/images/right_arrar.png",
-//                    width: 20,
-//                  )
-//                ],
-//              ),
-//            ),
-//          ),
          new Container(
            height: 60,
            child: Row(
@@ -259,8 +267,10 @@ class _State extends State<CreatSitePage> {
                  child: inputnumbertextfiled(
                    title: "区域名称",
                    intputtype: 0,
+                   defaultText: fireModel.siteName,
                    callbacktext: (text) {
                      this.fireModel.siteName = text;
+                     updateNextButton();
                      setState(() {
 
                      });
@@ -318,6 +328,7 @@ class _State extends State<CreatSitePage> {
           inputnumbertextfiled(
             title: "面积(m²)",
             intputtype: 1,
+            defaultText: fireModel.area,
             callbacktext: (text) {
               this.fireModel.area = text;
               setState(() {
@@ -401,6 +412,40 @@ class _State extends State<CreatSitePage> {
         ],
       ),
     );
+//
+    Widget delete = new Offstage(
+      offstage: widget.isCreatSite,
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: GestureDetector(
+          onTap: () {
+//            _creatSite(new SitePageModel(), true);
+          },
+          child: Container(
+            color: Colors.red,
+            height: 40,
+            alignment: Alignment.center,
+//            decoration: BoxDecoration(
+//                borderRadius: BorderRadius.circular(3.0), //3像素圆角
+//                border: Border.all(color: Colors.grey),
+////                boxShadow: [
+////                  //阴影
+////                  BoxShadow(color: Colors.white, blurRadius: 4.0)
+////                ]
+//            ),
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+              child: Text(
+                "删除",
+                textAlign: TextAlign.start,
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+
 
     return Scaffold(
       appBar: NavBar,
@@ -411,6 +456,7 @@ class _State extends State<CreatSitePage> {
         },
         child: bigContainer,
       ),
+      bottomSheet: delete,
     );
   }
 

@@ -2,23 +2,23 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.sensoro.survey">
-
-    <!--
-         io.flutter.app.FlutterApplication is an android.app.Application that
-         calls FlutterMain.startInitialization(this); in its onCreate method.
-         In most cases you can leave this as-is, but you if you want to provide
-         additional functionality it is fine to subclass or reimplement
-         FlutterApplication and put your custom class here.
-    -->
-
+    <!-- 允许程序获取网络状态 -->
     <application
         android:name="io.flutter.app.FlutterApplication"
         android:icon="@mipmap/logo"
-        tools:replace="android:label"
-        android:label="升哲勘察">
-
+        android:label="升哲勘察"
+        tools:replace="android:label">
+        <activity android:name=".SelectCityActivity"></activity>
         <activity
-            android:name="com.sensoro.survey.MainActivity"
+            android:name="com.sensoro.MainActivity"
+            android:label="@string/title_activity_main"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".SelecCityActivity"
+            android:label="@string/title_activity_selec_city"
+            android:theme="@android:style/Theme.Translucent"  />
+        <activity
+            android:name=".MainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
             android:launchMode="singleTop"
@@ -43,15 +43,14 @@
                 android:value="true" />
         </activity> <!-- 适配小米（xiaomi）刘海屏 -->
         <activity
-            android:name="com.sensoro.survey.LocationEdtitActivtiy"
-            android:theme="@style/LaunchTheme"></activity>
+            android:name=".LocationEdtitActivtiy"
+            android:theme="@style/LaunchTheme" />
         <activity
-            android:name="com.sensoro.survey.AdministrativeActivity"
-            android:theme="@style/LaunchTheme"></activity>
+            android:name=".AdministrativeActivity"
+            android:theme="@style/LaunchTheme" />
         <activity
-            android:name="com.sensoro.survey.DeployMapActivity"
-            android:theme="@style/LaunchTheme"></activity>
-        <service android:name="com.amap.api.location.APSService" />
+            android:name=".DeployMapActivity"
+            android:theme="@style/LaunchTheme" />
         <activity
             android:name=".wxapi.WXEntryActivity"
             android:exported="true"
@@ -75,30 +74,25 @@
         <meta-data
             android:name="android.max_aspect"
             android:value="2.4" />
-
         <meta-data
             android:name="com.amap.api.v2.apikey"
             android:value="223082ee8e171c2e60fe707d8bb48806" />
 
-
         <service android:name="com.amap.api.location.APSService" />
-
-    </application>
-    <!-- 允许程序设置内置sd卡的写权限 -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
-    <!-- 允许程序获取网络状态 -->
+        <service android:name="com.amap.api.location.APSService" />
+    </application> <!-- 允许程序访问WiFi网络信息 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- 允许程序读写手机状态和身份 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- 允许程序访问CellID或WiFi热点来获取粗略的位置 -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <!-- 允许程序访问WiFi网络信息 -->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <!-- 允许程序读写手机状态和身份 -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <!-- 允许程序访问CellID或WiFi热点来获取粗略的位置 -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.MODE_PRIVATE"/>
-    <uses-permission android:name="android.permission.MODE_WORLD_WRITEABLE"/>
+    <uses-permission android:name="android.permission.MODE_PRIVATE" />
+
+    <uses-permission android:name="android.permission.MODE_WORLD_WRITEABLE" />
+
 </manifest>

@@ -31,7 +31,46 @@ import Photos
         //暂时写这里  后面整合到管理类
         let bascChanal = FlutterBasicMessageChannel(name: "BasicMessageChannelPlugin", binaryMessenger: flutterViewController, codec: FlutterStringCodec.init());
         
-         let versionChanal = FlutterBasicMessageChannel(name: "BasicMessageGetVersionChannelPlugin", binaryMessenger: flutterViewController, codec: FlutterStringCodec.init());
+        let versionChanal = FlutterBasicMessageChannel(name: "BasicMessageGetVersionChannelPlugin", binaryMessenger: flutterViewController, codec: FlutterStringCodec.init());
+        
+        let cityChanal = FlutterBasicMessageChannel(name: "BasicMessageChannelPluginGetCity", binaryMessenger: flutterViewController);
+        
+        
+        
+        cityChanal.setMessageHandler{[weak self] (message, fr) in
+            
+            guard self != nil else { return }
+            
+            if message != nil {
+                let mess = message as!String
+//
+//                if mess == "1"{
+//                    let urlString = "https://fir.im/sensoroSurvey"
+//
+//                    let url = URL(string: urlString)
+//
+//                    UIApplication.shared.open(url!, options: ["":""], completionHandler: nil)
+//                }else{
+//                    let infoDictionary = Bundle.main.infoDictionary!
+//                    let majorVersion = infoDictionary["CFBundleShortVersionString"]//主程序版本号
+//                    let appVersion = majorVersion as! String
+//                    versionChanal.sendMessage(appVersion)
+//                }
+             let postion = UIStoryboard.init(name: "cityPic", bundle: nil).instantiateViewController(withIdentifier: "SelectCityViewController") as! SelectCityViewController;
+                 postion.modalPresentationStyle = .overFullScreen;
+                 postion.returnTextBlock = { [weak self] (selet)->Void in
+                    guard self != nil else {return;}
+                  
+                    cityChanal.sendMessage(selet)
+                }
+              flutterViewController.present(postion, animated: true, completion: nil)//进入照相界面
+                
+            }
+            
+            
+        }
+        
+        
         versionChanal.setMessageHandler{[weak self] (message, fr) in
             
             guard self != nil else { return }
