@@ -738,7 +738,9 @@ class _State extends State<HomePage> {
       if (result != null) {
         String name = result as String;
         if (name == "refreshList") {
-          loadLocalData();
+          // loadLocalData();
+          dataList.clear();
+          getProjectListNetCall();
         }
         // this.name = name;
         setState(() {});
@@ -754,7 +756,9 @@ class _State extends State<HomePage> {
       if (result != null) {
         String name = result as String;
         if (name == "refreshList") {
-          loadLocalData();
+          // loadLocalData();
+          dataList.clear();
+          getProjectListNetCall();
         }
         // this.name = name;
         setState(() {});
@@ -772,7 +776,9 @@ class _State extends State<HomePage> {
       if (result != null) {
         String name = result as String;
         if (name == "refreshList") {
-          loadLocalData();
+          // loadLocalData();
+          dataList.clear();
+          getProjectListNetCall();
         }
         // this.name = name;
         setState(() {});
@@ -790,7 +796,9 @@ class _State extends State<HomePage> {
       if (result != null) {
         String name = result as String;
         if (name == "refreshList") {
-          loadLocalData();
+          // loadLocalData();
+          dataList.clear();
+          getProjectListNetCall();
         }
         // this.name = name;
         setState(() {});

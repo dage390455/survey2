@@ -279,6 +279,8 @@ class _PointListPageState extends State<PointListPage> {
     if (result != null) {
       String name = result as String;
       if (name == "refreshList") {
+        dataList.clear();
+
         // loadLocalData();
       }
       // this.name = name;

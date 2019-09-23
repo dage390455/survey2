@@ -237,7 +237,7 @@ class _AddProjectPageState extends State<AddProjectPage> {
       int code = resultData.response["code"].toInt();
       _stopLoading();
       if (code == 200) {
-        var msg = "创建项目成��";
+        var msg = "创建项目成功";
         utility.showToast(msg);
 
         Navigator.of(context).pop("refreshList");
