@@ -267,7 +267,7 @@ class _State extends State<HomePage> {
     //   setState(() {});
     // });
 
-    loadLocalData();
+    // loadLocalData();
     getProjectListNetCall();
 
     controller = new CalendarController();
@@ -420,6 +420,7 @@ class _State extends State<HomePage> {
                     dic["site_type"] == null ? "" : dic["site_type"];
                 projectInfoModel model = projectInfoModel(projectId,
                     projectName, "", remark, status, site_id, site_type, []);
+                dataList.add(model);
               }
             }
 
@@ -961,22 +962,22 @@ class _State extends State<HomePage> {
           projectInfoModel model = dataList[index];
           var name = model.projectName;
           var time = model.createTime;
-          String time1 = time.substring(0, 11);
-          time1 = time1.replaceAll('-', '.');
+          // String time1 = time.substring(0, 11);
+          // time1 = time1.replaceAll('-', '.');
 
-          bool flag = false;
-          if (dateFilterList.length > 0) {
-            for (String dateStr in dateFilterList) {
-              if (time1.contains(dateStr)) {
-                flag = true;
-              }
-            }
-          } else {
-            flag = true;
-          }
-          if (!flag) {
-            return emptyContainer;
-          }
+          // bool flag = false;
+          // if (dateFilterList.length > 0) {
+          //   for (String dateStr in dateFilterList) {
+          //     if (time1.contains(dateStr)) {
+          //       flag = true;
+          //     }
+          //   }
+          // } else {
+          //   flag = true;
+          // }
+          // if (!flag) {
+          //   return emptyContainer;
+          // }
 
           if (!name.contains(searchStr) && searchStr.length > 0) {
             return emptyContainer;
