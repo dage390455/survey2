@@ -68,6 +68,7 @@ public class MainActivity extends FlutterActivity {
     private Map<String, Map> map;
     WritableWorkbook wbook = null;
     BasicMessageChannel locationChannel;
+
     @Override
     public FlutterView createFlutterView(Context context) {
 
@@ -78,6 +79,17 @@ public class MainActivity extends FlutterActivity {
         flutterView.setLayoutParams(matchParent);
         flutterView.enableTransparentBackground();
         this.setContentView(flutterView);
+        DBHelper helper = new DBHelper(context, "selectCity", null, 1);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    helper.createDataBase();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
 
 
         new MethodChannel(flutterView, "com.pages.your/project_list").setMethodCallHandler(
@@ -136,8 +148,8 @@ public class MainActivity extends FlutterActivity {
 //             CityPickView cityPickView =   new  CityPickView();
 //             cityPickView.showCitySelect(MainActivity.this);
 
-            Intent intent = new Intent(MainActivity.this,SelectCityActivity.class);
-            startActivityForResult(intent,10000);
+            Intent intent = new Intent(MainActivity.this, SelectCityActivity.class);
+            startActivityForResult(intent, 10000);
 
 
             reply.reply("我来自 " + " !! 使用的是 BasicMessageChannel 方式");
@@ -203,7 +215,7 @@ public class MainActivity extends FlutterActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == RESULT_OK&&requestCode== MAPCODE) {
+        if (resultCode == RESULT_OK && requestCode == MAPCODE) {
             if (requestCode == MAPCODE) {
                 double latitude = data.getDoubleExtra("latitude", -1);
                 double longitude = data.getDoubleExtra("longitude", -1);
@@ -215,7 +227,7 @@ public class MainActivity extends FlutterActivity {
             }
         }
 
-        if (resultCode == RESULT_OK&&requestCode== 10000){
+        if (resultCode == RESULT_OK && requestCode == 10000) {
 
 
             List list = Transmission.getInstance().list;
