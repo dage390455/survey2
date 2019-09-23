@@ -11,6 +11,7 @@ import 'package:sensoro_survey/net/api/app_api.dart';
 import 'package:sensoro_survey/net/api/net_config.dart';
 import 'package:sensoro_survey/views/survey/SurveyPointInformation/survay_electrical_fire.dart';
 import 'package:sensoro_survey/views/survey/common/data_transfer_manager.dart';
+import 'package:sensoro_survey/views/survey/commonWidegt/TakePhotoView.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 import 'package:sensoro_survey/views/survey/editPage/edit_address_page.dart';
 import 'package:sensoro_survey/views/survey/editPage/edit_boss_person_page.dart';
@@ -141,68 +142,7 @@ class _State extends State<DynamicCreatePage> {
       width: 0,
     );
 
-//
-    Widget getView(TestComponentModel model){
-      List<String> optionList = model.options.split(";");
 
-      if (model.comp_code == "check_option" &&
-          model.comp_type == "radio") {
-        //单选框
-        return   MutilCheck1(
-          title: model.variable_name,
-          dataList: List<MutilCheckModel>.generate(
-              optionList.length, (i) => new MutilCheckModel(optionList[i], false)),
-          isSingle: true,
-        );
-      }
-      else if (model.comp_code == "check_option" &&
-          model.comp_type == "checkbox") {
-        //复选框
-        return MutilCheck1(
-          title: model.variable_name,
-          dataList: List<MutilCheckModel>.generate(
-              optionList.length, (i) => new MutilCheckModel(optionList[i], false)),
-          isSingle: false,
-        );
-      }
-      else {
-        return emptyContainer;
-      }
-    }
-
-
-    Widget myListView = new ListView.builder(
-        physics: new AlwaysScrollableScrollPhysics()
-            .applyTo(new BouncingScrollPhysics()), // 这个是用来控制能否在不屏的状态下滚动的属性
-        itemCount: dataList.length == 0 ? 1 : dataList.length,
-        // separatorBuilder: (BuildContext context, int index) =>
-        // Divider(height: 1.0, color: Colors.grey, indent: 20), // 添加分割线
-        itemBuilder: (BuildContext context, int index) {
-          // print("rebuild index =$index");
-          if (dataList.length == 0) {
-            return new Container(
-              padding: const EdgeInsets.only(
-                  top: 150.0, bottom: 0, left: 0, right: 0),
-              child: new Column(children: <Widget>[
-                new Image(
-                  image: new AssetImage("assets/images/nocontent.png"),
-                  width: 120,
-                  height: 120,
-                  // fit: BoxFit.fitWidth,
-                ),
-                Text("暂无控件",
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                        color: prefix0.LIGHT_TEXT_COLOR,
-                        fontWeight: FontWeight.normal,
-                        fontSize: 17)),
-              ]),
-            );
-          }
-
-          return getView(dataList[index]);
-
-        });
 
 
 
@@ -211,7 +151,9 @@ class _State extends State<DynamicCreatePage> {
     Widget bigContainer = Container(
       color: prefix0.LIGHT_LINE_COLOR,
       padding: new EdgeInsets.fromLTRB(0, 0, 0, 0),
-      child: myListView
+      child:Container(
+        child:  TakePhotoView(),
+      )
     );
 
     return Scaffold(

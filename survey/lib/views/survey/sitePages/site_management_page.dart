@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sensoro_survey/generated/customCalendar/lib/controller.dart';
 import 'package:sensoro_survey/net/api/app_api.dart';
 import 'package:sensoro_survey/net/api/net_config.dart';
@@ -84,12 +85,28 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
     }
   }
 
-  void _textSql() async {
+  void _textSql()async {
 
-    Future<String> future = _locationBasicMessageChannel.send("000000");
-    future.then((message) {
-      print("========================" + message);
-    });
+
+    final result = await Navigator.of(context, rootNavigator: true)
+        .push(CupertinoPageRoute(builder: (BuildContext context) {
+      return new DynamicCreatePage();
+    }));
+
+    if (result != null) {
+      String name = result as String;
+      if (name == "refreshList") {}
+      // this.name = name;
+      setState(() {});
+    }
+
+//    Fluttertoast.showToast(
+//        msg: "This is Center Short Toast",
+//        toastLength: Toast.LENGTH_SHORT,
+//        gravity: ToastGravity.CENTER,
+//        timeInSecForIos: 1,
+//
+//    );
   }
 
 
@@ -179,6 +196,26 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
       // ),
       title: Text("区域名称"),
       actions: <Widget>[
+
+        Container(
+          padding: new EdgeInsets.fromLTRB(0, 0, 0, 0),
+          alignment: Alignment.center,
+          child: GestureDetector(
+              onTap: () {
+                // 点击空白页面关闭键盘
+                _textSql();
+              },
+              child: Padding(
+                padding: new EdgeInsets.fromLTRB(20, 20, 20, 20),
+                child: Text(
+                  "测试",
+                  style: TextStyle(
+                    color: Colors.grey,
+                  ),
+                ),
+              )
+          ),
+        ),
       ],
     );
 
