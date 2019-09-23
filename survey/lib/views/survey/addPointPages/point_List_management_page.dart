@@ -56,7 +56,8 @@ class _PointListManagementPageState extends State<PointListManagementPage> {
     if (result != null) {
       String name = result as String;
       if (name == "refreshList") {}
-      // this.name = name;
+      dataList.clear();
+      getListNetCall();
       setState(() {});
     }
   }
@@ -71,6 +72,8 @@ class _PointListManagementPageState extends State<PointListManagementPage> {
       String name = result as String;
       if (name == "refreshList") {
 //        loadLocalData();
+        dataList.clear();
+        getListNetCall();
       }
       // this.name = name;
       setState(() {});
@@ -119,9 +122,9 @@ class _PointListManagementPageState extends State<PointListManagementPage> {
               }
             }
           }
+          setState(() {});
         }
       }
-      setState(() {});
     }
   }
 
@@ -137,6 +140,7 @@ class _PointListManagementPageState extends State<PointListManagementPage> {
     if (result != null) {
       String name = result as String;
       if (name == "refreshList") {
+        dataList.clear();
         getListNetCall();
       }
       // this.name = name;
