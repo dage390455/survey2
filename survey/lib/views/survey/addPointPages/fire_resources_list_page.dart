@@ -2,33 +2,27 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:sensoro_survey/views/survey/common/data_transfer_manager.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
-import 'package:sensoro_survey/views/survey/sitePages/Model/SitePageModel.dart';
-import 'package:sensoro_survey/views/survey/sitePages/buildinglist_page.dart';
-import 'package:sensoro_survey/views/survey/sitePages/creat_site_page.dart';
 
 import '../const.dart';
-import 'fire_resources_list_page.dart';
+import 'add_new_fireresoure_page.dart';
 
-class PointRiskTypeSelectPage extends StatefulWidget {
-  PointRiskTypeSelectPage({Key key, this.title}) : super(key: key);
+class FireResourcesListPage extends StatefulWidget {
+  FireResourcesListPage({Key key, this.title}) : super(key: key);
 
   final String title;
 
   @override
-  _PointRiskTypeSelectPageState createState() =>
-      _PointRiskTypeSelectPageState();
+  _FireResourcesListPageState createState() => _FireResourcesListPageState();
 }
 
-class _PointRiskTypeSelectPageState extends State<PointRiskTypeSelectPage> {
-  List<String> dataList = ["风险评估", "消防隐患", "消防资源"];
-  var tabImages;
-  void _startManagePage(SitePageModel data) async {
-    DataTransferManager.shared.creatModel();
+class _FireResourcesListPageState extends State<FireResourcesListPage> {
+  List<String> dataList = ["消防栓", "灭火器", "消防栓"];
+
+  void _startAddNewFireResourcePage() async {
     final result = await Navigator.of(context, rootNavigator: true)
         .push(CupertinoPageRoute(builder: (BuildContext context) {
-      return new BuildingListPage(sitePageModel: data);
+      return new AddNewFireResourcePage();
     }));
 
     if (result != null) {
@@ -39,63 +33,13 @@ class _PointRiskTypeSelectPageState extends State<PointRiskTypeSelectPage> {
     }
   }
 
-  void _creatSite(SitePageModel model, bool isCreat) async {
-    DataTransferManager.shared.creatModel();
-    final result = await Navigator.of(context, rootNavigator: true)
-        .push(CupertinoPageRoute(builder: (BuildContext context) {
-      return new CreatSitePage(fireModel: model, isCreatSite: isCreat);
-    }));
-
-    if (result != null) {
-//      SitePageModel name = result as SitePageModel;
-//
-//      for (int i = 0; i < dataList.length; i++) {
-//        SitePageModel model = dataList[i];
-//        if (model.sitePageModelId == name.sitePageModelId) {
-//          dataList.removeAt(i);
-//          break;
-//        }
-//      }
-//
-//      dataList.add(name);
-//
-//      // this.name = name;
-//
-//      setState(() {});
-
-//      getListNetCall();
-    }
-  }
-
-  void _startFireResPageList() async {
-    final result = await Navigator.of(context, rootNavigator: true)
-        .push(CupertinoPageRoute(builder: (BuildContext context) {
-      return new FireResourcesListPage();
-    }));
-
-    if (result != null) {
-      // this.name = name;
-      setState(() {});
-    }
-  }
-
-  Image getTabImage(path) {
-    return Image.asset(path, width: 20.0, height: 20.0);
-  }
+  _itemClick(int Index) {}
 
   @override
   void initState() {
     // TODO: implement initState
 
     super.initState();
-
-    if (tabImages == null) {
-      tabImages = [
-        getTabImage('assets/images/pingfen.png'),
-        getTabImage('assets/images/yinhuan.png'),
-        getTabImage('assets/images/ziyuan.png'),
-      ];
-    }
   }
 
   @override
@@ -105,13 +49,7 @@ class _PointRiskTypeSelectPageState extends State<PointRiskTypeSelectPage> {
       brightness: Brightness.light,
       backgroundColor: Colors.white,
       centerTitle: true,
-      // title: Text(
-      //   "项目列表",
-      //   style: TextStyle(
-      //       color: BLACK_TEXT_COLOR, fontWeight: FontWeight.bold, fontSize: 16),
-      // ),
-      title: Text("勘察任务类型"),
-
+      title: Text("消防资源列表"),
       leading: IconButton(
         icon: Image.asset(
           "assets/images/back.png",
@@ -123,15 +61,6 @@ class _PointRiskTypeSelectPageState extends State<PointRiskTypeSelectPage> {
       ),
       actions: <Widget>[],
     );
-
-    //打开创建页面
-    _openCreatPage(int Index) {
-      switch (Index) {
-        case 1:
-          _startFireResPageList();
-          break;
-      }
-    }
 
     Widget myListView = new ListView.builder(
         physics: new AlwaysScrollableScrollPhysics()
@@ -155,19 +84,19 @@ class _PointRiskTypeSelectPageState extends State<PointRiskTypeSelectPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Container(
-                      color: LIGHT_LINE_COLOR,
-                      height: 12,
-                      width: prefix0.screen_width,
-                    ),
+//                    Container(
+//                      color: LIGHT_LINE_COLOR,
+//                      height: 12,
+//                      width: prefix0.screen_width,
+//                    ),
 
                     GestureDetector(
                       onTap: () {
-                        _openCreatPage(index);
+                        _itemClick(index);
 //                        _startManagePage(dataList[index]);
                       },
                       child: Container(
-                        height: 80,
+                        height: 50,
                         color: Colors.white,
                         padding: const EdgeInsets.only(
                             top: 0.0, bottom: 0, left: 20, right: 20),
@@ -177,9 +106,6 @@ class _PointRiskTypeSelectPageState extends State<PointRiskTypeSelectPage> {
                             //表示所有的子件都是从左到顺序排列，这是默认值
                             textDirection: TextDirection.ltr,
                             children: <Widget>[
-                              //这决定了左对齐
-                              tabImages[index],
-
                               Expanded(
                                 child: Container(
                                   padding: const EdgeInsets.only(
@@ -194,7 +120,7 @@ class _PointRiskTypeSelectPageState extends State<PointRiskTypeSelectPage> {
                               ),
                               Image.asset(
                                 "assets/images/right_arrar.png",
-                                width: 20,
+                                width: 2,
                               )
 //                              new SizedBox(
 //                                width: 10,
@@ -223,6 +149,23 @@ class _PointRiskTypeSelectPageState extends State<PointRiskTypeSelectPage> {
             ],
           );
         });
+
+    Widget bottomButton = Container(
+      color: prefix0.LIGHT_LINE_COLOR,
+      height: 50,
+      width: prefix0.screen_width,
+      child: new MaterialButton(
+        color: Colors.grey,
+        child: new Text("+ 添加资源",
+            style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.normal,
+                fontSize: 20)),
+        onPressed: () {
+          _startAddNewFireResourcePage();
+        },
+      ),
+    );
     Widget bodyContiner = new Container(
       color: Colors.white,
       // height: 140, //高度不填会自适应
@@ -240,7 +183,6 @@ class _PointRiskTypeSelectPageState extends State<PointRiskTypeSelectPage> {
           Expanded(
             child: myListView,
           ),
-          // bottomButton,
         ],
       ),
     );
@@ -248,6 +190,7 @@ class _PointRiskTypeSelectPageState extends State<PointRiskTypeSelectPage> {
     return new Scaffold(
       appBar: navBar,
       body: bodyContiner,
+      bottomSheet: bottomButton,
     );
   }
 }
