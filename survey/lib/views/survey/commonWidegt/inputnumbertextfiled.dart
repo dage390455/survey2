@@ -34,7 +34,9 @@ class _inputnumbertextfiledState extends State<inputnumbertextfiled> {
 
     _editingController.text = widget.defaultText;
     _editingController.addListener(() {
-      widget.callbacktext(_editingController.text);
+      if (_editingController.text.length > 0) {
+        widget.callbacktext(_editingController.text);
+      }
     });
   }
 

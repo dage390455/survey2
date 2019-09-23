@@ -35,11 +35,15 @@ class SitePageModel {
 
   String address = "";
   String parentId = "";
-  double belowFloor;
+  String belowFloor;
   String location = ",";
-  double height = 0;
-  double upperFloor;
+  String height;
+  String upperFloor;
   String remarks = "";
+
+  String cityText;
+  String districtText;
+  String provinceText;
 
   SitePageModel(
     this.id,
@@ -131,6 +135,36 @@ class SitePageModel {
     data['type'] = this.type;
     data['remarks'] = this.remarks;
     data['upper_floor'] = this.upperFloor;
+    data['status'] = this.status;
+    return data;
+  }
+
+  SitePageModel.fromDetailJson(Map<String, dynamic> json) {
+    cityText = json['city_text'];
+    districtText = json['district_text'];
+    address = json['address'];
+    province = json['province'];
+    provinceText = json['province_text'];
+    city = json['city'];
+    parentId = json['parent_id'];
+    district = json['district'];
+    name = json['name'];
+    id = json['id'];
+    status = json['status'];
+  }
+
+  Map<String, dynamic> toDetailJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['city_text'] = this.cityText;
+    data['district_text'] = this.districtText;
+    data['address'] = this.address;
+    data['province'] = this.province;
+    data['province_text'] = this.provinceText;
+    data['city'] = this.city;
+    data['parent_id'] = this.parentId;
+    data['district'] = this.district;
+    data['name'] = this.name;
+    data['id'] = this.id;
     data['status'] = this.status;
     return data;
   }

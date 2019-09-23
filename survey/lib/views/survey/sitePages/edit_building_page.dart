@@ -10,16 +10,16 @@ import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 import 'package:sensoro_survey/views/survey/editPage/edit_content_page.dart';
 import 'package:sensoro_survey/views/survey/sitePages/Model/SitePageModel.dart';
 
-class CreatbuildingPage extends StatefulWidget {
+class EditbuildingPage extends StatefulWidget {
   SitePageModel sitePageModel;
 
-  CreatbuildingPage(this.sitePageModel);
+  EditbuildingPage(this.sitePageModel);
 
   @override
   _State createState() => _State();
 }
 
-class _State extends State<CreatbuildingPage> {
+class _State extends State<EditbuildingPage> {
   BasicMessageChannel<String> _basicMessageChannel =
       BasicMessageChannel("BasicMessageChannelPlugin", StringCodec());
 
@@ -42,7 +42,7 @@ class _State extends State<CreatbuildingPage> {
           //给Android端的返回值
           return "========================收到Native消息：" + message;
         }));
-
+    getBuildingDetail();
     super.initState();
   }
 
@@ -59,18 +59,43 @@ class _State extends State<CreatbuildingPage> {
     });
   }
 
-  Future creatBuilding() async {
-    String urlStr = NetConfig.baseUrl +
-        NetConfig.createUrl +
-        "?parent_id=" +
-        widget.sitePageModel.id;
+  Future getBuildingDetail() async {
+    String urlStr =
+        NetConfig.baseUrl + NetConfig.getSiteUrl + widget.sitePageModel.id;
+    Map<String, dynamic> headers = {};
+    Map<String, dynamic> params = {};
+
+    print(params);
+
+    ResultData resultData = await AppApi.getInstance()
+        .get(urlStr, params: params, context: context, showLoad: true);
+    if (resultData.isSuccess()) {
+      // _stopLoading();
+
+      int code = resultData.response["code"].toInt();
+      if (code == 200) {
+        Map json = resultData.response["data"];
+
+        SitePageModel model = SitePageModel.fromDetailJson(json);
+        if (model != null) {
+          widget.sitePageModel = model;
+        }
+      }
+    }
+    _updateSaveState();
+    setState(() {});
+  }
+
+  Future editBuilding() async {
+    String urlStr =
+        NetConfig.baseUrl + NetConfig.editeUrl + this.widget.sitePageModel.id;
     Map<String, dynamic> headers = {};
     Map<String, dynamic> params = {"data": widget.sitePageModel.toBuildJson()};
 
     print(params);
 
     ResultData resultData = await AppApi.getInstance()
-        .post(urlStr, params: params, context: context, showLoad: true);
+        .put(urlStr, params: params, context: context, showLoad: true);
     if (resultData.isSuccess()) {
       // _stopLoading();
 
@@ -90,7 +115,7 @@ class _State extends State<CreatbuildingPage> {
       brightness: Brightness.light,
       backgroundColor: Colors.white,
       title: Text(
-        "新建建筑",
+        "建筑详情",
         style: TextStyle(color: Colors.black),
       ),
       leading: Container(
@@ -113,7 +138,7 @@ class _State extends State<CreatbuildingPage> {
           child: GestureDetector(
             onTap: () {
               if (this.isCheack) {
-                creatBuilding();
+                editBuilding();
               }
             },
             child: Text(
@@ -253,7 +278,7 @@ class _State extends State<CreatbuildingPage> {
                     inputnumbertextfiled(
                       title: "建筑高度(m)",
                       intputtype: 1,
-                      callbacktext: (text) {
+                      onChanged: (text) {
                         widget.sitePageModel.height = text;
                         print(text + "建筑高度");
                       },

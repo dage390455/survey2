@@ -19,8 +19,8 @@ class NetConfig {
   static const addPointUrl = "/prospect_info/create";
   //区域列表接口
   static const siteListUrl = "/site_info/list?parent_id=";
-  static const createUrl = "/site_info/create";
-  static const editeUrl = "/site_info/update/";
+  static const createUrl = "site_info/create";
+  static const editeUrl = "site_info/update/";
   static const getSiteUrl = "/site_info/detail/";
   static const deleteSiteUrl = "/site_info/delete/";
 

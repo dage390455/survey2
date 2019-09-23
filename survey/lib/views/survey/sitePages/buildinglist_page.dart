@@ -11,6 +11,7 @@ import 'package:sensoro_survey/views/survey/sitePages/Model/SitePageModel.dart';
 import '../const.dart';
 import 'creat_building_page.dart';
 import 'creat_site_page.dart';
+import 'edit_building_page.dart';
 
 class BuildingListPage extends StatefulWidget {
   BuildingListPage({Key key, this.sitePageModel}) : super(key: key);
@@ -28,7 +29,7 @@ class _BuildingListPageState extends State<BuildingListPage> {
   void _creatbuilding() async {
     final result = await Navigator.of(context, rootNavigator: true)
         .push(CupertinoPageRoute(builder: (BuildContext context) {
-      return new CreatbuildingPage();
+      return new CreatbuildingPage(widget.sitePageModel);
     }));
 
     if (result != null) {
@@ -38,7 +39,20 @@ class _BuildingListPageState extends State<BuildingListPage> {
     }
   }
 
-  ///暂时写死
+  ///建筑详情
+  void _buildingdetail(int index) async {
+    final result = await Navigator.of(context, rootNavigator: true)
+        .push(CupertinoPageRoute(builder: (BuildContext context) {
+      return new EditbuildingPage(widget.sitePageModel.buildingList[index]);
+    }));
+
+    if (result != null) {
+      SitePageModel sitePageModel = result as SitePageModel;
+//      widget.sitePageModel.buildingList.add(sitePageModel);
+      setState(() {});
+    }
+  }
+
   Future getBuildingListCall() async {
     String urlStr =
         NetConfig.siteListUrl + widget.sitePageModel.id + "&keyword=";
@@ -137,7 +151,9 @@ class _BuildingListPageState extends State<BuildingListPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        _buildingdetail(index);
+                      },
                       child: Container(
                         color: Colors.white,
                         padding: const EdgeInsets.all(20),
