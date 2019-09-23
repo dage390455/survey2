@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:sensoro_survey/net/NetService/result_data.dart';
+import 'package:sensoro_survey/net/api/app_api.dart';
+import 'package:sensoro_survey/net/api/net_config.dart';
 import 'package:sensoro_survey/views/survey/commonWidegt/SearchView.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 import 'package:sensoro_survey/views/survey/sitePages/Model/SitePageModel.dart';
@@ -12,20 +15,14 @@ import 'creat_site_page.dart';
 class BuildingListPage extends StatefulWidget {
   BuildingListPage({Key key, this.sitePageModel}) : super(key: key);
 
-  final SitePageModel sitePageModel;
+  SitePageModel sitePageModel;
 
   @override
   _BuildingListPageState createState() => _BuildingListPageState(sitePageModel);
 }
 
 class _BuildingListPageState extends State<BuildingListPage> {
-  SitePageModel model = SitePageModel("","","","","","","","",0.0,"","");
-  List<SitePageModel> listmodel = [];
-
-  _BuildingListPageState(SitePageModel sitePageModel) {
-    listmodel = sitePageModel.listplace;
-    model = sitePageModel;
-  }
+  _BuildingListPageState(SitePageModel sitePageModel) {}
 
   ///新建建筑
   void _creatbuilding() async {
@@ -36,7 +33,38 @@ class _BuildingListPageState extends State<BuildingListPage> {
 
     if (result != null) {
       SitePageModel sitePageModel = result as SitePageModel;
-      listmodel.add(sitePageModel);
+      widget.sitePageModel.buildingList.add(sitePageModel);
+      setState(() {});
+    }
+  }
+
+  ///暂时写死
+  Future getBuildingListCall() async {
+    String urlStr =
+        NetConfig.siteListUrl + widget.sitePageModel.id + "&keyword=";
+    Map<String, dynamic> headers = {};
+    Map<String, dynamic> params = {};
+
+    ResultData resultData = await AppApi.getInstance()
+        .getListNetCall(context, true, urlStr, headers, params);
+    if (resultData.isSuccess()) {
+      // _stopLoading();
+      widget.sitePageModel.buildingList.clear();
+      int code = resultData.response["code"].toInt();
+      if (code == 200) {
+        if (resultData.response["data"]["records"] is List) {
+          List resultList = resultData.response["data"]["records"];
+          if (resultList.length > 0) {
+            for (int i = 0; i < resultList.length; i++) {
+              Map json = resultList[i] as Map;
+              SitePageModel model = SitePageModel.fromBuildJson(json);
+              if (model != null) {
+                widget.sitePageModel.buildingList.add(model);
+              }
+            }
+          }
+        }
+      }
       setState(() {});
     }
   }
@@ -45,15 +73,23 @@ class _BuildingListPageState extends State<BuildingListPage> {
   void _openEreaPage() async {
     final result = await Navigator.of(context, rootNavigator: true)
         .push(CupertinoPageRoute(builder: (BuildContext context) {
-      return new CreatSitePage(fireModel: model, isCreatSite: false);
+      return new CreatSitePage(
+          fireModel: widget.sitePageModel, isCreatSite: false);
     }));
 
     if (result != null) {
       SitePageModel sitePageModel = result as SitePageModel;
-      sitePageModel.listplace = model.listplace;
-      model = sitePageModel;
+      sitePageModel.listplace = widget.sitePageModel.listplace;
+      widget.sitePageModel = sitePageModel;
       setState(() {});
     }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getBuildingListCall();
   }
 
   @override
@@ -61,12 +97,14 @@ class _BuildingListPageState extends State<BuildingListPage> {
     Widget myListView = new ListView.builder(
         physics: new AlwaysScrollableScrollPhysics()
             .applyTo(new BouncingScrollPhysics()), // 这个是用来控制能否在不屏的状态下滚动的属性
-        itemCount: listmodel.length == 0 ? 1 : listmodel.length,
+        itemCount: widget.sitePageModel.buildingList.length == 0
+            ? 1
+            : widget.sitePageModel.buildingList.length,
         // separatorBuilder: (BuildContext context, int index) =>
         // Divider(height: 1.0, color: Colors.grey, indent: 20), // 添加分割线
         itemBuilder: (BuildContext context, int index) {
           // print("rebuild index =$index");
-          if (listmodel.length == 0) {
+          if (widget.sitePageModel.buildingList.length == 0) {
             return new Container(
               padding: const EdgeInsets.only(
                   top: 80.0, bottom: 0, left: 0, right: 0),
@@ -114,7 +152,9 @@ class _BuildingListPageState extends State<BuildingListPage> {
                                         CrossAxisAlignment.start,
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: <Widget>[
-                                      Text(listmodel[index].siteName,
+                                      Text(
+                                          widget.sitePageModel
+                                              .buildingList[index].name,
                                           textAlign: TextAlign.start,
                                           style: TextStyle(
                                               color: prefix0.BLACK_TEXT_COLOR,
@@ -145,13 +185,15 @@ class _BuildingListPageState extends State<BuildingListPage> {
                 color: Colors.red,
                 icon: Icons.delete,
                 onTap: () => setState(() {
-                  listmodel.removeAt(index);
+                  widget.sitePageModel.buildingList.removeAt(index);
                 }),
               ),
             ],
           );
         });
 
+    Widget reflust = new RefreshIndicator(
+        displacement: 10.0, child: myListView, onRefresh: getBuildingListCall);
     Column body = Column(
       children: <Widget>[
         Padding(
@@ -161,7 +203,7 @@ class _BuildingListPageState extends State<BuildingListPage> {
               searchAction: (editText) => _searchAction(editText)),
         ),
         Expanded(
-          child: myListView,
+          child: reflust,
         ),
         Padding(
           padding: const EdgeInsets.all(20),
@@ -192,7 +234,7 @@ class _BuildingListPageState extends State<BuildingListPage> {
 
     return new Scaffold(
         appBar: new AppBar(
-          title: new Text(widget.sitePageModel.siteName),
+          title: new Text(widget.sitePageModel.name),
           centerTitle: true,
           leading: IconButton(
             icon: Image.asset(

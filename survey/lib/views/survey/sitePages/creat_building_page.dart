@@ -2,6 +2,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:sensoro_survey/net/api/app_api.dart';
+import 'package:sensoro_survey/net/api/net_config.dart';
 import 'package:sensoro_survey/views/survey/commonWidegt/inputnumbertextfiled.dart';
 import 'package:sensoro_survey/views/survey/commonWidegt/remarktextfiled.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
@@ -16,8 +18,7 @@ class CreatbuildingPage extends StatefulWidget {
 class _State extends State<CreatbuildingPage> {
   BasicMessageChannel<String> _basicMessageChannel =
       BasicMessageChannel("BasicMessageChannelPlugin", StringCodec());
-
-  SitePageModel sitePageModel = SitePageModel("","","","","","","","",0.0,"","");
+  SitePageModel sitePageModel;
 
   bool isCheack = false;
 
@@ -30,8 +31,8 @@ class _State extends State<CreatbuildingPage> {
             List list = message.split(",");
             if (list.length == 3) {
               setState(() {
-                sitePageModel.editLongitudeLatitude = list[0] + "," + list[1];
-                sitePageModel.editPosition = list[2];
+//                sitePageModel.location = list[0] + "," + list[1];
+//                sitePageModel.address = list[2];
                 _updateSaveState();
               });
             }
@@ -45,10 +46,7 @@ class _State extends State<CreatbuildingPage> {
 
   //向native发送消息
   void _sendToNative() {
-    var location = "0," +
-        sitePageModel.editLongitudeLatitude +
-        "," +
-        sitePageModel.editPosition;
+    var location = "0," + sitePageModel.location + "," + sitePageModel.address;
 
     Future<String> future = _basicMessageChannel.send(location);
     future.then((message) {
@@ -56,7 +54,25 @@ class _State extends State<CreatbuildingPage> {
     });
   }
 
+  Future creatBuilding() async {
+    String urlStr = NetConfig.baseUrl + NetConfig.createUrl;
+    Map<String, dynamic> headers = {};
+    Map<String, dynamic> params = {"data": sitePageModel.toBuildJson()};
 
+    print(params);
+
+    ResultData resultData = await AppApi.getInstance()
+        .post(urlStr, params: params, context: context, showLoad: true);
+    if (resultData.isSuccess()) {
+      // _stopLoading();
+
+      int code = resultData.response["code"].toInt();
+      if (code == 200) {
+        Navigator.of(context).pop(this.sitePageModel);
+      }
+      setState(() {});
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +105,7 @@ class _State extends State<CreatbuildingPage> {
           child: GestureDetector(
             onTap: () {
               if (this.isCheack) {
-                Navigator.of(context).pop(this.sitePageModel);
+                creatBuilding();
               }
             },
             child: Text(
@@ -108,7 +124,7 @@ class _State extends State<CreatbuildingPage> {
         context,
         new MaterialPageRoute(
             builder: (context) => new EditContentPage(
-                  name: this.sitePageModel.siteName,
+                  name: this.sitePageModel.name,
                   title: "建筑名称",
                   hintText: "请输入建筑名称",
                   historyKey: "buildingCreatHistoryKey",
@@ -118,7 +134,7 @@ class _State extends State<CreatbuildingPage> {
       if (result != null) {
         String name = result as String;
 
-        this.sitePageModel.siteName = name;
+        this.sitePageModel.name = name;
         _updateSaveState();
 
         setState(() {});
@@ -156,8 +172,8 @@ class _State extends State<CreatbuildingPage> {
                         ),
                         Expanded(
                           child: Text(
-                            this.sitePageModel.siteName.length > 0
-                                ? this.sitePageModel.siteName
+                            null != this.sitePageModel.name
+                                ? this.sitePageModel.name
                                 : "必填",
                             textAlign: TextAlign.right,
                             style: new TextStyle(fontSize: prefix0.fontsSize),
@@ -188,8 +204,8 @@ class _State extends State<CreatbuildingPage> {
                         ),
                         Expanded(
                           child: Text(
-                            this.sitePageModel.editPosition.length > 0
-                                ? this.sitePageModel.editPosition
+                            null != this.sitePageModel.address
+                                ? this.sitePageModel.address
                                 : "必填",
                             textAlign: TextAlign.right,
                             style: new TextStyle(fontSize: prefix0.fontsSize),
@@ -229,7 +245,8 @@ class _State extends State<CreatbuildingPage> {
                     inputnumbertextfiled(
                       title: "建筑高度(m)",
                       intputtype: 1,
-                      callbacktext: (text) {
+                      onChanged: (text) {
+                        sitePageModel.height = text;
                         print(text + "建筑高度");
                       },
                     ),
@@ -240,7 +257,9 @@ class _State extends State<CreatbuildingPage> {
                     inputnumbertextfiled(
                       title: "地上楼层数(层)",
                       intputtype: 1,
-                      callbacktext: (text) {
+                      onChanged: (text) {
+                        sitePageModel.upperFloor = text;
+
                         print(text + "地上楼层数");
                       },
                     ),
@@ -251,7 +270,9 @@ class _State extends State<CreatbuildingPage> {
                     inputnumbertextfiled(
                       title: "地下楼层数(层)",
                       intputtype: 1,
-                      callbacktext: (text) {
+                      onChanged: (text) {
+                        sitePageModel.belowFloor = text;
+
                         print(text + "地下楼层数");
                       },
                     ),
@@ -268,6 +289,7 @@ class _State extends State<CreatbuildingPage> {
             child: remarktextfiled(
               callbacktext: (text) {
                 print(text + "备注");
+                sitePageModel.remarks = text;
               },
             ),
           ),
@@ -296,8 +318,7 @@ class _State extends State<CreatbuildingPage> {
   }
 
   _updateSaveState() {
-    if (sitePageModel.siteName.length > 0 &&
-        sitePageModel.editPosition.length > 0) {
+    if (sitePageModel.name.length > 0 && sitePageModel.address.length > 0) {
       this.isCheack = true;
     } else {
       this.isCheack = false;
