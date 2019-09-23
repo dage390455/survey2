@@ -130,7 +130,7 @@ class _PointRiskManagementPageState extends State<PointRiskManagementPage> {
 
   _getData() {
     for (int i = 0; i < 5; i++) {
-      var sitePage = new SitePageModel("","","","","","","","",0.0);
+      var sitePage = new SitePageModel("","","","","","","","",0.0,"");
       sitePage.siteName = "望京soho T1";
 
       dataList.add(sitePage);
@@ -397,7 +397,7 @@ class _PointRiskManagementPageState extends State<PointRiskManagementPage> {
         padding: const EdgeInsets.all(20),
         child: GestureDetector(
           onTap: () {
-            _creatSite(new SitePageModel("","","0","area","","","","",0.0), true);
+            _creatSite(new SitePageModel("","","0","area","","","","",0.0,""), true);
           },
           child: Container(
             height: 40,

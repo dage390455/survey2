@@ -17,7 +17,7 @@ class _State extends State<CreatbuildingPage> {
   BasicMessageChannel<String> _basicMessageChannel =
       BasicMessageChannel("BasicMessageChannelPlugin", StringCodec());
 
-  SitePageModel sitePageModel = SitePageModel("","","","","","","","",0.0);
+  SitePageModel sitePageModel = SitePageModel("","","","","","","","",0.0,"");
 
   bool isCheack = false;
 
@@ -55,6 +55,8 @@ class _State extends State<CreatbuildingPage> {
       print("========================" + message);
     });
   }
+
+
 
   @override
   Widget build(BuildContext context) {

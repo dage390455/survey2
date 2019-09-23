@@ -27,7 +27,7 @@ import '../survey_type_page.dart';
 import 'Model/SitePageModel.dart';
 
 class CreatSitePage extends StatefulWidget {
-  SitePageModel fireModel = SitePageModel("","","0","area","","","","",0.0);
+  SitePageModel fireModel = SitePageModel("","","0","area","","","","",0.0,"");
   bool isCreatSite = false;
 
   CreatSitePage({this.fireModel,this.isCreatSite});
@@ -43,7 +43,7 @@ class _State extends State<CreatSitePage> {
   BasicMessageChannel  _locationBasicMessageChannel =
   BasicMessageChannel("BasicMessageChannelPluginGetCity", StandardMessageCodec());
   _State({this.fireModel});
-  SitePageModel fireModel = SitePageModel("","","0","area","","","","",0.0);
+  SitePageModel fireModel = SitePageModel("","","0","area","","","","",0.0,"");
   FocusNode blankNode = FocusNode();
   var isCheack = false;
   TextEditingController remarkController = TextEditingController();

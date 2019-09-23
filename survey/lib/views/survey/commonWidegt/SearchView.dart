@@ -7,10 +7,11 @@ import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 
 class SearchView extends StatefulWidget {
   var hitText = "";
+  var defineText = "";
   final searchAction;
   String searchStr = "";
-  TextEditingController searchController = TextEditingController();
-  SearchView({this.hitText, this.searchAction});
+
+  SearchView({this.hitText, this.searchAction,this.defineText});
 
   @override
   _State createState() =>
@@ -23,12 +24,14 @@ class _State extends State<SearchView> {
   List<String> tags = [];
 
   _State({this.hisoryKey, this.editParentText});
-
+  TextEditingController searchController = TextEditingController();
   @override
   void initState() {
     // TODO: implement initState
 
     super.initState();
+
+    searchController.text = widget.defineText;
   }
 
 
@@ -48,7 +51,7 @@ class _State extends State<SearchView> {
         editParentText(widget.searchStr);
         setState(() {});
       },
-      controller: widget.searchController,
+      controller: searchController,
       cursorWidth: 0,
       cursorColor: Colors.white,
       keyboardType: TextInputType.text,
@@ -82,7 +85,7 @@ class _State extends State<SearchView> {
 
             onPressed: () {
               editParentText("");
-              widget.searchController.text = "";
+              searchController.text = "";
               widget.searchStr = "";
 
 

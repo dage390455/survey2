@@ -129,7 +129,7 @@ class _PointRiskTypeSelectPageState extends State<PointRiskTypeSelectPage> {
       ],
     );
 
-
+    //打开创建页面
     _openCreatPage(int Index){
 
     }

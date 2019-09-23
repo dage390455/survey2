@@ -30,7 +30,7 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
 
   BasicMessageChannel  _locationBasicMessageChannel =
   BasicMessageChannel("BasicMessageChannelPluginGetCity", StandardMessageCodec());
-
+  FocusNode blankNode = FocusNode();
   bool calendaring = false;
   String beginTimeStr = "";
   String endTimeStr = "";
@@ -94,7 +94,7 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
 
 
   Future getListNetCall() async {
-    String urlStr = NetConfig.siteListUrl+"0";
+    String urlStr = NetConfig.siteListUrl+"0"+"&keyword="+searchStr;
     Map<String, dynamic> headers = {};
     Map<String, dynamic> params = {};
 
@@ -129,7 +129,7 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
 
   _getData() {
     for (int i = 0; i < 5; i++) {
-      var sitePage = new SitePageModel("","","","","","","","",0.0);
+      var sitePage = new SitePageModel("","","","","","","","",0.0,"");
       sitePage.siteName = "望京soho T1";
 
       dataList.add(sitePage);
@@ -165,60 +165,6 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
 
   @override
   Widget build(BuildContext context) {
-    Widget searchbar = TextField(
-      //文本输入控件
-      onSubmitted: (String str) {
-        //提交监听
-        // searchStr = val;
-        // print('用户提变更');
-      },
-      onChanged: (val) {
-        searchStr = val;
-        setState(() {});
-      },
-      controller: searchController,
-      cursorWidth: 0,
-      cursorColor: Colors.white,
-      keyboardType: TextInputType.text,
-      //设置输入框文本类型
-      textAlign: TextAlign.left,
-      //设置内容显示位置是否居中等
-      style: new TextStyle(
-        fontSize: 13.0,
-        color: prefix0.BLACK_TEXT_COLOR,
-      ),
-      autofocus: false,
-      //自动获取焦点
-      decoration: new InputDecoration(
-        border: InputBorder.none,
-        hintText: "场所名称",
-        icon: new Container(
-          padding: EdgeInsets.all(0.0),
-          child: new Image(
-            image: new AssetImage("assets/images/search.png"),
-            width: 20,
-            height: 20,
-            // fit: BoxFit.fitWidth,
-          ),
-        ),
-
-        suffixIcon: new IconButton(
-            icon: Image.asset(
-              "assets/images/close_black.png",
-              // height: 20,
-            ),
-            tooltip: '消除',
-            onPressed: () {
-              searchController.clear();
-              searchStr = "";
-              setState(() {});
-            }),
-
-        contentPadding: EdgeInsets.fromLTRB(3.0, 20.0, 3.0, 10.0), //设置显示本的一个内边距
-// //                border: InputBorder.none,//取默认的下划线边框
-      ),
-    );
-
 
 
     Widget navBar = AppBar(
@@ -233,26 +179,6 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
       // ),
       title: Text("区域名称"),
       actions: <Widget>[
-        Container(
-          padding: new EdgeInsets.fromLTRB(0, 0, 0, 0),
-          alignment: Alignment.center,
-          child: GestureDetector(
-              onTap: () {
-                // 点击空白页面关闭键盘
-                _textSql();
-              },
-              child: Padding(
-                padding: new EdgeInsets.fromLTRB(20, 20, 20, 20),
-                child: Text(
-                  "地图",
-                  style: TextStyle(
-                    color: Colors.grey,
-                  ),
-                ),
-              )
-          ),
-        ),
-
       ],
     );
 
@@ -350,19 +276,13 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
                   ]),
             ),
             secondaryActions: <Widget>[
-//              IconSlideAction(
-//                caption: '删除',
-//                color: Colors.red,
-//                icon: Icons.delete,
-//                onTap: () => setState(() {
-//                  dataList.removeAt(index);
-//                }),
-//              ),
             ],
           );
         });
 
     _searchAction(String text) {
+      searchStr = text;
+      getListNetCall();
       print("........................." + text);
     }
 
@@ -419,6 +339,7 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
             padding: new EdgeInsets.fromLTRB(20, 20, 20, 20),
             child: new SearchView(
                 hitText: "区域名称",
+                defineText: searchStr,
                 searchAction: (editText) => _searchAction(editText)),
           ),
 
@@ -438,10 +359,10 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
     Widget of = new Offstage(
       offstage: false,
       child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: new EdgeInsets.fromLTRB(20, 0, 20, 20),
         child: GestureDetector(
           onTap: () {
-            _creatSite(new SitePageModel("","","0","area","","","","",0.0), true);
+            _creatSite(new SitePageModel("","","0","area","","","","",0.0,""), true);
           },
           child: Container(
             height: 40,
@@ -468,7 +389,13 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
 
     return new Scaffold(
       appBar: navBar,
-      body: bodyContiner,
+      body: GestureDetector(
+        onTap: () {
+          // 点击空白页面关闭键盘
+          FocusScope.of(context).requestFocus(blankNode);
+        },
+        child: bodyContiner,
+      ),
       bottomSheet: of,
     );
   }

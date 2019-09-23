@@ -19,7 +19,7 @@ class BuildingListPage extends StatefulWidget {
 }
 
 class _BuildingListPageState extends State<BuildingListPage> {
-  SitePageModel model = SitePageModel("","","","","","","","",0.0);
+  SitePageModel model = SitePageModel("","","","","","","","",0.0,"");
   List<SitePageModel> listmodel = [];
 
   _BuildingListPageState(SitePageModel sitePageModel) {

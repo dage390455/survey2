@@ -45,6 +45,7 @@ class SitePageModel {
       this.city, //组件类型
       this.district,
       this.size,
+      this.remark,
       // this.extraInfo,
    );
 
@@ -58,13 +59,13 @@ class SitePageModel {
     json['province'],
     json['city'],
     json['district'],
-    json['size'] ,
-
+    json['size'] ==null?0.0:json['size'],
+    json['remarks'] == null?"":json['remarks']
   );
 
   Map<String, dynamic> toJson() => {
-    "id": this.id,
-    "status": this.status,
+//    "id": this.id,
+//    "status": this.status,
     "parent_id": this.parent_id,
     "type": this.type,
     "name": this.name,
@@ -72,6 +73,7 @@ class SitePageModel {
     "city": city, //组件类型
     "district":district,
     "size": size,
+    "remarks":remark,
   };
 
 }
