@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
+import 'package:sensoro_survey/views/survey/sitePages/Model/fire_resource_model.dart';
 
 import '../const.dart';
 import 'add_new_fireresoure_page.dart';
@@ -12,12 +13,15 @@ class FireResourcesListPage extends StatefulWidget {
 
   final String title;
 
+  List<FireResourceModel> dataList = List<FireResourceModel>.generate(
+      3, (i) => new FireResourceModel("消防栓" + i.toString(), "消防栓", "", "", ""));
+
   @override
   _FireResourcesListPageState createState() => _FireResourcesListPageState();
 }
 
 class _FireResourcesListPageState extends State<FireResourcesListPage> {
-  List<String> dataList = ["消防栓", "灭火器", "消防栓"];
+//  List<String> dataList = ["消防栓", "灭火器", "消防栓"];
 
   void _startAddNewFireResourcePage() async {
     final result = await Navigator.of(context, rootNavigator: true)
@@ -26,14 +30,15 @@ class _FireResourcesListPageState extends State<FireResourcesListPage> {
     }));
 
     if (result != null) {
-      String name = result as String;
-      if (name == "refreshList") {}
-      // this.name = name;
+      FireResourceModel sitePageModel = result as FireResourceModel;
+
+      widget.dataList.add(sitePageModel);
+
       setState(() {});
     }
   }
 
-  _itemClick(int Index) {}
+  _itemClick(int index) {}
 
   @override
   void initState() {
@@ -65,7 +70,7 @@ class _FireResourcesListPageState extends State<FireResourcesListPage> {
     Widget myListView = new ListView.builder(
         physics: new AlwaysScrollableScrollPhysics()
             .applyTo(new BouncingScrollPhysics()), // 这个是用来控制能否在不屏的状态下滚动的属性
-        itemCount: 3,
+        itemCount: widget.dataList.length,
         // separatorBuilder: (BuildContext context, int index) =>
         // Divider(height: 1.0, color: Colors.grey, indent: 20), // 添加分割线
         itemBuilder: (BuildContext context, int index) {
@@ -110,7 +115,8 @@ class _FireResourcesListPageState extends State<FireResourcesListPage> {
                                 child: Container(
                                   padding: const EdgeInsets.only(
                                       top: 0.0, bottom: 0, left: 10, right: 0),
-                                  child: Text(dataList[index],
+                                  child: Text(
+                                      widget.dataList[index].resourceName,
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
                                           color: prefix0.BLACK_TEXT_COLOR,
