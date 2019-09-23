@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:sensoro_survey/generated/customCalendar/lib/controller.dart';
+import 'package:sensoro_survey/model/project_info_model.dart';
 import 'package:sensoro_survey/net/api/app_api.dart';
 import 'package:sensoro_survey/net/api/net_config.dart';
 import 'package:sensoro_survey/views/survey/addPointPages/point_risk_type_select_page.dart';
@@ -15,23 +16,24 @@ import 'package:sensoro_survey/views/survey/sitePages/creat_site_page.dart';
 import 'package:sensoro_survey/views/survey/sitePages/sqflite_page.dart';
 
 import '../const.dart';
+import '../point_content_page.dart';
 
 
-class PointRiskManagementPage extends StatefulWidget {
-  PointRiskManagementPage({Key key, this.title}) : super(key: key);
+class PointListManagementPage extends StatefulWidget {
+  PointListManagementPage({Key key, this.title,this.input}) : super(key: key);
 
-
+  projectInfoModel input;
   final String title;
 
   @override
-  _PointRiskManagementPageState createState() => _PointRiskManagementPageState();
+  _PointListManagementPageState createState() => _PointListManagementPageState(this.input);
 }
 
-class _PointRiskManagementPageState extends State<PointRiskManagementPage> {
-
+class _PointListManagementPageState extends State<PointListManagementPage> {
+  projectInfoModel input;
   BasicMessageChannel  _locationBasicMessageChannel =
   BasicMessageChannel("BasicMessageChannelPluginGetCity", StandardMessageCodec());
-
+  _PointListManagementPageState(this.input);
   bool calendaring = false;
   String beginTimeStr = "";
   String endTimeStr = "";
@@ -57,6 +59,24 @@ class _PointRiskManagementPageState extends State<PointRiskManagementPage> {
     }
   }
 
+
+  void _gotoPoint(int index) async {
+    final result = await Navigator.of(context, rootNavigator: true)
+        .push(CupertinoPageRoute(builder: (BuildContext context) {
+      return new PointContentPage(input: input);
+    }));
+
+    if (result != null) {
+      String name = result as String;
+      if (name == "refreshList") {
+//        loadLocalData();
+      }
+      // this.name = name;
+      setState(() {});
+    }
+  }
+  
+  
   void _creatSite(SitePageModel model, bool isCreat) async {
     DataTransferManager.shared.creatModel();
     final result = await Navigator.of(context, rootNavigator: true)
@@ -65,22 +85,6 @@ class _PointRiskManagementPageState extends State<PointRiskManagementPage> {
     }));
 
     if (result != null) {
-//      SitePageModel name = result as SitePageModel;
-//
-//      for (int i = 0; i < dataList.length; i++) {
-//        SitePageModel model = dataList[i];
-//        if (model.sitePageModelId == name.sitePageModelId) {
-//          dataList.removeAt(i);
-//          break;
-//        }
-//      }
-//
-//      dataList.add(name);
-//
-//      // this.name = name;
-//
-//      setState(() {});
-
       getListNetCall();
     }
   }
@@ -211,6 +215,46 @@ class _PointRiskManagementPageState extends State<PointRiskManagementPage> {
     );
 
 
+    Widget navBar = AppBar(
+      elevation: 1.0,
+      brightness: Brightness.light,
+      backgroundColor: Colors.white,
+      centerTitle: true,
+      // title: Text(
+      //   "项目列表",
+      //   style: TextStyle(
+      //       color: BLACK_TEXT_COLOR, fontWeight: FontWeight.bold, fontSize: 16),
+      // ),
+      leading: IconButton(
+        icon: Image.asset(
+          "assets/images/back.png",
+          // height: 20,
+        ),
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      ),
+      title: Text(input.projectName),
+      actions: <Widget>[
+        Container(
+          padding: new EdgeInsets.fromLTRB(0, 0, 20, 0),
+          alignment: Alignment.center,
+          child: GestureDetector(
+            onTap: () {
+
+            },
+            child: Text(
+              "详情",
+              style: TextStyle(
+                color: prefix0.GREEN_COLOR,
+              ),
+            ),
+          ),
+        ),
+
+      ],
+    );
+
 
 
 
@@ -265,7 +309,7 @@ class _PointRiskManagementPageState extends State<PointRiskManagementPage> {
 
                     GestureDetector(
                       onTap: () {
-                        _startManagePage(dataList[index]);
+                        _gotoPoint(index);
                       },
                       child: Container(
                         height: 80,
@@ -374,7 +418,7 @@ class _PointRiskManagementPageState extends State<PointRiskManagementPage> {
           Padding(
             padding: new EdgeInsets.fromLTRB(20, 20, 20, 20),
             child: new SearchView(
-                hitText: "任务名称",
+                hitText: "勘察点名称",
                 searchAction: (editText) => _searchAction(editText)),
           ),
 
@@ -412,7 +456,7 @@ class _PointRiskManagementPageState extends State<PointRiskManagementPage> {
             child: Padding(
               padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
               child: Text(
-                "+ 新建勘察任务",
+                "+ 新建勘察点",
                 textAlign: TextAlign.start,
                 style: TextStyle(color: Colors.grey),
               ),
@@ -423,7 +467,7 @@ class _PointRiskManagementPageState extends State<PointRiskManagementPage> {
     );
 
     return new Scaffold(
-
+      appBar: navBar,
       body: bodyContiner,
       bottomSheet: of,
     );

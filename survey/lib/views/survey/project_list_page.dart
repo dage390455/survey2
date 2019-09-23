@@ -42,6 +42,8 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:sensoro_survey/net/api/app_api.dart';
 import 'package:sensoro_survey/widgets/component.dart';
 
+import 'addPointPages/point_List_management_page.dart';
+
 //import 'package:fluwx/fluwx.dart' as fluwx;
 BasicMessageChannel<String> _basicMessageChannel =
     BasicMessageChannel("BasicMessageGetVersionChannelPlugin", StringCodec());
@@ -660,7 +662,7 @@ class _State extends State<HomePage> {
     void _gotoPoint(int index) async {
       final result = await Navigator.of(context, rootNavigator: true)
           .push(CupertinoPageRoute(builder: (BuildContext context) {
-        return new PointContentPage(input: dataList[index]);
+        return new PointListManagementPage(input: dataList[index]);
       }));
 
       if (result != null) {

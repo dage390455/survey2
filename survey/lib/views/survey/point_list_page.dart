@@ -424,7 +424,7 @@ class _PointListPageState extends State<PointListPage> {
 
     Widget bottomButton = Container(
       color: prefix0.LIGHT_LINE_COLOR,
-      height: 130,
+      height: 60,
       width: prefix0.screen_width,
       child: Column(
           //这行决定了左对齐
@@ -437,7 +437,7 @@ class _PointListPageState extends State<PointListPage> {
               child: new MaterialButton(
                 color: prefix0.GREEN_COLOR,
                 textColor: Colors.white,
-                child: new Text('新建勘察点',
+                child: new Text('新建安装点',
                     style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.normal,
@@ -455,76 +455,7 @@ class _PointListPageState extends State<PointListPage> {
             //     width: prefix0.screen_width - 40,
             //     height: 1.0,
             //     color: FENGE_LINE_COLOR),
-            Container(
-              height: 70,
-              width: prefix0.screen_width,
-              child: new Padding(
-                padding: new EdgeInsets.fromLTRB(20, 5, 20, 2),
-                child: Row(
 
-                    //Row 中mainAxisAlignment是水平的，Column中是垂直的
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //表示所有的子控件都是从左到右序排列，这是默认值
-                    textDirection: TextDirection.ltr,
-                    children: <Widget>[
-                      new Column(children: <Widget>[
-                        Container(
-                          height: 40,
-                          width: 40,
-                          child: IconButton(
-                            icon: isLeftSelect
-                                ? Image.asset("assets/images/网络铺设（选中）.png")
-                                : Image.asset(
-                                    "assets/images/网络铺设.png",
-                                    // height: 20,
-                                  ),
-                            onPressed: () {
-                              //   setState(() {
-                              //     isRightSelect = false;
-                              //     isLeftSelect = true;
-                              //   });
-                            },
-                          ),
-                        ),
-                        Text("网络铺设",
-                            textAlign: TextAlign.start,
-                            style: TextStyle(
-                                color: isLeftSelect
-                                    ? prefix0.BLACK_TEXT_COLOR
-                                    : prefix0.LIGHT_TEXT_COLOR,
-                                fontWeight: FontWeight.normal,
-                                fontSize: 13)),
-                      ]),
-                      new Column(children: <Widget>[
-                        Container(
-                          height: 40,
-                          width: 40,
-                          child: IconButton(
-                            icon: isRightSelect
-                                ? Image.asset("assets/images/终端安装（选中）.png")
-                                : Image.asset(
-                                    "assets/images/终端安装.png",
-                                  ),
-                            onPressed: () {
-                              setState(() {
-                                isRightSelect = true;
-                                isLeftSelect = false;
-                              });
-                            },
-                          ),
-                        ),
-                        Text("终端安装",
-                            textAlign: TextAlign.start,
-                            style: TextStyle(
-                                color: isRightSelect
-                                    ? prefix0.BLACK_TEXT_COLOR
-                                    : prefix0.LIGHT_TEXT_COLOR,
-                                fontWeight: FontWeight.normal,
-                                fontSize: 13)),
-                      ]),
-                    ]),
-              ),
-            ),
           ]),
     );
 
@@ -594,7 +525,7 @@ class _PointListPageState extends State<PointListPage> {
                   height: 120,
                   // fit: BoxFit.fitWidth,
                 ),
-                Text("没有已创建的勘察点，请创建勘察点",
+                Text("没有已创建的安装点，请创建安装点",
                     textAlign: TextAlign.start,
                     style: TextStyle(
                         color: prefix0.LIGHT_TEXT_COLOR,
