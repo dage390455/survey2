@@ -289,7 +289,10 @@ class _PointRiskManagementPageState extends State<PointRiskManagementPage> {
                                           fontSize: 17)),
                                 ),
                               ),
-
+                              Image.asset(
+                                "assets/images/right_arrar.png",
+                                width: 20,
+                              ),
                               new SizedBox(
                                 width: 10,
                               ),

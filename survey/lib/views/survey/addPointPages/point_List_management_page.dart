@@ -17,6 +17,7 @@ import 'package:sensoro_survey/views/survey/sitePages/sqflite_page.dart';
 
 import '../const.dart';
 import '../point_content_page.dart';
+import 'Model/PointListModel.dart';
 
 
 class PointListManagementPage extends StatefulWidget {
@@ -37,12 +38,12 @@ class _PointListManagementPageState extends State<PointListManagementPage> {
   bool calendaring = false;
   String beginTimeStr = "";
   String endTimeStr = "";
-
+  String searchStr = "";
   String dateFilterStr = "";
   CalendarController controller;
-  String searchStr = "";
+
   TextEditingController searchController = TextEditingController();
-  List<SitePageModel> dataList = [];
+  List<PointListModel> dataList = [];
 
   void _startManagePage(SitePageModel data) async {
     DataTransferManager.shared.creatModel();
@@ -99,7 +100,7 @@ class _PointListManagementPageState extends State<PointListManagementPage> {
 
 
   Future getListNetCall() async {
-    String urlStr = NetConfig.siteListUrl+"0";
+    String urlStr = NetConfig.pointListUrl+"123456"+"&keyword="+searchStr;
     Map<String, dynamic> headers = {};
     Map<String, dynamic> params = {};
 
@@ -116,7 +117,7 @@ class _PointListManagementPageState extends State<PointListManagementPage> {
           if (resultList.length > 0) {
             for (int i = 0; i < resultList.length; i++) {
               Map json = resultList[i] as Map;
-              SitePageModel model = SitePageModel.fromJson(json);
+              PointListModel model = PointListModel.fromJson(json);
               if (model != null) {
                 dataList.add(model);
               }
@@ -132,14 +133,6 @@ class _PointListManagementPageState extends State<PointListManagementPage> {
   }
 
 
-  _getData() {
-    for (int i = 0; i < 5; i++) {
-      var sitePage = new SitePageModel("","","","","","","","",0.0,"");
-      sitePage.siteName = "望京soho T1";
-
-      dataList.add(sitePage);
-    }
-  }
 
 
   @override
@@ -333,7 +326,10 @@ class _PointListManagementPageState extends State<PointListManagementPage> {
                                           fontSize: 17)),
                                 ),
                               ),
-
+                              Image.asset(
+                                "assets/images/right_arrar.png",
+                                width: 20,
+                              ),
                               new SizedBox(
                                 width: 10,
                               ),
