@@ -105,6 +105,8 @@ class _State extends State<CreatSitePage> {
     Map<String, dynamic> headers = {};
     Map<String, dynamic> params = {"data":fireModel.toJson()};
 
+    print(params);
+
     ResultData resultData = await AppApi.getInstance()
         .post(urlStr,params: params,context: context,showLoad: true);
     if (resultData.isSuccess()) {

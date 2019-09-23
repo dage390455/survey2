@@ -46,16 +46,16 @@ class PointContentPageState extends State<PointContentPage> {
     if (tabImages == null) {
       tabImages = [
         [
-          getTabImage('assets/images/home.png'),
-          getTabImage('assets/images/home_sel.png')
+          getTabImage('assets/images/fengxianpinggu.png'),
+          getTabImage('assets/images/fengxianpinggu-click.png')
         ],
         [
-          getTabImage('assets/images/alarm_home.png'),
-          getTabImage('assets/images/alarm_home_sel.png')
+          getTabImage('assets/images/wangluo.png'),
+          getTabImage('assets/images/wangluo-click.png')
         ],
         [
-          getTabImage('assets/images/alarm_home.png'),
-          getTabImage('assets/images/alarm_home_sel.png')
+          getTabImage('assets/images/zhongduananzhuang.png'),
+          getTabImage('assets/images/zhongduananzhuang-click.png')
         ],
       ];
     }

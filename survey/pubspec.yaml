@@ -101,6 +101,19 @@ flutter:
   - assets/images/manage_home_sel.png
   - assets/images/manage_home.png
   - assets/images/arrow_folddown.png
+  - assets/images/changsuo.png
+  - assets/images/fengxianpinggu.png
+  - assets/images/kancha.png
+  - assets/images/pingfen.png
+  - assets/images/wangluo.png
+  - assets/images/yinhuan.png
+  - assets/images/zhongduananzhuang.png
+  - assets/images/ziyuan.png
+  - assets/images/changsuo-click.png
+  - assets/images/fengxianpinggu-click.png
+  - assets/images/kancha-click.png
+  - assets/images/wangluo-click.png
+  - assets/images/zhongduananzhuang-click.png
   fonts:
   - family: FlamanteRoma
     fonts:

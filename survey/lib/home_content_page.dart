@@ -37,12 +37,12 @@ class HomeContentPageState extends State<HomeContentPage> {
     if (tabImages == null) {
       tabImages = [
         [
-          getTabImage('assets/images/home.png'),
-          getTabImage('assets/images/home_sel.png')
+          getTabImage('assets/images/kancha.png'),
+          getTabImage('assets/images/kancha-click.png')
         ],
         [
-          getTabImage('assets/images/alarm_home.png'),
-          getTabImage('assets/images/alarm_home_sel.png')
+          getTabImage('assets/images/changsuo.png'),
+          getTabImage('assets/images/changsuo-click.png')
         ],
 
       ];
