@@ -12,6 +12,7 @@ import 'package:package_info/package_info.dart';
 import 'package:sensoro_survey/model/component_configure_model.dart';
 import 'package:sensoro_survey/net/api/net_config.dart';
 import 'package:sensoro_survey/views/survey/point_content_page.dart';
+import 'package:sensoro_survey/views/survey/sitePages/Model/SitePageModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -267,7 +268,7 @@ class _State extends State<HomePage> {
     // });
 
     loadLocalData();
-    // getConfigureListNetCall();
+    getProjectListNetCall();
 
     controller = new CalendarController();
     controller.addMonthChangeListener(
@@ -376,6 +377,73 @@ class _State extends State<HomePage> {
             }
             _saveConfigureList(jsonStr);
           }
+        }
+      }
+    }
+  }
+
+  void getProjectListNetCall() async {
+    String urlStr = NetConfig.projectListUrl;
+    Map<String, dynamic> headers = {};
+    Map<String, dynamic> params = {};
+
+    ResultData resultData = await AppApi.getInstance()
+        .getListNetCall(context, true, urlStr, headers, params);
+    if (resultData.isSuccess()) {
+      // _stopLoading();
+      int code = resultData.response["code"].toInt();
+      if (code == 200) {
+        isFrist = false;
+        if (resultData.response["data"] is List) {
+          List resultList = resultData.response["data"];
+          if (resultList.length > 0) {
+            setState(() {
+              dataList.addAll(resultList);
+            });
+          }
+        }
+
+        if (resultData.response["data"] is Map) {
+          Map resultMap = resultData.response["data"];
+          if (resultMap["records"] is List) {
+            List<dynamic> list1 = resultMap["records"];
+            if (list1.length > 0) {
+              for (int i = 0; i < list1.length; i++) {
+                Map<String, dynamic> dic = list1[i];
+                String projectId = dic["id"];
+                String projectName = dic["name"] == null ? "" : dic["name"];
+                String createTime = dic["name"] == null ? "" : dic["name"];
+                String remark = dic["name"] == null ? "" : dic["name"];
+                String status = dic["status"] == null ? "" : dic["status"];
+                String site_id = dic["site_id"] == null ? "" : dic["site_id"];
+                String site_type =
+                    dic["site_type"] == null ? "" : dic["site_type"];
+                projectInfoModel model = projectInfoModel(projectId,
+                    projectName, "", remark, status, site_id, site_type, []);
+              }
+            }
+
+            //  {"id":"7c7b80cc-4806-411a-a07f-4787f3f09efd","status":
+            //  "0","site_id":"1","site_type":"building","name":"111"}
+            //  SitePageModel
+
+            // //本地化存储
+            // String jsonStr = "";
+            // for (Map map in configureList) {
+            //   String str = json.encode(map);
+            //   str = str.replaceAll(';', ';;');
+            //   if (jsonStr.length == 0) {
+            //     jsonStr = str;
+            //   } else {
+            //     jsonStr = jsonStr + ';' + str;
+            //   }
+            // }
+            // _saveConfigureList(jsonStr);
+          }
+          if (resultMap["total"] != null) {
+            listTotalCount = resultMap["total"].toInt();
+          }
+          setState(() {});
         }
       }
     }
@@ -693,7 +761,7 @@ class _State extends State<HomePage> {
     }
 
     void _addProject() async {
-      projectInfoModel model = projectInfoModel("", "", 1, "", []);
+      projectInfoModel model = projectInfoModel("", "", "", "", "", "", "", []);
 
       final result = await Navigator.of(context, rootNavigator: true)
           .push(CupertinoPageRoute(builder: (BuildContext context) {
@@ -711,7 +779,7 @@ class _State extends State<HomePage> {
     }
 
     void _addPoint() async {
-      projectInfoModel model = projectInfoModel("", "", 1, "", []);
+      projectInfoModel model = projectInfoModel("", "", "", "", "", "", "", []);
 
       final result = await Navigator.of(context, rootNavigator: true)
           .push(CupertinoPageRoute(builder: (BuildContext context) {

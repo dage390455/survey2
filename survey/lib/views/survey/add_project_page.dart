@@ -50,7 +50,7 @@ class _AddProjectPageState extends State<AddProjectPage> {
   String siteType = "";
   String siteName = "场所名称";
   String siteId = "";
-  int id = 0;
+  String id = "";
   List<dynamic> subList = [];
   bool isCheack = false;
   bool isEdit = false;
@@ -83,7 +83,7 @@ class _AddProjectPageState extends State<AddProjectPage> {
     id = this.input.projectId;
     subList = this.input.subList;
     super.initState();
-    if (name.length > 0 && id > 0) {
+    if (name.length > 0 && id.length > 0) {
       this.isEdit = true;
     }
     getListNetCall();
@@ -227,7 +227,7 @@ class _AddProjectPageState extends State<AddProjectPage> {
 // {"data":{"site_id":"222","site_type":"area","name":"项目2", "contact_list" :[{"type": "fire_admin", "user_name":"郑家杰", "mobile":
 // "13910686019"}, {"type": "fire_responsor", "user_name":"郭晶晶", "mobile": "13800138000"}]}}
 
-    _startLoading();
+    // _startLoading();
     Map<String, dynamic> params = {"data": json};
 
     ResultData resultData = await AppApi.getInstance()
@@ -282,7 +282,7 @@ class _AddProjectPageState extends State<AddProjectPage> {
     input.projectName = this.name;
     input.subList = this.subList;
     if (!isEdit) {
-      input.projectId = currentTimeMillis;
+      // input.projectId = currentTimeMillis;
     }
 
     String historyKey = 'projectList';

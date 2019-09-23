@@ -164,7 +164,7 @@ class SaveDataManger {
   }
 
   //修改已存储的内容，编辑模式
-  static replaceHistory(String tag, String historyKey, int id) async {
+  static replaceHistory(String tag, String historyKey, String id) async {
     var history = await SaveDataManger.getProjectHistory(historyKey);
     List<dynamic> tags = history;
     String teststr3 = jsonEncode(tags);

@@ -24,22 +24,28 @@ import 'electrical_fire_model.dart';
 //}
 
 class projectInfoModel {
-  int projectId; //项目id ，暂用时间戳
+  String projectId; //项目id ，暂用时间戳
   String projectName; //项目名称
   String createTime; //创建时间 yyyy-mm-dd hh:mm的格式
   String remark; //备注
+  String status;
+  String site_id;
+  String site_type;
   // List<projectInfoSubModel> subList;
   List<dynamic> subList; //勘察点信息列表
 
-  projectInfoModel(this.projectName, this.createTime, this.projectId,
-      this.remark, this.subList);
+  projectInfoModel(this.projectId, this.projectName, this.createTime,
+      this.remark, this.status, this.site_id, this.site_type, this.subList);
 
   projectInfoModel.fromJson(Map<String, dynamic> json)
       : this(
+          json['id'],
           json['projectName'],
           json['createTime'],
-          json['id'],
           json['remark'],
+          json['status'],
+          json['site_id'],
+          json['site_type'],
           json['subList'],
         );
 
@@ -64,6 +70,9 @@ class projectInfoModel {
         'createTime': createTime,
         'remark': remark,
         'id': projectId,
+        'status': status,
+        'site_id': site_id,
+        'site_type': site_type,
         'subList': this.subList1(),
       };
 }

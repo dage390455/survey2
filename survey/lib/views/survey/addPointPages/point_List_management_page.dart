@@ -126,8 +126,8 @@ class _PointListManagementPageState extends State<PointListManagementPage> {
   }
 
   void _addPoint() async {
-    projectInfoModel model =
-        projectInfoModel(input.projectId.toString(), "", 1, "", []);
+    projectInfoModel model = projectInfoModel(
+        input.projectId.toString(), "", "", "", "", "", "", []);
 
     final result = await Navigator.of(context, rootNavigator: true)
         .push(CupertinoPageRoute(builder: (BuildContext context) {

@@ -8,7 +8,7 @@ import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 class DataTransferManager {
   static var shared = DataTransferManager();
 
-  var project = projectInfoModel("", "", 1, "", []);
+  var project = projectInfoModel("", "", "", "", "", "", "", []);
   ElectricalFireModel fireCreatModel;
 
   bool isEditModel = false;

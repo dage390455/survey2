@@ -55,7 +55,7 @@ class _AddPointPageState extends State<AddPointPage> {
   double peopleNum = 0;
 
   String siteId = "";
-  int id = 0;
+  String id = "";
   List<dynamic> subList = [];
   bool isCheack = false;
   bool isEdit = false;
@@ -95,7 +95,7 @@ class _AddPointPageState extends State<AddPointPage> {
     id = this.input.projectId;
     subList = this.input.subList;
     super.initState();
-    if (name.length > 0 && id > 0) {
+    if (name.length > 0 && id.length > 0) {
       this.isEdit = true;
     }
     getListNetCall();
@@ -298,7 +298,7 @@ class _AddPointPageState extends State<AddPointPage> {
     input.projectName = this.name;
     input.subList = this.subList;
     if (!isEdit) {
-      input.projectId = currentTimeMillis;
+      // input.projectId = currentTimeMillis;
     }
 
     String historyKey = 'projectList';

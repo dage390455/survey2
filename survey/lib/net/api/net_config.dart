@@ -13,6 +13,8 @@ class NetConfig {
   //提交一组数据 POST
   static const updateRiskValueUrl = "variable_value/saveOrUpate";
 
+  //项目列表
+  static const projectListUrl = "/project_info/list";
   //新增项目信息 POST
   static const addProjectUrl = "/project_info/create";
   //新增勘察点信息 POST
