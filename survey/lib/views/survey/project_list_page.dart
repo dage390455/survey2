@@ -11,6 +11,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:package_info/package_info.dart';
 import 'package:sensoro_survey/model/component_configure_model.dart';
 import 'package:sensoro_survey/net/api/net_config.dart';
+import 'package:sensoro_survey/views/survey/point_content_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -659,7 +660,7 @@ class _State extends State<HomePage> {
     void _gotoPoint(int index) async {
       final result = await Navigator.of(context, rootNavigator: true)
           .push(CupertinoPageRoute(builder: (BuildContext context) {
-        return new PointListPage(input: dataList[index]);
+        return new PointContentPage(input: dataList[index]);
       }));
 
       if (result != null) {

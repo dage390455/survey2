@@ -4,19 +4,28 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:sensoro_survey/model/project_info_model.dart';
+import 'package:sensoro_survey/views/survey/point_list_page.dart';
 import 'package:sensoro_survey/views/survey/sitePages/site_management_page.dart';
 
-import 'views/survey/project_list_page.dart';
+import 'addPointPages/point_risk_management_page.dart';
 
-class HomeContentPage extends StatefulWidget {
+
+
+class PointContentPage extends StatefulWidget {
+  projectInfoModel input;
+  PointContentPage({Key key, @required this.input}) : super(key: key);
   @override
-  State<StatefulWidget> createState() => HomeContentPageState();
+  State<StatefulWidget> createState() => PointContentPageState(input);
 }
 
-class HomeContentPageState extends State<HomeContentPage> {
-  final appBarTitles = ['勘察项目', '场所管理'];
+class PointContentPageState extends State<PointContentPage> {
+  final appBarTitles = ['风险评估','网络铺设', '终端安装'];
   final tabTextStyleSelected = TextStyle(color: Colors.black);
   final tabTextStyleNormal = TextStyle(color: const Color(0xff969696));
+  projectInfoModel input;
+
+  PointContentPageState(this.input);
 
   // ignore: undefined_identifier
 //  Color themeColor = ThemeColorUtils.currentColorTheme;//设置主题标题背景颜色
@@ -33,7 +42,7 @@ class HomeContentPageState extends State<HomeContentPage> {
   @override
   void initState() {
     super.initState();
-    pages = <Widget>[ProjectListPage(),SiteManagementPage()];
+    pages = <Widget>[PointRiskManagementPage(),SiteManagementPage(),PointListPage(input: input)];
     if (tabImages == null) {
       tabImages = [
         [
@@ -44,7 +53,10 @@ class HomeContentPageState extends State<HomeContentPage> {
           getTabImage('assets/images/alarm_home.png'),
           getTabImage('assets/images/alarm_home_sel.png')
         ],
-
+        [
+          getTabImage('assets/images/alarm_home.png'),
+          getTabImage('assets/images/alarm_home_sel.png')
+        ],
       ];
     }
   }
@@ -67,12 +79,46 @@ class HomeContentPageState extends State<HomeContentPage> {
     return Text(appBarTitles[curIndex], style: getTabTextStyle(curIndex));
   }
 
+
+
+
   @override
   Widget build(BuildContext context) {
     _body = IndexedStack(
       children: pages,
       index: _tabIndex,
     );
+
+
+    Widget navBar = AppBar(
+      elevation: 1.0,
+      brightness: Brightness.light,
+      backgroundColor: Colors.white,
+      centerTitle: true,
+      // title: Text(
+      //   "项目列表",
+      //   style: TextStyle(
+      //       color: BLACK_TEXT_COLOR, fontWeight: FontWeight.bold, fontSize: 16),
+      // ),
+      leading: IconButton(
+        icon: Image.asset(
+          "assets/images/back.png",
+          // height: 20,
+        ),
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      ),
+      title: Text(input.projectName),
+      actions: <Widget>[
+
+
+      ],
+    );
+
+
+
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -84,6 +130,8 @@ class HomeContentPageState extends State<HomeContentPage> {
 //                style: TextStyle(color: Colors.white)),
 //            iconTheme: IconThemeData(color: Colors.white)
 //        ),
+
+        appBar: navBar,
         body: _body,
         bottomNavigationBar: CupertinoTabBar(//
           items: <BottomNavigationBarItem>[
@@ -93,9 +141,10 @@ class HomeContentPageState extends State<HomeContentPage> {
             BottomNavigationBarItem(
                 icon: getTabIcon(1),
                 title: getTabTitle(1)),
-//            BottomNavigationBarItem(
-//                icon: getTabIcon(2),
-//                title: getTabTitle(2)),
+
+            BottomNavigationBarItem(
+                icon: getTabIcon(2),
+                title: getTabTitle(2)),
 //            BottomNavigationBarItem(
 //                icon: getTabIcon(3),
 //                title: getTabTitle(3)),

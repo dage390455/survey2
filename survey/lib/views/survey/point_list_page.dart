@@ -813,7 +813,7 @@ class _PointListPageState extends State<PointListPage> {
       // title: Text("Flutter Layout Demo"),
       title: "Flutter Layout Demo",
       home: Scaffold(
-          appBar: navBar,
+//          appBar: navBar,
           body: GestureDetector(
             onTap: () {
               // 点击空白页面关闭键盘
