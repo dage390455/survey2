@@ -147,7 +147,14 @@ import Photos
 //            }
 //            navigationC.pushViewController(postion, animated: true);
             fr("swift 传值成功")
+            
+            
+            
             var sourceType = UIImagePickerControllerSourceType.camera
+             let mess = message as! String
+                if(mess == "1"){
+                    sourceType = UIImagePickerControllerSourceType.photoLibrary
+                }
             
             
             if !UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.camera){
@@ -204,6 +211,9 @@ import Photos
         return "\(timeStamp)"
     }
 
+    
+    
+    
  // 微信开放平台  AppID：wxa6699198d77a32f2   e4f935b68806e2d49ba31cd0f3ae33ef  Bundle ID：com.sensoro.survey1
  // 微信开放平台  AppID：wxf274fbb694ee5981  c63730e77d8a95a0670a161a053814f0  Bundle ID：com.sensoro.survey
 }
