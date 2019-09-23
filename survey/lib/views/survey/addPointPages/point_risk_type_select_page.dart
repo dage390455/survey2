@@ -130,7 +130,9 @@ class _PointRiskTypeSelectPageState extends State<PointRiskTypeSelectPage> {
     );
 
 
+    _openCreatPage(int Index){
 
+    }
 
     Widget myListView = new ListView.builder(
         physics: new AlwaysScrollableScrollPhysics()
@@ -163,6 +165,7 @@ class _PointRiskTypeSelectPageState extends State<PointRiskTypeSelectPage> {
 
                     GestureDetector(
                       onTap: () {
+                        _openCreatPage(index);
 //                        _startManagePage(dataList[index]);
                       },
                       child: Container(
@@ -191,7 +194,10 @@ class _PointRiskTypeSelectPageState extends State<PointRiskTypeSelectPage> {
                                           fontSize: 17)),
                                 ),
                               ),
-
+                              Image.asset(
+                                "assets/images/right_arrar.png",
+                                width: 20,
+                              )
 //                              new SizedBox(
 //                                width: 10,
 //                              ),
