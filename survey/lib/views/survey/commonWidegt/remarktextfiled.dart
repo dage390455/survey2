@@ -6,8 +6,10 @@ import '../const.dart';
 
 class remarktextfiled extends StatefulWidget {
   final callbacktext;
+  final String title;
 
-  const remarktextfiled({Key key, this.callbacktext}) : super(key: key);
+  const remarktextfiled({Key key, this.title, this.callbacktext})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -37,7 +39,7 @@ class _remarktextfiledState extends State<remarktextfiled> {
             new SizedBox(
               height: 10,
             ),
-            Text("备注",
+            Text(null == widget.title ? "备注" : widget.title,
                 textAlign: TextAlign.left,
                 style: TextStyle(
                     color: prefix0.LIGHT_TEXT_COLOR,

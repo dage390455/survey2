@@ -58,6 +58,7 @@ target 'Runner' do
     pod p[:name], :path => File.join(symlink, 'ios')
   }
   
+  pod 'WHToast'
   pod 'FMDB'
   pod 'libxlsxwriter'
   pod 'CityBase'
