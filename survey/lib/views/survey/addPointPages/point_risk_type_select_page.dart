@@ -28,19 +28,10 @@ class PointRiskTypeSelectPage extends StatefulWidget {
 
 class _PointRiskTypeSelectPageState extends State<PointRiskTypeSelectPage> {
 
-  BasicMessageChannel  _locationBasicMessageChannel =
-  BasicMessageChannel("BasicMessageChannelPluginGetCity", StandardMessageCodec());
 
-  bool calendaring = false;
-  String beginTimeStr = "";
-  String endTimeStr = "";
 
-  String dateFilterStr = "";
-  CalendarController controller;
-  String searchStr = "";
-  TextEditingController searchController = TextEditingController();
-  List<SitePageModel> dataList = [];
-
+  List<String> dataList = ["风险评估","消防隐患","消防资源"];
+  var tabImages;
   void _startManagePage(SitePageModel data) async {
     DataTransferManager.shared.creatModel();
     final result = await Navigator.of(context, rootNavigator: true)
@@ -80,60 +71,16 @@ class _PointRiskTypeSelectPageState extends State<PointRiskTypeSelectPage> {
 //
 //      setState(() {});
 
-      getListNetCall();
-    }
-  }
-
-  void _textSql() async {
-
-    Future<String> future = _locationBasicMessageChannel.send("000000");
-    future.then((message) {
-      print("========================" + message);
-    });
-  }
-
-
-  Future getListNetCall() async {
-    String urlStr = NetConfig.siteListUrl+"0";
-    Map<String, dynamic> headers = {};
-    Map<String, dynamic> params = {};
-
-    ResultData resultData = await AppApi.getInstance()
-        .getListNetCall(context, true, urlStr, headers, params);
-    if (resultData.isSuccess()) {
-      // _stopLoading();
-      dataList.clear();
-      int code = resultData.response["code"].toInt();
-      if (code == 200) {
-
-        if (resultData.response["data"]["records"] is List) {
-          List resultList = resultData.response["data"]["records"];
-          if (resultList.length > 0) {
-            for (int i = 0; i < resultList.length; i++) {
-              Map json = resultList[i] as Map;
-              SitePageModel model = SitePageModel.fromJson(json);
-              if (model != null) {
-                dataList.add(model);
-              }
-            }
-
-          }
-        }
-
-      }
-      setState(() {
-      });
+//      getListNetCall();
     }
   }
 
 
-  _getData() {
-    for (int i = 0; i < 5; i++) {
-      var sitePage = new SitePageModel("","","","","","","","",0.0);
-      sitePage.siteName = "望京soho T1";
 
-      dataList.add(sitePage);
-    }
+
+
+  Image getTabImage(path) {
+    return Image.asset(path, width: 20.0, height: 20.0);
   }
 
 
@@ -142,15 +89,15 @@ class _PointRiskTypeSelectPageState extends State<PointRiskTypeSelectPage> {
     // TODO: implement initState
 
     super.initState();
-    _locationBasicMessageChannel.setMessageHandler((message) => Future<String>(() {
-      print(message);
-      //message为native传递的数据
-      //给Android端的返回值
-      return "========================收到Native消息：" + message;
-    }));
 
+    if (tabImages == null) {
+      tabImages = [
+          getTabImage('assets/images/pingfen.png'),
+          getTabImage('assets/images/yinhuan.png'),
+          getTabImage('assets/images/ziyuan.png'),
+      ];
+    }
 
-    getListNetCall();
   }
 
   @override
@@ -188,31 +135,12 @@ class _PointRiskTypeSelectPageState extends State<PointRiskTypeSelectPage> {
     Widget myListView = new ListView.builder(
         physics: new AlwaysScrollableScrollPhysics()
             .applyTo(new BouncingScrollPhysics()), // 这个是用来控制能否在不屏的状态下滚动的属性
-        itemCount: dataList.length == 0 ? 1 : dataList.length,
+        itemCount: 3,
         // separatorBuilder: (BuildContext context, int index) =>
         // Divider(height: 1.0, color: Colors.grey, indent: 20), // 添加分割线
         itemBuilder: (BuildContext context, int index) {
           // print("rebuild index =$index");
-          if (dataList.length == 0) {
-            return new Container(
-              padding: const EdgeInsets.only(
-                  top: 150.0, bottom: 0, left: 0, right: 0),
-              child: new Column(children: <Widget>[
-                new Image(
-                  image: new AssetImage("assets/images/nocontent.png"),
-                  width: 120,
-                  height: 120,
-                  // fit: BoxFit.fitWidth,
-                ),
-                Text("暂无场所",
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                        color: prefix0.LIGHT_TEXT_COLOR,
-                        fontWeight: FontWeight.normal,
-                        fontSize: 17)),
-              ]),
-            );
-          }
+
 
           return Slidable(
             actionPane: SlidableDrawerActionPane(),
@@ -235,7 +163,7 @@ class _PointRiskTypeSelectPageState extends State<PointRiskTypeSelectPage> {
 
                     GestureDetector(
                       onTap: () {
-                        _startManagePage(dataList[index]);
+//                        _startManagePage(dataList[index]);
                       },
                       child: Container(
                         height: 80,
@@ -249,9 +177,13 @@ class _PointRiskTypeSelectPageState extends State<PointRiskTypeSelectPage> {
                             textDirection: TextDirection.ltr,
                             children: <Widget>[
                               //这决定了左对齐
+                              tabImages[index],
+
                               Expanded(
                                 child: Container(
-                                  child: Text(dataList[index].name,
+                                  padding:
+                                  const EdgeInsets.only(top: 0.0, bottom: 0, left: 10, right: 0),
+                                  child: Text(dataList[index],
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
                                           color: prefix0.BLACK_TEXT_COLOR,
@@ -260,9 +192,9 @@ class _PointRiskTypeSelectPageState extends State<PointRiskTypeSelectPage> {
                                 ),
                               ),
 
-                              new SizedBox(
-                                width: 10,
-                              ),
+//                              new SizedBox(
+//                                width: 10,
+//                              ),
                             ]),
                       ),
                     ),
@@ -287,20 +219,6 @@ class _PointRiskTypeSelectPageState extends State<PointRiskTypeSelectPage> {
             ],
           );
         });
-
-    _searchAction(String text) {
-      print("........................." + text);
-    }
-
-
-    Widget reflust = new  RefreshIndicator(
-      displacement: 10.0,
-      child: myListView,
-      onRefresh: getListNetCall
-
-    );
-
-
     Widget bodyContiner = new Container(
       color: Colors.white,
       // height: 140, //高度不填会自适应
@@ -316,7 +234,7 @@ class _PointRiskTypeSelectPageState extends State<PointRiskTypeSelectPage> {
               height: 1.0,
               color: FENGE_LINE_COLOR),
           Expanded(
-            child: reflust,
+            child: myListView,
           ),
           // bottomButton,
         ],
