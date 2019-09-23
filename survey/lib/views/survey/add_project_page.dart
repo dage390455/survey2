@@ -17,7 +17,6 @@ import 'package:sensoro_survey/widgets/text_input.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 import 'package:sensoro_survey/views/survey/const.dart';
 import 'package:sensoro_survey/views/survey/editPage/edit_project_name_page.dart';
-import 'package:sensoro_survey/widgets/progress_hud.dart';
 import 'package:sensoro_survey/model/project_info_model.dart';
 import 'package:sensoro_survey/views/survey/sitePages/Model/SitePageModel.dart';
 
@@ -27,7 +26,7 @@ import 'package:sensoro_survey/widgets/component.dart';
 import 'package:sensoro_survey/model/component_configure_model.dart';
 import 'package:sensoro_survey/net/api/net_config.dart';
 import 'package:sensoro_survey/views/survey/utility.dart';
-
+import 'package:sensoro_survey/widgets/progress_hud.dart';
 //import 'package:sensoro_survey/views/survey/editPage/edit_project_name_page.dart';
 import 'package:sensoro_survey/views/survey/common/save_data_manager.dart';
 
@@ -56,7 +55,8 @@ class _AddProjectPageState extends State<AddProjectPage> {
   bool isCheack = false;
   bool isEdit = false;
   int managerCount = 1;
-  Map<String, dynamic> admin = {};
+  bool _loading = false;
+  Map<String, dynamic> admin = {"name": "", "mobile": ""};
   List<Map<String, dynamic>> managerList = [
     {"name": "", "mobile": ""}
   ];
@@ -68,7 +68,7 @@ class _AddProjectPageState extends State<AddProjectPage> {
   UtilityPage utility = UtilityPage();
 
   TextEditingController step1TextController = TextEditingController();
-  TextEditingController managerTextController = TextEditingController();
+  TextEditingController step2TextController = TextEditingController();
 
   List<TextEditingController> textCList = [];
 
@@ -89,10 +89,26 @@ class _AddProjectPageState extends State<AddProjectPage> {
     getListNetCall();
 
     step1TextController.text = this.name;
-    step1TextController.addListener(() {});
+    step1TextController.addListener(() {
+      admin["name"] = step1TextController.text;
+    });
+    step2TextController.text = this.name;
+    step2TextController.addListener(() {
+      admin["mobile"] = step2TextController.text;
+    });
 
-    managerTextController.addListener(() {});
-    textCList.add(managerTextController);
+    TextEditingController managerTextController1 = TextEditingController();
+    TextEditingController managerTextController2 = TextEditingController();
+    managerTextController1.addListener(() {
+      Map<String, dynamic> manager = managerList[0];
+      manager["name"] = managerTextController1.text;
+    });
+    managerTextController2.addListener(() {
+      Map<String, dynamic> manager = managerList[0];
+      manager["mobile"] = managerTextController2.text;
+    });
+    textCList.add(managerTextController1);
+    textCList.add(managerTextController2);
   }
 
   Future getListNetCall() async {
@@ -167,15 +183,32 @@ class _AddProjectPageState extends State<AddProjectPage> {
       utility.showToast("场所名称不能为空");
       return;
     }
-    if ([admin["name"] as String].length == 0) {
+    String name1 = admin["name"];
+    if (name1.length == 0) {
       utility.showToast("责任人名字不能为空");
       return;
     }
-    if ([admin["mobile"] as String].length == 0) {
+    String mobile = admin["mobile"];
+    if (mobile.length == 0) {
       utility.showToast("责任人电话不能为空");
       return;
     }
-    for (int i = 0; i < managerList.length; i++) {}
+
+    List<Map<String, dynamic>> list = [];
+    list.add({
+      "type": "fire_admin",
+      "user_name": admin["name"],
+      "mobile": admin["mobile"]
+    });
+
+    for (int i = 0; i < managerList.length; i++) {
+      Map<String, dynamic> dic = managerList[i];
+      list.add({
+        "type": "fire_responsor",
+        "user_name": dic["name"],
+        "mobile": dic["mobile"]
+      });
+    }
 
     String urlStr = NetConfig.addProjedtUrl;
     Map<String, dynamic> headers = {"Content-Type": "application/json"};
@@ -185,45 +218,43 @@ class _AddProjectPageState extends State<AddProjectPage> {
     json["site_id"] = siteId;
     json["site_type"] = siteType;
     json["name"] = name;
-    // json["contact_list"] = model.variable_value;
+    json["contact_list"] = list;
 
-    List<Map<String, dynamic>> list = [];
-    for (int i = 0; i < dataList.length; i++) {
-      Map<String, dynamic> json = {};
-      json["site_id"] = siteId;
-      json["site_type"] = siteType;
-      json["name"] = name;
-      // json["contact_list"] = model.variable_value;
-      // json["variable_value"] = model.variable_value;
-      // json["variable_value"] = model.variable_value;
-      // Map<String, dynamic> json = model.toJson();
-      list.add(json);
-    }
-    // Map<String, dynamic> data1 = {
-    //   "risk_id": "1",
-    //   "variable_code": "name",
-    //   "variable_value": "郑家杰"
-    // };
+// {"data":{"site_id":"222","site_type":"area","name":"项目2", "contact_list" :[{"type": "fire_admin", "user_name":"郑家杰", "mobile":
+// "13910686019"}, {"type": "fire_responsor", "user_name":"郭晶晶", "mobile": "13800138000"}]}}
 
-    Map<String, dynamic> params = {"data": list};
+    _startLoading();
+    Map<String, dynamic> params = {"data": json};
 
     ResultData resultData = await AppApi.getInstance()
         .postListNetCall(context, true, urlStr, headers, params);
     if (resultData.isSuccess()) {
       // _stopLoading();
       int code = resultData.response["code"].toInt();
+      _stopLoading();
       if (code == 200) {
-        var msg = "数据上传成功";
-        // errorInfo = msg;
-        // showErrorMsg(errorInfo);
-        // showToast(errorInfo);
-        // Navigator.of(context).pop("");
+        var msg = "创建项目成��";
+        utility.showToast(msg);
+
+        Navigator.of(context).pop("refreshList");
       } else {
         var msg = resultData.response["msg"];
-        // errorInfo = msg;
-        // showErrorMsg(msg);
+        utility.showToast(msg);
       }
     }
+  }
+
+  //小菊花
+  Future<Null> _stopLoading() async {
+    setState(() {
+      _loading = false;
+    });
+  }
+
+  Future<Null> _startLoading() async {
+    setState(() {
+      _loading = true;
+    });
   }
 
   void saveInfoInLocal() {
@@ -270,9 +301,20 @@ class _AddProjectPageState extends State<AddProjectPage> {
     managerCount++;
     managerList.add({"name": "", "mobile": ""});
 
-    TextEditingController managerTextController = TextEditingController();
-    managerTextController.addListener(() {});
-    textCList.add(managerTextController);
+    int count = managerList.length;
+    TextEditingController managerTextController1 = TextEditingController();
+    TextEditingController managerTextController2 = TextEditingController();
+
+    managerTextController1.addListener(() {
+      Map<String, dynamic> manager = managerList[count - 1];
+      manager["name"] = managerTextController1.text;
+    });
+    managerTextController2.addListener(() {
+      Map<String, dynamic> manager = managerList[count - 1];
+      manager["mobile"] = managerTextController2.text;
+    });
+    textCList.add(managerTextController1);
+    textCList.add(managerTextController2);
 
     setState(() {});
   }
@@ -444,97 +486,129 @@ class _AddProjectPageState extends State<AddProjectPage> {
       ),
     );
 
-    Widget listView1 = Container(
-      padding: const EdgeInsets.only(top: 20.0, bottom: 0, left: 20, right: 20),
-      child: new Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(
-                  "项目名称",
-                  style: new TextStyle(fontSize: prefix0.fontsSize),
-                ),
-                Container(
-                  height: 50,
-                  width: 250,
-                  child: TextField(
-                    textAlign: TextAlign.center,
-                    controller: step1TextController,
-                    keyboardType: TextInputType.text,
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      labelText: '项目名称(必填)',
+    Widget listView1 = ProgressDialog(
+      loading: _loading,
+      msg: '正在加载...',
+      child: Container(
+        padding:
+            const EdgeInsets.only(top: 20.0, bottom: 0, left: 20, right: 20),
+        child: new Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  new Row(children: <Widget>[
+                    Text(
+                      "*",
+                      style: TextStyle(color: Colors.red),
                     ),
-                    maxLines: 1,
-                    autofocus: false,
-                    onChanged: (val) {
-                      name = val;
-                      setState(() {});
-                    },
+                    new SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      "项目名称",
+                      style: new TextStyle(fontSize: prefix0.fontsSize),
+                    ),
+                  ]),
+                  Container(
+                    height: 50,
+                    width: 250,
+                    child: TextField(
+                      textAlign: TextAlign.center,
+                      // controller: step1TextController,
+                      keyboardType: TextInputType.text,
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: '项目名称(必填)',
+                      ),
+                      maxLines: 1,
+                      autofocus: false,
+                      onChanged: (val) {
+                        name = val;
+                        setState(() {});
+                      },
+                    ),
                   ),
-                ),
-              ]),
-          Container(
-            color: prefix0.LINE_COLOR,
-            height: 1,
-          ),
-          GestureDetector(
-            onTap: editName, //写入方法名称就可以了，但是是无参的
-            child: Container(
-              alignment: Alignment.center,
-              height: 60,
-              child: new Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text(
-                    "场所层级",
-                    style: new TextStyle(fontSize: prefix0.fontsSize),
-                  ),
+                ]),
+            Container(
+              color: prefix0.LINE_COLOR,
+              height: 1,
+            ),
+            GestureDetector(
+              onTap: editName, //写入方法名称就可以了，但是是无参的
+              child: Container(
+                alignment: Alignment.center,
+                height: 60,
+                child: new Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    new Row(children: <Widget>[
+                      Text(
+                        "*",
+                        style: TextStyle(color: Colors.red),
+                      ),
+                      new SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        "场所层级",
+                        style: new TextStyle(fontSize: prefix0.fontsSize),
+                      ),
+                    ]),
 
-                  popTypeView,
-                  // Expanded(
-                  //   child: Text(
-                  //     "111",
-                  //     textAlign: TextAlign.right,
-                  //     style: new TextStyle(fontSize: prefix0.fontsSize),
-                  //   ),
-                  // ),
-                  // Image.asset(
-                  //   "assets/images/arrow_folddown.png",
-                  //   width: 20,
-                  // )
-                ],
+                    popTypeView,
+                    // Expanded(
+                    //   child: Text(
+                    //     "111",
+                    //     textAlign: TextAlign.right,
+                    //     style: new TextStyle(fontSize: prefix0.fontsSize),
+                    //   ),
+                    // ),
+                    // Image.asset(
+                    //   "assets/images/arrow_folddown.png",
+                    //   width: 20,
+                    // )
+                  ],
+                ),
               ),
             ),
-          ),
-          Container(
-            color: prefix0.LINE_COLOR,
-            height: 1,
-          ),
-          GestureDetector(
-            onTap: editName, //写入方����名称就可以了，但是是无参的
-            child: Container(
-              alignment: Alignment.center,
-              height: 60,
-              child: new Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text(
-                    "场所名称",
-                    style: new TextStyle(fontSize: prefix0.fontsSize),
-                  ),
-                  popNameView,
-                ],
+            Container(
+              color: prefix0.LINE_COLOR,
+              height: 1,
+            ),
+            GestureDetector(
+              onTap: editName, //写入方����名称就可以了，但是是无参的
+              child: Container(
+                alignment: Alignment.center,
+                height: 60,
+                child: new Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    new Row(children: <Widget>[
+                      Text(
+                        "*",
+                        style: TextStyle(color: Colors.red),
+                      ),
+                      new SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        "场所名称",
+                        style: new TextStyle(fontSize: prefix0.fontsSize),
+                      ),
+                    ]),
+                    popNameView,
+                  ],
+                ),
               ),
             ),
-          ),
-          Container(
-            color: prefix0.LINE_COLOR,
-            height: 1,
-          ),
-        ],
+            Container(
+              color: prefix0.LINE_COLOR,
+              height: 1,
+            ),
+          ],
+        ),
       ),
     );
 
@@ -568,20 +642,29 @@ class _AddProjectPageState extends State<AddProjectPage> {
                     Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          Text(
-                            "消防责任人姓名",
-                            style: new TextStyle(fontSize: prefix0.fontsSize),
-                          ),
+                          new Row(children: <Widget>[
+                            Text(
+                              "*",
+                              style: TextStyle(color: Colors.red),
+                            ),
+                            new SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              "消防责任人姓名",
+                              style: new TextStyle(fontSize: prefix0.fontsSize),
+                            ),
+                          ]),
                           Container(
                             height: 59,
                             width: 200,
                             child: TextField(
                               textAlign: TextAlign.center,
-                              // controller: step1TextController,
+                              controller: step1TextController,
                               keyboardType: TextInputType.text,
                               decoration: InputDecoration(
                                 border: InputBorder.none,
-                                labelText: '消防责任人姓名(必填)',
+                                hintText: '消防责任人姓名(必填)',
                               ),
                               maxLines: 1,
                               autofocus: false,
@@ -609,19 +692,29 @@ class _AddProjectPageState extends State<AddProjectPage> {
                     Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          Text(
-                            "消防责任人电话",
-                            style: new TextStyle(fontSize: prefix0.fontsSize),
-                          ),
+                          new Row(children: <Widget>[
+                            Text(
+                              "*",
+                              style: TextStyle(color: Colors.red),
+                            ),
+                            new SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              "消防责任人电话",
+                              style: new TextStyle(fontSize: prefix0.fontsSize),
+                            ),
+                          ]),
                           Container(
                             height: 59,
                             width: 200,
                             child: TextField(
                               textAlign: TextAlign.center,
+                              controller: step2TextController,
                               keyboardType: TextInputType.phone,
                               decoration: InputDecoration(
                                 border: InputBorder.none,
-                                labelText: '消防责任人电话(必填)',
+                                hintText: '消防责任人电话(必填)',
                               ),
                               maxLines: 1,
                               autofocus: false,
@@ -640,7 +733,9 @@ class _AddProjectPageState extends State<AddProjectPage> {
           if (index >= 4 &&
               index <= managerList.length * 2 + 3 &&
               managerList.length > 0 &&
-              managerList.length % 2 == 0) {
+              index % 2 == 0) {
+            double a = (index - 2) / 2;
+            int item = a.toInt();
             return new Container(
               color: Colors.white,
               height: 60,
@@ -662,14 +757,14 @@ class _AddProjectPageState extends State<AddProjectPage> {
                             child: TextField(
                               textAlign: TextAlign.center,
                               keyboardType: TextInputType.text,
+                              controller: textCList[item * 2 - 2],
                               decoration: InputDecoration(
                                 border: InputBorder.none,
-                                labelText: '消防管理人姓名(选填)',
+                                hintText: '消防管理人姓名(选填)',
                               ),
                               maxLines: 1,
                               autofocus: false,
                               onChanged: (val) {
-                                double item = (index - 4) / 2;
                                 setState(() {});
                               },
                             ),
@@ -683,7 +778,9 @@ class _AddProjectPageState extends State<AddProjectPage> {
           if (index >= 4 &&
               index <= managerList.length * 2 + 3 &&
               managerList.length > 0 &&
-              managerList.length % 2 == 1) {
+              index % 2 == 1) {
+            double a = (index - 2) / 2;
+            int item = a.toInt();
             return new Container(
               color: Colors.white,
               height: 60,
@@ -705,9 +802,10 @@ class _AddProjectPageState extends State<AddProjectPage> {
                             child: TextField(
                               textAlign: TextAlign.center,
                               keyboardType: TextInputType.phone,
+                              controller: textCList[item * 2 - 1],
                               decoration: InputDecoration(
                                 border: InputBorder.none,
-                                labelText: '消防管理人电话(选填)',
+                                hintText: '消防管理人电话(选填)',
                               ),
                               maxLines: 1,
                               autofocus: false,
@@ -800,7 +898,7 @@ class _AddProjectPageState extends State<AddProjectPage> {
                           // border: new Border.all(color: LIGHT_TEXT_COLOR, width: 0.5),
                           hintText: "点击输入",
                           contentPadding: EdgeInsets.fromLTRB(
-                              20.0, 20.0, 10.0, 10.0), //设置显示文本的一个内边距
+                              20.0, 20.0, 10.0, 10.0), //设置显示��本的一个内边距
 // //                border: InputBorder.none,//取消默认的下划线边框
                         ),
                       ),
@@ -849,7 +947,8 @@ class _AddProjectPageState extends State<AddProjectPage> {
               child: Text(
                 "完成",
                 style: TextStyle(
-                  color: this.isCheack ? prefix0.GREEN_COLOR : Colors.grey,
+                  color:
+                      this.name.length > 0 ? prefix0.GREEN_COLOR : Colors.grey,
                 ),
               ),
             ),
