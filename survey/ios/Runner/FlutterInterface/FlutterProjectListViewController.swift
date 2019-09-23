@@ -106,6 +106,12 @@ class FlutterProjectListViewController: FlutterBaseViewController,UIDocumentInte
         }
     }
     
+    func showToast(message:String) -> Void{
+        WHToast.showMessage(message, duration: 2, finishHandler:({
+            
+        }))
+    }
+    
     @objc func openFileAndSave(nofi : Notification){
         let urlstr = nofi.userInfo!["url"] as! NSString;
         var url : NSURL? = NSURL(string: urlstr as String);
@@ -194,6 +200,16 @@ class FlutterProjectListViewController: FlutterBaseViewController,UIDocumentInte
                         let userDefaults = UserDefaults.standard;
                         userDefaults.set(str, forKey: key as String);
 
+                    }
+                }
+            }
+                
+            else if ("showToast" == call.method) {
+                if let arguments:NSDictionary = call.arguments as! NSDictionary{
+                    
+                    if  let str = arguments["message"] as? NSString {
+                        self.showToast(message: str as String);
+                        
                     }
                 }
             }

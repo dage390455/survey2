@@ -893,170 +893,154 @@ class _State extends State<HomePage> {
             return emptyContainer;
           }
 
-          return Dismissible(
-            background: Container(
-                color: Colors.red,
-                child: Center(
-                  child: Text(
-                    "删除",
-                    style: TextStyle(color: Colors.white),
+          // return Dismissible(
+          //   background: Container(
+          //       color: Colors.red,
+          //       child: Center(
+          //         child: Text(
+          //           "删除",
+          //           style: TextStyle(color: Colors.white),
+          //         ),
+          //       )),
+          //   key: Key("$index"),
+          //   onDismissed: (DismissDirection direction) {
+          //     if (direction == DismissDirection.endToStart) {
+          //       //这里处理数据
+          //       print("这里处理数据");
+          //       //本地存储也去掉
+          //       String historyKey = 'projectList';
+          //       Map<String, dynamic> map = model.toJson();
+          //       String jsonStr = json.encode(map);
+
+          //       SaveDataManger.deleteHistory(
+          //         jsonStr,
+          //         historyKey,
+          //         model.projectId,
+          //       );
+          //       setState(() {
+          //         dataList.removeAt(index);
+          //       });
+          //     }
+          //   },
+          //   direction: DismissDirection.endToStart,
+          //   // direction: DismissDirection.up,
+          //   confirmDismiss: !confirmDismiss
+          //       ? null
+          //       : (DismissDirection dismissDirection) async {
+          //           switch (dismissDirection) {
+          //             case DismissDirection.endToStart:
+          //               return await _showConfirmationDialog(context, '删除') ==
+          //                   true;
+          //             case DismissDirection.startToEnd:
+          //               return false;
+          //             case DismissDirection.horizontal:
+          //             case DismissDirection.vertical:
+          //             case DismissDirection.up:
+          //             case DismissDirection.down:
+          //               assert(false);
+          //           }
+          //           return false;
+          //         },
+
+          return Container(
+            color: Colors.white,
+            height: 80,
+            padding:
+                const EdgeInsets.only(top: 0.0, bottom: 0, left: 0, right: 0),
+            child: new Column(
+
+                //这行决定了对齐
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Container(
+                    color: LIGHT_LINE_COLOR,
+                    height: 12,
+                    width: prefix0.screen_width,
                   ),
-                )),
-            key: Key("$index"),
-            onDismissed: (DismissDirection direction) {
-              if (direction == DismissDirection.endToStart) {
-                //这里处理数据
-                print("这里���理数据");
-                //本地存储也去掉
-                String historyKey = 'projectList';
-                Map<String, dynamic> map = model.toJson();
-                String jsonStr = json.encode(map);
 
-                SaveDataManger.deleteHistory(
-                  jsonStr,
-                  historyKey,
-                  model.projectId,
-                );
-                setState(() {
-                  dataList.removeAt(index);
-                });
-              }
-            },
-            direction: DismissDirection.endToStart,
-            // direction: DismissDirection.up,
-            confirmDismiss: !confirmDismiss
-                ? null
-                : (DismissDirection dismissDirection) async {
-                    switch (dismissDirection) {
-                      case DismissDirection.endToStart:
-                        return await _showConfirmationDialog(context, '删除') ==
-                            true;
-                      case DismissDirection.startToEnd:
-                        return false;
-                      // return await _showConfirmationDialog(
-                      //         context, 'delete') ==
-                      //     true;
-                      case DismissDirection.horizontal:
-                      case DismissDirection.vertical:
-                      case DismissDirection.up:
-                      case DismissDirection.down:
-                        assert(false);
-                    }
-                    return false;
-                  },
-            // confirmDismiss: confirmDismiss1,
-            child: new Container(
-              color: Colors.white,
-              padding:
-                  const EdgeInsets.only(top: 0.0, bottom: 0, left: 0, right: 0),
-              child: new Column(
-
-                  //这行决定了对齐
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Container(
-                      color: LIGHT_LINE_COLOR,
-                      height: 12,
-                      width: prefix0.screen_width,
-                    ),
-
-                    GestureDetector(
-                      onTap: () {
-                        _gotoPoint(index);
-                      },
-                      child: Container(
-                        color: Colors.white,
-                        padding: const EdgeInsets.only(
-                            top: 0.0, bottom: 0, left: 20, right: 20),
-                        child: Row(
-                            //Row 中mainAxisAlignment是水平的，Column中是垂直的
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            //表���所有的子件都是从左到顺序排列，这是默认值
-                            textDirection: TextDirection.ltr,
-                            children: <Widget>[
-                              //这决定了左对齐
-                              Expanded(
-                                child: Container(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: <Widget>[
-                                      //这个位置用ListTile就会报错
-                                      // Expanded(
-                                      Text(name,
-                                          textAlign: TextAlign.start,
-                                          style: TextStyle(
-                                              color: prefix0.BLACK_TEXT_COLOR,
-                                              fontWeight: FontWeight.normal,
-                                              fontSize: 17)),
-                                      // ),
-                                      new SizedBox(
-                                        height: 2,
-                                      ),
-                                      Text(time,
-                                          textAlign: TextAlign.start,
-                                          style: TextStyle(
-                                              color: prefix0.BLACK_TEXT_COLOR,
-                                              fontWeight: FontWeight.normal,
-                                              fontSize: 17)),
-                                    ],
-                                  ),
+                  GestureDetector(
+                    onTap: () {
+                      _gotoPoint(index);
+                    },
+                    child: Container(
+                      color: Colors.white,
+                      padding: const EdgeInsets.only(
+                          top: 0.0, bottom: 0, left: 20, right: 20),
+                      child: Row(
+                          //Row 中mainAxisAlignment是水平的，Column中是垂直的
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          //表���所有的子件都是从左到顺序排列，这是默认值
+                          textDirection: TextDirection.ltr,
+                          children: <Widget>[
+                            //这决定了左对齐
+                            Expanded(
+                              child: Container(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    //这个位置用ListTile就会报错
+                                    // Expanded(
+                                    Text(name,
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: prefix0.BLACK_TEXT_COLOR,
+                                            fontWeight: FontWeight.normal,
+                                            fontSize: 17)),
+                                    // ),
+                                    // new SizedBox(
+                                    //   height: 2,
+                                    // ),
+                                    // Text(time,
+                                    //     textAlign: TextAlign.start,
+                                    //     style: TextStyle(
+                                    //         color: prefix0.BLACK_TEXT_COLOR,
+                                    //         fontWeight: FontWeight.normal,
+                                    //         fontSize: 17)),
+                                  ],
                                 ),
                               ),
+                            ),
 
-                              new SizedBox(
-                                width: 10,
-                              ),
+                            new SizedBox(
+                              width: 10,
+                            ),
 
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: <Widget>[
-                                  new RaisedButton(
-                                    color: Colors.orange,
-                                    textColor: Colors.white,
-                                    child: new Text('编辑'),
-                                    onPressed: () {
-                                      _editProject(model);
-                                    },
-                                  ),
-                                  new RaisedButton(
-                                    color: prefix0.LIGHT_TEXT_COLOR,
-                                    textColor: Colors.white,
-                                    child: new Text('导出'),
-                                    onPressed: () {
-                                      _outputDocument(index);
-                                    },
-                                  ),
-//                                  new RaisedButton(
-//                                    color: prefix0.LIGHT_TEXT_COLOR,
-//                                    textColor: Colors.white,
-//                                    child: new Text('入口'),
-//                                    onPressed: () {
-//                                      Navigator.push(
-//                                        context,
-//                                        new MaterialPageRoute(
-//                                            builder: (context) =>
-//                                                new SurveyPointInformationPage()),
-//                                      );
-//                                    },
-//                                  ),
-                                ],
-                              ),
-                            ]),
-                      ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                // new RaisedButton(
+                                //   color: Colors.orange,
+                                //   textColor: Colors.white,
+                                //   child: new Text('编辑'),
+                                //   onPressed: () {
+                                //     _editProject(model);
+                                //   },
+                                // ),
+                                // new RaisedButton(
+                                //   color: prefix0.LIGHT_TEXT_COLOR,
+                                //   textColor: Colors.white,
+                                //   child: new Text('导出'),
+                                //   onPressed: () {
+                                //     _outputDocument(index);
+                                //   },
+                                // ),
+                              ],
+                            ),
+                          ]),
                     ),
+                  ),
 
-                    //分割线
-                    Container(
-                        alignment: Alignment.center,
-                        width: prefix0.screen_width,
-                        height: 1.0,
-                        color: FENGE_LINE_COLOR),
-                  ]),
-            ),
+                  //分割线
+                  Container(
+                      alignment: Alignment.center,
+                      width: prefix0.screen_width,
+                      height: 1.0,
+                      color: FENGE_LINE_COLOR),
+                ]),
           );
         });
 
@@ -1117,6 +1101,35 @@ class _State extends State<HomePage> {
             });
           });
         },
+      ),
+    );
+
+    Widget bottomButton2 = new Container(
+      height: 80,
+      width: mediaQuery.size.width,
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: GestureDetector(
+          onTap: _addProject,
+          child: Container(
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(3.0), //3像素圆角
+                border: Border.all(color: Colors.grey),
+                boxShadow: [
+                  //阴影
+                  BoxShadow(color: Colors.white, blurRadius: 4.0)
+                ]),
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+              child: Text(
+                "+ 新建项目",
+                textAlign: TextAlign.start,
+                style: TextStyle(color: Colors.grey),
+              ),
+            ),
+          ),
+        ),
       ),
     );
 
@@ -1210,7 +1223,7 @@ class _State extends State<HomePage> {
         },
         child: bodyContiner,
       ),
-      bottomSheet: bottomButton,
+      bottomNavigationBar: bottomButton2,
     );
   }
 }
