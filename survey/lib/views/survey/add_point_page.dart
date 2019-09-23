@@ -87,7 +87,9 @@ class _AddPointPageState extends State<AddPointPage> {
   @override
   void initState() {
     // insertData();
-
+    // _loading = true;
+    // _startLoading();
+    // _loading = true;
     // name = this.input.projectName;
     // time = this.input.createTime;
     id = this.input.projectId;
@@ -145,8 +147,10 @@ class _AddPointPageState extends State<AddPointPage> {
             }
           }
         }
+        setState(() {});
+      } else {
+        utility.showToast("网络请求失败，请检查网络");
       }
-      setState(() {});
     }
   }
 
@@ -175,8 +179,10 @@ class _AddPointPageState extends State<AddPointPage> {
             }
           }
         }
+        setState(() {});
+      } else {
+        utility.showToast("网络请求失败，请检查网络");
       }
-      setState(() {});
     }
   }
 
@@ -587,7 +593,7 @@ class _AddPointPageState extends State<AddPointPage> {
                   ]),
                   Container(
                     height: 50,
-                    width: 250,
+                    width: 150,
                     child: TextField(
                       textAlign: TextAlign.center,
                       // controller: step1TextController,
@@ -843,14 +849,14 @@ class _AddPointPageState extends State<AddPointPage> {
                           ]),
                           Container(
                             height: 59,
-                            width: 200,
+                            width: 100,
                             child: TextField(
                               textAlign: TextAlign.center,
                               controller: step1TextController,
                               keyboardType: TextInputType.text,
                               decoration: InputDecoration(
                                 border: InputBorder.none,
-                                hintText: '消防责任人姓名(必填)',
+                                hintText: '必填',
                               ),
                               maxLines: 1,
                               autofocus: false,
@@ -893,14 +899,14 @@ class _AddPointPageState extends State<AddPointPage> {
                           ]),
                           Container(
                             height: 59,
-                            width: 200,
+                            width: 100,
                             child: TextField(
                               textAlign: TextAlign.center,
                               controller: step2TextController,
                               keyboardType: TextInputType.phone,
                               decoration: InputDecoration(
                                 border: InputBorder.none,
-                                hintText: '消防责任人电话(必填)',
+                                hintText: '必填',
                               ),
                               maxLines: 1,
                               autofocus: false,
@@ -939,14 +945,14 @@ class _AddPointPageState extends State<AddPointPage> {
                           ),
                           Container(
                             height: 59,
-                            width: 200,
+                            width: 100,
                             child: TextField(
                               textAlign: TextAlign.center,
                               keyboardType: TextInputType.text,
                               controller: textCList[item * 2 - 2],
                               decoration: InputDecoration(
                                 border: InputBorder.none,
-                                hintText: '消防管理人姓名(选填)',
+                                hintText: '选填',
                               ),
                               maxLines: 1,
                               autofocus: false,
@@ -984,14 +990,14 @@ class _AddPointPageState extends State<AddPointPage> {
                           ),
                           Container(
                             height: 59,
-                            width: 200,
+                            width: 100,
                             child: TextField(
                               textAlign: TextAlign.center,
                               keyboardType: TextInputType.phone,
                               controller: textCList[item * 2 - 1],
                               decoration: InputDecoration(
                                 border: InputBorder.none,
-                                hintText: '消防管理人电话(选填)',
+                                hintText: '选填',
                               ),
                               maxLines: 1,
                               autofocus: false,
