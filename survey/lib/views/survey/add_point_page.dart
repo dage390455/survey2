@@ -30,25 +30,30 @@ import 'package:sensoro_survey/widgets/progress_hud.dart';
 //import 'package:sensoro_survey/views/survey/editPage/edit_project_name_page.dart';
 import 'package:sensoro_survey/views/survey/common/save_data_manager.dart';
 
-class AddProjectPage extends StatefulWidget {
+class AddPointPage extends StatefulWidget {
   projectInfoModel input;
 
-  AddProjectPage({Key key, @required this.input}) : super(key: key);
+  AddPointPage({Key key, @required this.input}) : super(key: key);
 
   @override
-  _AddProjectPageState createState() => _AddProjectPageState(input: this.input);
+  _AddPointPageState createState() => _AddPointPageState(input: this.input);
 }
 
-class _AddProjectPageState extends State<AddProjectPage> {
+class _AddPointPageState extends State<AddPointPage> {
   projectInfoModel input;
 
-  _AddProjectPageState({this.input});
+  _AddPointPageState({this.input});
 
   String name = "";
   String time = "";
   String siteTypeName = "场所层级";
   String siteType = "";
   String siteName = "场所名称";
+  String siteUse = "";
+  String siteUseName = "场所用途";
+  double money = 0;
+  double peopleNum = 0;
+
   String siteId = "";
   int id = 0;
   List<dynamic> subList = [];
@@ -64,6 +69,11 @@ class _AddProjectPageState extends State<AddProjectPage> {
     {"key": "area", "name": "区域"},
     {"key": "building", "name": "建筑"},
   ];
+
+  List<Map<String, dynamic>> siteUseList = [
+    {"key": "area", "name": "城乡结合部"},
+    {"key": "other", "name": "其他"},
+  ];
   List<SitePageModel> dataList = [];
   UtilityPage utility = UtilityPage();
 
@@ -78,8 +88,8 @@ class _AddProjectPageState extends State<AddProjectPage> {
   void initState() {
     // insertData();
 
-    name = this.input.projectName;
-    time = this.input.createTime;
+    // name = this.input.projectName;
+    // time = this.input.createTime;
     id = this.input.projectId;
     subList = this.input.subList;
     super.initState();
@@ -170,9 +180,9 @@ class _AddProjectPageState extends State<AddProjectPage> {
     }
   }
 
-  void addProjectNetCall() async {
+  void addPointNetCall() async {
     if (name.length == 0) {
-      utility.showToast("项目名称不能为空");
+      utility.showToast("勘察点名称不能为空");
       return;
     }
     if (siteType.length == 0) {
@@ -181,6 +191,10 @@ class _AddProjectPageState extends State<AddProjectPage> {
     }
     if (siteName.length == 0) {
       utility.showToast("场所名称不能为空");
+      return;
+    }
+    if (siteUse.length == 0) {
+      utility.showToast("场所用途不能为空");
       return;
     }
     String name1 = admin["name"];
@@ -210,7 +224,7 @@ class _AddProjectPageState extends State<AddProjectPage> {
       });
     }
 
-    String urlStr = NetConfig.addProjectUrl;
+    String urlStr = NetConfig.addPointUrl;
     Map<String, dynamic> headers = {"Content-Type": "application/json"};
     //从dataList取数据
 
@@ -218,10 +232,10 @@ class _AddProjectPageState extends State<AddProjectPage> {
     json["site_id"] = siteId;
     json["site_type"] = siteType;
     json["name"] = name;
+    json["total_assets"] = money.toString();
+    json["resident_count"] = peopleNum.toString();
+    json["project_id"] = id;
     json["contact_list"] = list;
-
-// {"data":{"site_id":"222","site_type":"area","name":"项目2", "contact_list" :[{"type": "fire_admin", "user_name":"郑家杰", "mobile":
-// "13910686019"}, {"type": "fire_responsor", "user_name":"郭晶晶", "mobile": "13800138000"}]}}
 
     _startLoading();
     Map<String, dynamic> params = {"data": json};
@@ -233,7 +247,7 @@ class _AddProjectPageState extends State<AddProjectPage> {
       int code = resultData.response["code"].toInt();
       _stopLoading();
       if (code == 200) {
-        var msg = "创建项目成��";
+        var msg = "创建勘察点成功";
         utility.showToast(msg);
 
         Navigator.of(context).pop("refreshList");
@@ -360,7 +374,7 @@ class _AddProjectPageState extends State<AddProjectPage> {
         onPressed: () {
           if (this.name.length > 0) {
             // saveInfoInLocal();
-            addProjectNetCall();
+            addPointNetCall();
             // Navigator.of(context).pop("refreshList");
           }
         },
@@ -385,6 +399,17 @@ class _AddProjectPageState extends State<AddProjectPage> {
         SitePageModel model = dataList[i];
         list.add(new PopupMenuItem<String>(
             child: new Text(model.name), value: i.toString()));
+      }
+
+      return list;
+    }
+
+    List<PopupMenuItem<String>> siteUsePopList() {
+      List<PopupMenuItem<String>> list = [];
+      for (int i = 0; i < siteUseList.length; i++) {
+        Map<String, dynamic> dic = siteUseList[i];
+        list.add(new PopupMenuItem<String>(
+            child: new Text(dic["name"]), value: i.toString()));
       }
 
       return list;
@@ -486,6 +511,55 @@ class _AddProjectPageState extends State<AddProjectPage> {
       ),
     );
 
+    //弹出的选择LIST
+    Container popUseView = new Container(
+      alignment: Alignment.center,
+      height: 60,
+      width: 200,
+      child: Center(
+        child: PopupMenuButton(
+//              icon: Icon(Icons.home),
+          child: new Row(
+            children: <Widget>[
+              Expanded(
+                child: Text(
+                  siteUseName,
+                  textAlign: TextAlign.right,
+                  style: TextStyle(color: Colors.black, fontSize: 17),
+                ),
+              ),
+              Image.asset(
+                "assets/images/arrow_folddown.png",
+                width: 20,
+              )
+            ],
+          ),
+          tooltip: "长按提示",
+          initialValue: "hot",
+          offset: Offset(0.2, 0),
+          padding: EdgeInsets.only(top: 0.0, bottom: 0, left: 100, right: 0),
+
+          itemBuilder: (context) =>
+              <PopupMenuItem<String>>[]..addAll(siteUsePopList()),
+
+          onSelected: (String s) {
+            Map<String, dynamic> dic = siteUseList[int.parse(s)];
+            siteUseName = dic["name"];
+            siteUse = dic["key"];
+            // getNameListNetCall(siteType);
+            // siteName = "场所名称";
+            setState(() {
+              // model.variable_value = optionList[int.parse(s)];
+              // choosedModel = cars[int.parse(action)];
+            });
+          },
+          onCanceled: () {
+            print("onCanceled");
+          },
+        ),
+      ),
+    );
+
     Widget listView1 = ProgressDialog(
       loading: _loading,
       msg: '正在加载...',
@@ -507,7 +581,7 @@ class _AddProjectPageState extends State<AddProjectPage> {
                       width: 10,
                     ),
                     Text(
-                      "项目名称",
+                      "勘察点名称",
                       style: new TextStyle(fontSize: prefix0.fontsSize),
                     ),
                   ]),
@@ -520,7 +594,7 @@ class _AddProjectPageState extends State<AddProjectPage> {
                       keyboardType: TextInputType.text,
                       decoration: InputDecoration(
                         border: InputBorder.none,
-                        hintText: '项目名称(必填)',
+                        hintText: '勘察点名称(必填)',
                       ),
                       maxLines: 1,
                       autofocus: false,
@@ -603,6 +677,118 @@ class _AddProjectPageState extends State<AddProjectPage> {
                 ),
               ),
             ),
+            Container(
+              color: prefix0.LINE_COLOR,
+              height: 1,
+            ),
+            GestureDetector(
+              // onTap: editName, //写入方����名称就可以了，但是是无参的
+              child: Container(
+                alignment: Alignment.center,
+                height: 60,
+                child: new Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    new Row(children: <Widget>[
+                      Text(
+                        "*",
+                        style: TextStyle(color: Colors.red),
+                      ),
+                      new SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        "场所用途",
+                        style: new TextStyle(fontSize: prefix0.fontsSize),
+                      ),
+                    ]),
+                    popUseView,
+                  ],
+                ),
+              ),
+            ),
+            Container(
+              color: prefix0.LINE_COLOR,
+              height: 1,
+            ),
+            Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  new Row(children: <Widget>[
+                    Text(
+                      " ",
+                      style: TextStyle(color: Colors.red),
+                    ),
+                    new SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      "资产总值",
+                      style: new TextStyle(fontSize: prefix0.fontsSize),
+                    ),
+                  ]),
+                  Container(
+                    height: 50,
+                    width: 80,
+                    child: TextField(
+                      textAlign: TextAlign.center,
+                      // controller: step1TextController,
+                      keyboardType: TextInputType.text,
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        suffixText: '元',
+                      ),
+                      maxLines: 1,
+                      autofocus: false,
+                      onChanged: (val) {
+                        money = double.parse(val);
+                        setState(() {});
+                      },
+                    ),
+                  ),
+                ]),
+            Container(
+              color: prefix0.LINE_COLOR,
+              height: 1,
+            ),
+            Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  new Row(children: <Widget>[
+                    Text(
+                      " ",
+                      style: TextStyle(color: Colors.red),
+                    ),
+                    new SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      "常驻人口",
+                      style: new TextStyle(fontSize: prefix0.fontsSize),
+                    ),
+                  ]),
+                  Container(
+                    height: 50,
+                    width: 80,
+                    child: TextField(
+                      textAlign: TextAlign.center,
+                      // controller: step1TextController,
+                      keyboardType:
+                          TextInputType.numberWithOptions(decimal: false),
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        // hintText: '',
+                        suffixText: '万',
+                      ),
+                      maxLines: 1,
+                      autofocus: false,
+                      onChanged: (val) {
+                        peopleNum = double.parse(val);
+                        setState(() {});
+                      },
+                    ),
+                  ),
+                ]),
             Container(
               color: prefix0.LINE_COLOR,
               height: 1,
@@ -918,7 +1104,7 @@ class _AddProjectPageState extends State<AddProjectPage> {
         backgroundColor: Colors.white,
         centerTitle: true,
         title: Text(
-          "新建项目",
+          "新建勘察点",
           style: TextStyle(color: Colors.black),
         ),
         leading: Container(
@@ -941,7 +1127,7 @@ class _AddProjectPageState extends State<AddProjectPage> {
             alignment: Alignment.center,
             child: GestureDetector(
               onTap: () {
-                addProjectNetCall();
+                addPointNetCall();
                 // Navigator.of(context).pop("");
               },
               child: Text(
@@ -966,7 +1152,7 @@ class _AddProjectPageState extends State<AddProjectPage> {
       ),
       body: GestureDetector(
         onTap: () {
-          // 点击空白页面关闭键盘
+          // 点击空白页面��闭键盘
           FocusScope.of(context).requestFocus(blankNode);
         },
         child: Container(

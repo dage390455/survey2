@@ -14,7 +14,9 @@ class NetConfig {
   static const updateRiskValueUrl = "variable_value/saveOrUpate";
 
   //新增项目信息 POST
-  static const addProjedtUrl = "/project_info/create";
+  static const addProjectUrl = "/project_info/create";
+  //新增勘察点信息 POST
+  static const addPointUrl = "/prospect_info/create";
   //区域列表接口
   static const siteListUrl = "/site_info/list?parent_id=";
   static const createUrl = "/site_info/create";
@@ -23,5 +25,4 @@ class NetConfig {
   static const deleteSiteUrl = "/site_info/delete/";
 
   static const pointListUrl = "/prospect_info/list?project_id=";
-
 }

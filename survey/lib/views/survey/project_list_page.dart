@@ -34,6 +34,7 @@ import 'package:sensoro_survey/generated/customCalendar/lib/flutter_custom_calen
 import 'package:sensoro_survey/generated/customCalendar/lib/model/date_model.dart';
 import 'package:sensoro_survey/views/survey/point_list_page.dart';
 import 'package:sensoro_survey/views/survey/add_project_page.dart';
+import 'package:sensoro_survey/views/survey/add_point_page.dart';
 import 'package:sensoro_survey/model/project_info_model.dart';
 import 'package:sensoro_survey/views/survey/SurveyPointInformation/summary_construction_page.dart';
 import 'package:sensoro_survey/views/survey/common/save_data_manager.dart';
@@ -266,7 +267,7 @@ class _State extends State<HomePage> {
     // });
 
     loadLocalData();
-    getConfigureListNetCall();
+    // getConfigureListNetCall();
 
     controller = new CalendarController();
     controller.addMonthChangeListener(
@@ -709,6 +710,24 @@ class _State extends State<HomePage> {
       }
     }
 
+    void _addPoint() async {
+      projectInfoModel model = projectInfoModel("", "", 1, "", []);
+
+      final result = await Navigator.of(context, rootNavigator: true)
+          .push(CupertinoPageRoute(builder: (BuildContext context) {
+        return new AddPointPage(input: model);
+      }));
+
+      if (result != null) {
+        String name = result as String;
+        if (name == "refreshList") {
+          loadLocalData();
+        }
+        // this.name = name;
+        setState(() {});
+      }
+    }
+
     Widget emptyContainer = Container(
       height: 0,
       width: 0,
@@ -1113,6 +1132,7 @@ class _State extends State<HomePage> {
         padding: const EdgeInsets.all(20),
         child: GestureDetector(
           onTap: _addProject,
+          // onTap: _addPoint,
           child: Container(
             alignment: Alignment.center,
             decoration: BoxDecoration(

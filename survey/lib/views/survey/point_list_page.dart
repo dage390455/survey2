@@ -26,6 +26,7 @@ import 'package:sensoro_survey/model/project_info_model.dart';
 import 'package:sensoro_survey/views/survey/common/save_data_manager.dart';
 import 'package:sensoro_survey/views/survey/survey_type_page.dart';
 import 'package:sensoro_survey/views/survey/add_all_type_page.dart';
+import 'package:sensoro_survey/views/survey/add_point_page.dart';
 
 import 'SurveyPointInformation/summary_construction_page.dart';
 import 'SurveyPointInformation/survay_electrical_fire_detail.dart';
@@ -267,6 +268,24 @@ class _PointListPageState extends State<PointListPage> {
     }
   }
 
+  void _addPoint() async {
+    projectInfoModel model = projectInfoModel("", "", 1, "", []);
+
+    final result = await Navigator.of(context, rootNavigator: true)
+        .push(CupertinoPageRoute(builder: (BuildContext context) {
+      return new AddPointPage(input: model);
+    }));
+
+    if (result != null) {
+      String name = result as String;
+      if (name == "refreshList") {
+        // loadLocalData();
+      }
+      // this.name = name;
+      setState(() {});
+    }
+  }
+
   _navBack() async {
     Map<String, dynamic> map = {
       "code": "200",
@@ -455,7 +474,6 @@ class _PointListPageState extends State<PointListPage> {
             //     width: prefix0.screen_width - 40,
             //     height: 1.0,
             //     color: FENGE_LINE_COLOR),
-
           ]),
     );
 
