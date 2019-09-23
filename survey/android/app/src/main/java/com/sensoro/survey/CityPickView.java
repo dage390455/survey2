@@ -2,6 +2,9 @@ package com.sensoro.survey;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 
 import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
@@ -31,11 +34,11 @@ public class CityPickView  {
     public void showCitySelect(Context context,CityPickViewSelectInterface cityPickViewSelectInterface){
         DBHelper helper = new DBHelper(context,"selectCity",null,1);
         this.cityPickViewSelectInterface = cityPickViewSelectInterface;
-        try {
-            helper.createDataBase();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            helper.createDataBase();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
 
         List citys = helper.getcityList("000000");
