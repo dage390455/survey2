@@ -46,6 +46,7 @@ class SitePageModel {
       this.district,
       this.size,
       this.remark,
+      this.editPosition,
       // this.extraInfo,
    );
 
@@ -60,8 +61,25 @@ class SitePageModel {
     json['city'],
     json['district'],
     json['size'] ==null?0.0:json['size'],
-    json['remarks'] == null?"":json['remarks']
+    json['remarks'] == null?"":json['remarks'],
+    "",
   );
+
+  SitePageModel.modelfromJson(Map<String, dynamic> json)
+      : this(
+    json['id'],
+    json['status'],
+    json['parent_id'] ,
+    json['type'],
+    json['name'],
+    json['province'],
+    json['city'],
+    json['district'],
+    json['size'] ==null?0.0:json['size'],
+    json['remarks'] == null?"":json['remarks'],
+    (json['province_text']==null?"":json['province_text']) + (json['city_text']==null?"":json['city_text']) + (json['district_text']=null?"":json['district_text']),
+  );
+
 
   Map<String, dynamic> toJson() => {
 //    "id": this.id,

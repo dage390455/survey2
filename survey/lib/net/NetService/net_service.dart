@@ -12,6 +12,8 @@ import 'package:flutter/material.dart';
 enum Method {
   GET,
   POST,
+  PUT,
+  DELETE,
   UPLOAD,
   DOWNLOAD,
 }
@@ -47,6 +49,20 @@ class NetService {
         context: context,
         showLoad: showLoad);
   }
+
+  /// post请求
+  put(String url,
+      {Map<String, dynamic> headers,
+        Map<String, dynamic> params,
+        BuildContext context,
+        bool showLoad}) async {
+    return await request(url,
+        method: Method.PUT,
+        params: params,
+        context: context,
+        showLoad: showLoad);
+  }
+
 
   /// 附件上传
   upLoad(
@@ -116,6 +132,13 @@ class NetService {
         case Method.POST:
           response = await sessionManager.post(url, data: params);
           break;
+        case Method.PUT:
+          response = await sessionManager.put(url, data: params);
+          break;
+        case Method.DELETE:
+          response = await sessionManager.delete(url, data: params);
+          break;
+
         case Method.UPLOAD:
           {
             FormData formData = new FormData();

@@ -18,6 +18,7 @@ class NetConfig {
   //区域列表接口
   static const siteListUrl = "/site_info/list?parent_id=";
   static const createUrl = "/site_info/create";
+  static const editeUrl = "/site_info/update/";
 
   static const pointListUrl = "/prospect_info/list?project_id=";
 

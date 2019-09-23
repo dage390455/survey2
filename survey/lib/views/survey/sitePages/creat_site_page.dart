@@ -27,7 +27,7 @@ import '../survey_type_page.dart';
 import 'Model/SitePageModel.dart';
 
 class CreatSitePage extends StatefulWidget {
-  SitePageModel fireModel = SitePageModel("","","0","area","","","","",0.0,"");
+  SitePageModel fireModel = SitePageModel("","","0","area","","","","",0.0,"","");
   bool isCreatSite = false;
 
   CreatSitePage({this.fireModel,this.isCreatSite});
@@ -43,7 +43,7 @@ class _State extends State<CreatSitePage> {
   BasicMessageChannel  _locationBasicMessageChannel =
   BasicMessageChannel("BasicMessageChannelPluginGetCity", StandardMessageCodec());
   _State({this.fireModel});
-  SitePageModel fireModel = SitePageModel("","","0","area","","","","",0.0,"");
+  SitePageModel fireModel = SitePageModel("","","0","area","","","","",0.0,"","");
   FocusNode blankNode = FocusNode();
   var isCheack = false;
   TextEditingController remarkController = TextEditingController();
@@ -122,6 +122,30 @@ class _State extends State<CreatSitePage> {
       });
     }
   }
+
+  Future editSite() async {
+    String urlStr =NetConfig.baseUrl + NetConfig.editeUrl+this.fireModel.id;
+    Map<String, dynamic> headers = {};
+    Map<String, dynamic> params = {"data":fireModel.toJson()};
+
+    print(params);
+
+    ResultData resultData = await AppApi.getInstance()
+        .put(urlStr,params: params,context: context,showLoad: true);
+    if (resultData.isSuccess()) {
+      // _stopLoading();
+
+      int code = resultData.response["code"].toInt();
+      if (code == 200) {
+
+        Navigator.of(context).pop(this.fireModel);
+
+      }
+      setState(() {
+      });
+    }
+  }
+
 
 
   //向native发送消息

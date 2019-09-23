@@ -437,7 +437,7 @@ class _PointListManagementPageState extends State<PointListManagementPage> {
         padding: const EdgeInsets.all(20),
         child: GestureDetector(
           onTap: () {
-            _creatSite(new SitePageModel("","","0","area","","","","",0.0,""), true);
+            _creatSite(new SitePageModel("","","0","area","","","","",0.0,"",""), true);
           },
           child: Container(
             height: 40,
