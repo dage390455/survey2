@@ -14,26 +14,27 @@ import 'package:sensoro_survey/views/survey/sitePages/Model/SitePageModel.dart';
 import 'package:sensoro_survey/views/survey/sitePages/buildinglist_page.dart';
 import 'package:sensoro_survey/views/survey/sitePages/creat_site_page.dart';
 import 'package:sensoro_survey/views/survey/sitePages/sqflite_page.dart';
+import 'package:sensoro_survey/views/survey/add_point_page.dart';
 
 import '../const.dart';
 import '../point_content_page.dart';
 import 'Model/PointListModel.dart';
 
-
 class PointListManagementPage extends StatefulWidget {
-  PointListManagementPage({Key key, this.title,this.input}) : super(key: key);
+  PointListManagementPage({Key key, this.title, this.input}) : super(key: key);
 
   projectInfoModel input;
   final String title;
 
   @override
-  _PointListManagementPageState createState() => _PointListManagementPageState(this.input);
+  _PointListManagementPageState createState() =>
+      _PointListManagementPageState(this.input);
 }
 
 class _PointListManagementPageState extends State<PointListManagementPage> {
   projectInfoModel input;
-  BasicMessageChannel  _locationBasicMessageChannel =
-  BasicMessageChannel("BasicMessageChannelPluginGetCity", StandardMessageCodec());
+  BasicMessageChannel _locationBasicMessageChannel = BasicMessageChannel(
+      "BasicMessageChannelPluginGetCity", StandardMessageCodec());
   _PointListManagementPageState(this.input);
   bool calendaring = false;
   String beginTimeStr = "";
@@ -60,7 +61,6 @@ class _PointListManagementPageState extends State<PointListManagementPage> {
     }
   }
 
-
   void _gotoPoint(int index) async {
     final result = await Navigator.of(context, rootNavigator: true)
         .push(CupertinoPageRoute(builder: (BuildContext context) {
@@ -76,8 +76,7 @@ class _PointListManagementPageState extends State<PointListManagementPage> {
       setState(() {});
     }
   }
-  
-  
+
   void _creatSite(SitePageModel model, bool isCreat) async {
     DataTransferManager.shared.creatModel();
     final result = await Navigator.of(context, rootNavigator: true)
@@ -91,16 +90,14 @@ class _PointListManagementPageState extends State<PointListManagementPage> {
   }
 
   void _textSql() async {
-
     Future<String> future = _locationBasicMessageChannel.send("000000");
     future.then((message) {
       print("========================" + message);
     });
   }
 
-
   Future getListNetCall() async {
-    String urlStr = NetConfig.pointListUrl+"123456"+"&keyword="+searchStr;
+    String urlStr = NetConfig.pointListUrl + "123456" + "&keyword=" + searchStr;
     Map<String, dynamic> headers = {};
     Map<String, dynamic> params = {};
 
@@ -111,7 +108,6 @@ class _PointListManagementPageState extends State<PointListManagementPage> {
       dataList.clear();
       int code = resultData.response["code"].toInt();
       if (code == 200) {
-
         if (resultData.response["data"]["records"] is List) {
           List resultList = resultData.response["data"]["records"];
           if (resultList.length > 0) {
@@ -122,31 +118,44 @@ class _PointListManagementPageState extends State<PointListManagementPage> {
                 dataList.add(model);
               }
             }
-
           }
         }
-
       }
-      setState(() {
-      });
+      setState(() {});
     }
   }
 
+  void _addPoint() async {
+    projectInfoModel model =
+        projectInfoModel(input.projectId.toString(), "", 1, "", []);
 
+    final result = await Navigator.of(context, rootNavigator: true)
+        .push(CupertinoPageRoute(builder: (BuildContext context) {
+      return new AddPointPage(input: model);
+    }));
 
+    if (result != null) {
+      String name = result as String;
+      if (name == "refreshList") {
+        getListNetCall();
+      }
+      // this.name = name;
+      setState(() {});
+    }
+  }
 
   @override
   void initState() {
     // TODO: implement initState
 
     super.initState();
-    _locationBasicMessageChannel.setMessageHandler((message) => Future<String>(() {
-      print(message);
-      //message为native传递的数据
-      //给Android端的返回值
-      return "========================收到Native消息：" + message;
-    }));
-
+    _locationBasicMessageChannel
+        .setMessageHandler((message) => Future<String>(() {
+              print(message);
+              //message为native传递的数据
+              //给Android端的返回值
+              return "========================收到Native消息：" + message;
+            }));
 
     getListNetCall();
   }
@@ -207,7 +216,6 @@ class _PointListManagementPageState extends State<PointListManagementPage> {
       ),
     );
 
-
     Widget navBar = AppBar(
       elevation: 1.0,
       brightness: Brightness.light,
@@ -233,9 +241,7 @@ class _PointListManagementPageState extends State<PointListManagementPage> {
           padding: new EdgeInsets.fromLTRB(0, 0, 20, 0),
           alignment: Alignment.center,
           child: GestureDetector(
-            onTap: () {
-
-            },
+            onTap: () {},
             child: Text(
               "详情",
               style: TextStyle(
@@ -244,13 +250,8 @@ class _PointListManagementPageState extends State<PointListManagementPage> {
             ),
           ),
         ),
-
       ],
     );
-
-
-
-
 
     Widget myListView = new ListView.builder(
         physics: new AlwaysScrollableScrollPhysics()
@@ -362,14 +363,8 @@ class _PointListManagementPageState extends State<PointListManagementPage> {
       print("........................." + text);
     }
 
-
-    Widget reflust = new  RefreshIndicator(
-      displacement: 10.0,
-      child: myListView,
-      onRefresh: getListNetCall
-
-    );
-
+    Widget reflust = new RefreshIndicator(
+        displacement: 10.0, child: myListView, onRefresh: getListNetCall);
 
     Widget bodyContiner = new Container(
       color: Colors.white,
@@ -437,7 +432,12 @@ class _PointListManagementPageState extends State<PointListManagementPage> {
         padding: const EdgeInsets.all(20),
         child: GestureDetector(
           onTap: () {
-            _creatSite(new SitePageModel("","","0","area","","","","",0.0,"",""), true);
+            _addPoint();
+
+            // _creatSite(
+            //     new SitePageModel(
+            //         "", "", "0", "area", "", "", "", "", 0.0, "", ""),
+            //     true);
           },
           child: Container(
             height: 40,

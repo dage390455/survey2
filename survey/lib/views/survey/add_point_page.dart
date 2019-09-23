@@ -88,8 +88,8 @@ class _AddPointPageState extends State<AddPointPage> {
   void initState() {
     // insertData();
 
-    name = this.input.projectName;
-    time = this.input.createTime;
+    // name = this.input.projectName;
+    // time = this.input.createTime;
     id = this.input.projectId;
     subList = this.input.subList;
     super.initState();
