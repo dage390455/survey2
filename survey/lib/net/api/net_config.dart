@@ -10,4 +10,7 @@ class NetConfig {
   static const updateRiskUrl = "comp_variable/saveOrUpate";
   //提交一组数据 POST
   static const updateRiskValueUrl = "variable_value/saveOrUpate";
+  //区域列表接口
+  static const siteListUrl = "/site_info/list?parent_id=";
+  static const createUrl = "/site_info/create";
 }

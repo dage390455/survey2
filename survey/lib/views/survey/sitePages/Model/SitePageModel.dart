@@ -16,4 +16,62 @@ class SitePageModel {
   String remark = "";
 
   List<SitePageModel> listplace = [];
+
+
+  String id = "";
+
+  String status = "";
+  String parent_id = "";
+  String type = "";
+  String name = "";
+
+  String province = "";
+
+  String city = "";
+
+  String district = "";
+  double size = 0.0;
+
+
+
+
+  SitePageModel(
+      this.id,
+      this.status,
+      this.parent_id,
+      this.type,
+      this.name,
+      this.province, //组件编码
+      this.city, //组件类型
+      this.district,
+      this.size,
+      // this.extraInfo,
+   );
+
+  SitePageModel.fromJson(Map<String, dynamic> json)
+      : this(
+    json['id'],
+    json['status'],
+    json['parent_id'] ,
+    json['type'],
+    json['name'],
+    json['province'],
+    json['city'],
+    json['district'],
+    json['size'] ,
+
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": this.id,
+    "status": this.status,
+    "parent_id": this.parent_id,
+    "type": this.type,
+    "name": this.name,
+    "province":province, //组件编码
+    "city": city, //组件类型
+    "district":district,
+    "size": size,
+  };
+
 }

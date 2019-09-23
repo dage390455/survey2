@@ -3,6 +3,9 @@ import 'package:city_pickers/city_pickers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sensoro_survey/model/electrical_fire_model.dart';
+import 'package:sensoro_survey/net/NetService/result_data.dart';
+import 'package:sensoro_survey/net/api/app_api.dart';
+import 'package:sensoro_survey/net/api/net_config.dart';
 import 'package:sensoro_survey/views/survey/SurveyPointInformation/survay_electrical_fire.dart';
 import 'package:sensoro_survey/views/survey/common/data_transfer_manager.dart';
 import 'package:sensoro_survey/views/survey/commonWidegt/inputnumbertextfiled.dart';
@@ -24,7 +27,7 @@ import '../survey_type_page.dart';
 import 'Model/SitePageModel.dart';
 
 class CreatSitePage extends StatefulWidget {
-  SitePageModel fireModel = SitePageModel();
+  SitePageModel fireModel = SitePageModel("","","0","area","","","","",0.0);
   bool isCreatSite = false;
 
   CreatSitePage({this.fireModel,this.isCreatSite});
@@ -40,7 +43,7 @@ class _State extends State<CreatSitePage> {
   BasicMessageChannel  _locationBasicMessageChannel =
   BasicMessageChannel("BasicMessageChannelPluginGetCity", StandardMessageCodec());
   _State({this.fireModel});
-  SitePageModel fireModel = SitePageModel();
+  SitePageModel fireModel = SitePageModel("","","0","area","","","","",0.0);
   FocusNode blankNode = FocusNode();
   var isCheack = false;
   TextEditingController remarkController = TextEditingController();
@@ -59,6 +62,9 @@ class _State extends State<CreatSitePage> {
         String area = list[2]["name"];
 
         fireModel.editPosition = prince+city+area;
+        fireModel.province = list[0]["code"];
+        fireModel.city= list[1]["code"];
+        fireModel.district= list[2]["code"];
         updateNextButton();
         setState(() {
 
@@ -92,6 +98,29 @@ class _State extends State<CreatSitePage> {
     remarkController.text = fireModel.remark;
     super.initState();
   }
+
+
+  Future creatSite() async {
+    String urlStr =NetConfig.baseUrl + NetConfig.createUrl;
+    Map<String, dynamic> headers = {};
+    Map<String, dynamic> params = {"data":fireModel.toJson()};
+
+    ResultData resultData = await AppApi.getInstance()
+        .post(urlStr,params: params,context: context,showLoad: true);
+    if (resultData.isSuccess()) {
+      // _stopLoading();
+
+      int code = resultData.response["code"].toInt();
+      if (code == 200) {
+
+        Navigator.of(context).pop(this.fireModel);
+
+      }
+      setState(() {
+      });
+    }
+  }
+
 
   //向native发送消息
   void _sendToNative() {
@@ -161,7 +190,7 @@ class _State extends State<CreatSitePage> {
             onTap: () {
               // 点击空白页面关闭键盘
               if (this.isCheack) {
-                Navigator.of(context).pop(this.fireModel);
+                creatSite();
               }
             },
             child: Padding(
@@ -183,7 +212,7 @@ class _State extends State<CreatSitePage> {
         context,
         new MaterialPageRoute(
             builder: (context) => new EditContentPage(
-                  name: this.fireModel.siteName,
+                  name: this.fireModel.name,
                   title: "场所名称",
                   hintText: "请输入场所名称，例如：望京Soho T1",
                   historyKey: "siteCreatHistoryKey",
@@ -193,7 +222,7 @@ class _State extends State<CreatSitePage> {
       if (result != null) {
         String name = result as String;
 
-        this.fireModel.siteName = name;
+        this.fireModel.name = name;
         updateNextButton();
         setState(() {});
       }
@@ -267,9 +296,9 @@ class _State extends State<CreatSitePage> {
                  child: inputnumbertextfiled(
                    title: "区域名称",
                    intputtype: 0,
-                   defaultText: fireModel.siteName,
+                   defaultText: fireModel.name,
                    callbacktext: (text) {
-                     this.fireModel.siteName = text;
+                     this.fireModel.name = text;
                      updateNextButton();
                      setState(() {
 
@@ -330,7 +359,7 @@ class _State extends State<CreatSitePage> {
             intputtype: 1,
             defaultText: fireModel.area,
             callbacktext: (text) {
-              this.fireModel.area = text;
+              this.fireModel.size = double.parse(text);
               setState(() {
 
               });
@@ -461,7 +490,7 @@ class _State extends State<CreatSitePage> {
   }
 
   updateNextButton() {
-    if (fireModel.siteName.length > 0 &&
+    if (fireModel.name.length > 0 &&
         fireModel.editPosition.length > 0) {
       this.isCheack = true;
     } else {

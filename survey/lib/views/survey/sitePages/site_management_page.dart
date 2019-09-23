@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:sensoro_survey/generated/customCalendar/lib/controller.dart';
+import 'package:sensoro_survey/net/api/app_api.dart';
+import 'package:sensoro_survey/net/api/net_config.dart';
 import 'package:sensoro_survey/views/survey/common/data_transfer_manager.dart';
 import 'package:sensoro_survey/views/survey/commonWidegt/SearchView.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
@@ -62,21 +64,23 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
     }));
 
     if (result != null) {
-      SitePageModel name = result as SitePageModel;
+//      SitePageModel name = result as SitePageModel;
+//
+//      for (int i = 0; i < dataList.length; i++) {
+//        SitePageModel model = dataList[i];
+//        if (model.sitePageModelId == name.sitePageModelId) {
+//          dataList.removeAt(i);
+//          break;
+//        }
+//      }
+//
+//      dataList.add(name);
+//
+//      // this.name = name;
+//
+//      setState(() {});
 
-      for (int i = 0; i < dataList.length; i++) {
-        SitePageModel model = dataList[i];
-        if (model.sitePageModelId == name.sitePageModelId) {
-          dataList.removeAt(i);
-          break;
-        }
-      }
-
-      dataList.add(name);
-
-      // this.name = name;
-
-      setState(() {});
+      getListNetCall();
     }
   }
 
@@ -89,11 +93,43 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
   }
 
 
+  Future getListNetCall() async {
+    String urlStr = NetConfig.siteListUrl+"0";
+    Map<String, dynamic> headers = {};
+    Map<String, dynamic> params = {};
+
+    ResultData resultData = await AppApi.getInstance()
+        .getListNetCall(context, true, urlStr, headers, params);
+    if (resultData.isSuccess()) {
+      // _stopLoading();
+      dataList.clear();
+      int code = resultData.response["code"].toInt();
+      if (code == 200) {
+
+        if (resultData.response["data"]["records"] is List) {
+          List resultList = resultData.response["data"]["records"];
+          if (resultList.length > 0) {
+            for (int i = 0; i < resultList.length; i++) {
+              Map json = resultList[i] as Map;
+              SitePageModel model = SitePageModel.fromJson(json);
+              if (model != null) {
+                dataList.add(model);
+              }
+            }
+
+          }
+        }
+
+      }
+      setState(() {
+      });
+    }
+  }
 
 
   _getData() {
     for (int i = 0; i < 5; i++) {
-      var sitePage = new SitePageModel();
+      var sitePage = new SitePageModel("","","","","","","","",0.0);
       sitePage.siteName = "望京soho T1";
 
       dataList.add(sitePage);
@@ -124,7 +160,7 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
     }));
 
 
-    _getData();
+    getListNetCall();
   }
 
   @override
@@ -220,6 +256,9 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
       ],
     );
 
+
+
+
     Widget myListView = new ListView.builder(
         physics: new AlwaysScrollableScrollPhysics()
             .applyTo(new BouncingScrollPhysics()), // 这个是用来控制能否在不屏的状态下滚动的属性
@@ -286,7 +325,7 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
                               //这决定了左对齐
                               Expanded(
                                 child: Container(
-                                  child: Text(dataList[index].siteName,
+                                  child: Text(dataList[index].name,
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
                                           color: prefix0.BLACK_TEXT_COLOR,
@@ -326,6 +365,15 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
     _searchAction(String text) {
       print("........................." + text);
     }
+
+
+    Widget reflust = new  RefreshIndicator(
+      displacement: 10.0,
+      child: myListView,
+      onRefresh: getListNetCall
+
+    );
+
 
     Widget bodyContiner = new Container(
       color: Colors.white,
@@ -380,7 +428,7 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
               height: 1.0,
               color: FENGE_LINE_COLOR),
           Expanded(
-            child: myListView,
+            child: reflust,
           ),
           // bottomButton,
         ],
@@ -393,7 +441,7 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
         padding: const EdgeInsets.all(20),
         child: GestureDetector(
           onTap: () {
-            _creatSite(new SitePageModel(), true);
+            _creatSite(new SitePageModel("","","0","area","","","","",0.0), true);
           },
           child: Container(
             height: 40,
