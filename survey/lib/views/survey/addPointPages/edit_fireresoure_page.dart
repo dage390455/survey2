@@ -7,12 +7,12 @@ import 'package:sensoro_survey/views/survey/commonWidegt/remarktextfiled.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 import 'package:sensoro_survey/views/survey/sitePages/Model/fire_resource_model.dart';
 
-class AddNewFireResourcePage extends StatefulWidget {
+class EditFireResourcePage extends StatefulWidget {
   @override
   _State createState() => _State();
 }
 
-class _State extends State<AddNewFireResourcePage> {
+class _State extends State<EditFireResourcePage> {
   bool isCheack = false;
 
   FireResourceModel fireResourceModel = FireResourceModel("", "", "", "", "");
