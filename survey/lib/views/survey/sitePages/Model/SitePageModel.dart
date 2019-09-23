@@ -77,7 +77,7 @@ class SitePageModel {
     json['district'],
     json['size'] ==null?0.0:json['size'],
     json['remarks'] == null?"":json['remarks'],
-    (json['province_text']==null?"":json['province_text']) + (json['city_text']==null?"":json['city_text']) + (json['district_text']=null?"":json['district_text']),
+    json['province_text'] +json['city_text']+ json['district_text'],
   );
 
 

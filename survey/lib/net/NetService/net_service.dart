@@ -50,7 +50,7 @@ class NetService {
         showLoad: showLoad);
   }
 
-  /// post请求
+  /// put请求
   put(String url,
       {Map<String, dynamic> headers,
         Map<String, dynamic> params,
@@ -58,6 +58,20 @@ class NetService {
         bool showLoad}) async {
     return await request(url,
         method: Method.PUT,
+        params: params,
+        context: context,
+        showLoad: showLoad);
+  }
+
+
+  /// put请求
+  delete(String url,
+      {Map<String, dynamic> headers,
+        Map<String, dynamic> params,
+        BuildContext context,
+        bool showLoad}) async {
+    return await request(url,
+        method: Method.DELETE,
         params: params,
         context: context,
         showLoad: showLoad);

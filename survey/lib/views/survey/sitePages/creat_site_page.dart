@@ -96,6 +96,10 @@ class _State extends State<CreatSitePage> {
           return "========================收到Native消息：" + message;
         }));
     remarkController.text = fireModel.remark;
+    if(!widget.isCreatSite){
+      getSite();
+    }
+
     super.initState();
   }
 
@@ -122,6 +126,62 @@ class _State extends State<CreatSitePage> {
       });
     }
   }
+
+
+  Future deleteSite() async {
+    String urlStr =NetConfig.baseUrl + NetConfig.deleteSiteUrl + this.fireModel.id;
+    Map<String, dynamic> headers = {};
+    Map<String, dynamic> params = {};
+
+    print(params);
+
+    ResultData resultData = await AppApi.getInstance()
+        .delete(urlStr,params: params,context: context,showLoad: true);
+    if (resultData.isSuccess()) {
+      // _stopLoading();
+
+      int code = resultData.response["code"].toInt();
+      if (code == 200) {
+
+        Navigator.of(context).pop(this.fireModel);
+
+      }
+      setState(() {
+      });
+    }
+  }
+
+  Future getSite() async {
+    String urlStr =NetConfig.baseUrl + NetConfig.getSiteUrl+fireModel.id;
+    Map<String, dynamic> headers = {};
+    Map<String, dynamic> params = {};
+
+    print(params);
+
+    ResultData resultData = await AppApi.getInstance()
+        .get(urlStr,params: params,context: context,showLoad: true);
+    if (resultData.isSuccess()) {
+      // _stopLoading();
+
+      int code = resultData.response["code"].toInt();
+      if (code == 200) {
+
+
+              Map json = resultData.response["data"] ;
+
+              SitePageModel model = SitePageModel.modelfromJson(json);
+              if (model != null) {
+                this.fireModel = model;
+              }
+            }
+      }
+      updateNextButton();
+      setState(() {
+      });
+    }
+
+
+
 
   Future editSite() async {
     String urlStr =NetConfig.baseUrl + NetConfig.editeUrl+this.fireModel.id;
@@ -216,7 +276,12 @@ class _State extends State<CreatSitePage> {
             onTap: () {
               // 点击空白页面关闭键盘
               if (this.isCheack) {
-                creatSite();
+                if(widget.isCreatSite){
+                  creatSite();
+                }else{
+                  editSite();
+                }
+
               }
             },
             child: Padding(
@@ -474,6 +539,7 @@ class _State extends State<CreatSitePage> {
         padding: const EdgeInsets.all(20),
         child: GestureDetector(
           onTap: () {
+            deleteSite();
 //            _creatSite(new SitePageModel(), true);
           },
           child: Container(

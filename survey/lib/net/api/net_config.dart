@@ -19,6 +19,8 @@ class NetConfig {
   static const siteListUrl = "/site_info/list?parent_id=";
   static const createUrl = "/site_info/create";
   static const editeUrl = "/site_info/update/";
+  static const getSiteUrl = "/site_info/detail/";
+  static const deleteSiteUrl = "/site_info/delete/";
 
   static const pointListUrl = "/prospect_info/list?project_id=";
 
