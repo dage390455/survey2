@@ -300,7 +300,7 @@ class _PointListManagementPageState extends State<PointListManagementPage> {
                   height: 120,
                   // fit: BoxFit.fitWidth,
                 ),
-                Text("暂无勘察任务",
+                Text("暂无勘察点",
                     textAlign: TextAlign.start,
                     style: TextStyle(
                         color: prefix0.LIGHT_TEXT_COLOR,

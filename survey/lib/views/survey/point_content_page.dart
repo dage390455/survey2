@@ -11,6 +11,7 @@ import 'package:sensoro_survey/views/survey/sitePages/site_management_page.dart'
 import 'addPointPages/Model/PointListModel.dart';
 import 'addPointPages/point_network_page.dart';
 import 'addPointPages/point_risk_management_page.dart';
+import 'addPointPages/point_risk_type_select_page.dart';
 
 
 
@@ -45,7 +46,7 @@ class PointContentPageState extends State<PointContentPage> {
   @override
   void initState() {
     super.initState();
-    pages = <Widget>[PointRiskManagementPage(model: widget.model,),PointNewWorkPage(),PointListPage(input: input)];
+    pages = <Widget>[PointRiskTypeSelectPage(model: widget.model,),PointNewWorkPage(),PointListPage(input: input)];
     if (tabImages == null) {
       tabImages = [
         [

@@ -32,5 +32,7 @@ class NetConfig {
   static const deletePointUrl = "/prospect_info/delete/";
 
   //勘察点任务
-  static const prospectTaskListUrl = "/prospect_task/list?keyword=";
+  static const prospectTaskListUrl = "/prospect_task/list?task_type=fire_danger&keyword=";
+  static const createProspectTaskUrl = "/prospect_task/create";
+  static const createProspectTaskUrl = "/prospect_task/detail/";
 }

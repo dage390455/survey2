@@ -2,48 +2,58 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:sensoro_survey/net/NetService/result_data.dart';
+import 'package:sensoro_survey/net/api/app_api.dart';
+import 'package:sensoro_survey/net/api/net_config.dart';
 import 'package:sensoro_survey/views/survey/commonWidegt/inputnumbertextfiled.dart';
 import 'package:sensoro_survey/views/survey/commonWidegt/remarktextfiled.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 import 'package:sensoro_survey/views/survey/sitePages/Model/fire_resource_model.dart';
 
-class AddNewFireResourcePage extends StatefulWidget {
+import 'Model/PointListModel.dart';
+import 'Model/fire_trouble_model.dart';
+
+class AddNewTroublePage extends StatefulWidget {
+  PointListModel input;
+  bool isCreate = true;
+  AddNewTroublePage(this.input,this.isCreate);
   @override
   _State createState() => _State();
 }
 
-class _State extends State<AddNewFireResourcePage> {
+class _State extends State<AddNewTroublePage> {
   bool isCheack = false;
 
-  FireResourceModel fireResourceModel = FireResourceModel("", "", "", "", "");
+  FireTroubleModel fireResourceModel = FireTroubleModel("", "fire_danger", "", "image", "", "", "", "");
 
   @override
   void initState() {
     super.initState();
+    fireResourceModel.prospect_id = widget.input.id;
   }
 
   Future creatFireResource() async {
-//    Navigator.of(context).pop(this.fireResourceModel);
-//    String urlStr =NetConfig.baseUrl + NetConfig.createUrl;
-//    Map<String, dynamic> headers = {};
-//    Map<String, dynamic> params = {"data":fireModel.toJson()};
-//
-//    print(params);
-//
-//    ResultData resultData = await AppApi.getInstance()
-//        .post(urlStr,params: params,context: context,showLoad: true);
-//    if (resultData.isSuccess()) {
-//      // _stopLoading();
-//
-//      int code = resultData.response["code"].toInt();
-//      if (code == 200) {
-//
-//        Navigator.of(context).pop(this.fireModel);
-//
-//      }
-//      setState(() {
-//      });
-//    }
+
+    String urlStr =NetConfig.baseUrl + NetConfig.createProspectTaskUrl;
+    Map<String, dynamic> headers = {};
+    Map<String, dynamic> params = {"data":fireResourceModel.toJson()};
+
+    print(params);
+
+    ResultData resultData = await AppApi.getInstance()
+        .post(urlStr,params: params,context: context,showLoad: true);
+    if (resultData.isSuccess()) {
+      // _stopLoading();
+
+      int code = resultData.response["code"].toInt();
+      if (code == 200) {
+
+        Navigator.of(context).pop();
+
+      }
+      setState(() {
+      });
+    }
   }
 
   @override
@@ -54,7 +64,7 @@ class _State extends State<AddNewFireResourcePage> {
       brightness: Brightness.light,
       backgroundColor: Colors.white,
       title: Text(
-        "新增资源",
+        "新增隐患",
         style: TextStyle(color: Colors.black),
       ),
       leading: Container(
@@ -102,12 +112,12 @@ class _State extends State<AddNewFireResourcePage> {
                 style: TextStyle(color: Colors.red),
               ),
               Text(
-                "资源类型",
+                "隐患程度",
                 style: new TextStyle(fontSize: prefix0.fontsSize),
               ),
               Expanded(
                 child: Text(
-                  fireResourceModel.resourceType,
+                  fireResourceModel.danger_level,
                   textAlign: TextAlign.right,
                   style: new TextStyle(fontSize: prefix0.fontsSize),
                 ),
@@ -123,19 +133,91 @@ class _State extends State<AddNewFireResourcePage> {
           itemBuilder: (BuildContext context) {
             return <PopupMenuItem<String>>[
               PopupMenuItem<String>(
-                child: Text("消防栓"),
+                child: Text("轻危"),
                 value: "0",
               ),
               PopupMenuItem<String>(
-                child: Text("灭火器"),
+                child: Text("中危"),
                 value: "1",
               ),
               PopupMenuItem<String>(
-                child: Text("防烟面罩"),
+                child: Text("高危"),
+                value: "2",
+              ),
+            ];
+          },
+          onSelected: (String s) {
+            switch (s) {
+              case "0":
+                this.fireResourceModel.danger_level = "轻危";
+                break;
+              case "1":
+                this.fireResourceModel.danger_level = "中危";
+                break;
+              case "2":
+                this.fireResourceModel.danger_level = "高危";
+                break;
+              default:
+                break;
+            }
+            _updateSaveState();
+            setState(() {
+
+            });
+          },
+          onCanceled: () {
+            print("onCanceled");
+          },
+        ),
+      ),
+    );
+
+    Container popView1 = new Container(
+      alignment: Alignment.center,
+      height: 60,
+      child: Center(
+        child: PopupMenuButton(
+          child: new Row(
+            children: <Widget>[
+              Text(
+                "*",
+                style: TextStyle(color: Colors.red),
+              ),
+              Text(
+                "隐患类型",
+                style: new TextStyle(fontSize: prefix0.fontsSize),
+              ),
+              Expanded(
+                child: Text(
+                  fireResourceModel.first_type,
+                  textAlign: TextAlign.right,
+                  style: new TextStyle(fontSize: prefix0.fontsSize),
+                ),
+              ),
+              Image.asset(
+                "assets/images/right_arrar.png",
+                width: 20,
+              )
+            ],
+          ),
+          offset: Offset(0.2, 0),
+          padding: EdgeInsets.only(top: 0.0, bottom: 0, left: 100, right: 0),
+          itemBuilder: (BuildContext context) {
+            return <PopupMenuItem<String>>[
+              PopupMenuItem<String>(
+                child: Text("违规用电"),
+                value: "0",
+              ),
+              PopupMenuItem<String>(
+                child: Text("疏散逃生"),
+                value: "1",
+              ),
+              PopupMenuItem<String>(
+                child: Text("易燃易爆"),
                 value: "2",
               ),
               PopupMenuItem<String>(
-                child: Text("辅助逃生"),
+                child: Text("安全标识"),
                 value: "3",
               ),
             ];
@@ -143,23 +225,23 @@ class _State extends State<AddNewFireResourcePage> {
           onSelected: (String s) {
             switch (s) {
               case "0":
-                this.fireResourceModel.resourceType = "消防栓";
+                this.fireResourceModel.first_type = "易燃易爆品";
                 break;
               case "1":
-                this.fireResourceModel.resourceType = "灭火器";
+                this.fireResourceModel.first_type = "电箱隐患";
                 break;
               case "2":
-                this.fireResourceModel.resourceType = "防烟面罩";
+                this.fireResourceModel.first_type = "易燃易爆";
                 break;
               case "3":
-                this.fireResourceModel.resourceType = "辅助逃生";
+                this.fireResourceModel.first_type = "安全标识";
                 break;
               default:
                 break;
             }
-
+            _updateSaveState();
             setState(() {
-              _updateSaveState();
+
             });
           },
           onCanceled: () {
@@ -193,11 +275,11 @@ class _State extends State<AddNewFireResourcePage> {
                           ),
                           Expanded(
                             child: inputnumbertextfiled(
-                              title: "资源名称",
+                              title: "隐患名称",
                               intputtype: 0,
                               onChanged: (text) {
                                 _updateSaveState();
-                                this.fireResourceModel.resourceName = text;
+                                this.fireResourceModel.item_name = text;
                               },
                             ),
                           )
@@ -208,6 +290,7 @@ class _State extends State<AddNewFireResourcePage> {
                       color: prefix0.LINE_COLOR,
                       height: 1,
                     ),
+                    popView1,
                     popView,
                   ])),
           Padding(
@@ -251,8 +334,8 @@ class _State extends State<AddNewFireResourcePage> {
   }
 
   _updateSaveState() {
-    if (fireResourceModel.resourceType.length > 0 &&
-        fireResourceModel.resourceName.length > 0) {
+    if (fireResourceModel.item_name.length > 0 &&
+        fireResourceModel.danger_level.length>0&&fireResourceModel.first_type.length>0) {
       this.isCheack = true;
     } else {
       this.isCheack = false;

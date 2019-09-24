@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:sensoro_survey/generated/customCalendar/lib/controller.dart';
+import 'package:sensoro_survey/model/project_info_model.dart';
 import 'package:sensoro_survey/net/api/app_api.dart';
 import 'package:sensoro_survey/net/api/net_config.dart';
 import 'package:sensoro_survey/views/survey/addPointPages/point_risk_type_select_page.dart';
@@ -13,92 +14,61 @@ import 'package:sensoro_survey/views/survey/sitePages/Model/SitePageModel.dart';
 import 'package:sensoro_survey/views/survey/sitePages/buildinglist_page.dart';
 import 'package:sensoro_survey/views/survey/sitePages/creat_site_page.dart';
 import 'package:sensoro_survey/views/survey/sitePages/sqflite_page.dart';
+import 'package:sensoro_survey/views/survey/add_point_page.dart';
+import 'package:sensoro_survey/views/survey/add_project_page.dart';
 
 import '../const.dart';
+import '../point_content_page.dart';
 import 'Model/PointListModel.dart';
 import 'Model/ProspectTaskListModel.dart';
+import 'add_new_trouble_page.dart';
 
+class FireTroubleListManagementPage extends StatefulWidget {
+  FireTroubleListManagementPage({Key key, this.title, this.input}) : super(key: key);
 
-class PointRiskManagementPage extends StatefulWidget {
-  PointListModel model;
-  PointRiskManagementPage({Key key, this.title,this.model}) : super(key: key);
-
-
+  PointListModel input;
   final String title;
 
   @override
-  _PointRiskManagementPageState createState() => _PointRiskManagementPageState();
+  _FireTroubleListManagementPageState createState() =>
+      _FireTroubleListManagementPageState(this.input);
 }
 
-class _PointRiskManagementPageState extends State<PointRiskManagementPage> {
-
-  BasicMessageChannel  _locationBasicMessageChannel =
-  BasicMessageChannel("BasicMessageChannelPluginGetCity", StandardMessageCodec());
-
+class _FireTroubleListManagementPageState extends State<FireTroubleListManagementPage> {
+  PointListModel input;
+  BasicMessageChannel _locationBasicMessageChannel = BasicMessageChannel(
+      "BasicMessageChannelPluginGetCity", StandardMessageCodec());
+  _FireTroubleListManagementPageState(this.input);
   bool calendaring = false;
   String beginTimeStr = "";
   String endTimeStr = "";
-
+  String searchStr = "";
   String dateFilterStr = "";
   CalendarController controller;
-  String searchStr = "";
+
   TextEditingController searchController = TextEditingController();
   List<ProspectTaskListModel> dataList = [];
 
-  void _startManagePage() async {
-    DataTransferManager.shared.creatModel();
+
+
+  void _gotoPoint(int index) async {
+
+
     final result = await Navigator.of(context, rootNavigator: true)
         .push(CupertinoPageRoute(builder: (BuildContext context) {
-      return new PointRiskTypeSelectPage(model: widget.model,);
+      return new AddNewTroublePage(widget.input,false);
     }));
 
     if (result != null) {
-      String name = result as String;
-      if (name == "refreshList") {}
-      // this.name = name;
       setState(() {});
     }
+
   }
 
-  void _creatSite() async {
-    DataTransferManager.shared.creatModel();
-    final result = await Navigator.of(context, rootNavigator: true)
-        .push(CupertinoPageRoute(builder: (BuildContext context) {
-      return new PointRiskTypeSelectPage(model: widget.model,);
-    }));
-
-    if (result != null) {
-//      SitePageModel name = result as SitePageModel;
-//
-//      for (int i = 0; i < dataList.length; i++) {
-//        SitePageModel model = dataList[i];
-//        if (model.sitePageModelId == name.sitePageModelId) {
-//          dataList.removeAt(i);
-//          break;
-//        }
-//      }
-//
-//      dataList.add(name);
-//
-//      // this.name = name;
-//
-//      setState(() {});
-
-      getListNetCall();
-    }
-  }
-
-  void _textSql() async {
-
-    Future<String> future = _locationBasicMessageChannel.send("000000");
-    future.then((message) {
-      print("========================" + message);
-    });
-  }
 
 
   Future getListNetCall() async {
-    String urlStr = NetConfig.prospectTaskListUrl+searchStr+"&prospect_id="+widget.model.id;
+    String urlStr = NetConfig.prospectTaskListUrl+searchStr+"&prospect_id="+widget.input.id;
     Map<String, dynamic> headers = {};
     Map<String, dynamic> params = {};
 
@@ -130,22 +100,50 @@ class _PointRiskManagementPageState extends State<PointRiskManagementPage> {
     }
   }
 
+  void _addPoint() async {
+    final result = await Navigator.of(context, rootNavigator: true)
+        .push(CupertinoPageRoute(builder: (BuildContext context) {
+      return new AddNewTroublePage(widget.input,true);
+    }));
 
+    if (result != null) {
+      setState(() {});
+    }
+  }
 
-
+  void _editProject() async {
+//    final result = await Navigator.of(context, rootNavigator: true)
+//        .push(CupertinoPageRoute(builder: (BuildContext context) {
+//      return new AddProjectPage(
+//        input: input,
+//        isEdit: true,
+//      );
+//    }));
+//
+//    if (result != null) {
+//      String name = result as String;
+//      if (name == "refreshList") {
+////        loadLocalData();
+//        dataList.clear();
+//        getListNetCall();
+//      }
+//      // this.name = name;
+//      setState(() {});
+//    }
+  }
 
   @override
   void initState() {
     // TODO: implement initState
 
     super.initState();
-    _locationBasicMessageChannel.setMessageHandler((message) => Future<String>(() {
-      print(message);
-      //message为native传递的数据
-      //给Android端的返回值
-      return "========================收到Native消息：" + message;
-    }));
-
+    _locationBasicMessageChannel
+        .setMessageHandler((message) => Future<String>(() {
+              print(message);
+              //message为native传递的数据
+              //给Android端的返回值
+              return "========================收到Native消息：" + message;
+            }));
 
     getListNetCall();
   }
@@ -206,10 +204,44 @@ class _PointRiskManagementPageState extends State<PointRiskManagementPage> {
       ),
     );
 
-
-
-
-
+    Widget navBar = AppBar(
+      elevation: 1.0,
+      brightness: Brightness.light,
+      backgroundColor: Colors.white,
+      centerTitle: true,
+      // title: Text(
+      //   "项目列表",
+      //   style: TextStyle(
+      //       color: BLACK_TEXT_COLOR, fontWeight: FontWeight.bold, fontSize: 16),
+      // ),
+      leading: IconButton(
+        icon: Image.asset(
+          "assets/images/back.png",
+          // height: 20,
+        ),
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      ),
+      title: Text("消防隐患列表"),
+      actions: <Widget>[
+        Container(
+          padding: new EdgeInsets.fromLTRB(0, 0, 20, 0),
+          alignment: Alignment.center,
+          child: GestureDetector(
+            onTap: () {
+              _editProject();
+            },
+            child: Text(
+              "详情",
+              style: TextStyle(
+                color: prefix0.GREEN_COLOR,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
 
     Widget myListView = new ListView.builder(
         physics: new AlwaysScrollableScrollPhysics()
@@ -230,7 +262,7 @@ class _PointRiskManagementPageState extends State<PointRiskManagementPage> {
                   height: 120,
                   // fit: BoxFit.fitWidth,
                 ),
-                Text("暂无勘察任务",
+                Text("暂无隐患",
                     textAlign: TextAlign.start,
                     style: TextStyle(
                         color: prefix0.LIGHT_TEXT_COLOR,
@@ -261,7 +293,7 @@ class _PointRiskManagementPageState extends State<PointRiskManagementPage> {
 
                     GestureDetector(
                       onTap: () {
-                        _startManagePage();
+                        _gotoPoint(index);
                       },
                       child: Container(
                         height: 80,
@@ -305,30 +337,19 @@ class _PointRiskManagementPageState extends State<PointRiskManagementPage> {
                   ]),
             ),
             secondaryActions: <Widget>[
-//              IconSlideAction(
-//                caption: '删除',
-//                color: Colors.red,
-//                icon: Icons.delete,
-//                onTap: () => setState(() {
-//                  dataList.removeAt(index);
-//                }),
-//              ),
+
             ],
           );
         });
 
     _searchAction(String text) {
+      searchStr = text;
+      getListNetCall();
       print("........................." + text);
     }
 
-
-    Widget reflust = new  RefreshIndicator(
-      displacement: 10.0,
-      child: myListView,
-      onRefresh: getListNetCall
-
-    );
-
+    Widget reflust = new RefreshIndicator(
+        displacement: 10.0, child: myListView, onRefresh: getListNetCall);
 
     Widget bodyContiner = new Container(
       color: Colors.white,
@@ -370,13 +391,6 @@ class _PointRiskManagementPageState extends State<PointRiskManagementPage> {
             ),
           ),
 
-          Padding(
-            padding: new EdgeInsets.fromLTRB(20, 20, 20, 20),
-            child: new SearchView(
-                hitText: "任务名称",
-                searchAction: (editText) => _searchAction(editText)),
-          ),
-
           //分割线
           Container(
               width: prefix0.screen_width,
@@ -396,7 +410,12 @@ class _PointRiskManagementPageState extends State<PointRiskManagementPage> {
         padding: const EdgeInsets.all(20),
         child: GestureDetector(
           onTap: () {
-            _creatSite();
+            _addPoint();
+
+            // _creatSite(
+            //     new SitePageModel(
+            //         "", "", "0", "area", "", "", "", "", 0.0, "", ""),
+            //     true);
           },
           child: Container(
             height: 40,
@@ -411,7 +430,7 @@ class _PointRiskManagementPageState extends State<PointRiskManagementPage> {
             child: Padding(
               padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
               child: Text(
-                "+ 新建勘察任务",
+                "+ 添加隐患",
                 textAlign: TextAlign.start,
                 style: TextStyle(color: Colors.grey),
               ),
@@ -422,7 +441,7 @@ class _PointRiskManagementPageState extends State<PointRiskManagementPage> {
     );
 
     return new Scaffold(
-
+      appBar: navBar,
       body: bodyContiner,
       bottomSheet: of,
     );

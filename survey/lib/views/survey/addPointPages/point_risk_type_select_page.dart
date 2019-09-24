@@ -9,11 +9,15 @@ import 'package:sensoro_survey/views/survey/sitePages/buildinglist_page.dart';
 import 'package:sensoro_survey/views/survey/sitePages/creat_site_page.dart';
 
 import '../const.dart';
+import 'Fire_Trouble_List_management_page.dart';
+import 'Model/PointListModel.dart';
+import 'Model/ProspectTaskListModel.dart';
 import 'fire_resources_list_page.dart';
 
 class PointRiskTypeSelectPage extends StatefulWidget {
-  PointRiskTypeSelectPage({Key key, this.title}) : super(key: key);
+  PointRiskTypeSelectPage({Key key, this.title,this.model}) : super(key: key);
 
+  PointListModel model;
   final String title;
 
   @override
@@ -64,6 +68,18 @@ class _PointRiskTypeSelectPageState extends State<PointRiskTypeSelectPage> {
 //      setState(() {});
 
 //      getListNetCall();
+    }
+  }
+
+  void _startTroublePageList() async {
+    final result = await Navigator.of(context, rootNavigator: true)
+        .push(CupertinoPageRoute(builder: (BuildContext context) {
+      return new FireTroubleListManagementPage(input: widget.model,);
+    }));
+
+    if (result != null) {
+      // this.name = name;
+      setState(() {});
     }
   }
 
@@ -128,6 +144,9 @@ class _PointRiskTypeSelectPageState extends State<PointRiskTypeSelectPage> {
     _openCreatPage(int Index) {
       switch (Index) {
         case 1:
+          _startTroublePageList();
+        break;
+        case 2:
           _startFireResPageList();
           break;
       }
@@ -246,7 +265,7 @@ class _PointRiskTypeSelectPageState extends State<PointRiskTypeSelectPage> {
     );
 
     return new Scaffold(
-      appBar: navBar,
+//      appBar: navBar,
       body: bodyContiner,
     );
   }
