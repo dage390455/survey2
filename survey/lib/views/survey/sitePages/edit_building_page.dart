@@ -7,11 +7,11 @@ import 'package:sensoro_survey/net/api/net_config.dart';
 import 'package:sensoro_survey/views/survey/commonWidegt/inputnumbertextfiled.dart';
 import 'package:sensoro_survey/views/survey/commonWidegt/remarktextfiled.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
-import 'package:sensoro_survey/views/survey/editPage/edit_content_page.dart';
 import 'package:sensoro_survey/views/survey/sitePages/Model/SitePageModel.dart';
 
 class EditbuildingPage extends StatefulWidget {
-  SitePageModel sitePageModel;
+  SitePageModel sitePageModel = SitePageModel.building(
+      "", "", "", "", "", "", "", 0.0, ",", "", 0, 0, "", "", "", "");
 
   EditbuildingPage(this.sitePageModel);
 
@@ -23,6 +23,7 @@ class _State extends State<EditbuildingPage> {
   BasicMessageChannel<String> _basicMessageChannel =
       BasicMessageChannel("BasicMessageChannelPlugin", StringCodec());
   SitePageModel sitePageModel;
+
   _State(this.sitePageModel);
 
   bool isCheack = false;
@@ -171,28 +172,6 @@ class _State extends State<EditbuildingPage> {
       ],
     );
 
-    editName() async {
-      final result = await Navigator.push(
-        context,
-        new MaterialPageRoute(
-            builder: (context) => new EditContentPage(
-                  name: this.sitePageModel.name,
-                  title: "建筑名称",
-                  hintText: "请输入建筑名称",
-                  historyKey: "buildingCreatHistoryKey",
-                )),
-      );
-
-      if (result != null) {
-        String name = result as String;
-
-        this.sitePageModel.name = name;
-        _updateSaveState();
-
-        setState(() {});
-      }
-    }
-
     editLoction() async {
       _sendToNative();
     }
@@ -211,34 +190,37 @@ class _State extends State<EditbuildingPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
-                GestureDetector(
-                  onTap: editName,
-                  child: Container(
-                    alignment: Alignment.center,
-                    height: 60,
-                    child: new Row(
-                      children: <Widget>[
-                        Text(
-                          "建筑名称",
-                          style: new TextStyle(fontSize: prefix0.fontsSize),
-                        ),
-                        Expanded(
-                          child: Text(
-                            null != this.sitePageModel.name
-                                ? this.sitePageModel.name
-                                : "必填",
-                            textAlign: TextAlign.right,
-                            style: new TextStyle(fontSize: prefix0.fontsSize),
+                Padding(
+                    padding: new EdgeInsets.fromLTRB(0, 0, 0, 0),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.max,
+                        children: <Widget>[
+                          new Container(
+                            height: 60,
+                            child: Row(
+                              children: <Widget>[
+                                Text(
+                                  "*",
+                                  style: TextStyle(color: Colors.red),
+                                ),
+                                Expanded(
+                                  child: inputnumbertextfiled(
+                                    title: "建筑名称",
+                                    intputtype: 0,
+                                    defaultText: sitePageModel.name == null
+                                        ? "建筑名称"
+                                        : sitePageModel.name,
+                                    onChanged: (text) {
+                                      _updateSaveState();
+                                      this.sitePageModel.name = text;
+                                    },
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
-                        ),
-                        Image.asset(
-                          "assets/images/right_arrar.png",
-                          width: 20,
-                        )
-                      ],
-                    ),
-                  ),
-                ),
+                        ])),
                 Container(
                   color: prefix0.LINE_COLOR,
                   height: 1,
@@ -276,7 +258,7 @@ class _State extends State<EditbuildingPage> {
                   height: 1,
                 ),
                 inputnumbertextfiled(
-                  defaultText: this.sitePageModel.size.toString(),
+                  defaultText: sitePageModel.size.toString(),
                   title: "建筑面积(㎡)",
                   intputtype: 0,
                   onChanged: (text) {},
@@ -296,7 +278,7 @@ class _State extends State<EditbuildingPage> {
                   mainAxisSize: MainAxisSize.max,
                   children: <Widget>[
                     inputnumbertextfiled(
-                      defaultText: this.sitePageModel.height.toString(),
+                      defaultText: sitePageModel.height.toString(),
                       title: "建筑高度(m)",
                       intputtype: 1,
                       onChanged: (text) {
@@ -311,7 +293,7 @@ class _State extends State<EditbuildingPage> {
                     inputnumbertextfiled(
                       title: "地上楼层数(层)",
                       intputtype: 1,
-                      defaultText: this.sitePageModel.upperFloor.toString(),
+                      defaultText: sitePageModel.upperFloor.toString(),
                       onChanged: (text) {
                         sitePageModel.upperFloor = text;
 
@@ -325,7 +307,7 @@ class _State extends State<EditbuildingPage> {
                     inputnumbertextfiled(
                       title: "地下楼层数(层)",
                       intputtype: 1,
-                      defaultText: this.sitePageModel.belowFloor.toString(),
+                      defaultText: sitePageModel.belowFloor.toString(),
                       onChanged: (text) {
                         sitePageModel.belowFloor = text;
 
@@ -353,6 +335,7 @@ class _State extends State<EditbuildingPage> {
       ),
     );
     Widget delete = new Offstage(
+      offstage: false,
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: GestureDetector(
