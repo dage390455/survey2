@@ -7,12 +7,11 @@ import 'package:sensoro_survey/net/api/net_config.dart';
 import 'package:sensoro_survey/views/survey/commonWidegt/inputnumbertextfiled.dart';
 import 'package:sensoro_survey/views/survey/commonWidegt/remarktextfiled.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
-import 'package:sensoro_survey/views/survey/editPage/edit_content_page.dart';
 import 'package:sensoro_survey/views/survey/sitePages/Model/SitePageModel.dart';
 
 class CreatbuildingPage extends StatefulWidget {
-  SitePageModel sitePageModel =
-      SitePageModel("", "", "", "", "", "", "", "", 0.0, "", "");
+  SitePageModel sitePageModel = SitePageModel.building(
+      "", "", "", "", "", "", "", 0.0, ",", "", 0, 0, "", "", "", "");
 
   CreatbuildingPage(this.sitePageModel);
 
@@ -24,11 +23,10 @@ class _State extends State<CreatbuildingPage> {
   BasicMessageChannel<String> _basicMessageChannel =
       BasicMessageChannel("BasicMessageChannelPlugin", StringCodec());
 
-  _State(SitePageModel sitePageModel, {this.fireModel});
-
-  SitePageModel fireModel =
-      SitePageModel("", "", "0", "area", "", "", "", "", 0.0, "", "");
   bool isCheack = false;
+  SitePageModel sitePageModel;
+
+  _State(this.sitePageModel);
 
   @override
   void initState() {
@@ -38,8 +36,8 @@ class _State extends State<CreatbuildingPage> {
           if (message != null && message.isNotEmpty) {
             List list = message.split(",");
             if (list.length == 3) {
-              fireModel.location = list[0] + "," + list[1];
-              fireModel.address = list[2];
+              sitePageModel.location = list[0] + "," + list[1];
+              sitePageModel.address = list[2];
               _updateSaveState();
               setState(() {});
             }
@@ -53,7 +51,7 @@ class _State extends State<CreatbuildingPage> {
 
   //向native发送消息
   void _sendToNative() {
-    var location = "0," + fireModel.location + "," + fireModel.address;
+    var location = "0," + sitePageModel.location + "," + sitePageModel.address;
 
     Future<String> future = _basicMessageChannel.send(location);
     future.then((message) {
@@ -62,10 +60,9 @@ class _State extends State<CreatbuildingPage> {
   }
 
   Future creatBuilding() async {
-    String urlStr =
-        NetConfig.baseUrl + NetConfig.createUrl + "?parent_id=" + fireModel.id;
+    String urlStr = NetConfig.baseUrl + NetConfig.createUrl;
     Map<String, dynamic> headers = {};
-    Map<String, dynamic> params = {"data": fireModel.toBuildJson()};
+    Map<String, dynamic> params = {"data": sitePageModel.toBuildJson()};
 
     print(params);
 
@@ -76,7 +73,7 @@ class _State extends State<CreatbuildingPage> {
 
       int code = resultData.response["code"].toInt();
       if (code == 200) {
-        Navigator.of(context).pop(this.fireModel);
+        Navigator.of(context).pop(this.sitePageModel);
       }
       setState(() {});
     }
@@ -127,28 +124,6 @@ class _State extends State<CreatbuildingPage> {
       ],
     );
 
-    editName() async {
-      final result = await Navigator.push(
-        context,
-        new MaterialPageRoute(
-            builder: (context) => new EditContentPage(
-                  name: this.fireModel.name,
-                  title: "建筑名称",
-                  hintText: "请输入建筑名称",
-                  historyKey: "buildingCreatHistoryKey",
-                )),
-      );
-
-      if (result != null) {
-        String name = result as String;
-
-        fireModel.name = name;
-        _updateSaveState();
-
-        setState(() {});
-      }
-    }
-
     editLoction() async {
       _sendToNative();
     }
@@ -167,32 +142,34 @@ class _State extends State<CreatbuildingPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
-                GestureDetector(
-                  onTap: editName,
-                  child: Container(
-                    alignment: Alignment.center,
-                    height: 60,
-                    child: new Row(
-                      children: <Widget>[
-                        Text(
-                          "建筑名称",
-                          style: new TextStyle(fontSize: prefix0.fontsSize),
-                        ),
-                        Expanded(
-                          child: Text(
-                            "必填",
-                            textAlign: TextAlign.right,
-                            style: new TextStyle(fontSize: prefix0.fontsSize),
+                Padding(
+                    padding: new EdgeInsets.fromLTRB(0, 0, 0, 0),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.max,
+                        children: <Widget>[
+                          new Container(
+                            height: 60,
+                            child: Row(
+                              children: <Widget>[
+                                Text(
+                                  "*",
+                                  style: TextStyle(color: Colors.red),
+                                ),
+                                Expanded(
+                                  child: inputnumbertextfiled(
+                                    title: "建筑名称",
+                                    intputtype: 0,
+                                    onChanged: (text) {
+                                      _updateSaveState();
+                                      this.sitePageModel.name = text;
+                                    },
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
-                        ),
-                        Image.asset(
-                          "assets/images/right_arrar.png",
-                          width: 20,
-                        )
-                      ],
-                    ),
-                  ),
-                ),
+                        ])),
                 Container(
                   color: prefix0.LINE_COLOR,
                   height: 1,
@@ -210,7 +187,9 @@ class _State extends State<CreatbuildingPage> {
                         ),
                         Expanded(
                           child: Text(
-                            "必填",
+                            sitePageModel.address == null
+                                ? "必填"
+                                : sitePageModel.address,
                             textAlign: TextAlign.right,
                             style: new TextStyle(fontSize: prefix0.fontsSize),
                           ),
@@ -231,7 +210,9 @@ class _State extends State<CreatbuildingPage> {
                   title: "建筑面积(㎡)",
                   intputtype: 0,
                   onChanged: (text) {},
-                  callbacktext: (text) {},
+                  callbacktext: (text) {
+                    sitePageModel.size = double.parse(text);
+                  },
                 ),
               ],
             ),
@@ -250,7 +231,7 @@ class _State extends State<CreatbuildingPage> {
                       title: "建筑高度(m)",
                       intputtype: 1,
                       callbacktext: (text) {
-                        fireModel.height = text;
+                        sitePageModel.height = double.parse(text);
                         print(text + "建筑高度");
                       },
                     ),
@@ -262,7 +243,7 @@ class _State extends State<CreatbuildingPage> {
                       title: "地上楼层数(层)",
                       intputtype: 1,
                       onChanged: (text) {
-                        fireModel.upperFloor = text;
+                        sitePageModel.upperFloor = int.parse(text);
 
                         print(text + "地上楼层数");
                       },
@@ -275,7 +256,7 @@ class _State extends State<CreatbuildingPage> {
                       title: "地下楼层数(层)",
                       intputtype: 1,
                       onChanged: (text) {
-                        fireModel.belowFloor = text;
+                        sitePageModel.belowFloor = int.parse(text);
 
                         print(text + "地下楼层数");
                       },
@@ -293,7 +274,7 @@ class _State extends State<CreatbuildingPage> {
             child: remarktextfiled(
               callbacktext: (text) {
                 print(text + "备注");
-                fireModel.remarks = text;
+                sitePageModel.remarks = text;
               },
             ),
           ),
@@ -322,7 +303,7 @@ class _State extends State<CreatbuildingPage> {
   }
 
   _updateSaveState() {
-    if (fireModel.name.length > 0 && fireModel.address.length > 0) {
+    if (sitePageModel.name.length > 0 && sitePageModel.address.length > 0) {
       this.isCheack = true;
     } else {
       this.isCheack = false;

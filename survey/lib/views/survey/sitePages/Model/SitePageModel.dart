@@ -34,11 +34,10 @@ class SitePageModel {
   double size = 0.0;
 
   String address = "";
-  String parentId = "";
-  String belowFloor;
-  String location = ",";
-  String height;
-  String upperFloor;
+  int belowFloor;
+  String location = "";
+  double height;
+  int upperFloor;
   String remarks = "";
 
   String cityText;
@@ -103,38 +102,65 @@ class SitePageModel {
         "remarks": remark,
       };
 
+  SitePageModel.building(
+    this.id,
+    this.parent_id,
+    this.name,
+    this.type,
+    this.province, //组件编码
+    this.city, //组件类型
+    this.district,
+    this.size,
+    this.location,
+    this.address,
+    this.upperFloor,
+    this.belowFloor,
+    this.provinceText,
+    this.cityText,
+    this.districtText,
+    this.remarks,
+
+    // this.extraInfo,
+  );
+
   SitePageModel.fromBuildJson(Map<String, dynamic> json) {
-    address = json['address'];
+    id = json['id'];
+    parent_id = json['parent_id'];
+    name = json['name'];
     province = json['province'];
     city = json['city'];
-    parentId = json['parent_id'];
     district = json['district'];
-    belowFloor = json['below_floor'];
-    name = json['name'];
+
+    provinceText = json['province_text'];
+    cityText = json['city_text'];
+    districtText = json['district_text'];
+    address = json['address'];
     location = json['location'];
-    id = json['id'];
+    belowFloor = json['below_floor'];
+    upperFloor = json['upper_floor'];
     type = json['type'];
+    size = json['size'];
     height = json['height'];
     remarks = json['remarks'];
-    upperFloor = json['upper_floor'];
     status = json['status'];
   }
 
   Map<String, dynamic> toBuildJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['parent_id'] = this.parent_id;
     data['address'] = this.address;
     data['province'] = this.province;
     data['city'] = this.city;
-    data['parent_id'] = this.parentId;
     data['district'] = this.district;
-    data['below_floor'] = this.belowFloor;
     data['name'] = this.name;
-    data['height'] = this.height;
     data['location'] = this.location;
-    data['id'] = this.id;
     data['type'] = this.type;
     data['remarks'] = this.remarks;
+    data['height'] = this.height;
+    data['size'] = this.size;
     data['upper_floor'] = this.upperFloor;
+    data['below_floor'] = this.belowFloor;
     data['status'] = this.status;
     return data;
   }
@@ -146,7 +172,7 @@ class SitePageModel {
     province = json['province'];
     provinceText = json['province_text'];
     city = json['city'];
-    parentId = json['parent_id'];
+    parent_id = json['parent_id'];
     district = json['district'];
     name = json['name'];
     id = json['id'];
@@ -165,7 +191,7 @@ class SitePageModel {
     data['province'] = this.province;
     data['province_text'] = this.provinceText;
     data['city'] = this.city;
-    data['parent_id'] = this.parentId;
+    data['parent_id'] = this.parent_id;
     data['district'] = this.district;
     data['name'] = this.name;
     data['id'] = this.id;

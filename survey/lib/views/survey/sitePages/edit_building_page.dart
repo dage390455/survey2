@@ -16,12 +16,14 @@ class EditbuildingPage extends StatefulWidget {
   EditbuildingPage(this.sitePageModel);
 
   @override
-  _State createState() => _State();
+  _State createState() => _State(sitePageModel);
 }
 
 class _State extends State<EditbuildingPage> {
   BasicMessageChannel<String> _basicMessageChannel =
       BasicMessageChannel("BasicMessageChannelPlugin", StringCodec());
+  SitePageModel sitePageModel;
+  _State(this.sitePageModel);
 
   bool isCheack = false;
 
@@ -33,8 +35,8 @@ class _State extends State<EditbuildingPage> {
           if (message != null && message.isNotEmpty) {
             List list = message.split(",");
             if (list.length == 3) {
-              widget.sitePageModel.location = list[0] + "," + list[1];
-              widget.sitePageModel.address = list[2];
+              sitePageModel.location = list[0] + "," + list[1];
+              sitePageModel.address = list[2];
               _updateSaveState();
               setState(() {});
             }
@@ -48,10 +50,7 @@ class _State extends State<EditbuildingPage> {
 
   //向native发送消息
   void _sendToNative() {
-    var location = "0," +
-        widget.sitePageModel.location +
-        "," +
-        widget.sitePageModel.address;
+    var location = "0," + sitePageModel.location + "," + sitePageModel.address;
 
     Future<String> future = _basicMessageChannel.send(location);
     future.then((message) {
@@ -60,8 +59,7 @@ class _State extends State<EditbuildingPage> {
   }
 
   Future getBuildingDetail() async {
-    String urlStr =
-        NetConfig.baseUrl + NetConfig.getSiteUrl + widget.sitePageModel.id;
+    String urlStr = NetConfig.baseUrl + NetConfig.getSiteUrl + sitePageModel.id;
     Map<String, dynamic> headers = {};
     Map<String, dynamic> params = {};
 
@@ -78,7 +76,7 @@ class _State extends State<EditbuildingPage> {
 
         SitePageModel model = SitePageModel.fromDetailJson(json);
         if (model != null) {
-          widget.sitePageModel = model;
+          sitePageModel = model;
         }
       }
     }
@@ -88,9 +86,9 @@ class _State extends State<EditbuildingPage> {
 
   Future editBuilding() async {
     String urlStr =
-        NetConfig.baseUrl + NetConfig.editeUrl + this.widget.sitePageModel.id;
+        NetConfig.baseUrl + NetConfig.editeUrl + this.sitePageModel.id;
     Map<String, dynamic> headers = {};
-    Map<String, dynamic> params = {"data": widget.sitePageModel.toBuildJson()};
+    Map<String, dynamic> params = {"data": sitePageModel.toBuildJson()};
 
     print(params);
 
@@ -101,7 +99,28 @@ class _State extends State<EditbuildingPage> {
 
       int code = resultData.response["code"].toInt();
       if (code == 200) {
-        Navigator.of(context).pop(this.widget.sitePageModel);
+        Navigator.of(context).pop(this.sitePageModel);
+      }
+      setState(() {});
+    }
+  }
+
+  Future deleteSite() async {
+    String urlStr =
+        NetConfig.baseUrl + NetConfig.deleteSiteUrl + this.sitePageModel.id;
+    Map<String, dynamic> headers = {};
+    Map<String, dynamic> params = {};
+
+    print(params);
+
+    ResultData resultData = await AppApi.getInstance()
+        .delete(urlStr, params: params, context: context, showLoad: true);
+    if (resultData.isSuccess()) {
+      // _stopLoading();
+
+      int code = resultData.response["code"].toInt();
+      if (code == 200) {
+        Navigator.of(context).pop(this.sitePageModel);
       }
       setState(() {});
     }
@@ -157,7 +176,7 @@ class _State extends State<EditbuildingPage> {
         context,
         new MaterialPageRoute(
             builder: (context) => new EditContentPage(
-                  name: this.widget.sitePageModel.name,
+                  name: this.sitePageModel.name,
                   title: "建筑名称",
                   hintText: "请输入建筑名称",
                   historyKey: "buildingCreatHistoryKey",
@@ -167,7 +186,7 @@ class _State extends State<EditbuildingPage> {
       if (result != null) {
         String name = result as String;
 
-        this.widget.sitePageModel.name = name;
+        this.sitePageModel.name = name;
         _updateSaveState();
 
         setState(() {});
@@ -205,8 +224,8 @@ class _State extends State<EditbuildingPage> {
                         ),
                         Expanded(
                           child: Text(
-                            null != this.widget.sitePageModel.name
-                                ? this.widget.sitePageModel.name
+                            null != this.sitePageModel.name
+                                ? this.sitePageModel.name
                                 : "必填",
                             textAlign: TextAlign.right,
                             style: new TextStyle(fontSize: prefix0.fontsSize),
@@ -237,8 +256,8 @@ class _State extends State<EditbuildingPage> {
                         ),
                         Expanded(
                           child: Text(
-                            null != this.widget.sitePageModel.address
-                                ? this.widget.sitePageModel.address
+                            null != this.sitePageModel.address
+                                ? this.sitePageModel.address
                                 : "必填",
                             textAlign: TextAlign.right,
                             style: new TextStyle(fontSize: prefix0.fontsSize),
@@ -257,7 +276,7 @@ class _State extends State<EditbuildingPage> {
                   height: 1,
                 ),
                 inputnumbertextfiled(
-                  defaultText: this.widget.sitePageModel.size.toString(),
+                  defaultText: this.sitePageModel.size.toString(),
                   title: "建筑面积(㎡)",
                   intputtype: 0,
                   onChanged: (text) {},
@@ -277,11 +296,11 @@ class _State extends State<EditbuildingPage> {
                   mainAxisSize: MainAxisSize.max,
                   children: <Widget>[
                     inputnumbertextfiled(
-                      defaultText: this.widget.sitePageModel.height.toString(),
+                      defaultText: this.sitePageModel.height.toString(),
                       title: "建筑高度(m)",
                       intputtype: 1,
                       onChanged: (text) {
-                        widget.sitePageModel.height = text;
+                        sitePageModel.height = text;
                         print(text + "建筑高度");
                       },
                     ),
@@ -292,10 +311,9 @@ class _State extends State<EditbuildingPage> {
                     inputnumbertextfiled(
                       title: "地上楼层数(层)",
                       intputtype: 1,
-                      defaultText:
-                          this.widget.sitePageModel.upperFloor.toString(),
+                      defaultText: this.sitePageModel.upperFloor.toString(),
                       onChanged: (text) {
-                        widget.sitePageModel.upperFloor = text;
+                        sitePageModel.upperFloor = text;
 
                         print(text + "地上楼层数");
                       },
@@ -307,10 +325,9 @@ class _State extends State<EditbuildingPage> {
                     inputnumbertextfiled(
                       title: "地下楼层数(层)",
                       intputtype: 1,
-                      defaultText:
-                          this.widget.sitePageModel.belowFloor.toString(),
+                      defaultText: this.sitePageModel.belowFloor.toString(),
                       onChanged: (text) {
-                        widget.sitePageModel.belowFloor = text;
+                        sitePageModel.belowFloor = text;
 
                         print(text + "地下楼层数");
                       },
@@ -328,14 +345,45 @@ class _State extends State<EditbuildingPage> {
             child: remarktextfiled(
               callbacktext: (text) {
                 print(text + "备注");
-                widget.sitePageModel.remarks = text;
+                sitePageModel.remarks = text;
               },
             ),
           ),
         ],
       ),
     );
-
+    Widget delete = new Offstage(
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: GestureDetector(
+          onTap: () {
+            deleteSite();
+//            _creatSite(new SitePageModel(), true);
+          },
+          child: Container(
+            color: Colors.red,
+            height: 40,
+            alignment: Alignment.center,
+//            decoration: BoxDecoration(
+//                borderRadius: BorderRadius.circular(3.0), //3像素圆角
+//                border: Border.all(color: Colors.grey),
+////                boxShadow: [
+////                  //阴影
+////                  BoxShadow(color: Colors.white, blurRadius: 4.0)
+////                ]
+//            ),
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+              child: Text(
+                "删除",
+                textAlign: TextAlign.start,
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
     Widget bigContainer = Container(
       color: prefix0.LIGHT_LINE_COLOR,
       padding: new EdgeInsets.fromLTRB(0, 0, 0, 0),
@@ -353,12 +401,12 @@ class _State extends State<EditbuildingPage> {
     return Scaffold(
       appBar: NavBar,
       body: bigContainer,
+      bottomSheet: delete,
     );
   }
 
   _updateSaveState() {
-    if (widget.sitePageModel.name.length > 0 &&
-        widget.sitePageModel.address.length > 0) {
+    if (sitePageModel.name.length > 0 && sitePageModel.address.length > 0) {
       this.isCheack = true;
     } else {
       this.isCheack = false;
