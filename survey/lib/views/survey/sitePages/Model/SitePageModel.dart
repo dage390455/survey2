@@ -31,7 +31,7 @@ class SitePageModel {
   String city = "";
 
   String district = "";
-  double size = 0.0;
+  double size;
 
   String address = "";
   int belowFloor;

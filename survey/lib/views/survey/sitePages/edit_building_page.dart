@@ -11,7 +11,7 @@ import 'package:sensoro_survey/views/survey/sitePages/Model/SitePageModel.dart';
 
 class EditbuildingPage extends StatefulWidget {
   SitePageModel sitePageModel = SitePageModel.building(
-      "", "", "", "", "", "", "", 0.0, ",", "", 0, 0, "", "", "", "");
+      "", "", "", "", "", "", "", 0, ",", "", 0, 0, "", "", "", "");
 
   EditbuildingPage(this.sitePageModel);
 
@@ -59,6 +59,7 @@ class _State extends State<EditbuildingPage> {
     });
   }
 
+  ///详情
   Future getBuildingDetail() async {
     String urlStr = NetConfig.baseUrl + NetConfig.getSiteUrl + sitePageModel.id;
     Map<String, dynamic> headers = {};
@@ -77,12 +78,13 @@ class _State extends State<EditbuildingPage> {
 
         SitePageModel model = SitePageModel.fromDetailJson(json);
         if (model != null) {
-          sitePageModel = model;
+          setState(() {
+            sitePageModel = model;
+          });
         }
       }
     }
     _updateSaveState();
-    setState(() {});
   }
 
   Future editBuilding() async {
@@ -258,7 +260,9 @@ class _State extends State<EditbuildingPage> {
                   height: 1,
                 ),
                 inputnumbertextfiled(
-                  defaultText: sitePageModel.size.toString(),
+                  defaultText: sitePageModel.size != null
+                      ? sitePageModel.size.toString()
+                      : "",
                   title: "建筑面积(㎡)",
                   intputtype: 0,
                   onChanged: (text) {},
@@ -293,7 +297,9 @@ class _State extends State<EditbuildingPage> {
                     inputnumbertextfiled(
                       title: "地上楼层数(层)",
                       intputtype: 1,
-                      defaultText: sitePageModel.upperFloor.toString(),
+                      defaultText: sitePageModel.upperFloor != null
+                          ? sitePageModel.upperFloor.toString()
+                          : "",
                       onChanged: (text) {
                         sitePageModel.upperFloor = text;
 
@@ -307,7 +313,9 @@ class _State extends State<EditbuildingPage> {
                     inputnumbertextfiled(
                       title: "地下楼层数(层)",
                       intputtype: 1,
-                      defaultText: sitePageModel.belowFloor.toString(),
+                      defaultText: sitePageModel.belowFloor != null
+                          ? sitePageModel.belowFloor.toString()
+                          : "",
                       onChanged: (text) {
                         sitePageModel.belowFloor = text;
 
