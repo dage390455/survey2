@@ -133,7 +133,7 @@ class _AddProjectPageState extends State<AddProjectPage> {
     if (name.length > 0 && projectId.length > 0) {
       this.isEdit = true;
     }
-    getListNetCall();
+    getSiteListNetCall();
 
     if (isEdit == true) {
       getProjectDetailNetCall();
@@ -164,7 +164,7 @@ class _AddProjectPageState extends State<AddProjectPage> {
     textCList.add(managerTextController2);
   }
 
-  Future getListNetCall() async {
+  Future getSiteListNetCall() async {
     String urlStr = NetConfig.siteListUrl + "0";
     Map<String, dynamic> headers = {};
     Map<String, dynamic> params = {};

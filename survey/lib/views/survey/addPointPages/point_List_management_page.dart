@@ -66,7 +66,10 @@ class _PointListManagementPageState extends State<PointListManagementPage> {
   void _gotoPoint(int index) async {
     final result = await Navigator.of(context, rootNavigator: true)
         .push(CupertinoPageRoute(builder: (BuildContext context) {
-      return new PointContentPage(input: input,model: dataList[index],);
+      return new PointContentPage(
+        input: input,
+        model: dataList[index],
+      );
     }));
 
     if (result != null) {
@@ -101,7 +104,8 @@ class _PointListManagementPageState extends State<PointListManagementPage> {
   }
 
   Future getListNetCall() async {
-    String urlStr = NetConfig.pointListUrl + input.projectId + "&keyword=" + searchStr;
+    String urlStr =
+        NetConfig.pointListUrl + input.projectId + "&keyword=" + searchStr;
     Map<String, dynamic> headers = {};
     Map<String, dynamic> params = {};
 
@@ -301,7 +305,7 @@ class _PointListManagementPageState extends State<PointListManagementPage> {
                   height: 120,
                   // fit: BoxFit.fitWidth,
                 ),
-                Text("暂无勘察任务",
+                Text("暂无勘察点",
                     textAlign: TextAlign.start,
                     style: TextStyle(
                         color: prefix0.LIGHT_TEXT_COLOR,
