@@ -29,7 +29,8 @@ class _BuildingListPageState extends State<BuildingListPage> {
   void _creatbuilding() async {
     final result = await Navigator.of(context, rootNavigator: true)
         .push(CupertinoPageRoute(builder: (BuildContext context) {
-      return new CreatbuildingPage(widget.sitePageModel);
+      return new CreatbuildingPage(
+          new SitePageModel("", "", "", "", "", "", "", "", 0.0, "", ""));
     }));
 
     if (result != null) {
@@ -71,7 +72,7 @@ class _BuildingListPageState extends State<BuildingListPage> {
           if (resultList.length > 0) {
             for (int i = 0; i < resultList.length; i++) {
               Map json = resultList[i] as Map;
-              SitePageModel model = SitePageModel.fromBuildJson(json);
+              SitePageModel model = SitePageModel.fromJson(json);
               if (model != null) {
                 widget.sitePageModel.buildingList.add(model);
               }

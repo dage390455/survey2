@@ -150,6 +150,10 @@ class SitePageModel {
     district = json['district'];
     name = json['name'];
     id = json['id'];
+    height = json['height'];
+    size = json['size'];
+    upperFloor = json['upper_floor'];
+    belowFloor = json['below_floor'];
     status = json['status'];
   }
 

@@ -257,6 +257,7 @@ class _State extends State<EditbuildingPage> {
                   height: 1,
                 ),
                 inputnumbertextfiled(
+                  defaultText: this.widget.sitePageModel.size.toString(),
                   title: "建筑面积(㎡)",
                   intputtype: 0,
                   onChanged: (text) {},
@@ -276,6 +277,7 @@ class _State extends State<EditbuildingPage> {
                   mainAxisSize: MainAxisSize.max,
                   children: <Widget>[
                     inputnumbertextfiled(
+                      defaultText: this.widget.sitePageModel.height.toString(),
                       title: "建筑高度(m)",
                       intputtype: 1,
                       onChanged: (text) {
@@ -290,6 +292,8 @@ class _State extends State<EditbuildingPage> {
                     inputnumbertextfiled(
                       title: "地上楼层数(层)",
                       intputtype: 1,
+                      defaultText:
+                          this.widget.sitePageModel.upperFloor.toString(),
                       onChanged: (text) {
                         widget.sitePageModel.upperFloor = text;
 
@@ -303,6 +307,8 @@ class _State extends State<EditbuildingPage> {
                     inputnumbertextfiled(
                       title: "地下楼层数(层)",
                       intputtype: 1,
+                      defaultText:
+                          this.widget.sitePageModel.belowFloor.toString(),
                       onChanged: (text) {
                         widget.sitePageModel.belowFloor = text;
 

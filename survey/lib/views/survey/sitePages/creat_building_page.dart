@@ -11,18 +11,23 @@ import 'package:sensoro_survey/views/survey/editPage/edit_content_page.dart';
 import 'package:sensoro_survey/views/survey/sitePages/Model/SitePageModel.dart';
 
 class CreatbuildingPage extends StatefulWidget {
-  SitePageModel sitePageModel;
+  SitePageModel sitePageModel =
+      SitePageModel("", "", "", "", "", "", "", "", 0.0, "", "");
 
   CreatbuildingPage(this.sitePageModel);
 
   @override
-  _State createState() => _State();
+  _State createState() => _State(sitePageModel);
 }
 
 class _State extends State<CreatbuildingPage> {
   BasicMessageChannel<String> _basicMessageChannel =
       BasicMessageChannel("BasicMessageChannelPlugin", StringCodec());
 
+  _State(SitePageModel sitePageModel, {this.fireModel});
+
+  SitePageModel fireModel =
+      SitePageModel("", "", "0", "area", "", "", "", "", 0.0, "", "");
   bool isCheack = false;
 
   @override
@@ -33,8 +38,8 @@ class _State extends State<CreatbuildingPage> {
           if (message != null && message.isNotEmpty) {
             List list = message.split(",");
             if (list.length == 3) {
-              widget.sitePageModel.location = list[0] + "," + list[1];
-              widget.sitePageModel.address = list[2];
+              fireModel.location = list[0] + "," + list[1];
+              fireModel.address = list[2];
               _updateSaveState();
               setState(() {});
             }
@@ -48,10 +53,7 @@ class _State extends State<CreatbuildingPage> {
 
   //向native发送消息
   void _sendToNative() {
-    var location = "0," +
-        widget.sitePageModel.location +
-        "," +
-        widget.sitePageModel.address;
+    var location = "0," + fireModel.location + "," + fireModel.address;
 
     Future<String> future = _basicMessageChannel.send(location);
     future.then((message) {
@@ -60,12 +62,10 @@ class _State extends State<CreatbuildingPage> {
   }
 
   Future creatBuilding() async {
-    String urlStr = NetConfig.baseUrl +
-        NetConfig.createUrl +
-        "?parent_id=" +
-        widget.sitePageModel.id;
+    String urlStr =
+        NetConfig.baseUrl + NetConfig.createUrl + "?parent_id=" + fireModel.id;
     Map<String, dynamic> headers = {};
-    Map<String, dynamic> params = {"data": widget.sitePageModel.toBuildJson()};
+    Map<String, dynamic> params = {"data": fireModel.toBuildJson()};
 
     print(params);
 
@@ -76,7 +76,7 @@ class _State extends State<CreatbuildingPage> {
 
       int code = resultData.response["code"].toInt();
       if (code == 200) {
-        Navigator.of(context).pop(this.widget.sitePageModel);
+        Navigator.of(context).pop(this.fireModel);
       }
       setState(() {});
     }
@@ -132,7 +132,7 @@ class _State extends State<CreatbuildingPage> {
         context,
         new MaterialPageRoute(
             builder: (context) => new EditContentPage(
-                  name: this.widget.sitePageModel.name,
+                  name: this.fireModel.name,
                   title: "建筑名称",
                   hintText: "请输入建筑名称",
                   historyKey: "buildingCreatHistoryKey",
@@ -142,7 +142,7 @@ class _State extends State<CreatbuildingPage> {
       if (result != null) {
         String name = result as String;
 
-        this.widget.sitePageModel.name = name;
+        fireModel.name = name;
         _updateSaveState();
 
         setState(() {});
@@ -180,9 +180,7 @@ class _State extends State<CreatbuildingPage> {
                         ),
                         Expanded(
                           child: Text(
-                            null != this.widget.sitePageModel.name
-                                ? this.widget.sitePageModel.name
-                                : "必填",
+                            "必填",
                             textAlign: TextAlign.right,
                             style: new TextStyle(fontSize: prefix0.fontsSize),
                           ),
@@ -212,9 +210,7 @@ class _State extends State<CreatbuildingPage> {
                         ),
                         Expanded(
                           child: Text(
-                            null != this.widget.sitePageModel.address
-                                ? this.widget.sitePageModel.address
-                                : "必填",
+                            "必填",
                             textAlign: TextAlign.right,
                             style: new TextStyle(fontSize: prefix0.fontsSize),
                           ),
@@ -254,7 +250,7 @@ class _State extends State<CreatbuildingPage> {
                       title: "建筑高度(m)",
                       intputtype: 1,
                       callbacktext: (text) {
-                        widget.sitePageModel.height = text;
+                        fireModel.height = text;
                         print(text + "建筑高度");
                       },
                     ),
@@ -266,7 +262,7 @@ class _State extends State<CreatbuildingPage> {
                       title: "地上楼层数(层)",
                       intputtype: 1,
                       onChanged: (text) {
-                        widget.sitePageModel.upperFloor = text;
+                        fireModel.upperFloor = text;
 
                         print(text + "地上楼层数");
                       },
@@ -279,7 +275,7 @@ class _State extends State<CreatbuildingPage> {
                       title: "地下楼层数(层)",
                       intputtype: 1,
                       onChanged: (text) {
-                        widget.sitePageModel.belowFloor = text;
+                        fireModel.belowFloor = text;
 
                         print(text + "地下楼层数");
                       },
@@ -297,7 +293,7 @@ class _State extends State<CreatbuildingPage> {
             child: remarktextfiled(
               callbacktext: (text) {
                 print(text + "备注");
-                widget.sitePageModel.remarks = text;
+                fireModel.remarks = text;
               },
             ),
           ),
@@ -326,8 +322,7 @@ class _State extends State<CreatbuildingPage> {
   }
 
   _updateSaveState() {
-    if (widget.sitePageModel.name.length > 0 &&
-        widget.sitePageModel.address.length > 0) {
+    if (fireModel.name.length > 0 && fireModel.address.length > 0) {
       this.isCheack = true;
     } else {
       this.isCheack = false;
