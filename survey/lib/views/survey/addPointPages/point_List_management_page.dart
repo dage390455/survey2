@@ -15,6 +15,7 @@ import 'package:sensoro_survey/views/survey/sitePages/buildinglist_page.dart';
 import 'package:sensoro_survey/views/survey/sitePages/creat_site_page.dart';
 import 'package:sensoro_survey/views/survey/sitePages/sqflite_page.dart';
 import 'package:sensoro_survey/views/survey/add_point_page.dart';
+import 'package:sensoro_survey/views/survey/add_project_page.dart';
 
 import '../const.dart';
 import '../point_content_page.dart';
@@ -148,6 +149,27 @@ class _PointListManagementPageState extends State<PointListManagementPage> {
     }
   }
 
+  void _editProject() async {
+    final result = await Navigator.of(context, rootNavigator: true)
+        .push(CupertinoPageRoute(builder: (BuildContext context) {
+      return new AddProjectPage(
+        input: input,
+        isEdit: true,
+      );
+    }));
+
+    if (result != null) {
+      String name = result as String;
+      if (name == "refreshList") {
+//        loadLocalData();
+        dataList.clear();
+        getListNetCall();
+      }
+      // this.name = name;
+      setState(() {});
+    }
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -245,7 +267,9 @@ class _PointListManagementPageState extends State<PointListManagementPage> {
           padding: new EdgeInsets.fromLTRB(0, 0, 20, 0),
           alignment: Alignment.center,
           child: GestureDetector(
-            onTap: () {},
+            onTap: () {
+              _editProject();
+            },
             child: Text(
               "详情",
               style: TextStyle(
