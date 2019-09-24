@@ -53,13 +53,15 @@ class _AddProjectPageState extends State<AddProjectPage> {
   String siteType = "";
   String siteName = "场所名称";
   String siteId = "";
-  String id = "";
+  String projectId = "";
+  String remark = "";
+  List<Map<String, dynamic>> contact_list = [];
   List<dynamic> subList = [];
   bool isCheack = false;
   int managerCount = 1;
   bool _loading = false;
   Map<String, dynamic> admin = {"name": "", "mobile": ""};
-  List<Map<String, dynamic>> managerList = [
+  List<dynamic> managerList = [
     {"name": "", "mobile": ""}
   ];
   List<Map<String, dynamic>> siteTypeList = [
@@ -69,8 +71,11 @@ class _AddProjectPageState extends State<AddProjectPage> {
   List<SitePageModel> dataList = [];
   UtilityPage utility = UtilityPage();
 
+  TextEditingController TextController1 = TextEditingController();
   TextEditingController step1TextController = TextEditingController();
   TextEditingController step2TextController = TextEditingController();
+  TextEditingController managerTextController1 = TextEditingController();
+  TextEditingController managerTextController2 = TextEditingController();
 
   List<TextEditingController> textCList = [];
 
@@ -82,26 +87,71 @@ class _AddProjectPageState extends State<AddProjectPage> {
 
     name = this.input.projectName;
     time = this.input.createTime;
-    id = this.input.projectId;
+    projectId = this.input.projectId;
     isEdit = this.isEdit;
     subList = this.input.subList;
+    siteType = this.input.site_type;
+    remark = this.input.remark;
+    siteId = this.input.site_id;
+    for (int i = 0; i < siteTypeList.length; i++) {
+      Map<String, dynamic> dic = siteTypeList[i];
+      if (siteType == dic["key"]) {
+        siteTypeName = dic["name"];
+      }
+    }
+
+    if (this.input.site_type.length > 0 && this.input != null) {
+      getNameListNetCall(this.input.site_type);
+    }
+
+    if (subList.length > 0) {
+      for (int i = 0; i < subList.length; i++) {
+        if (subList[0] is Map && i == 0) {
+          Map dic = subList[0];
+          admin["name"] = dic["name"];
+          admin["mobile"] = dic["mobile"];
+          continue;
+        }
+
+        if (subList[i] is Map) {
+          Map dic = subList[i];
+          Map<String, dynamic> dic1 = {};
+          dic1["name"] = dic["name"];
+          dic1["mobile"] = dic["mobile"];
+
+          SitePageModel model = SitePageModel.fromJson(dic1);
+          if (model != null) {
+            dataList.add(model);
+          }
+        }
+      }
+    }
+
+    siteName = this.input.site_id;
+    // contact_list = this.input.subList == null ? [] : this.input.subList;
     super.initState();
-    if (name.length > 0 && id.length > 0) {
+    if (name.length > 0 && projectId.length > 0) {
       this.isEdit = true;
     }
     getListNetCall();
 
-    step1TextController.text = this.name;
+    if (isEdit == true) {
+      getProjectDetailNetCall();
+    }
+
+    TextController1.text = this.name;
+    TextController1.addListener(() {
+      this.name = TextController1.text;
+    });
+    step1TextController.text = admin["name"];
     step1TextController.addListener(() {
       admin["name"] = step1TextController.text;
     });
-    step2TextController.text = this.name;
+    step2TextController.text = admin["mobile"];
     step2TextController.addListener(() {
       admin["mobile"] = step2TextController.text;
     });
 
-    TextEditingController managerTextController1 = TextEditingController();
-    TextEditingController managerTextController2 = TextEditingController();
     managerTextController1.addListener(() {
       Map<String, dynamic> manager = managerList[0];
       manager["name"] = managerTextController1.text;
@@ -164,6 +214,9 @@ class _AddProjectPageState extends State<AddProjectPage> {
             for (int i = 0; i < resultList.length; i++) {
               Map json = resultList[i] as Map;
               SitePageModel model = SitePageModel.fromJson(json);
+              if (siteId == model.id) {
+                siteName = model.name;
+              }
               if (model != null) {
                 dataList.add(model);
               }
@@ -174,6 +227,14 @@ class _AddProjectPageState extends State<AddProjectPage> {
       } else {
         utility.showToast("网络请求失败，请检查网络");
       }
+    }
+  }
+
+  void addorEdit() async {
+    if (isEdit == true) {
+      updateProjectNetCall();
+    } else {
+      addProjectNetCall();
     }
   }
 
@@ -251,20 +312,159 @@ class _AddProjectPageState extends State<AddProjectPage> {
     }
   }
 
-  deleteProjectNetCall() {
-    String urlStr = NetConfig.deleteProjectUrl + input.projectId;
+  void getProjectDetailNetCall() async {
+    String urlStr = NetConfig.projectDetailUrl + input.projectId;
     Map<String, dynamic> headers = {};
     Map<String, dynamic> params = {};
+    // limit=5&offset=5
 
-    ResultData resultData = AppApi.getInstance()
+    ResultData resultData = await AppApi.getInstance()
+        .getListNetCall(context, true, urlStr, headers, params);
+    if (resultData.isSuccess()) {
+      // _stopLoading();
+      int code = resultData.response["code"].toInt();
+      if (code == 200) {
+        if (resultData.response["data"] is List) {
+          List resultList = resultData.response["data"];
+          if (resultList.length > 0) {
+            setState(() {
+              // dataList.addAll(resultList);
+            });
+          }
+        }
+
+        if (resultData.response["data"] is Map) {
+          Map resultMap = resultData.response["data"];
+
+          name = resultMap["name"];
+          projectId = resultMap["id"];
+          // status = resultMap["status"];
+          siteId = resultMap["site_id"];
+          siteType = resultMap["site_type"];
+
+          List<dynamic> subList = resultMap["contact_list"];
+          if (subList.length > 0) {
+            for (int i = 0; i < subList.length; i++) {
+              if (subList[0] is Map && i == 0) {
+                Map dic = subList[0];
+                admin["name"] = dic["user_name"];
+                admin["mobile"] = dic["mobile"];
+                step1TextController.text = admin["name"];
+                step2TextController.text = admin["mobile"];
+                continue;
+              }
+
+              if (subList[i] is Map) {
+                Map dic = subList[i];
+                Map<String, dynamic> dic1 = {};
+                dic1["name"] = dic["user_name"];
+                dic1["mobile"] = dic["mobile"];
+                if (i == 1) {
+                  managerTextController1.text = dic1["name"];
+                  managerTextController2.text = dic1["mobile"];
+                }
+
+                SitePageModel model = SitePageModel.fromJson(dic1);
+                if (model != null) {
+                  dataList.add(model);
+                }
+              }
+            }
+          }
+        }
+
+        setState(() {});
+      }
+    }
+  }
+
+//必须加 async才会能进返回
+  deleteProjectNetCall() async {
+    String urlStr =
+        NetConfig.baseUrl + NetConfig.deleteProjectUrl + input.projectId;
+    Map<String, dynamic> headers = {"Content-Type": "application/json"};
+    Map<String, dynamic> params = {};
+
+    ResultData resultData = await AppApi.getInstance()
         .delete(urlStr, params: params, context: context, showLoad: true);
+
+    if (resultData.isSuccess()) {
+      // _stopLoading();
+
+      int code = resultData.response["code"].toInt();
+      if (code == 200) {
+        utility.showToast("项目已删除");
+        Navigator.of(context).pop("refreshList");
+
+        // await Navigator.popUntil(context, ModalRoute.withName('projectList'));
+      } else {
+        utility.showToast("网络请求失败，请检查网络");
+      }
+    } else {}
+  }
+
+  updateProjectNetCall() async {
+    String urlStr =
+        NetConfig.baseUrl + NetConfig.updateProjectUrl + input.projectId;
+
+    if (name.length == 0) {
+      utility.showToast("项目名称不能为空");
+      return;
+    }
+    if (siteType.length == 0) {
+      utility.showToast("场所类型不能为空");
+      return;
+    }
+    if (siteName.length == 0) {
+      utility.showToast("场所名称不能为空");
+      return;
+    }
+    String name1 = admin["name"];
+    if (name1.length == 0) {
+      utility.showToast("责任人名字不能为空");
+      return;
+    }
+    String mobile = admin["mobile"];
+    if (mobile.length == 0) {
+      utility.showToast("责任人电话不能为空");
+      return;
+    }
+
+    List<Map<String, dynamic>> list = [];
+    list.add({
+      "type": "fire_admin",
+      "user_name": admin["name"],
+      "mobile": admin["mobile"]
+    });
+
+    for (int i = 0; i < managerList.length; i++) {
+      Map<String, dynamic> dic = managerList[i];
+      list.add({
+        "type": "fire_responsor",
+        "user_name": dic["name"],
+        "mobile": dic["mobile"]
+      });
+    }
+    Map<String, dynamic> headers = {"Content-Type": "application/json"};
+    //从dataList取数据
+
+    Map<String, dynamic> json = {};
+    json["site_id"] = siteId;
+    json["site_type"] = siteType;
+    json["name"] = name;
+    json["contact_list"] = list;
+    // _startLoading();
+    Map<String, dynamic> params = {"data": json};
+
+    ResultData resultData = await AppApi.getInstance()
+        .put(urlStr, params: params, context: context, showLoad: true);
     if (resultData.isSuccess()) {
       // _stopLoading();
 
       int code = resultData.response["code"].toInt();
       if (code == 200) {
         Navigator.of(context).pop("refreshList");
-        utility.showToast("项目已删除");
+        utility.showToast("项目信息已更新");
       } else {
         utility.showToast("网络请求失败，请检查网络");
       }
@@ -548,7 +748,7 @@ class _AddProjectPageState extends State<AddProjectPage> {
                     width: 150,
                     child: TextField(
                       textAlign: TextAlign.center,
-                      // controller: step1TextController,
+                      controller: TextController1,
                       keyboardType: TextInputType.text,
                       decoration: InputDecoration(
                         border: InputBorder.none,
@@ -950,7 +1150,7 @@ class _AddProjectPageState extends State<AddProjectPage> {
           backgroundColor: Colors.white,
           centerTitle: true,
           title: Text(
-            "新建项目",
+            this.isEdit == true ? "项目详情" : "新建项目",
             style: TextStyle(color: Colors.black),
           ),
           leading: Container(
@@ -972,11 +1172,11 @@ class _AddProjectPageState extends State<AddProjectPage> {
               alignment: Alignment.center,
               child: GestureDetector(
                 onTap: () {
-                  addProjectNetCall();
+                  addorEdit();
                   // Navigator.of(context).pop("");
                 },
                 child: Text(
-                  "完成",
+                  "保存",
                   style: TextStyle(
                     color: this.name.length > 0
                         ? prefix0.GREEN_COLOR
@@ -998,10 +1198,7 @@ class _AddProjectPageState extends State<AddProjectPage> {
             child: ManListView,
           ),
         ),
-        bottomNavigationBar: this.isEdit == true ? bottomButton : emptyContainer
-
-        // bottomSheet: bottomButton,
-        // bottomSheet: bottomButton,
-        );
+        bottomNavigationBar:
+            this.isEdit == true ? bottomButton : emptyContainer);
   }
 }

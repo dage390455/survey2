@@ -25,6 +25,7 @@ import 'package:sensoro_survey/views/sensoro_city_page/task_test_page.dart';
 import 'package:sensoro_survey/views/survey/project_list_page.dart';
 import 'package:sensoro_survey/views/survey/electric_install_page.dart';
 import 'package:sensoro_survey/views/survey/survey_point_information.dart';
+import 'package:sensoro_survey/views/survey/add_project_page.dart';
 
 import 'home_content_page.dart';
 
@@ -147,6 +148,7 @@ Widget _widgetForRoute(String route) {
       return new ElectricInstallPage();
     case 'projectList':
       return new HomeContentPage();
+
     case 'surveyInformation':
       return new SurveyPointInformationPage();
     default:
@@ -187,6 +189,7 @@ class MyApp1 extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
         routes: <String, WidgetBuilder>{
+          '/screen3': (BuildContext context) => new AddProjectPage(),
           "/home": (BuildContext context) => new MyHomePage(),
         },
         home: _home(context),

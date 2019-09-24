@@ -15,10 +15,13 @@ class NetConfig {
 
   //项目列表
   static const projectListUrl = "/project_info/list";
+  static const projectDetailUrl = "/project_info/detail/";
   //新增项目信息 POST
   static const addProjectUrl = "/project_info/create";
 
-  static const deleteProjectUrl = "/project_info/delete/";
+  static const deleteProjectUrl = "project_info/delete/";
+  static const updateProjectUrl = "/project_info/update/";
+
   //新增勘察点信息 POST
   static const addPointUrl = "/prospect_info/create";
   //区域列表接口

@@ -150,6 +150,7 @@ class _PointListManagementPageState extends State<PointListManagementPage> {
   }
 
   void _editProject() async {
+    // Navigator.pushNamedAndRemoveUntil(context,"/screen3",ModalRoute.withName('/')){
     final result = await Navigator.of(context, rootNavigator: true)
         .push(CupertinoPageRoute(builder: (BuildContext context) {
       return new AddProjectPage(

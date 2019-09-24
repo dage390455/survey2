@@ -343,6 +343,26 @@ class _AddPointPageState extends State<AddPointPage> {
     setState(() {});
   }
 
+  deleteItemNetCall() {
+    String urlStr = NetConfig.deletePointUrl + input.site_id;
+    Map<String, dynamic> headers = {};
+    Map<String, dynamic> params = {};
+
+    ResultData resultData = AppApi.getInstance()
+        .delete(urlStr, params: params, context: context, showLoad: true);
+    if (resultData.isSuccess()) {
+      // _stopLoading();
+
+      int code = resultData.response["code"].toInt();
+      if (code == 200) {
+        Navigator.of(context).pop("refreshList");
+        utility.showToast("勘察点已删除");
+      } else {
+        utility.showToast("网络请求失败，请检查网络");
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     editName() async {
@@ -382,11 +402,7 @@ class _AddPointPageState extends State<AddPointPage> {
                 fontWeight: FontWeight.normal,
                 fontSize: 20)),
         onPressed: () {
-          if (this.name.length > 0) {
-            // saveInfoInLocal();
-            addPointNetCall();
-            // Navigator.of(context).pop("refreshList");
-          }
+          deleteItemNetCall();
         },
       ),
     );
@@ -1113,72 +1129,71 @@ class _AddPointPageState extends State<AddPointPage> {
     ]);
 
     return Scaffold(
-      appBar: AppBar(
-        elevation: 1.0,
-        brightness: Brightness.light,
-        backgroundColor: Colors.white,
-        centerTitle: true,
-        title: Text(
-          "新建勘察点",
-          style: TextStyle(color: Colors.black),
-        ),
-        leading: Container(
-          alignment: Alignment.center,
-          child: GestureDetector(
-            onTap: () {
-              // 点击空白页面关闭键盘
-              Navigator.pop(context);
-            },
-            child: Text(
-              "取消",
-              style: TextStyle(color: Colors.black),
-            ),
+        appBar: AppBar(
+          elevation: 1.0,
+          brightness: Brightness.light,
+          backgroundColor: Colors.white,
+          centerTitle: true,
+          title: Text(
+            "新建勘察点",
+            style: TextStyle(color: Colors.black),
           ),
-        ),
-
-        actions: <Widget>[
-          Container(
-            padding: new EdgeInsets.fromLTRB(0, 0, 20, 0),
+          leading: Container(
             alignment: Alignment.center,
             child: GestureDetector(
               onTap: () {
-                addPointNetCall();
-                // Navigator.of(context).pop("");
+                // 点击空白页面关闭键盘
+                Navigator.pop(context);
               },
               child: Text(
-                "完成",
-                style: TextStyle(
-                  color:
-                      this.name.length > 0 ? prefix0.GREEN_COLOR : Colors.grey,
-                ),
+                "取消",
+                style: TextStyle(color: Colors.black),
               ),
             ),
           ),
-        ],
-        // IconButton(
-        //   icon: Image.asset(
-        //     "assets/images/back.png",
-        //     // height: 20,
-        //   ),
-        //   onPressed: () {
-        //     Navigator.pop(context);
-        //   },
-        // ),
-      ),
-      body: GestureDetector(
-        onTap: () {
-          // 点击空白页�������键盘
-          FocusScope.of(context).requestFocus(blankNode);
-        },
-        child: Container(
-          padding:
-              const EdgeInsets.only(top: 0.0, bottom: 0, left: 0, right: 0),
-          child: MainlistView,
-        ),
-      ),
 
-      bottomSheet: bottomButton,
-      // bottomSheet: bottomButton,
-    );
+          actions: <Widget>[
+            Container(
+              padding: new EdgeInsets.fromLTRB(0, 0, 20, 0),
+              alignment: Alignment.center,
+              child: GestureDetector(
+                onTap: () {
+                  addPointNetCall();
+                  // Navigator.of(context).pop("");
+                },
+                child: Text(
+                  "完成",
+                  style: TextStyle(
+                    color: this.name.length > 0
+                        ? prefix0.GREEN_COLOR
+                        : Colors.grey,
+                  ),
+                ),
+              ),
+            ),
+          ],
+          // IconButton(
+          //   icon: Image.asset(
+          //     "assets/images/back.png",
+          //     // height: 20,
+          //   ),
+          //   onPressed: () {
+          //     Navigator.pop(context);
+          //   },
+          // ),
+        ),
+        body: GestureDetector(
+          onTap: () {
+            // 点击空白页�������键盘
+            FocusScope.of(context).requestFocus(blankNode);
+          },
+          child: Container(
+            padding:
+                const EdgeInsets.only(top: 0.0, bottom: 0, left: 0, right: 0),
+            child: MainlistView,
+          ),
+        ),
+        bottomNavigationBar:
+            this.isEdit == true ? bottomButton : emptyContainer);
   }
 }
