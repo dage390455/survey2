@@ -66,7 +66,7 @@ class _PointListManagementPageState extends State<PointListManagementPage> {
   void _gotoPoint(int index) async {
     final result = await Navigator.of(context, rootNavigator: true)
         .push(CupertinoPageRoute(builder: (BuildContext context) {
-      return new PointContentPage(input: input);
+      return new PointContentPage(input: input,model: dataList[index],);
     }));
 
     if (result != null) {

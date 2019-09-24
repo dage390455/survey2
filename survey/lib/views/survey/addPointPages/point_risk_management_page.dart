@@ -15,10 +15,13 @@ import 'package:sensoro_survey/views/survey/sitePages/creat_site_page.dart';
 import 'package:sensoro_survey/views/survey/sitePages/sqflite_page.dart';
 
 import '../const.dart';
+import 'Model/PointListModel.dart';
+import 'Model/ProspectTaskListModel.dart';
 
 
 class PointRiskManagementPage extends StatefulWidget {
-  PointRiskManagementPage({Key key, this.title}) : super(key: key);
+  PointListModel model;
+  PointRiskManagementPage({Key key, this.title,this.model}) : super(key: key);
 
 
   final String title;
@@ -40,9 +43,9 @@ class _PointRiskManagementPageState extends State<PointRiskManagementPage> {
   CalendarController controller;
   String searchStr = "";
   TextEditingController searchController = TextEditingController();
-  List<SitePageModel> dataList = [];
+  List<ProspectTaskListModel> dataList = [];
 
-  void _startManagePage(SitePageModel data) async {
+  void _startManagePage() async {
     DataTransferManager.shared.creatModel();
     final result = await Navigator.of(context, rootNavigator: true)
         .push(CupertinoPageRoute(builder: (BuildContext context) {
@@ -57,7 +60,7 @@ class _PointRiskManagementPageState extends State<PointRiskManagementPage> {
     }
   }
 
-  void _creatSite(SitePageModel model, bool isCreat) async {
+  void _creatSite() async {
     DataTransferManager.shared.creatModel();
     final result = await Navigator.of(context, rootNavigator: true)
         .push(CupertinoPageRoute(builder: (BuildContext context) {
@@ -95,7 +98,7 @@ class _PointRiskManagementPageState extends State<PointRiskManagementPage> {
 
 
   Future getListNetCall() async {
-    String urlStr = NetConfig.siteListUrl+"0";
+    String urlStr = NetConfig.prospectTaskListUrl+searchStr+"&prospect_id="+widget.model.id;
     Map<String, dynamic> headers = {};
     Map<String, dynamic> params = {};
 
@@ -112,7 +115,7 @@ class _PointRiskManagementPageState extends State<PointRiskManagementPage> {
           if (resultList.length > 0) {
             for (int i = 0; i < resultList.length; i++) {
               Map json = resultList[i] as Map;
-              SitePageModel model = SitePageModel.fromJson(json);
+              ProspectTaskListModel model = ProspectTaskListModel.fromJson(json);
               if (model != null) {
                 dataList.add(model);
               }
@@ -128,14 +131,7 @@ class _PointRiskManagementPageState extends State<PointRiskManagementPage> {
   }
 
 
-  _getData() {
-    for (int i = 0; i < 5; i++) {
-      var sitePage = new SitePageModel("","","","","","","","",0.0,"","");
-      sitePage.siteName = "望京soho T1";
 
-      dataList.add(sitePage);
-    }
-  }
 
 
   @override
@@ -265,7 +261,7 @@ class _PointRiskManagementPageState extends State<PointRiskManagementPage> {
 
                     GestureDetector(
                       onTap: () {
-                        _startManagePage(dataList[index]);
+                        _startManagePage();
                       },
                       child: Container(
                         height: 80,
@@ -281,7 +277,7 @@ class _PointRiskManagementPageState extends State<PointRiskManagementPage> {
                               //这决定了左对齐
                               Expanded(
                                 child: Container(
-                                  child: Text(dataList[index].name,
+                                  child: Text(dataList[index].item_name,
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
                                           color: prefix0.BLACK_TEXT_COLOR,
@@ -400,7 +396,7 @@ class _PointRiskManagementPageState extends State<PointRiskManagementPage> {
         padding: const EdgeInsets.all(20),
         child: GestureDetector(
           onTap: () {
-            _creatSite(new SitePageModel("","","0","area","","","","",0.0,"",""), true);
+            _creatSite();
           },
           child: Container(
             height: 40,

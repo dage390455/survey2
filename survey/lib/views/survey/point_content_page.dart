@@ -8,6 +8,7 @@ import 'package:sensoro_survey/model/project_info_model.dart';
 import 'package:sensoro_survey/views/survey/point_list_page.dart';
 import 'package:sensoro_survey/views/survey/sitePages/site_management_page.dart';
 
+import 'addPointPages/Model/PointListModel.dart';
 import 'addPointPages/point_network_page.dart';
 import 'addPointPages/point_risk_management_page.dart';
 
@@ -15,7 +16,8 @@ import 'addPointPages/point_risk_management_page.dart';
 
 class PointContentPage extends StatefulWidget {
   projectInfoModel input;
-  PointContentPage({Key key, @required this.input}) : super(key: key);
+  PointListModel model;
+  PointContentPage({Key key, @required this.input,this.model}) : super(key: key);
   @override
   State<StatefulWidget> createState() => PointContentPageState(input);
 }
@@ -43,7 +45,7 @@ class PointContentPageState extends State<PointContentPage> {
   @override
   void initState() {
     super.initState();
-    pages = <Widget>[PointRiskManagementPage(),PointNewWorkPage(),PointListPage(input: input)];
+    pages = <Widget>[PointRiskManagementPage(model: widget.model,),PointNewWorkPage(),PointListPage(input: input)];
     if (tabImages == null) {
       tabImages = [
         [
@@ -110,7 +112,7 @@ class PointContentPageState extends State<PointContentPage> {
           Navigator.pop(context);
         },
       ),
-      title: Text(input.projectName),
+      title: Text(widget.model.name),
       actions: <Widget>[
 
 
