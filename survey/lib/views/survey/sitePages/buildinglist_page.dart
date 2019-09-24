@@ -50,9 +50,7 @@ class _BuildingListPageState extends State<BuildingListPage> {
     }));
 
     if (result != null) {
-      SitePageModel sitePageModel = result as SitePageModel;
-      widget.sitePageModel.buildingList.add(sitePageModel);
-      setState(() {});
+      getBuildingListCall();
     }
   }
 
@@ -64,9 +62,7 @@ class _BuildingListPageState extends State<BuildingListPage> {
     }));
 
     if (result != null) {
-      SitePageModel sitePageModel = result as SitePageModel;
-//      widget.sitePageModel.buildingList.add(sitePageModel);
-      setState(() {});
+      getBuildingListCall();
     }
   }
 

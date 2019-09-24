@@ -59,6 +59,7 @@ class _State extends State<EditbuildingPage> {
     });
   }
 
+  ///详情
   Future getBuildingDetail() async {
     String urlStr = NetConfig.baseUrl + NetConfig.getSiteUrl + sitePageModel.id;
     Map<String, dynamic> headers = {};
