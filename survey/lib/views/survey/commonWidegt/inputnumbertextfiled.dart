@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 
 class inputnumbertextfiled extends StatefulWidget {
@@ -59,15 +58,15 @@ class _inputnumbertextfiledState extends State<inputnumbertextfiled> {
                   widget.onChanged(v);
                 },
 
-                keyboardType: widget.intputtype == 1
-                    ? TextInputType.number
-                    : TextInputType.text,
-
-                inputFormatters: widget.intputtype == 1
-                    ? [
-                        WhitelistingTextInputFormatter(RegExp("[0-9.]")),
-                      ]
-                    : null,
+//                keyboardType: widget.intputtype == 1
+//                    ? TextInputType.number
+//                    : TextInputType.text,
+//
+//                inputFormatters: widget.intputtype == 1
+//                    ? [
+//                        WhitelistingTextInputFormatter(RegExp("[0-9.]")),
+//                      ]
+//                    : null,
                 //只允许输入数字
                 textAlign: TextAlign.right,
                 decoration: InputDecoration(

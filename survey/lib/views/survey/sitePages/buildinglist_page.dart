@@ -24,6 +24,7 @@ class BuildingListPage extends StatefulWidget {
 
 class _BuildingListPageState extends State<BuildingListPage> {
   _BuildingListPageState(SitePageModel sitePageModel) {}
+  String searchStr = "";
 
   ///新建建筑
   void _creatbuilding() async {
@@ -70,8 +71,10 @@ class _BuildingListPageState extends State<BuildingListPage> {
   }
 
   Future getBuildingListCall() async {
-    String urlStr =
-        NetConfig.siteListUrl + widget.sitePageModel.id + "&keyword=";
+    String urlStr = NetConfig.siteListUrl +
+        widget.sitePageModel.id +
+        "&keyword=" +
+        searchStr;
     Map<String, dynamic> headers = {};
     Map<String, dynamic> params = {};
 
@@ -223,6 +226,13 @@ class _BuildingListPageState extends State<BuildingListPage> {
             ],
           );
         });
+    _searchAction(editText) {
+      searchStr = editText;
+      getBuildingListCall();
+      print("==建筑列表"
+              "=" +
+          editText);
+    }
 
     Widget reflust = new RefreshIndicator(
         displacement: 10.0, child: myListView, onRefresh: getBuildingListCall);
@@ -297,10 +307,4 @@ class _BuildingListPageState extends State<BuildingListPage> {
         ),
         body: body);
   }
-}
-
-_searchAction(editText) {
-  print("==建筑列表"
-          "=" +
-      editText);
 }
