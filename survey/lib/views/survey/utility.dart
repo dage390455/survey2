@@ -17,7 +17,28 @@ class UtilityPage {
       };
       methodChannel.invokeMethod('showToast', map);
     }
+    return;
+  }
 
+  void showHud(String msg) {
+    if (Platform.isIOS) {
+      const methodChannel = const MethodChannel('com.pages.your/project_list');
+      Map<String, dynamic> map = {
+        "message": msg,
+      };
+      methodChannel.invokeMethod('showHud', map);
+    }
+    return;
+  }
+
+  void stopHud(String msg) {
+    if (Platform.isIOS) {
+      const methodChannel = const MethodChannel('com.pages.your/project_list');
+      Map<String, dynamic> map = {
+        "message": msg,
+      };
+      methodChannel.invokeMethod('stopHud', map);
+    }
     return;
   }
 }

@@ -32,17 +32,20 @@ import 'package:sensoro_survey/views/survey/common/save_data_manager.dart';
 
 class AddProjectPage extends StatefulWidget {
   projectInfoModel input;
-
-  AddProjectPage({Key key, @required this.input}) : super(key: key);
+  bool isEdit;
+  AddProjectPage({Key key, @required this.input, this.isEdit})
+      : super(key: key);
 
   @override
-  _AddProjectPageState createState() => _AddProjectPageState(input: this.input);
+  _AddProjectPageState createState() =>
+      _AddProjectPageState(input: this.input, isEdit: this.isEdit);
 }
 
 class _AddProjectPageState extends State<AddProjectPage> {
   projectInfoModel input;
+  bool isEdit = false;
 
-  _AddProjectPageState({this.input});
+  _AddProjectPageState({this.input, this.isEdit});
 
   String name = "";
   String time = "";
@@ -53,7 +56,6 @@ class _AddProjectPageState extends State<AddProjectPage> {
   String id = "";
   List<dynamic> subList = [];
   bool isCheack = false;
-  bool isEdit = false;
   int managerCount = 1;
   bool _loading = false;
   Map<String, dynamic> admin = {"name": "", "mobile": ""};
@@ -81,6 +83,7 @@ class _AddProjectPageState extends State<AddProjectPage> {
     name = this.input.projectName;
     time = this.input.createTime;
     id = this.input.projectId;
+    isEdit = this.isEdit;
     subList = this.input.subList;
     super.initState();
     if (name.length > 0 && id.length > 0) {
@@ -248,6 +251,26 @@ class _AddProjectPageState extends State<AddProjectPage> {
     }
   }
 
+  deleteProjectNetCall() {
+    String urlStr = NetConfig.deleteProjectUrl + input.projectId;
+    Map<String, dynamic> headers = {};
+    Map<String, dynamic> params = {};
+
+    ResultData resultData = AppApi.getInstance()
+        .delete(urlStr, params: params, context: context, showLoad: true);
+    if (resultData.isSuccess()) {
+      // _stopLoading();
+
+      int code = resultData.response["code"].toInt();
+      if (code == 200) {
+        Navigator.of(context).pop("refreshList");
+        utility.showToast("项目已删除");
+      } else {
+        utility.showToast("网络请求失败，请检查网络");
+      }
+    }
+  }
+
   //小菊花
   Future<Null> _stopLoading() async {
     setState(() {
@@ -323,6 +346,10 @@ class _AddProjectPageState extends State<AddProjectPage> {
     setState(() {});
   }
 
+  void _deleteThisItem() async {
+    deleteProjectNetCall();
+  }
+
   @override
   Widget build(BuildContext context) {
     editName() async {
@@ -350,21 +377,22 @@ class _AddProjectPageState extends State<AddProjectPage> {
     );
 
     Widget bottomButton = Container(
-      color: prefix0.LIGHT_LINE_COLOR,
+      color: Colors.red,
       height: 60,
       width: prefix0.screen_width,
       child: new MaterialButton(
-        color: this.name.length > 0 ? prefix0.GREEN_COLOR : Colors.grey,
+        color: Colors.red,
         textColor: Colors.white,
-        child: new Text('完成',
+        child: new Text('删除',
             style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.normal,
                 fontSize: 20)),
         onPressed: () {
           if (this.name.length > 0) {
+            _deleteThisItem();
             // saveInfoInLocal();
-            addProjectNetCall();
+            // addProjectNetCall();
             // Navigator.of(context).pop("refreshList");
           }
         },
@@ -466,7 +494,7 @@ class _AddProjectPageState extends State<AddProjectPage> {
               )
             ],
           ),
-          tooltip: "长按提示",
+          tooltip: "长���提示",
           initialValue: "hot",
           offset: Offset(0.2, 0),
           padding: EdgeInsets.only(top: 0.0, bottom: 0, left: 100, right: 0),
@@ -616,7 +644,7 @@ class _AddProjectPageState extends State<AddProjectPage> {
       ),
     );
 
-    Widget listView2 = new ListView.builder(
+    Widget ManListView = new ListView.builder(
         physics: new AlwaysScrollableScrollPhysics()
             .applyTo(new BouncingScrollPhysics()), // 这个是用来控制能否在不满屏的状态下滚动的属性
         itemCount: managerList.length == 0 ? 5 : managerList.length * 2 + 7,
@@ -883,7 +911,7 @@ class _AddProjectPageState extends State<AddProjectPage> {
                             new Border.all(color: LIGHT_TEXT_COLOR, width: 0.5),
                       ),
                       child: TextField(
-                        //文本输入控件
+                        //文本���入控件
                         onSubmitted: (String str) {
                           //提交监听
                           // searchStr = val;
@@ -916,72 +944,64 @@ class _AddProjectPageState extends State<AddProjectPage> {
         });
 
     return Scaffold(
-      appBar: AppBar(
-        elevation: 1.0,
-        brightness: Brightness.light,
-        backgroundColor: Colors.white,
-        centerTitle: true,
-        title: Text(
-          "新建项目",
-          style: TextStyle(color: Colors.black),
-        ),
-        leading: Container(
-          alignment: Alignment.center,
-          child: GestureDetector(
-            onTap: () {
-              // 点击空白页面关闭键盘
-              Navigator.pop(context);
-            },
-            child: Text(
-              "取消",
-              style: TextStyle(color: Colors.black),
-            ),
+        appBar: AppBar(
+          elevation: 1.0,
+          brightness: Brightness.light,
+          backgroundColor: Colors.white,
+          centerTitle: true,
+          title: Text(
+            "新建项目",
+            style: TextStyle(color: Colors.black),
           ),
-        ),
-
-        actions: <Widget>[
-          Container(
-            padding: new EdgeInsets.fromLTRB(0, 0, 20, 0),
+          leading: Container(
             alignment: Alignment.center,
             child: GestureDetector(
               onTap: () {
-                addProjectNetCall();
-                // Navigator.of(context).pop("");
+                // 点击空白页面关闭键盘
+                Navigator.pop(context);
               },
               child: Text(
-                "完成",
-                style: TextStyle(
-                  color:
-                      this.name.length > 0 ? prefix0.GREEN_COLOR : Colors.grey,
-                ),
+                "取消",
+                style: TextStyle(color: Colors.black),
               ),
             ),
           ),
-        ],
-        // IconButton(
-        //   icon: Image.asset(
-        //     "assets/images/back.png",
-        //     // height: 20,
-        //   ),
-        //   onPressed: () {
-        //     Navigator.pop(context);
-        //   },
-        // ),
-      ),
-      body: GestureDetector(
-        onTap: () {
-          // 点击空白页面关闭键盘
-          FocusScope.of(context).requestFocus(blankNode);
-        },
-        child: Container(
-          padding:
-              const EdgeInsets.only(top: 0.0, bottom: 0, left: 0, right: 0),
-          child: listView2,
+          actions: <Widget>[
+            Container(
+              padding: new EdgeInsets.fromLTRB(0, 0, 20, 0),
+              alignment: Alignment.center,
+              child: GestureDetector(
+                onTap: () {
+                  addProjectNetCall();
+                  // Navigator.of(context).pop("");
+                },
+                child: Text(
+                  "完成",
+                  style: TextStyle(
+                    color: this.name.length > 0
+                        ? prefix0.GREEN_COLOR
+                        : Colors.grey,
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
-      ),
+        body: GestureDetector(
+          onTap: () {
+            // 点击空白页面关闭键盘
+            FocusScope.of(context).requestFocus(blankNode);
+          },
+          child: Container(
+            padding:
+                const EdgeInsets.only(top: 0.0, bottom: 0, left: 0, right: 0),
+            child: ManListView,
+          ),
+        ),
+        bottomNavigationBar: this.isEdit == true ? bottomButton : emptyContainer
 
-      // bottomSheet: bottomButton,
-      // bottomSheet: bottomButton,
-    );
+        // bottomSheet: bottomButton,
+        // bottomSheet: bottomButton,
+        );
   }
 }

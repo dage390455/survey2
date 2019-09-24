@@ -17,6 +17,8 @@ class NetConfig {
   static const projectListUrl = "/project_info/list";
   //新增项目信息 POST
   static const addProjectUrl = "/project_info/create";
+
+  static const deleteProjectUrl = "/project_info/delete/";
   //新增勘察点信息 POST
   static const addPointUrl = "/prospect_info/create";
   //区域列表接口
@@ -27,4 +29,5 @@ class NetConfig {
   static const deleteSiteUrl = "/site_info/delete/";
 
   static const pointListUrl = "/prospect_info/list?project_id=";
+  static const deletePointUrl = "/prospect_info/delete/";
 }

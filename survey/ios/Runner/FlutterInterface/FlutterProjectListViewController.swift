@@ -82,6 +82,7 @@ class FlutterProjectListViewController: FlutterBaseViewController,UIDocumentInte
     }
     
     func loadLocalHistoryList() -> Void{
+        
         let userDefaults = UserDefaults.standard;
         let dic = userDefaults.dictionaryRepresentation();
         var flag = false;
@@ -111,6 +112,19 @@ class FlutterProjectListViewController: FlutterBaseViewController,UIDocumentInte
             
         }))
     }
+    
+    func showProgressHUD(message:String) -> Void{
+        SVProgressHUD.showProgress(-1, status: message);
+//        self?.navigationController?.popViewController(animated: true);
+    }
+    
+    func stopProgressHUD(message:String) -> Void{
+        SVProgressHUD.dismiss();
+        //        self?.navigationController?.popViewController(animated: true);
+    }
+    
+   
+    
     
     @objc func openFileAndSave(nofi : Notification){
         let urlstr = nofi.userInfo!["url"] as! NSString;
@@ -209,7 +223,22 @@ class FlutterProjectListViewController: FlutterBaseViewController,UIDocumentInte
                     
                     if  let str = arguments["message"] as? NSString {
                         self.showToast(message: str as String);
-                        
+                    }
+                }
+            }
+            else if ("showHud" == call.method) {
+                if let arguments:NSDictionary = call.arguments as! NSDictionary{
+                    
+                    if  let str = arguments["message"] as? NSString {
+                        self.showProgressHUD(message: str as String);
+                    }
+                }
+            }
+            else if ("stopHud" == call.method) {
+                if let arguments:NSDictionary = call.arguments as! NSDictionary{
+                    
+                    if  let str = arguments["message"] as? NSString {
+                        self.stopProgressHUD(message: str as String);
                     }
                 }
             }

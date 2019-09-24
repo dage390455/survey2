@@ -32,17 +32,20 @@ import 'package:sensoro_survey/views/survey/common/save_data_manager.dart';
 
 class AddPointPage extends StatefulWidget {
   projectInfoModel input;
+  bool isEdit;
 
-  AddPointPage({Key key, @required this.input}) : super(key: key);
+  AddPointPage({Key key, @required this.input, this.isEdit}) : super(key: key);
 
   @override
-  _AddPointPageState createState() => _AddPointPageState(input: this.input);
+  _AddPointPageState createState() =>
+      _AddPointPageState(input: this.input, isEdit: this.isEdit);
 }
 
 class _AddPointPageState extends State<AddPointPage> {
   projectInfoModel input;
+  bool isEdit = false;
 
-  _AddPointPageState({this.input});
+  _AddPointPageState({this.input, this.isEdit});
 
   String name = "";
   String time = "";
@@ -55,10 +58,10 @@ class _AddPointPageState extends State<AddPointPage> {
   double peopleNum = 0;
 
   String siteId = "";
-  String id = "";
+  String projectId = "";
   List<dynamic> subList = [];
   bool isCheack = false;
-  bool isEdit = false;
+
   int managerCount = 1;
   bool _loading = false;
   Map<String, dynamic> admin = {"name": "", "mobile": ""};
@@ -92,10 +95,11 @@ class _AddPointPageState extends State<AddPointPage> {
     // _loading = true;
     // name = this.input.projectName;
     // time = this.input.createTime;
-    id = this.input.projectId;
+    projectId = this.input.projectId;
     subList = this.input.subList;
+    isEdit = this.isEdit;
     super.initState();
-    if (name.length > 0 && id.length > 0) {
+    if (name.length > 0 && projectId.length > 0) {
       this.isEdit = true;
     }
     getListNetCall();
@@ -240,7 +244,7 @@ class _AddPointPageState extends State<AddPointPage> {
     json["name"] = name;
     json["total_assets"] = money.toString();
     json["resident_count"] = peopleNum.toString();
-    json["project_id"] = id;
+    json["project_id"] = projectId;
     json["contact_list"] = list;
 
     _startLoading();
@@ -370,9 +374,9 @@ class _AddPointPageState extends State<AddPointPage> {
       height: 60,
       width: prefix0.screen_width,
       child: new MaterialButton(
-        color: this.name.length > 0 ? prefix0.GREEN_COLOR : Colors.grey,
+        color: Colors.red,
         textColor: Colors.white,
-        child: new Text('完成',
+        child: new Text('删除',
             style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.normal,
@@ -566,16 +570,57 @@ class _AddPointPageState extends State<AddPointPage> {
       ),
     );
 
-    Widget listView1 = ProgressDialog(
-      loading: _loading,
-      msg: '正在加载...',
-      child: Container(
-        padding:
-            const EdgeInsets.only(top: 20.0, bottom: 0, left: 20, right: 20),
-        child: new Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Row(
+    Widget listView1 = Container(
+      padding: const EdgeInsets.only(top: 20.0, bottom: 0, left: 20, right: 20),
+      child: new Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                new Row(children: <Widget>[
+                  Text(
+                    "*",
+                    style: TextStyle(color: Colors.red),
+                  ),
+                  new SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    "勘察点名称",
+                    style: new TextStyle(fontSize: prefix0.fontsSize),
+                  ),
+                ]),
+                Container(
+                  height: 50,
+                  width: 150,
+                  child: TextField(
+                    textAlign: TextAlign.center,
+                    // controller: step1TextController,
+                    keyboardType: TextInputType.text,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: '勘察点名称(必填)',
+                    ),
+                    maxLines: 1,
+                    autofocus: false,
+                    onChanged: (val) {
+                      name = val;
+                      setState(() {});
+                    },
+                  ),
+                ),
+              ]),
+          Container(
+            color: prefix0.LINE_COLOR,
+            height: 1,
+          ),
+          GestureDetector(
+            // onTap: editName, //写入方法名称就可以了，但是是无参的
+            child: Container(
+              alignment: Alignment.center,
+              height: 60,
+              child: new Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   new Row(children: <Widget>[
@@ -587,224 +632,181 @@ class _AddPointPageState extends State<AddPointPage> {
                       width: 10,
                     ),
                     Text(
-                      "勘察点名称",
+                      "场所层级",
                       style: new TextStyle(fontSize: prefix0.fontsSize),
                     ),
                   ]),
-                  Container(
-                    height: 50,
-                    width: 150,
-                    child: TextField(
-                      textAlign: TextAlign.center,
-                      // controller: step1TextController,
-                      keyboardType: TextInputType.text,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: '勘察点名称(必填)',
-                      ),
-                      maxLines: 1,
-                      autofocus: false,
-                      onChanged: (val) {
-                        name = val;
-                        setState(() {});
-                      },
-                    ),
-                  ),
-                ]),
-            Container(
-              color: prefix0.LINE_COLOR,
-              height: 1,
-            ),
-            GestureDetector(
-              // onTap: editName, //写入方法名称就可以了，但是是无参的
-              child: Container(
-                alignment: Alignment.center,
-                height: 60,
-                child: new Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    new Row(children: <Widget>[
-                      Text(
-                        "*",
-                        style: TextStyle(color: Colors.red),
-                      ),
-                      new SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        "场所层级",
-                        style: new TextStyle(fontSize: prefix0.fontsSize),
-                      ),
-                    ]),
 
-                    popTypeView,
-                    // Expanded(
-                    //   child: Text(
-                    //     "111",
-                    //     textAlign: TextAlign.right,
-                    //     style: new TextStyle(fontSize: prefix0.fontsSize),
-                    //   ),
-                    // ),
-                    // Image.asset(
-                    //   "assets/images/arrow_folddown.png",
-                    //   width: 20,
-                    // )
-                  ],
-                ),
+                  popTypeView,
+                  // Expanded(
+                  //   child: Text(
+                  //     "111",
+                  //     textAlign: TextAlign.right,
+                  //     style: new TextStyle(fontSize: prefix0.fontsSize),
+                  //   ),
+                  // ),
+                  // Image.asset(
+                  //   "assets/images/arrow_folddown.png",
+                  //   width: 20,
+                  // )
+                ],
               ),
             ),
-            Container(
-              color: prefix0.LINE_COLOR,
-              height: 1,
-            ),
-            GestureDetector(
-              // onTap: editName, //写入方����名称就可以了，但是是无参的
-              child: Container(
-                alignment: Alignment.center,
-                height: 60,
-                child: new Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    new Row(children: <Widget>[
-                      Text(
-                        "*",
-                        style: TextStyle(color: Colors.red),
-                      ),
-                      new SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        "场所名称",
-                        style: new TextStyle(fontSize: prefix0.fontsSize),
-                      ),
-                    ]),
-                    popNameView,
-                  ],
-                ),
-              ),
-            ),
-            Container(
-              color: prefix0.LINE_COLOR,
-              height: 1,
-            ),
-            GestureDetector(
-              // onTap: editName, //写入方����名称就可以了，但是是无参的
-              child: Container(
-                alignment: Alignment.center,
-                height: 60,
-                child: new Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    new Row(children: <Widget>[
-                      Text(
-                        "*",
-                        style: TextStyle(color: Colors.red),
-                      ),
-                      new SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        "场所用途",
-                        style: new TextStyle(fontSize: prefix0.fontsSize),
-                      ),
-                    ]),
-                    popUseView,
-                  ],
-                ),
-              ),
-            ),
-            Container(
-              color: prefix0.LINE_COLOR,
-              height: 1,
-            ),
-            Row(
+          ),
+          Container(
+            color: prefix0.LINE_COLOR,
+            height: 1,
+          ),
+          GestureDetector(
+            // onTap: editName, //写入方����名称就可以了，但是是无参的
+            child: Container(
+              alignment: Alignment.center,
+              height: 60,
+              child: new Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   new Row(children: <Widget>[
                     Text(
-                      " ",
+                      "*",
                       style: TextStyle(color: Colors.red),
                     ),
                     new SizedBox(
                       width: 10,
                     ),
                     Text(
-                      "资产总值",
+                      "场所名称",
                       style: new TextStyle(fontSize: prefix0.fontsSize),
                     ),
                   ]),
-                  Container(
-                    height: 50,
-                    width: 80,
-                    child: TextField(
-                      textAlign: TextAlign.center,
-                      // controller: step1TextController,
-                      keyboardType: TextInputType.text,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        suffixText: '元',
-                      ),
-                      maxLines: 1,
-                      autofocus: false,
-                      onChanged: (val) {
-                        money = double.parse(val);
-                        setState(() {});
-                      },
-                    ),
-                  ),
-                ]),
-            Container(
-              color: prefix0.LINE_COLOR,
-              height: 1,
+                  popNameView,
+                ],
+              ),
             ),
-            Row(
+          ),
+          Container(
+            color: prefix0.LINE_COLOR,
+            height: 1,
+          ),
+          GestureDetector(
+            // onTap: editName, //写入方����名称就可以了，但是是无参的
+            child: Container(
+              alignment: Alignment.center,
+              height: 60,
+              child: new Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   new Row(children: <Widget>[
                     Text(
-                      " ",
+                      "*",
                       style: TextStyle(color: Colors.red),
                     ),
                     new SizedBox(
                       width: 10,
                     ),
                     Text(
-                      "常驻人口",
+                      "场所用途",
                       style: new TextStyle(fontSize: prefix0.fontsSize),
                     ),
                   ]),
-                  Container(
-                    height: 50,
-                    width: 80,
-                    child: TextField(
-                      textAlign: TextAlign.center,
-                      // controller: step1TextController,
-                      keyboardType:
-                          TextInputType.numberWithOptions(decimal: false),
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        // hintText: '',
-                        suffixText: '万',
-                      ),
-                      maxLines: 1,
-                      autofocus: false,
-                      onChanged: (val) {
-                        peopleNum = double.parse(val);
-                        setState(() {});
-                      },
-                    ),
+                  popUseView,
+                ],
+              ),
+            ),
+          ),
+          Container(
+            color: prefix0.LINE_COLOR,
+            height: 1,
+          ),
+          Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                new Row(children: <Widget>[
+                  Text(
+                    " ",
+                    style: TextStyle(color: Colors.red),
+                  ),
+                  new SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    "资产总值",
+                    style: new TextStyle(fontSize: prefix0.fontsSize),
                   ),
                 ]),
-            Container(
-              color: prefix0.LINE_COLOR,
-              height: 1,
-            ),
-          ],
-        ),
+                Container(
+                  height: 50,
+                  width: 80,
+                  child: TextField(
+                    textAlign: TextAlign.center,
+                    // controller: step1TextController,
+                    keyboardType: TextInputType.text,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      suffixText: '元',
+                    ),
+                    maxLines: 1,
+                    autofocus: false,
+                    onChanged: (val) {
+                      money = double.parse(val);
+                      setState(() {});
+                    },
+                  ),
+                ),
+              ]),
+          Container(
+            color: prefix0.LINE_COLOR,
+            height: 1,
+          ),
+          Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                new Row(children: <Widget>[
+                  Text(
+                    " ",
+                    style: TextStyle(color: Colors.red),
+                  ),
+                  new SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    "常驻人口",
+                    style: new TextStyle(fontSize: prefix0.fontsSize),
+                  ),
+                ]),
+                Container(
+                  height: 50,
+                  width: 80,
+                  child: TextField(
+                    textAlign: TextAlign.center,
+                    // controller: step1TextController,
+                    keyboardType:
+                        TextInputType.numberWithOptions(decimal: false),
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      // hintText: '',
+                      suffixText: '万',
+                    ),
+                    maxLines: 1,
+                    autofocus: false,
+                    onChanged: (val) {
+                      peopleNum = double.parse(val);
+                      setState(() {});
+                    },
+                  ),
+                ),
+              ]),
+          Container(
+            color: prefix0.LINE_COLOR,
+            height: 1,
+          ),
+        ],
       ),
     );
 
-    Widget listView2 = new ListView.builder(
+    Widget reflust = new RefreshIndicator(
+        displacement: 10.0, child: listView1, onRefresh: getListNetCall);
+
+    Widget MainlistView = new ListView.builder(
         physics: new AlwaysScrollableScrollPhysics()
             .applyTo(new BouncingScrollPhysics()), // 这个是用来控制能否在不满屏的状态下滚动的属性
         itemCount: managerList.length == 0 ? 5 : managerList.length * 2 + 7,
@@ -1103,6 +1105,13 @@ class _AddPointPageState extends State<AddPointPage> {
           }
         });
 
+    Column body = Column(children: <Widget>[
+      MainlistView,
+      Expanded(
+        child: reflust,
+      ),
+    ]);
+
     return Scaffold(
       appBar: AppBar(
         elevation: 1.0,
@@ -1158,17 +1167,17 @@ class _AddPointPageState extends State<AddPointPage> {
       ),
       body: GestureDetector(
         onTap: () {
-          // 点击空白页面��闭键盘
+          // 点击空白页�������键盘
           FocusScope.of(context).requestFocus(blankNode);
         },
         child: Container(
           padding:
               const EdgeInsets.only(top: 0.0, bottom: 0, left: 0, right: 0),
-          child: listView2,
+          child: MainlistView,
         ),
       ),
 
-      // bottomSheet: bottomButton,
+      bottomSheet: bottomButton,
       // bottomSheet: bottomButton,
     );
   }

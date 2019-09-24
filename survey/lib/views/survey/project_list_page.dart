@@ -217,6 +217,7 @@ class _State extends State<HomePage> {
   static Map<String, dynamic> headers = {};
   static Map<String, dynamic> params = {};
   static String urlStr = "";
+  int pageNum = 1;
 
   CalendarController controller;
   TextEditingController searchController = TextEditingController();
@@ -383,9 +384,12 @@ class _State extends State<HomePage> {
   }
 
   void getProjectListNetCall() async {
-    String urlStr = NetConfig.projectListUrl;
+    int offset = (pageNum - 1) * 20;
+    String urlStr =
+        NetConfig.projectListUrl + '?limit=20&offset=' + offset.toString();
     Map<String, dynamic> headers = {};
     Map<String, dynamic> params = {};
+    // limit=5&offset=5
 
     ResultData resultData = await AppApi.getInstance()
         .getListNetCall(context, true, urlStr, headers, params);
@@ -1180,6 +1184,7 @@ class _State extends State<HomePage> {
             setState(() {
               _easyRefreshKey.currentState.waitState(() {
                 dataList.clear();
+                getProjectListNetCall();
                 setState(() {
                   loadMore = true;
                 });
@@ -1195,6 +1200,8 @@ class _State extends State<HomePage> {
                 if (dataList.length >= listTotalCount && listTotalCount > 0) {
                   return;
                 }
+                pageNum++;
+                getProjectListNetCall();
               });
             });
           });
@@ -1306,7 +1313,7 @@ class _State extends State<HomePage> {
               height: 1.0,
               color: FENGE_LINE_COLOR),
           Expanded(
-            child: myListView,
+            child: myRefreshListView,
           ),
           // bottomButton,
         ],
