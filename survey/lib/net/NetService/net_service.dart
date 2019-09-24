@@ -53,9 +53,9 @@ class NetService {
   /// put请求
   put(String url,
       {Map<String, dynamic> headers,
-        Map<String, dynamic> params,
-        BuildContext context,
-        bool showLoad}) async {
+      Map<String, dynamic> params,
+      BuildContext context,
+      bool showLoad}) async {
     return await request(url,
         method: Method.PUT,
         params: params,
@@ -63,20 +63,18 @@ class NetService {
         showLoad: showLoad);
   }
 
-
   /// put请求
   delete(String url,
       {Map<String, dynamic> headers,
-        Map<String, dynamic> params,
-        BuildContext context,
-        bool showLoad}) async {
+      Map<String, dynamic> params,
+      BuildContext context,
+      bool showLoad}) async {
     return await request(url,
         method: Method.DELETE,
         params: params,
         context: context,
         showLoad: showLoad);
   }
-
 
   /// 附件上传
   upLoad(
@@ -113,13 +111,14 @@ class NetService {
       if (headers != null) {
         sessionManager.options.headers = headers;
       } else {
-        if (m_headers != null) {
-          Map<String, dynamic> temp_headers = {};
-          temp_headers["x-session-id"] = m_headers["x-session-id"];
-          temp_headers["Accept-Language"] = m_headers["Accept-Language"];
-          temp_headers["Authorization"] = m_headers["Authorization"];
-          sessionManager.options.headers = temp_headers;
-        }
+        headers = {"Content-Type": "application/json"};
+        // if (m_headers != null) {
+        //   Map<String, dynamic> temp_headers = {};
+        //   temp_headers["x-session-id"] = m_headers["x-session-id"];
+        //   temp_headers["Accept-Language"] = m_headers["Accept-Language"];
+        //   temp_headers["Authorization"] = m_headers["Authorization"];
+        //   sessionManager.options.headers = temp_headers;
+        // }
       }
       // var baseUrl = await getBasicUrl();
       sessionManager.options.baseUrl = url;

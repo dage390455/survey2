@@ -4,16 +4,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sensoro_survey/net/api/app_api.dart';
 import 'package:sensoro_survey/net/api/net_config.dart';
-import 'package:sensoro_survey/views/survey/commonWidegt/inputnumbertextfiled.dart';
-import 'package:sensoro_survey/views/survey/commonWidegt/remarktextfiled.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 import 'package:sensoro_survey/views/survey/sitePages/Model/SitePageModel.dart';
 
-class EditbuildingPage extends StatefulWidget {
-  SitePageModel sitePageModel = SitePageModel.building(
-      "", "", "", "", "", "", "", 0, ",", "", 0, 0, "", "", "", "");
+import '../const.dart';
 
-  EditbuildingPage(this.sitePageModel);
+class EditbuildingPage extends StatefulWidget {
+  String id = "";
+
+  String parent_id = "";
+
+  EditbuildingPage(this.id, this.parent_id);
+
+  SitePageModel sitePageModel = SitePageModel.building(
+      "", "", "", "building", "", "", "", 0.0, ",", "", 0, 0, "", "", "", "");
 
   @override
   _State createState() => _State(sitePageModel);
@@ -22,11 +26,12 @@ class EditbuildingPage extends StatefulWidget {
 class _State extends State<EditbuildingPage> {
   BasicMessageChannel<String> _basicMessageChannel =
       BasicMessageChannel("BasicMessageChannelPlugin", StringCodec());
-  SitePageModel sitePageModel;
-
-  _State(this.sitePageModel);
+  SitePageModel sitePageModel = SitePageModel.building(
+      "", "", "", "building", "", "", "", 0.0, ",", "", 0, 0, "", "", "", "");
 
   bool isCheack = false;
+
+  _State(this.sitePageModel);
 
   @override
   void initState() {
@@ -61,7 +66,7 @@ class _State extends State<EditbuildingPage> {
 
   ///详情
   Future getBuildingDetail() async {
-    String urlStr = NetConfig.baseUrl + NetConfig.getSiteUrl + sitePageModel.id;
+    String urlStr = NetConfig.baseUrl + NetConfig.getSiteUrl + widget.id;
     Map<String, dynamic> headers = {};
     Map<String, dynamic> params = {};
 
@@ -76,18 +81,14 @@ class _State extends State<EditbuildingPage> {
       if (code == 200) {
         Map json = resultData.response["data"];
 
-        SitePageModel model = SitePageModel.fromDetailJson(json);
-        if (model != null) {
-          setState(() {
-            sitePageModel = model;
-          });
-        }
+        sitePageModel = SitePageModel.fromDetailJson(json);
+        _updateSaveState();
+        setState(() {});
       }
     }
-    _updateSaveState();
   }
 
-  Future editBuilding() async {
+  Future saveBuilding() async {
     String urlStr =
         NetConfig.baseUrl + NetConfig.editeUrl + this.sitePageModel.id;
     Map<String, dynamic> headers = {};
@@ -108,7 +109,7 @@ class _State extends State<EditbuildingPage> {
     }
   }
 
-  Future deleteSite() async {
+  Future deleteBuilding() async {
     String urlStr =
         NetConfig.baseUrl + NetConfig.deleteSiteUrl + this.sitePageModel.id;
     Map<String, dynamic> headers = {};
@@ -160,7 +161,7 @@ class _State extends State<EditbuildingPage> {
           child: GestureDetector(
             onTap: () {
               if (this.isCheack) {
-                editBuilding();
+                saveBuilding();
               }
             },
             child: Text(
@@ -207,16 +208,36 @@ class _State extends State<EditbuildingPage> {
                                   style: TextStyle(color: Colors.red),
                                 ),
                                 Expanded(
-                                  child: inputnumbertextfiled(
-                                    title: "建筑名称",
-                                    intputtype: 0,
-                                    defaultText: sitePageModel.name == null
-                                        ? "建筑名称"
-                                        : sitePageModel.name,
-                                    onChanged: (text) {
-                                      _updateSaveState();
-                                      this.sitePageModel.name = text;
-                                    },
+                                  child: Padding(
+                                    padding: new EdgeInsets.symmetric(
+                                        horizontal: 0, vertical: 10),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: <Widget>[
+                                        Text(
+                                          "建筑名称",
+                                          style: new TextStyle(
+                                              fontSize: prefix0.fontsSize),
+                                        ),
+                                        Expanded(
+                                          child: TextField(
+                                            controller: TextEditingController(
+                                                text: sitePageModel.name),
+                                            onChanged: (v) {
+                                              sitePageModel.name = v;
+                                            },
+
+                                            //只允许输入数字
+                                            textAlign: TextAlign.right,
+                                            decoration: InputDecoration(
+                                              border: InputBorder.none,
+                                              hintText: '请输入',
+                                            ),
+                                            autofocus: false,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 )
                               ],
@@ -240,9 +261,7 @@ class _State extends State<EditbuildingPage> {
                         ),
                         Expanded(
                           child: Text(
-                            null != this.sitePageModel.address
-                                ? this.sitePageModel.address
-                                : "必填",
+                            sitePageModel.address.toString(),
                             textAlign: TextAlign.right,
                             style: new TextStyle(fontSize: prefix0.fontsSize),
                           ),
@@ -259,15 +278,40 @@ class _State extends State<EditbuildingPage> {
                   color: prefix0.LINE_COLOR,
                   height: 1,
                 ),
-                inputnumbertextfiled(
-                  defaultText: sitePageModel.size != null
-                      ? sitePageModel.size.toString()
-                      : "",
-                  title: "建筑面积(㎡)",
-                  intputtype: 0,
-                  onChanged: (text) {},
-                  callbacktext: (text) {},
-                ),
+                Container(
+                  child: Padding(
+                    padding:
+                        new EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: <Widget>[
+                        Text(
+                          "建筑面积(㎡)",
+                          style: new TextStyle(fontSize: prefix0.fontsSize),
+                        ),
+                        Expanded(
+                          child: TextField(
+                            controller: TextEditingController(
+                                text: sitePageModel.size.toString()),
+                            onChanged: (v) {
+                              sitePageModel.size = double.parse(v);
+                            },
+                            inputFormatters: [
+                              WhitelistingTextInputFormatter(RegExp("[0-9.]")),
+                            ],
+                            //只允许输入数字
+                            textAlign: TextAlign.right,
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              hintText: '请输入',
+                            ),
+                            autofocus: false,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
               ],
             ),
           ),
@@ -281,46 +325,118 @@ class _State extends State<EditbuildingPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.max,
                   children: <Widget>[
-                    inputnumbertextfiled(
-                      defaultText: sitePageModel.height.toString(),
-                      title: "建筑高度(m)",
-                      intputtype: 1,
-                      onChanged: (text) {
-                        sitePageModel.height = text;
-                        print(text + "建筑高度");
-                      },
+                    Container(
+                      child: Padding(
+                        padding: new EdgeInsets.symmetric(
+                            horizontal: 0, vertical: 10),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: <Widget>[
+                            Text(
+                              "建筑高度(m)",
+                              style: new TextStyle(fontSize: prefix0.fontsSize),
+                            ),
+                            Expanded(
+                              child: TextField(
+                                controller: TextEditingController(
+                                    text: sitePageModel.height.toString()),
+                                onChanged: (v) {
+                                  sitePageModel.height = double.parse(v);
+                                },
+                                inputFormatters: [
+                                  WhitelistingTextInputFormatter(
+                                      RegExp("[0-9.]")),
+                                ],
+                                //只允许输入数字
+                                textAlign: TextAlign.right,
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: '请输入',
+                                ),
+                                autofocus: false,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                     Container(
                       color: prefix0.LINE_COLOR,
                       height: 1,
                     ),
-                    inputnumbertextfiled(
-                      title: "地上楼层数(层)",
-                      intputtype: 1,
-                      defaultText: sitePageModel.upperFloor != null
-                          ? sitePageModel.upperFloor.toString()
-                          : "",
-                      onChanged: (text) {
-                        sitePageModel.upperFloor = text;
-
-                        print(text + "地上楼层数");
-                      },
+                    Container(
+                      child: Padding(
+                        padding: new EdgeInsets.symmetric(
+                            horizontal: 0, vertical: 10),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: <Widget>[
+                            Text(
+                              "地上楼层数(层)",
+                              style: new TextStyle(fontSize: prefix0.fontsSize),
+                            ),
+                            Expanded(
+                              child: TextField(
+                                controller: TextEditingController(
+                                    text: sitePageModel.upperFloor.toString()),
+                                onChanged: (v) {
+                                  sitePageModel.upperFloor = int.parse(v);
+                                },
+                                inputFormatters: [
+                                  WhitelistingTextInputFormatter(
+                                      RegExp("[0-9.]")),
+                                ],
+                                //只允许输入数字
+                                textAlign: TextAlign.right,
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: '请输入',
+                                ),
+                                autofocus: false,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                     Container(
                       color: prefix0.LINE_COLOR,
                       height: 1,
                     ),
-                    inputnumbertextfiled(
-                      title: "地下楼层数(层)",
-                      intputtype: 1,
-                      defaultText: sitePageModel.belowFloor != null
-                          ? sitePageModel.belowFloor.toString()
-                          : "",
-                      onChanged: (text) {
-                        sitePageModel.belowFloor = text;
-
-                        print(text + "地下楼层数");
-                      },
+                    Container(
+                      child: Padding(
+                        padding: new EdgeInsets.symmetric(
+                            horizontal: 0, vertical: 10),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: <Widget>[
+                            Text(
+                              "地下楼层数(层)",
+                              style: new TextStyle(fontSize: prefix0.fontsSize),
+                            ),
+                            Expanded(
+                              child: TextField(
+                                controller: TextEditingController(
+                                    text: sitePageModel.belowFloor.toString()),
+                                onChanged: (v) {
+                                  sitePageModel.belowFloor = int.parse(v);
+                                },
+                                inputFormatters: [
+                                  WhitelistingTextInputFormatter(
+                                      RegExp("[0-9.]")),
+                                ],
+                                //只允许输入数字
+                                textAlign: TextAlign.right,
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: '请输入',
+                                ),
+                                autofocus: false,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ])),
           Padding(
@@ -331,38 +447,74 @@ class _State extends State<EditbuildingPage> {
             ),
           ),
           Padding(
-            padding: new EdgeInsets.fromLTRB(20, 0, 20, 0),
-            child: remarktextfiled(
-              callbacktext: (text) {
-                print(text + "备注");
-                sitePageModel.remarks = text;
-              },
-            ),
-          ),
+              padding: new EdgeInsets.fromLTRB(20, 0, 20, 0),
+              child: Container(
+                child: Padding(
+                  padding:
+                      new EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      new SizedBox(
+                        height: 10,
+                      ),
+                      Text("备注",
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                              color: prefix0.LIGHT_TEXT_COLOR,
+                              fontWeight: FontWeight.normal,
+                              fontSize: 17)),
+                      new SizedBox(
+                        height: 15,
+                      ),
+                      Container(
+                        height: 200,
+                        decoration: BoxDecoration(
+                          border: new Border.all(
+                              color: LIGHT_TEXT_COLOR, width: 0.5),
+                        ),
+                        child: TextField(
+                          onSubmitted: (String str) {},
+                          textAlign: TextAlign.start,
+                          minLines: 1,
+                          controller: TextEditingController(
+                              text: sitePageModel.remarks),
+                          maxLines: 10,
+                          onChanged: (v) {
+                            sitePageModel.remarks = v;
+                          },
+                          style: new TextStyle(
+                            fontSize: 13.0,
+                            color: prefix0.BLACK_TEXT_COLOR,
+                          ),
+                          decoration: new InputDecoration(
+                            border: InputBorder.none,
+                            hintText: "点击输入",
+                            contentPadding:
+                                EdgeInsets.fromLTRB(20.0, 20.0, 10.0, 10.0),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              )),
         ],
       ),
     );
+
     Widget delete = new Offstage(
       offstage: false,
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: GestureDetector(
           onTap: () {
-            deleteSite();
-//            _creatSite(new SitePageModel(), true);
+            deleteBuilding();
           },
           child: Container(
             color: Colors.red,
             height: 40,
             alignment: Alignment.center,
-//            decoration: BoxDecoration(
-//                borderRadius: BorderRadius.circular(3.0), //3像素圆角
-//                border: Border.all(color: Colors.grey),
-////                boxShadow: [
-////                  //阴影
-////                  BoxShadow(color: Colors.white, blurRadius: 4.0)
-////                ]
-//            ),
             child: Padding(
               padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
               child: Text(
@@ -397,10 +549,13 @@ class _State extends State<EditbuildingPage> {
   }
 
   _updateSaveState() {
-    if (sitePageModel.name.length > 0 && sitePageModel.address.length > 0) {
-      this.isCheack = true;
-    } else {
-      this.isCheack = false;
+    if (null != sitePageModel) {
+      if ((null != sitePageModel.name && sitePageModel.name.length > 0) &&
+          (null != sitePageModel.address && sitePageModel.address.length > 0)) {
+        this.isCheack = true;
+      } else {
+        this.isCheack = false;
+      }
     }
   }
 }

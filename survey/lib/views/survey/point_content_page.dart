@@ -7,29 +7,32 @@ import 'package:flutter/material.dart';
 import 'package:sensoro_survey/model/project_info_model.dart';
 import 'package:sensoro_survey/views/survey/point_list_page.dart';
 import 'package:sensoro_survey/views/survey/sitePages/site_management_page.dart';
+import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
+import 'package:sensoro_survey/views/survey/add_point_page.dart';
 
 import 'addPointPages/Model/PointListModel.dart';
 import 'addPointPages/point_network_page.dart';
 import 'addPointPages/point_risk_management_page.dart';
 import 'addPointPages/point_risk_type_select_page.dart';
 
-
-
 class PointContentPage extends StatefulWidget {
   projectInfoModel input;
   PointListModel model;
-  PointContentPage({Key key, @required this.input,this.model}) : super(key: key);
+  PointContentPage({Key key, @required this.input, this.model})
+      : super(key: key);
   @override
-  State<StatefulWidget> createState() => PointContentPageState(input);
+  State<StatefulWidget> createState() =>
+      PointContentPageState(input: this.input, model: this.model);
 }
 
 class PointContentPageState extends State<PointContentPage> {
-  final appBarTitles = ['风险评估','网络铺设', '终端安装'];
+  final appBarTitles = ['风险评估', '网络铺设', '终端安装'];
   final tabTextStyleSelected = TextStyle(color: Colors.black);
   final tabTextStyleNormal = TextStyle(color: const Color(0xff969696));
   projectInfoModel input;
+  PointListModel model;
 
-  PointContentPageState(this.input);
+  PointContentPageState({this.input, this.model});
 
   // ignore: undefined_identifier
 //  Color themeColor = ThemeColorUtils.currentColorTheme;//设置主题标题背景颜色
@@ -46,7 +49,18 @@ class PointContentPageState extends State<PointContentPage> {
   @override
   void initState() {
     super.initState();
+
     pages = <Widget>[PointRiskTypeSelectPage(model: widget.model,),PointNewWorkPage(),PointListPage(input: input)];
+
+    model = this.model;
+    pages = <Widget>[
+      PointRiskManagementPage(
+        model: widget.model,
+      ),
+      PointNewWorkPage(),
+      PointListPage(input: input)
+    ];
+
     if (tabImages == null) {
       tabImages = [
         [
@@ -65,14 +79,16 @@ class PointContentPageState extends State<PointContentPage> {
     }
   }
 
-  TextStyle getTabTextStyle(int curIndex) {//设置tabbar 选中和未选中的状态文本
+  TextStyle getTabTextStyle(int curIndex) {
+    //设置tabbar 选中和未选中的状态文本
     if (curIndex == _tabIndex) {
       return tabTextStyleSelected;
     }
     return tabTextStyleNormal;
   }
 
-  Image getTabIcon(int curIndex) {//设置tabbar选中和未选中的状态图标
+  Image getTabIcon(int curIndex) {
+    //设置tabbar选中和未选中的状态图标
     if (curIndex == _tabIndex) {
       return tabImages[curIndex][1];
     }
@@ -83,8 +99,28 @@ class PointContentPageState extends State<PointContentPage> {
     return Text(appBarTitles[curIndex], style: getTabTextStyle(curIndex));
   }
 
+  void _gotoPointInfo() async {
+    final result = await Navigator.of(context, rootNavigator: true)
+        .push(CupertinoPageRoute(builder: (BuildContext context) {
+      return new AddPointPage(
+        input: this.input,
+        isEdit: true,
+        model: this.model,
+        // model: dataList[index],
+      );
+    }));
 
-
+    if (result != null) {
+      String name = result as String;
+      if (name == "refreshList") {
+//        loadLocalData();
+        // dataList.clear();
+        // getListNetCall();
+      }
+      // this.name = name;
+      setState(() {});
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +128,6 @@ class PointContentPageState extends State<PointContentPage> {
       children: pages,
       index: _tabIndex,
     );
-
 
     Widget navBar = AppBar(
       elevation: 1.0,
@@ -115,20 +150,29 @@ class PointContentPageState extends State<PointContentPage> {
       ),
       title: Text(widget.model.name),
       actions: <Widget>[
-
-
+        Container(
+          padding: new EdgeInsets.fromLTRB(0, 0, 20, 0),
+          alignment: Alignment.center,
+          child: GestureDetector(
+            onTap: () {
+              _gotoPointInfo();
+            },
+            child: Text(
+              "详情",
+              style: TextStyle(
+                color: prefix0.GREEN_COLOR,
+              ),
+            ),
+          ),
+        ),
       ],
     );
 
-
-
-
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-          primaryColor: Colors.white
-      ),
-      home: Scaffold(//布局结构
+      theme: ThemeData(primaryColor: Colors.white),
+      home: Scaffold(
+        //布局结构
 //        appBar: AppBar(//选中每一项的标题和图标设置
 //            title: Text(appBarTitles[_tabIndex],
 //                style: TextStyle(color: Colors.white)),
@@ -137,26 +181,19 @@ class PointContentPageState extends State<PointContentPage> {
 
         appBar: navBar,
         body: _body,
-        bottomNavigationBar: CupertinoTabBar(//
+        bottomNavigationBar: CupertinoTabBar(
+          //
           items: <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-                icon: getTabIcon(0),
-                title: getTabTitle(0)),
-            BottomNavigationBarItem(
-                icon: getTabIcon(1),
-                title: getTabTitle(1)),
-
-            BottomNavigationBarItem(
-                icon: getTabIcon(2),
-                title: getTabTitle(2)),
+            BottomNavigationBarItem(icon: getTabIcon(0), title: getTabTitle(0)),
+            BottomNavigationBarItem(icon: getTabIcon(1), title: getTabTitle(1)),
+            BottomNavigationBarItem(icon: getTabIcon(2), title: getTabTitle(2)),
 //            BottomNavigationBarItem(
 //                icon: getTabIcon(3),
 //                title: getTabTitle(3)),
           ],
           currentIndex: _tabIndex,
           onTap: (index) {
-            setState((){
-
+            setState(() {
               _tabIndex = index;
             });
           },
@@ -165,7 +202,4 @@ class PointContentPageState extends State<PointContentPage> {
       ),
     );
   }
-
-
-
 }

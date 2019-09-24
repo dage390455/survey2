@@ -66,7 +66,10 @@ class _PointListManagementPageState extends State<PointListManagementPage> {
   void _gotoPoint(int index) async {
     final result = await Navigator.of(context, rootNavigator: true)
         .push(CupertinoPageRoute(builder: (BuildContext context) {
-      return new PointContentPage(input: input,model: dataList[index],);
+      return new PointContentPage(
+        input: input,
+        model: dataList[index],
+      );
     }));
 
     if (result != null) {
@@ -101,7 +104,8 @@ class _PointListManagementPageState extends State<PointListManagementPage> {
   }
 
   Future getListNetCall() async {
-    String urlStr = NetConfig.pointListUrl + input.projectId + "&keyword=" + searchStr;
+    String urlStr =
+        NetConfig.pointListUrl + input.projectId + "&keyword=" + searchStr;
     Map<String, dynamic> headers = {};
     Map<String, dynamic> params = {};
 
@@ -150,6 +154,7 @@ class _PointListManagementPageState extends State<PointListManagementPage> {
   }
 
   void _editProject() async {
+    // Navigator.pushNamedAndRemoveUntil(context,"/screen3",ModalRoute.withName('/')){
     final result = await Navigator.of(context, rootNavigator: true)
         .push(CupertinoPageRoute(builder: (BuildContext context) {
       return new AddProjectPage(

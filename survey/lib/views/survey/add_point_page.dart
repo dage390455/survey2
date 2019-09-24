@@ -29,23 +29,28 @@ import 'package:sensoro_survey/views/survey/utility.dart';
 import 'package:sensoro_survey/widgets/progress_hud.dart';
 //import 'package:sensoro_survey/views/survey/editPage/edit_project_name_page.dart';
 import 'package:sensoro_survey/views/survey/common/save_data_manager.dart';
+import 'package:sensoro_survey/views/survey/addPointPages/Model/PointListModel.dart';
 
 class AddPointPage extends StatefulWidget {
   projectInfoModel input;
+  PointListModel model;
+
   bool isEdit;
 
-  AddPointPage({Key key, @required this.input, this.isEdit}) : super(key: key);
+  AddPointPage({Key key, @required this.input, this.isEdit, this.model})
+      : super(key: key);
 
   @override
-  _AddPointPageState createState() =>
-      _AddPointPageState(input: this.input, isEdit: this.isEdit);
+  _AddPointPageState createState() => _AddPointPageState(
+      input: this.input, isEdit: this.isEdit, model: this.model);
 }
 
 class _AddPointPageState extends State<AddPointPage> {
   projectInfoModel input;
+  PointListModel model;
   bool isEdit = false;
 
-  _AddPointPageState({this.input, this.isEdit});
+  _AddPointPageState({this.input, this.isEdit, this.model});
 
   String name = "";
   String time = "";
@@ -57,8 +62,10 @@ class _AddPointPageState extends State<AddPointPage> {
   double money = 0;
   double peopleNum = 0;
 
+  String pointId = "";
   String siteId = "";
   String projectId = "";
+  String status = "";
   List<dynamic> subList = [];
   bool isCheack = false;
 
@@ -80,8 +87,13 @@ class _AddPointPageState extends State<AddPointPage> {
   List<SitePageModel> dataList = [];
   UtilityPage utility = UtilityPage();
 
+  TextEditingController TextController1 = TextEditingController();
   TextEditingController step1TextController = TextEditingController();
   TextEditingController step2TextController = TextEditingController();
+  TextEditingController managerTextController1 = TextEditingController();
+  TextEditingController managerTextController2 = TextEditingController();
+  TextEditingController moneyTextController = TextEditingController();
+  TextEditingController peopleTextController = TextEditingController();
 
   List<TextEditingController> textCList = [];
 
@@ -89,32 +101,51 @@ class _AddPointPageState extends State<AddPointPage> {
 
   @override
   void initState() {
-    // insertData();
-    // _loading = true;
-    // _startLoading();
-    // _loading = true;
-    // name = this.input.projectName;
-    // time = this.input.createTime;
+    model = this.model;
     projectId = this.input.projectId;
     subList = this.input.subList;
     isEdit = this.isEdit;
+
+    if (isEdit == true) {
+      siteType = model.site_type;
+      money = model.total_assets.toDouble();
+      peopleNum = model.resident_count.toDouble();
+      siteUseName = model.site_use;
+    }
+
     super.initState();
     if (name.length > 0 && projectId.length > 0) {
       this.isEdit = true;
     }
-    getListNetCall();
+    for (int i = 0; i < siteTypeList.length; i++) {
+      Map<String, dynamic> dic = siteTypeList[i];
+      if (siteType == dic["key"]) {
+        siteTypeName = dic["name"];
+      }
+    }
+    getSiteListNetCall();
+    getPointDetailNetCall();
+    if (this.model.site_type.length > 0 && this.model != null) {
+      getNameListNetCall(this.model.site_type);
+    }
 
-    step1TextController.text = this.name;
+    pointId = this.model.id;
+    name = this.model.name;
+
+    TextController1.text = this.name;
+    TextController1.addListener(() {
+      this.name = TextController1.text;
+    });
+
+    step1TextController.text = "";
     step1TextController.addListener(() {
       admin["name"] = step1TextController.text;
     });
-    step2TextController.text = this.name;
+    step2TextController.text = "";
     step2TextController.addListener(() {
       admin["mobile"] = step2TextController.text;
     });
 
-    TextEditingController managerTextController1 = TextEditingController();
-    TextEditingController managerTextController2 = TextEditingController();
     managerTextController1.addListener(() {
       Map<String, dynamic> manager = managerList[0];
       manager["name"] = managerTextController1.text;
@@ -127,7 +158,7 @@ class _AddPointPageState extends State<AddPointPage> {
     textCList.add(managerTextController2);
   }
 
-  Future getListNetCall() async {
+  Future getSiteListNetCall() async {
     String urlStr = NetConfig.siteListUrl + "0";
     Map<String, dynamic> headers = {};
     Map<String, dynamic> params = {};
@@ -177,6 +208,10 @@ class _AddPointPageState extends State<AddPointPage> {
             for (int i = 0; i < resultList.length; i++) {
               Map json = resultList[i] as Map;
               SitePageModel model = SitePageModel.fromJson(json);
+              if (siteId == model.id) {
+                siteName = model.name;
+              }
+
               if (model != null) {
                 dataList.add(model);
               }
@@ -241,6 +276,7 @@ class _AddPointPageState extends State<AddPointPage> {
     Map<String, dynamic> json = {};
     json["site_id"] = siteId;
     json["site_type"] = siteType;
+    json["site_use"] = siteUseName;
     json["name"] = name;
     json["total_assets"] = money.toString();
     json["resident_count"] = peopleNum.toString();
@@ -264,6 +300,163 @@ class _AddPointPageState extends State<AddPointPage> {
       } else {
         var msg = resultData.response["msg"];
         utility.showToast(msg);
+      }
+    }
+  }
+
+  void getPointDetailNetCall() async {
+    String urlStr = NetConfig.pointDetailUrl + model.id;
+    Map<String, dynamic> headers = {};
+    Map<String, dynamic> params = {};
+    // limit=5&offset=5
+
+    ResultData resultData = await AppApi.getInstance()
+        .getListNetCall(context, true, urlStr, headers, params);
+    if (resultData.isSuccess()) {
+      // _stopLoading();
+      int code = resultData.response["code"].toInt();
+      if (code == 200) {
+        if (resultData.response["data"] is Map) {
+          Map resultMap = resultData.response["data"];
+
+          name = resultMap["name"];
+          status = resultMap["status"];
+          siteId = resultMap["site_id"];
+          siteType = resultMap["site_type"];
+          siteUseName = resultMap["site_use"];
+          money = resultMap["total_assets"].toDouble();
+          peopleNum = resultMap["resident_count"].toDouble();
+          moneyTextController.text = money.toString();
+          peopleTextController.text = peopleNum.toString();
+
+          List<dynamic> subList = resultMap["contact_list"];
+          if (subList.length > 0) {
+            for (int i = 0; i < subList.length; i++) {
+              if (subList[0] is Map && i == 0) {
+                Map dic = subList[0];
+                admin["name"] = dic["user_name"];
+                admin["mobile"] = dic["mobile"];
+                step1TextController.text = admin["name"];
+                step2TextController.text = admin["mobile"];
+                continue;
+              }
+
+              if (subList[i] is Map) {
+                Map dic = subList[i];
+                Map<String, dynamic> dic1 = {};
+                dic1["name"] = dic["user_name"];
+                dic1["mobile"] = dic["mobile"];
+                if (i == 1) {
+                  managerTextController1.text = dic1["name"];
+                  managerTextController2.text = dic1["mobile"];
+                }
+
+                SitePageModel model = SitePageModel.fromJson(dic1);
+                if (model != null) {
+                  dataList.add(model);
+                }
+              }
+            }
+          }
+        }
+
+        setState(() {});
+      }
+    }
+  }
+
+//必须加 async才会能进返回
+  deletePointNetCall() async {
+    String urlStr = NetConfig.baseUrl + NetConfig.deletePointUrl + model.id;
+    Map<String, dynamic> headers = {"Content-Type": "application/json"};
+    Map<String, dynamic> params = {};
+
+    ResultData resultData = await AppApi.getInstance()
+        .delete(urlStr, params: params, context: context, showLoad: true);
+
+    if (resultData.isSuccess()) {
+      // _stopLoading();
+
+      int code = resultData.response["code"].toInt();
+      if (code == 200) {
+        utility.showToast("勘察点已删除");
+        Navigator.of(context).pop("refreshList");
+
+        // await Navigator.popUntil(context, ModalRoute.withName('projectList'));
+      } else {
+        utility.showToast("网络请求失败，请检查网络");
+      }
+    } else {}
+  }
+
+  updatePointNetCall() async {
+    String urlStr =
+        NetConfig.baseUrl + NetConfig.updateProjectUrl + input.projectId;
+
+    if (name.length == 0) {
+      utility.showToast("勘察点名称不能为空");
+      return;
+    }
+    if (siteType.length == 0) {
+      utility.showToast("场所类型不能为空");
+      return;
+    }
+    if (siteName.length == 0) {
+      utility.showToast("场所名称不能为空");
+      return;
+    }
+    String name1 = admin["name"];
+    if (name1.length == 0) {
+      utility.showToast("责任人名字不能为空");
+      return;
+    }
+    String mobile = admin["mobile"];
+    if (mobile.length == 0) {
+      utility.showToast("责任人电话不能为空");
+      return;
+    }
+
+    List<Map<String, dynamic>> list = [];
+    list.add({
+      "type": "fire_admin",
+      "user_name": admin["name"],
+      "mobile": admin["mobile"]
+    });
+
+    for (int i = 0; i < managerList.length; i++) {
+      Map<String, dynamic> dic = managerList[i];
+      list.add({
+        "type": "fire_responsor",
+        "user_name": dic["name"],
+        "mobile": dic["mobile"]
+      });
+    }
+    Map<String, dynamic> headers = {"Content-Type": "application/json"};
+    //从dataList取数据
+
+    Map<String, dynamic> json = {};
+    json["site_id"] = siteId;
+    json["site_type"] = siteType;
+    json["name"] = name;
+    json["site_use"] = siteUseName;
+
+    json["contact_list"] = list;
+    json["total_assets"] = money.toString();
+    json["resident_count"] = peopleNum.toString();
+    // _startLoading();
+    Map<String, dynamic> params = {"data": json};
+
+    ResultData resultData = await AppApi.getInstance()
+        .put(urlStr, params: params, context: context, showLoad: true);
+    if (resultData.isSuccess()) {
+      // _stopLoading();
+
+      int code = resultData.response["code"].toInt();
+      if (code == 200) {
+        Navigator.of(context).pop("refreshList");
+        utility.showToast("勘察点信息已更新");
+      } else {
+        utility.showToast("网络请求失败，请检查网络");
       }
     }
   }
@@ -343,6 +536,14 @@ class _AddPointPageState extends State<AddPointPage> {
     setState(() {});
   }
 
+  void addorEdit() async {
+    if (isEdit == true) {
+      updatePointNetCall();
+    } else {
+      addPointNetCall();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     editName() async {
@@ -382,11 +583,7 @@ class _AddPointPageState extends State<AddPointPage> {
                 fontWeight: FontWeight.normal,
                 fontSize: 20)),
         onPressed: () {
-          if (this.name.length > 0) {
-            // saveInfoInLocal();
-            addPointNetCall();
-            // Navigator.of(context).pop("refreshList");
-          }
+          deletePointNetCall();
         },
       ),
     );
@@ -533,7 +730,7 @@ class _AddPointPageState extends State<AddPointPage> {
             children: <Widget>[
               Expanded(
                 child: Text(
-                  siteUseName,
+                  siteUseName == null ? "" : siteUseName,
                   textAlign: TextAlign.right,
                   style: TextStyle(color: Colors.black, fontSize: 17),
                 ),
@@ -596,7 +793,7 @@ class _AddPointPageState extends State<AddPointPage> {
                   width: 150,
                   child: TextField(
                     textAlign: TextAlign.center,
-                    // controller: step1TextController,
+                    controller: TextController1,
                     keyboardType: TextInputType.text,
                     decoration: InputDecoration(
                       border: InputBorder.none,
@@ -636,19 +833,7 @@ class _AddPointPageState extends State<AddPointPage> {
                       style: new TextStyle(fontSize: prefix0.fontsSize),
                     ),
                   ]),
-
                   popTypeView,
-                  // Expanded(
-                  //   child: Text(
-                  //     "111",
-                  //     textAlign: TextAlign.right,
-                  //     style: new TextStyle(fontSize: prefix0.fontsSize),
-                  //   ),
-                  // ),
-                  // Image.asset(
-                  //   "assets/images/arrow_folddown.png",
-                  //   width: 20,
-                  // )
                 ],
               ),
             ),
@@ -738,7 +923,7 @@ class _AddPointPageState extends State<AddPointPage> {
                   width: 80,
                   child: TextField(
                     textAlign: TextAlign.center,
-                    // controller: step1TextController,
+                    controller: moneyTextController,
                     keyboardType: TextInputType.text,
                     decoration: InputDecoration(
                       border: InputBorder.none,
@@ -778,7 +963,7 @@ class _AddPointPageState extends State<AddPointPage> {
                   width: 80,
                   child: TextField(
                     textAlign: TextAlign.center,
-                    // controller: step1TextController,
+                    controller: peopleTextController,
                     keyboardType:
                         TextInputType.numberWithOptions(decimal: false),
                     decoration: InputDecoration(
@@ -804,14 +989,14 @@ class _AddPointPageState extends State<AddPointPage> {
     );
 
     Widget reflust = new RefreshIndicator(
-        displacement: 10.0, child: listView1, onRefresh: getListNetCall);
+        displacement: 10.0, child: listView1, onRefresh: getSiteListNetCall);
 
     Widget MainlistView = new ListView.builder(
         physics: new AlwaysScrollableScrollPhysics()
             .applyTo(new BouncingScrollPhysics()), // 这个是用来控制能否在不满屏的状态下滚动的属性
         itemCount: managerList.length == 0 ? 5 : managerList.length * 2 + 7,
         // separatorBuilder: (BuildContext context, int index) =>
-        // Divider(height: 1.0, color: Colors.grey, indent: 20), // 添加分割线
+        // Divider(height: 1.0, color: Colors.grey, indent: 20), // 添加分割���
         itemBuilder: (BuildContext context, int index) {
           // Map modelMap = managerList[index];
           if (index == 0) {
@@ -1113,72 +1298,71 @@ class _AddPointPageState extends State<AddPointPage> {
     ]);
 
     return Scaffold(
-      appBar: AppBar(
-        elevation: 1.0,
-        brightness: Brightness.light,
-        backgroundColor: Colors.white,
-        centerTitle: true,
-        title: Text(
-          "新建勘察点",
-          style: TextStyle(color: Colors.black),
-        ),
-        leading: Container(
-          alignment: Alignment.center,
-          child: GestureDetector(
-            onTap: () {
-              // 点击空白页面关闭键盘
-              Navigator.pop(context);
-            },
-            child: Text(
-              "取消",
-              style: TextStyle(color: Colors.black),
-            ),
+        appBar: AppBar(
+          elevation: 1.0,
+          brightness: Brightness.light,
+          backgroundColor: Colors.white,
+          centerTitle: true,
+          title: Text(
+            "新建勘察点",
+            style: TextStyle(color: Colors.black),
           ),
-        ),
-
-        actions: <Widget>[
-          Container(
-            padding: new EdgeInsets.fromLTRB(0, 0, 20, 0),
+          leading: Container(
             alignment: Alignment.center,
             child: GestureDetector(
               onTap: () {
-                addPointNetCall();
-                // Navigator.of(context).pop("");
+                // 点击空白页面关闭键盘
+                Navigator.pop(context);
               },
               child: Text(
-                "完成",
-                style: TextStyle(
-                  color:
-                      this.name.length > 0 ? prefix0.GREEN_COLOR : Colors.grey,
-                ),
+                "取消",
+                style: TextStyle(color: Colors.black),
               ),
             ),
           ),
-        ],
-        // IconButton(
-        //   icon: Image.asset(
-        //     "assets/images/back.png",
-        //     // height: 20,
-        //   ),
-        //   onPressed: () {
-        //     Navigator.pop(context);
-        //   },
-        // ),
-      ),
-      body: GestureDetector(
-        onTap: () {
-          // 点击空白页�������键盘
-          FocusScope.of(context).requestFocus(blankNode);
-        },
-        child: Container(
-          padding:
-              const EdgeInsets.only(top: 0.0, bottom: 0, left: 0, right: 0),
-          child: MainlistView,
-        ),
-      ),
 
-      bottomSheet: bottomButton,
-      // bottomSheet: bottomButton,
-    );
+          actions: <Widget>[
+            Container(
+              padding: new EdgeInsets.fromLTRB(0, 0, 20, 0),
+              alignment: Alignment.center,
+              child: GestureDetector(
+                onTap: () {
+                  addorEdit();
+                  // Navigator.of(context).pop("");
+                },
+                child: Text(
+                  "保存",
+                  style: TextStyle(
+                    color: this.name.length > 0
+                        ? prefix0.GREEN_COLOR
+                        : Colors.grey,
+                  ),
+                ),
+              ),
+            ),
+          ],
+          // IconButton(
+          //   icon: Image.asset(
+          //     "assets/images/back.png",
+          //     // height: 20,
+          //   ),
+          //   onPressed: () {
+          //     Navigator.pop(context);
+          //   },
+          // ),
+        ),
+        body: GestureDetector(
+          onTap: () {
+            // 点击空白页�������键盘
+            FocusScope.of(context).requestFocus(blankNode);
+          },
+          child: Container(
+            padding:
+                const EdgeInsets.only(top: 0.0, bottom: 0, left: 0, right: 0),
+            child: MainlistView,
+          ),
+        ),
+        bottomNavigationBar:
+            this.isEdit == true ? bottomButton : emptyContainer);
   }
 }

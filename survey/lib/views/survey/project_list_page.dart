@@ -422,8 +422,18 @@ class _State extends State<HomePage> {
                 String site_id = dic["site_id"] == null ? "" : dic["site_id"];
                 String site_type =
                     dic["site_type"] == null ? "" : dic["site_type"];
-                projectInfoModel model = projectInfoModel(projectId,
-                    projectName, "", remark, status, site_id, site_type, []);
+                List<dynamic> contact_list =
+                    dic["contact_list"] == null ? [] : dic["contact_list"];
+
+                projectInfoModel model = projectInfoModel(
+                    projectId,
+                    projectName,
+                    "",
+                    remark,
+                    status,
+                    site_id,
+                    site_type,
+                    contact_list);
                 dataList.add(model);
               }
             }
@@ -693,7 +703,7 @@ class _State extends State<HomePage> {
               ),
               ListTile(
                 title: Center(
-                  child: Text("朋友圈"),
+                  child: Text("��友圈"),
                 ),
                 onTap: () {
                   Navigator.pop(context);

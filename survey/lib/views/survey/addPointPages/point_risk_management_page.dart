@@ -18,22 +18,20 @@ import '../const.dart';
 import 'Model/PointListModel.dart';
 import 'Model/ProspectTaskListModel.dart';
 
-
 class PointRiskManagementPage extends StatefulWidget {
   PointListModel model;
-  PointRiskManagementPage({Key key, this.title,this.model}) : super(key: key);
-
+  PointRiskManagementPage({Key key, this.title, this.model}) : super(key: key);
 
   final String title;
 
   @override
-  _PointRiskManagementPageState createState() => _PointRiskManagementPageState();
+  _PointRiskManagementPageState createState() =>
+      _PointRiskManagementPageState();
 }
 
 class _PointRiskManagementPageState extends State<PointRiskManagementPage> {
-
-  BasicMessageChannel  _locationBasicMessageChannel =
-  BasicMessageChannel("BasicMessageChannelPluginGetCity", StandardMessageCodec());
+  BasicMessageChannel _locationBasicMessageChannel = BasicMessageChannel(
+      "BasicMessageChannelPluginGetCity", StandardMessageCodec());
 
   bool calendaring = false;
   String beginTimeStr = "";
@@ -89,16 +87,17 @@ class _PointRiskManagementPageState extends State<PointRiskManagementPage> {
   }
 
   void _textSql() async {
-
     Future<String> future = _locationBasicMessageChannel.send("000000");
     future.then((message) {
       print("========================" + message);
     });
   }
 
-
   Future getListNetCall() async {
-    String urlStr = NetConfig.prospectTaskListUrl+searchStr+"&prospect_id="+widget.model.id;
+    String urlStr = NetConfig.prospectTaskListUrl +
+        searchStr +
+        "&prospect_id=" +
+        widget.model.id;
     Map<String, dynamic> headers = {};
     Map<String, dynamic> params = {};
 
@@ -109,43 +108,36 @@ class _PointRiskManagementPageState extends State<PointRiskManagementPage> {
       dataList.clear();
       int code = resultData.response["code"].toInt();
       if (code == 200) {
-
         if (resultData.response["data"]["records"] is List) {
           List resultList = resultData.response["data"]["records"];
           if (resultList.length > 0) {
             for (int i = 0; i < resultList.length; i++) {
               Map json = resultList[i] as Map;
-              ProspectTaskListModel model = ProspectTaskListModel.fromJson(json);
+              ProspectTaskListModel model =
+                  ProspectTaskListModel.fromJson(json);
               if (model != null) {
                 dataList.add(model);
               }
             }
-
           }
         }
-
       }
-      setState(() {
-      });
+      setState(() {});
     }
   }
-
-
-
-
 
   @override
   void initState() {
     // TODO: implement initState
 
     super.initState();
-    _locationBasicMessageChannel.setMessageHandler((message) => Future<String>(() {
-      print(message);
-      //message为native传递的数据
-      //给Android端的返回值
-      return "========================收到Native消息：" + message;
-    }));
-
+    _locationBasicMessageChannel
+        .setMessageHandler((message) => Future<String>(() {
+              print(message);
+              //message为native传递的数据
+              //给Android端的返回值
+              return "========================收到Native消息：" + message;
+            }));
 
     getListNetCall();
   }
@@ -205,11 +197,6 @@ class _PointRiskManagementPageState extends State<PointRiskManagementPage> {
 // //                border: InputBorder.none,//取默认的下划线边框
       ),
     );
-
-
-
-
-
 
     Widget myListView = new ListView.builder(
         physics: new AlwaysScrollableScrollPhysics()
@@ -321,14 +308,8 @@ class _PointRiskManagementPageState extends State<PointRiskManagementPage> {
       print("........................." + text);
     }
 
-
-    Widget reflust = new  RefreshIndicator(
-      displacement: 10.0,
-      child: myListView,
-      onRefresh: getListNetCall
-
-    );
-
+    Widget reflust = new RefreshIndicator(
+        displacement: 10.0, child: myListView, onRefresh: getListNetCall);
 
     Widget bodyContiner = new Container(
       color: Colors.white,
@@ -422,7 +403,6 @@ class _PointRiskManagementPageState extends State<PointRiskManagementPage> {
     );
 
     return new Scaffold(
-
       body: bodyContiner,
       bottomSheet: of,
     );
