@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sensoro_survey/net/api/app_api.dart';
 import 'package:sensoro_survey/net/api/net_config.dart';
-import 'package:sensoro_survey/views/survey/commonWidegt/remarktextfiled.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 import 'package:sensoro_survey/views/survey/sitePages/Model/SitePageModel.dart';
+
+import '../const.dart';
 
 class EditbuildingPage extends StatefulWidget {
   String id = "";
@@ -25,7 +26,8 @@ class EditbuildingPage extends StatefulWidget {
 class _State extends State<EditbuildingPage> {
   BasicMessageChannel<String> _basicMessageChannel =
       BasicMessageChannel("BasicMessageChannelPlugin", StringCodec());
-  SitePageModel sitePageModel;
+  SitePageModel sitePageModel = SitePageModel.building(
+      "", "", "", "building", "", "", "", 0.0, ",", "", 0, 0, "", "", "", "");
 
   bool isCheack = false;
 
@@ -445,14 +447,58 @@ class _State extends State<EditbuildingPage> {
             ),
           ),
           Padding(
-            padding: new EdgeInsets.fromLTRB(20, 0, 20, 0),
-            child: remarktextfiled(
-              callbacktext: (text) {
-                print(text + "备注");
-                sitePageModel.remarks = text;
-              },
-            ),
-          ),
+              padding: new EdgeInsets.fromLTRB(20, 0, 20, 0),
+              child: Container(
+                child: Padding(
+                  padding:
+                      new EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      new SizedBox(
+                        height: 10,
+                      ),
+                      Text("备注",
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                              color: prefix0.LIGHT_TEXT_COLOR,
+                              fontWeight: FontWeight.normal,
+                              fontSize: 17)),
+                      new SizedBox(
+                        height: 15,
+                      ),
+                      Container(
+                        height: 200,
+                        decoration: BoxDecoration(
+                          border: new Border.all(
+                              color: LIGHT_TEXT_COLOR, width: 0.5),
+                        ),
+                        child: TextField(
+                          onSubmitted: (String str) {},
+                          textAlign: TextAlign.start,
+                          minLines: 1,
+                          controller: TextEditingController(
+                              text: sitePageModel.remarks),
+                          maxLines: 10,
+                          onChanged: (v) {
+                            sitePageModel.remarks = v;
+                          },
+                          style: new TextStyle(
+                            fontSize: 13.0,
+                            color: prefix0.BLACK_TEXT_COLOR,
+                          ),
+                          decoration: new InputDecoration(
+                            border: InputBorder.none,
+                            hintText: "点击输入",
+                            contentPadding:
+                                EdgeInsets.fromLTRB(20.0, 20.0, 10.0, 10.0),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              )),
         ],
       ),
     );
