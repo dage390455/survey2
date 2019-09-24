@@ -101,7 +101,7 @@ class _PointListManagementPageState extends State<PointListManagementPage> {
   }
 
   Future getListNetCall() async {
-    String urlStr = NetConfig.pointListUrl + "123456" + "&keyword=" + searchStr;
+    String urlStr = NetConfig.pointListUrl + input.projectId + "&keyword=" + searchStr;
     Map<String, dynamic> headers = {};
     Map<String, dynamic> params = {};
 
@@ -388,6 +388,8 @@ class _PointListManagementPageState extends State<PointListManagementPage> {
         });
 
     _searchAction(String text) {
+      searchStr = text;
+      getListNetCall();
       print("........................." + text);
     }
 
