@@ -10,21 +10,20 @@ import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 import 'package:sensoro_survey/views/survey/sitePages/Model/SitePageModel.dart';
 
 class EditbuildingPage extends StatefulWidget {
-  SitePageModel sitePageModel = SitePageModel.building(
-      "", "", "", "", "", "", "", 0, ",", "", 0, 0, "", "", "", "");
+  String id = "";
 
-  EditbuildingPage(this.sitePageModel);
+  String parent_id = "";
+
+  EditbuildingPage(this.id, this.parent_id);
 
   @override
-  _State createState() => _State(sitePageModel);
+  _State createState() => _State();
 }
 
 class _State extends State<EditbuildingPage> {
   BasicMessageChannel<String> _basicMessageChannel =
       BasicMessageChannel("BasicMessageChannelPlugin", StringCodec());
   SitePageModel sitePageModel;
-
-  _State(this.sitePageModel);
 
   bool isCheack = false;
 
@@ -61,7 +60,7 @@ class _State extends State<EditbuildingPage> {
 
   ///详情
   Future getBuildingDetail() async {
-    String urlStr = NetConfig.baseUrl + NetConfig.getSiteUrl + sitePageModel.id;
+    String urlStr = NetConfig.baseUrl + NetConfig.getSiteUrl + widget.id;
     Map<String, dynamic> headers = {};
     Map<String, dynamic> params = {};
 
@@ -76,18 +75,15 @@ class _State extends State<EditbuildingPage> {
       if (code == 200) {
         Map json = resultData.response["data"];
 
-        SitePageModel model = SitePageModel.fromDetailJson(json);
-        if (model != null) {
-          setState(() {
-            sitePageModel = model;
-          });
-        }
+        sitePageModel = SitePageModel.fromDetailJson(json);
+        _updateSaveState();
+
+        setState(() {});
       }
     }
-    _updateSaveState();
   }
 
-  Future editBuilding() async {
+  Future saveBuilding() async {
     String urlStr =
         NetConfig.baseUrl + NetConfig.editeUrl + this.sitePageModel.id;
     Map<String, dynamic> headers = {};
@@ -108,7 +104,7 @@ class _State extends State<EditbuildingPage> {
     }
   }
 
-  Future deleteSite() async {
+  Future deleteBuilding() async {
     String urlStr =
         NetConfig.baseUrl + NetConfig.deleteSiteUrl + this.sitePageModel.id;
     Map<String, dynamic> headers = {};
@@ -160,7 +156,7 @@ class _State extends State<EditbuildingPage> {
           child: GestureDetector(
             onTap: () {
               if (this.isCheack) {
-                editBuilding();
+                saveBuilding();
               }
             },
             child: Text(
@@ -208,11 +204,9 @@ class _State extends State<EditbuildingPage> {
                                 ),
                                 Expanded(
                                   child: inputnumbertextfiled(
+                                    defaultText: sitePageModel.name.toString(),
                                     title: "建筑名称",
                                     intputtype: 0,
-                                    defaultText: sitePageModel.name == null
-                                        ? "建筑名称"
-                                        : sitePageModel.name,
                                     onChanged: (text) {
                                       _updateSaveState();
                                       this.sitePageModel.name = text;
@@ -240,9 +234,7 @@ class _State extends State<EditbuildingPage> {
                         ),
                         Expanded(
                           child: Text(
-                            null != this.sitePageModel.address
-                                ? this.sitePageModel.address
-                                : "必填",
+                            sitePageModel.address.toString(),
                             textAlign: TextAlign.right,
                             style: new TextStyle(fontSize: prefix0.fontsSize),
                           ),
@@ -260,9 +252,7 @@ class _State extends State<EditbuildingPage> {
                   height: 1,
                 ),
                 inputnumbertextfiled(
-                  defaultText: sitePageModel.size != null
-                      ? sitePageModel.size.toString()
-                      : "",
+                  defaultText: sitePageModel.size.toString(),
                   title: "建筑面积(㎡)",
                   intputtype: 0,
                   onChanged: (text) {},
@@ -296,10 +286,8 @@ class _State extends State<EditbuildingPage> {
                     ),
                     inputnumbertextfiled(
                       title: "地上楼层数(层)",
+                      defaultText: sitePageModel.upperFloor.toString(),
                       intputtype: 1,
-                      defaultText: sitePageModel.upperFloor != null
-                          ? sitePageModel.upperFloor.toString()
-                          : "",
                       onChanged: (text) {
                         sitePageModel.upperFloor = text;
 
@@ -312,10 +300,8 @@ class _State extends State<EditbuildingPage> {
                     ),
                     inputnumbertextfiled(
                       title: "地下楼层数(层)",
+                      defaultText: sitePageModel.belowFloor.toString(),
                       intputtype: 1,
-                      defaultText: sitePageModel.belowFloor != null
-                          ? sitePageModel.belowFloor.toString()
-                          : "",
                       onChanged: (text) {
                         sitePageModel.belowFloor = text;
 
@@ -342,27 +328,19 @@ class _State extends State<EditbuildingPage> {
         ],
       ),
     );
+
     Widget delete = new Offstage(
       offstage: false,
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: GestureDetector(
           onTap: () {
-            deleteSite();
-//            _creatSite(new SitePageModel(), true);
+            deleteBuilding();
           },
           child: Container(
             color: Colors.red,
             height: 40,
             alignment: Alignment.center,
-//            decoration: BoxDecoration(
-//                borderRadius: BorderRadius.circular(3.0), //3像素圆角
-//                border: Border.all(color: Colors.grey),
-////                boxShadow: [
-////                  //阴影
-////                  BoxShadow(color: Colors.white, blurRadius: 4.0)
-////                ]
-//            ),
             child: Padding(
               padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
               child: Text(
@@ -397,10 +375,13 @@ class _State extends State<EditbuildingPage> {
   }
 
   _updateSaveState() {
-    if (sitePageModel.name.length > 0 && sitePageModel.address.length > 0) {
-      this.isCheack = true;
-    } else {
-      this.isCheack = false;
+    if (null != sitePageModel) {
+      if ((null != sitePageModel.name && sitePageModel.name.length > 0) &&
+          (null != sitePageModel.address && sitePageModel.address.length > 0)) {
+        this.isCheack = true;
+      } else {
+        this.isCheack = false;
+      }
     }
   }
 }

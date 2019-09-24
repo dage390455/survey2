@@ -58,7 +58,9 @@ class _BuildingListPageState extends State<BuildingListPage> {
   void _buildingdetail(int index) async {
     final result = await Navigator.of(context, rootNavigator: true)
         .push(CupertinoPageRoute(builder: (BuildContext context) {
-      return new EditbuildingPage(widget.sitePageModel.buildingList[index]);
+      SitePageModel buildingList = widget.sitePageModel.buildingList[index];
+
+      return new EditbuildingPage(buildingList.id, buildingList.parent_id);
     }));
 
     if (result != null) {
