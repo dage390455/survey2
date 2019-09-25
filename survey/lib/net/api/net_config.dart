@@ -43,5 +43,8 @@ class NetConfig {
   static const prospectTaskDetailurl = "prospect_task/detail/";
   static const updateprospectTaskurl = "prospect_task/update/";
   static const deleteprospectTaskurl = "prospect_task/delete/";
+
+  static const fire_resourceprospectTaskListUrl =
+      "/prospect_task/list?task_type=fire_resource&keyword=";
 //  static const createProspectTaskUrl = "/prospect_task/detail/";
 }

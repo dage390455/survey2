@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:sensoro_survey/views/survey/addPointPages/fire_source_management_page.dart';
 import 'package:sensoro_survey/views/survey/common/data_transfer_manager.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 import 'package:sensoro_survey/views/survey/sitePages/Model/SitePageModel.dart';
@@ -11,11 +12,9 @@ import 'package:sensoro_survey/views/survey/sitePages/creat_site_page.dart';
 import '../const.dart';
 import 'Fire_Trouble_List_management_page.dart';
 import 'Model/PointListModel.dart';
-import 'Model/ProspectTaskListModel.dart';
-import 'fire_resources_list_page.dart';
 
 class PointRiskTypeSelectPage extends StatefulWidget {
-  PointRiskTypeSelectPage({Key key, this.title,this.model}) : super(key: key);
+  PointRiskTypeSelectPage({Key key, this.title, this.model}) : super(key: key);
 
   PointListModel model;
   final String title;
@@ -74,7 +73,9 @@ class _PointRiskTypeSelectPageState extends State<PointRiskTypeSelectPage> {
   void _startTroublePageList() async {
     final result = await Navigator.of(context, rootNavigator: true)
         .push(CupertinoPageRoute(builder: (BuildContext context) {
-      return new FireTroubleListManagementPage(input: widget.model,);
+      return new FireTroubleListManagementPage(
+        input: widget.model,
+      );
     }));
 
     if (result != null) {
@@ -86,7 +87,7 @@ class _PointRiskTypeSelectPageState extends State<PointRiskTypeSelectPage> {
   void _startFireResPageList() async {
     final result = await Navigator.of(context, rootNavigator: true)
         .push(CupertinoPageRoute(builder: (BuildContext context) {
-      return new FireResourcesListPage();
+      return new FireSourceListManagementPage(input: widget.model);
     }));
 
     if (result != null) {
@@ -145,7 +146,7 @@ class _PointRiskTypeSelectPageState extends State<PointRiskTypeSelectPage> {
       switch (Index) {
         case 1:
           _startTroublePageList();
-        break;
+          break;
         case 2:
           _startFireResPageList();
           break;
