@@ -5,18 +5,17 @@ import 'package:flutter/services.dart';
 import 'package:sensoro_survey/net/NetService/result_data.dart';
 import 'package:sensoro_survey/net/api/app_api.dart';
 import 'package:sensoro_survey/net/api/net_config.dart';
-import 'package:sensoro_survey/views/survey/commonWidegt/inputnumbertextfiled.dart';
-import 'package:sensoro_survey/views/survey/commonWidegt/remarktextfiled.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
-import 'package:sensoro_survey/views/survey/sitePages/Model/fire_resource_model.dart';
 
-import 'Model/PointListModel.dart';
+import '../const.dart';
 import 'Model/fire_trouble_model.dart';
 
 class AddNewTroublePage extends StatefulWidget {
-  PointListModel input;
   bool isCreate = true;
-  AddNewTroublePage(this.input,this.isCreate);
+  String id;
+
+  AddNewTroublePage(this.id, this.isCreate);
+
   @override
   _State createState() => _State();
 }
@@ -24,35 +23,108 @@ class AddNewTroublePage extends StatefulWidget {
 class _State extends State<AddNewTroublePage> {
   bool isCheack = false;
 
-  FireTroubleModel fireResourceModel = FireTroubleModel("", "fire_danger", "", "image", "", "", "", "");
+  FireTroubleModel fireResourceModel =
+      FireTroubleModel("", "", "fire_danger", "", "image", "", "", "", "");
 
   @override
   void initState() {
     super.initState();
-    fireResourceModel.prospect_id = widget.input.id;
+
+    if (widget.isCreate) {
+      fireResourceModel.prospect_id = widget.id;
+    } else {
+      fireResourceModel.id = widget.id;
+    }
+    if (!widget.isCreate) {
+      getFireResourceDetail();
+    }
   }
 
   Future creatFireResource() async {
-
-    String urlStr =NetConfig.baseUrl + NetConfig.createProspectTaskUrl;
+    String urlStr = NetConfig.baseUrl + NetConfig.createProspectTaskUrl;
     Map<String, dynamic> headers = {};
-    Map<String, dynamic> params = {"data":fireResourceModel.toJson()};
+    Map<String, dynamic> params = {"data": fireResourceModel.toJson()};
 
     print(params);
 
     ResultData resultData = await AppApi.getInstance()
-        .post(urlStr,params: params,context: context,showLoad: true);
+        .post(urlStr, params: params, context: context, showLoad: true);
     if (resultData.isSuccess()) {
       // _stopLoading();
 
       int code = resultData.response["code"].toInt();
       if (code == 200) {
-
-        Navigator.of(context).pop();
-
+        Navigator.of(context).pop(fireResourceModel);
       }
-      setState(() {
-      });
+      setState(() {});
+    }
+  }
+
+  Future saveFireResource() async {
+    String urlStr = NetConfig.baseUrl +
+        NetConfig.updateprospectTaskurl +
+        fireResourceModel.id;
+    Map<String, dynamic> headers = {};
+    Map<String, dynamic> params = {"data": fireResourceModel.toJson()};
+
+    print(params);
+
+    ResultData resultData = await AppApi.getInstance()
+        .put(urlStr, params: params, context: context, showLoad: true);
+    if (resultData.isSuccess()) {
+      // _stopLoading();
+
+      int code = resultData.response["code"].toInt();
+      if (code == 200) {
+        Navigator.of(context).pop(fireResourceModel);
+      }
+      setState(() {});
+    }
+  }
+
+  Future getFireResourceDetail() async {
+    String urlStr = NetConfig.baseUrl +
+        NetConfig.prospectTaskDetailurl +
+        fireResourceModel.id;
+    Map<String, dynamic> headers = {};
+    Map<String, dynamic> params = {};
+
+    print(params);
+
+    ResultData resultData = await AppApi.getInstance()
+        .get(urlStr, params: params, context: context, showLoad: true);
+    if (resultData.isSuccess()) {
+      // _stopLoading();
+
+      int code = resultData.response["code"].toInt();
+      if (code == 200) {
+        Map json = resultData.response["data"];
+
+        fireResourceModel = FireTroubleModel.fromJson(json);
+      }
+      setState(() {});
+    }
+  }
+
+  Future deleteTrouble() async {
+    String urlStr = NetConfig.baseUrl +
+        NetConfig.deleteprospectTaskurl +
+        this.fireResourceModel.id;
+    Map<String, dynamic> headers = {};
+    Map<String, dynamic> params = {};
+
+    print(params);
+
+    ResultData resultData = await AppApi.getInstance()
+        .delete(urlStr, params: params, context: context, showLoad: true);
+    if (resultData.isSuccess()) {
+      // _stopLoading();
+
+      int code = resultData.response["code"].toInt();
+      if (code == 200) {
+        Navigator.of(context).pop(this.fireResourceModel);
+      }
+      setState(() {});
     }
   }
 
@@ -64,7 +136,7 @@ class _State extends State<AddNewTroublePage> {
       brightness: Brightness.light,
       backgroundColor: Colors.white,
       title: Text(
-        "新增隐患",
+        widget.isCreate ? "新增隐患" : "隐患详情",
         style: TextStyle(color: Colors.black),
       ),
       leading: Container(
@@ -86,7 +158,11 @@ class _State extends State<AddNewTroublePage> {
           child: GestureDetector(
             onTap: () {
               if (this.isCheack) {
-                creatFireResource();
+                if (widget.isCreate) {
+                  creatFireResource();
+                } else {
+                  saveFireResource();
+                }
               }
             },
             child: Text(
@@ -161,9 +237,7 @@ class _State extends State<AddNewTroublePage> {
                 break;
             }
             _updateSaveState();
-            setState(() {
-
-            });
+            setState(() {});
           },
           onCanceled: () {
             print("onCanceled");
@@ -240,9 +314,7 @@ class _State extends State<AddNewTroublePage> {
                 break;
             }
             _updateSaveState();
-            setState(() {
-
-            });
+            setState(() {});
           },
           onCanceled: () {
             print("onCanceled");
@@ -274,13 +346,35 @@ class _State extends State<AddNewTroublePage> {
                             style: TextStyle(color: Colors.red),
                           ),
                           Expanded(
-                            child: inputnumbertextfiled(
-                              title: "隐患名称",
-                              intputtype: 0,
-                              onChanged: (text) {
-                                _updateSaveState();
-                                this.fireResourceModel.item_name = text;
-                              },
+                            child: Padding(
+                              padding: new EdgeInsets.symmetric(
+                                  horizontal: 0, vertical: 10),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: <Widget>[
+                                  Text(
+                                    "隐患名称",
+                                    style: new TextStyle(
+                                        fontSize: prefix0.fontsSize),
+                                  ),
+                                  Expanded(
+                                    child: TextField(
+                                      controller: TextEditingController(
+                                          text: fireResourceModel.item_name),
+                                      onChanged: (v) {
+                                        fireResourceModel.item_name =
+                                            v.toString();
+                                      },
+                                      textAlign: TextAlign.right,
+                                      decoration: InputDecoration(
+                                        border: InputBorder.none,
+                                        hintText: '请输入',
+                                      ),
+                                      autofocus: false,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           )
                         ],
@@ -302,14 +396,78 @@ class _State extends State<AddNewTroublePage> {
           ),
           Padding(
             padding: new EdgeInsets.fromLTRB(20, 0, 20, 0),
-            child: remarktextfiled(
-              title: "资源描述：",
-              callbacktext: (text) {
-                print(text + "资源描述：");
-              },
+            child: Padding(
+              padding: new EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  new SizedBox(
+                    height: 10,
+                  ),
+                  Text("资源描述",
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                          color: prefix0.LIGHT_TEXT_COLOR,
+                          fontWeight: FontWeight.normal,
+                          fontSize: 17)),
+                  new SizedBox(
+                    height: 15,
+                  ),
+                  Container(
+                    height: 200,
+                    decoration: BoxDecoration(
+                      border:
+                          new Border.all(color: LIGHT_TEXT_COLOR, width: 0.5),
+                    ),
+                    child: TextField(
+                      onSubmitted: (String str) {},
+                      textAlign: TextAlign.start,
+                      minLines: 1,
+                      controller: TextEditingController(
+                          text: fireResourceModel.description),
+                      maxLines: 10,
+                      style: new TextStyle(
+                        fontSize: 13.0,
+                        color: prefix0.BLACK_TEXT_COLOR,
+                      ),
+                      decoration: new InputDecoration(
+                        border: InputBorder.none,
+                        hintText: "点击输入",
+                        contentPadding:
+                            EdgeInsets.fromLTRB(20.0, 20.0, 10.0, 10.0),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
+      ),
+    );
+
+    Widget delete = new Offstage(
+      offstage: widget.isCreate ? true : false,
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: GestureDetector(
+          onTap: () {
+            deleteTrouble();
+          },
+          child: Container(
+            color: Colors.red,
+            height: 40,
+            alignment: Alignment.center,
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+              child: Text(
+                "删除",
+                textAlign: TextAlign.start,
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ),
+        ),
       ),
     );
 
@@ -330,12 +488,14 @@ class _State extends State<AddNewTroublePage> {
     return Scaffold(
       appBar: NavBar,
       body: bigContainer,
+      bottomSheet: delete,
     );
   }
 
   _updateSaveState() {
     if (fireResourceModel.item_name.length > 0 &&
-        fireResourceModel.danger_level.length>0&&fireResourceModel.first_type.length>0) {
+        fireResourceModel.danger_level.length > 0 &&
+        fireResourceModel.first_type.length > 0) {
       this.isCheack = true;
     } else {
       this.isCheack = false;

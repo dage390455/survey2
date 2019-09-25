@@ -3,28 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:sensoro_survey/generated/customCalendar/lib/controller.dart';
-import 'package:sensoro_survey/model/project_info_model.dart';
 import 'package:sensoro_survey/net/api/app_api.dart';
 import 'package:sensoro_survey/net/api/net_config.dart';
-import 'package:sensoro_survey/views/survey/addPointPages/point_risk_type_select_page.dart';
-import 'package:sensoro_survey/views/survey/common/data_transfer_manager.dart';
-import 'package:sensoro_survey/views/survey/commonWidegt/SearchView.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
-import 'package:sensoro_survey/views/survey/sitePages/Model/SitePageModel.dart';
-import 'package:sensoro_survey/views/survey/sitePages/buildinglist_page.dart';
-import 'package:sensoro_survey/views/survey/sitePages/creat_site_page.dart';
-import 'package:sensoro_survey/views/survey/sitePages/sqflite_page.dart';
-import 'package:sensoro_survey/views/survey/add_point_page.dart';
-import 'package:sensoro_survey/views/survey/add_project_page.dart';
 
 import '../const.dart';
-import '../point_content_page.dart';
 import 'Model/PointListModel.dart';
 import 'Model/ProspectTaskListModel.dart';
 import 'add_new_trouble_page.dart';
 
 class FireTroubleListManagementPage extends StatefulWidget {
-  FireTroubleListManagementPage({Key key, this.title, this.input}) : super(key: key);
+  FireTroubleListManagementPage({Key key, this.title, this.input})
+      : super(key: key);
 
   PointListModel input;
   final String title;
@@ -34,11 +24,14 @@ class FireTroubleListManagementPage extends StatefulWidget {
       _FireTroubleListManagementPageState(this.input);
 }
 
-class _FireTroubleListManagementPageState extends State<FireTroubleListManagementPage> {
+class _FireTroubleListManagementPageState
+    extends State<FireTroubleListManagementPage> {
   PointListModel input;
   BasicMessageChannel _locationBasicMessageChannel = BasicMessageChannel(
       "BasicMessageChannelPluginGetCity", StandardMessageCodec());
+
   _FireTroubleListManagementPageState(this.input);
+
   bool calendaring = false;
   String beginTimeStr = "";
   String endTimeStr = "";
@@ -49,26 +42,22 @@ class _FireTroubleListManagementPageState extends State<FireTroubleListManagemen
   TextEditingController searchController = TextEditingController();
   List<ProspectTaskListModel> dataList = [];
 
-
-
-  void _gotoPoint(int index) async {
-
-
+  void _goPointDetail(int index) async {
     final result = await Navigator.of(context, rootNavigator: true)
         .push(CupertinoPageRoute(builder: (BuildContext context) {
-      return new AddNewTroublePage(widget.input,false);
+      return new AddNewTroublePage(dataList[index].id, false);
     }));
 
     if (result != null) {
-      setState(() {});
+      getListNetCall();
     }
-
   }
 
-
-
   Future getListNetCall() async {
-    String urlStr = NetConfig.prospectTaskListUrl+searchStr+"&prospect_id="+widget.input.id;
+    String urlStr = NetConfig.prospectTaskListUrl +
+        searchStr +
+        "&prospect_id=" +
+        widget.input.id;
     Map<String, dynamic> headers = {};
     Map<String, dynamic> params = {};
 
@@ -79,35 +68,32 @@ class _FireTroubleListManagementPageState extends State<FireTroubleListManagemen
       dataList.clear();
       int code = resultData.response["code"].toInt();
       if (code == 200) {
-
         if (resultData.response["data"]["records"] is List) {
           List resultList = resultData.response["data"]["records"];
           if (resultList.length > 0) {
             for (int i = 0; i < resultList.length; i++) {
               Map json = resultList[i] as Map;
-              ProspectTaskListModel model = ProspectTaskListModel.fromJson(json);
+              ProspectTaskListModel model =
+                  ProspectTaskListModel.fromJson(json);
               if (model != null) {
                 dataList.add(model);
               }
             }
-
           }
         }
-
       }
-      setState(() {
-      });
+      setState(() {});
     }
   }
 
-  void _addPoint() async {
+  void _newPoint() async {
     final result = await Navigator.of(context, rootNavigator: true)
         .push(CupertinoPageRoute(builder: (BuildContext context) {
-      return new AddNewTroublePage(widget.input,true);
+      return new AddNewTroublePage(widget.input.id, true);
     }));
 
     if (result != null) {
-      setState(() {});
+      getListNetCall();
     }
   }
 
@@ -224,23 +210,23 @@ class _FireTroubleListManagementPageState extends State<FireTroubleListManagemen
         },
       ),
       title: Text("消防隐患列表"),
-      actions: <Widget>[
-        Container(
-          padding: new EdgeInsets.fromLTRB(0, 0, 20, 0),
-          alignment: Alignment.center,
-          child: GestureDetector(
-            onTap: () {
-              _editProject();
-            },
-            child: Text(
-              "详情",
-              style: TextStyle(
-                color: prefix0.GREEN_COLOR,
-              ),
-            ),
-          ),
-        ),
-      ],
+//      actions: <Widget>[
+//        Container(
+//          padding: new EdgeInsets.fromLTRB(0, 0, 20, 0),
+//          alignment: Alignment.center,
+//          child: GestureDetector(
+//            onTap: () {
+//              _editProject();
+//            },
+//            child: Text(
+//              "详情",
+//              style: TextStyle(
+//                color: prefix0.GREEN_COLOR,
+//              ),
+//            ),
+//          ),
+//        ),
+//      ],
     );
 
     Widget myListView = new ListView.builder(
@@ -293,7 +279,7 @@ class _FireTroubleListManagementPageState extends State<FireTroubleListManagemen
 
                     GestureDetector(
                       onTap: () {
-                        _gotoPoint(index);
+                        _goPointDetail(index);
                       },
                       child: Container(
                         height: 80,
@@ -336,9 +322,7 @@ class _FireTroubleListManagementPageState extends State<FireTroubleListManagemen
                         color: FENGE_LINE_COLOR),
                   ]),
             ),
-            secondaryActions: <Widget>[
-
-            ],
+            secondaryActions: <Widget>[],
           );
         });
 
@@ -410,7 +394,7 @@ class _FireTroubleListManagementPageState extends State<FireTroubleListManagemen
         padding: const EdgeInsets.all(20),
         child: GestureDetector(
           onTap: () {
-            _addPoint();
+            _newPoint();
 
             // _creatSite(
             //     new SitePageModel(
