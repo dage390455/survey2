@@ -184,6 +184,7 @@ class _State extends State<DynamicCreatePage> {
       child:Container(
         child:  TakePhotoView(
           defineText: "加图片",
+          imagePath: "",
           takePhoneImageAction:(editText) => _searchAction(editText)) ,
 
 
