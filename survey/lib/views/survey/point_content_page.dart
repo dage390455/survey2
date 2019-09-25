@@ -188,9 +188,6 @@ class PointContentPageState extends State<PointContentPage> {
             BottomNavigationBarItem(icon: getTabIcon(0), title: getTabTitle(0)),
             BottomNavigationBarItem(icon: getTabIcon(1), title: getTabTitle(1)),
             BottomNavigationBarItem(icon: getTabIcon(2), title: getTabTitle(2)),
-//            BottomNavigationBarItem(
-//                icon: getTabIcon(3),
-//                title: getTabTitle(3)),
           ],
           currentIndex: _tabIndex,
           onTap: (index) {
