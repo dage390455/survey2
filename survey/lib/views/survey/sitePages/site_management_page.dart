@@ -110,6 +110,32 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
   }
 
 
+
+  void _textSql2()async {
+
+
+    final result = await Navigator.of(context, rootNavigator: true)
+        .push(CupertinoPageRoute(builder: (BuildContext context) {
+      return new DynamicCreatePage();
+    }));
+
+    if (result != null) {
+      String name = result as String;
+      if (name == "refreshList") {}
+      // this.name = name;
+      setState(() {});
+    }
+
+//    Fluttertoast.showToast(
+//        msg: "This is Center Short Toast",
+//        toastLength: Toast.LENGTH_SHORT,
+//        gravity: ToastGravity.CENTER,
+//        timeInSecForIos: 1,
+//
+//    );
+  }
+
+
   Future getListNetCall() async {
     String urlStr = NetConfig.siteListUrl+"0"+"&keyword="+searchStr;
     Map<String, dynamic> headers = {};
@@ -196,7 +222,25 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
       // ),
       title: Text("区域名称"),
       actions: <Widget>[
-
+        Container(
+          padding: new EdgeInsets.fromLTRB(0, 0, 0, 0),
+          alignment: Alignment.center,
+          child: GestureDetector(
+              onTap: () {
+                // 点击空白页面关闭键盘
+                _textSql2();
+              },
+              child: Padding(
+                padding: new EdgeInsets.fromLTRB(20, 20, 20, 20),
+                child: Text(
+                  "题库",
+                  style: TextStyle(
+                    color: Colors.grey,
+                  ),
+                ),
+              )
+          ),
+        ),
         Container(
           padding: new EdgeInsets.fromLTRB(0, 0, 0, 0),
           alignment: Alignment.center,

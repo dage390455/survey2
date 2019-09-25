@@ -50,16 +50,17 @@ class PointContentPageState extends State<PointContentPage> {
   void initState() {
     super.initState();
 
-    pages = <Widget>[PointRiskTypeSelectPage(model: widget.model,),PointNewWorkPage(),PointListPage(input: input)];
+
 
     model = this.model;
-    pages = <Widget>[
-      PointRiskManagementPage(
-        model: widget.model,
-      ),
-      PointNewWorkPage(),
-      PointListPage(input: input)
-    ];
+    pages = <Widget>[PointRiskTypeSelectPage(model: widget.model,),PointNewWorkPage(),PointListPage(input: input)];
+//    pages = <Widget>[
+//      PointRiskManagementPage(
+//        model: widget.model,
+//      ),
+//      PointNewWorkPage(),
+//      PointListPage(input: input)
+//    ];
 
     if (tabImages == null) {
       tabImages = [
