@@ -31,10 +31,10 @@ class NetConfig {
   static const getSiteUrl = "/site_info/detail/";
   static const deleteSiteUrl = "/site_info/delete/";
 
-  static const pointListUrl = "/prospect_info/list?project_id=";
+  static const pointListUrl = "prospect_info/list?project_id=";
   static const deletePointUrl = "/prospect_info/delete/";
-  static const pointDetailUrl = "/prospect_info/detail/";
-  static const updatePointUrl = "/prospect_info/update/";
+  static const pointDetailUrl = "prospect_info/detail/";
+  static const updatePointUrl = "prospect_info/update/";
 
   //勘察点任务
   static const prospectTaskListUrl =

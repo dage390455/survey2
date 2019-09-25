@@ -101,7 +101,9 @@ class _AddPointPageState extends State<AddPointPage> {
 
   @override
   void initState() {
-    model = this.model;
+    if (this.model != null) {
+      model = this.model;
+    }
     input = this.input;
     // projectId = this.input.projectId;
     // subList = this.input.subList;
@@ -127,13 +129,14 @@ class _AddPointPageState extends State<AddPointPage> {
     }
 
     if (this.model != null) {
+      model = this.model;
       pointId = this.model.id;
       name = this.model.name;
+      getPointDetailNetCall();
       // getSiteListNetCall(siteType);
     }
 
     getSiteListNetCall(siteType);
-    getPointDetailNetCall();
 
     TextController1.text = this.name;
     TextController1.addListener(() {
@@ -405,8 +408,7 @@ class _AddPointPageState extends State<AddPointPage> {
   }
 
   updatePointNetCall() async {
-    String urlStr =
-        NetConfig.baseUrl + NetConfig.updatePointUrl + input.projectId;
+    String urlStr = NetConfig.baseUrl + NetConfig.updatePointUrl + model.id;
 
     if (name.length == 0) {
       utility.showToast("勘察点名称不能为空");
