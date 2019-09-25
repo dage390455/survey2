@@ -13,8 +13,9 @@ class TakePhotoView extends StatefulWidget {
   var defineText = "";
   final takePhoneImageAction;
   String searchStr = "";
+  String imagePath = "";
 
-  TakePhotoView({this.takePhoneImageAction, this.defineText});
+  TakePhotoView({this.takePhoneImageAction, this.defineText,this.imagePath});
 
   @override
   _State createState() => _State();
@@ -22,7 +23,7 @@ class TakePhotoView extends StatefulWidget {
 
 class _State extends State<TakePhotoView> {
   List<String> tags = [];
-  String imgPath = "";
+
   int editIndex = -1;
   BasicMessageChannel<String> _basicMessageChannel =
       BasicMessageChannel("BasicMessageChannelPluginPickImage", StringCodec());
@@ -36,8 +37,8 @@ class _State extends State<TakePhotoView> {
           print(message);
           //message为native传递的数据
 
-          imgPath = message;
-          widget.takePhoneImageAction(imgPath);
+          widget.imagePath = message;
+          widget.takePhoneImageAction(widget.imagePath);
           setState(() {});
           //给Android端的返回值
           return "========================收到Native消息：" + message;
@@ -64,8 +65,8 @@ class _State extends State<TakePhotoView> {
       _sendToNative("");
       var image = await ImagePicker.pickImage(source: ImageSource.camera);
       if (null != image) {
-        imgPath = image.uri.path.toString();
-        widget.takePhoneImageAction(imgPath);
+        widget.imagePath = image.uri.path.toString();
+        widget.takePhoneImageAction(widget.imagePath);
         setState(() {});
       }
     }
@@ -74,8 +75,8 @@ class _State extends State<TakePhotoView> {
       _sendToNative("1");
       var image = await ImagePicker.pickImage(source: ImageSource.gallery);
       if (null != image) {
-        imgPath = image.uri.path.toString();
-        widget.takePhoneImageAction(imgPath);
+        widget.imagePath = image.uri.path.toString();
+        widget.takePhoneImageAction(widget.imagePath);
         setState(() {});
       }
     }
@@ -84,7 +85,7 @@ class _State extends State<TakePhotoView> {
       List<PicSwiperItem> list = new List();
       PicSwiperItem picSwiperItem = PicSwiperItem("");
       list.clear();
-      picSwiperItem.picUrl = imgPath;
+      picSwiperItem.picUrl = widget.imagePath;
 
       list.add(picSwiperItem);
       if (picSwiperItem.picUrl.isNotEmpty) {
@@ -97,10 +98,10 @@ class _State extends State<TakePhotoView> {
     }
 
    Widget _getImageWight(){
-      if(imgPath.startsWith("http")){
-        return Image.network(imgPath);
+      if(widget.imagePath.startsWith("http")){
+        return Image.network(widget.imagePath);
       }else{
-        return Image.file(File(imgPath));
+        return Image.file(File(widget.imagePath));
       }
     }
 
@@ -139,7 +140,7 @@ class _State extends State<TakePhotoView> {
         height: 150,
         child: GestureDetector(
             onTap: () {
-              if (imgPath.length > 0) {
+              if (widget.imagePath.length > 0) {
                 openPhoto1();
               } else {
                 _takePhone();
@@ -168,9 +169,9 @@ class _State extends State<TakePhotoView> {
                   padding: new EdgeInsets.fromLTRB(20, 10, 20, 0),
                   child: Container(
                     alignment: Alignment.center,
-                    child: imgPath.length == 0
-                        ? Text("+照片")
-                        : Image.file(File(imgPath)),
+                    child: widget.imagePath.length == 0
+                        ? Text(widget.defineText)
+                        : _getImageWight(),
                     decoration: new BoxDecoration(
                       border: new Border.all(
                           width: 1.0,
@@ -187,14 +188,14 @@ class _State extends State<TakePhotoView> {
 //              Row(
 //                children: <Widget>[
                 new Offstage(
-                    offstage: imgPath.length > 0 ? false : true,
+                    offstage: widget.imagePath.length > 0 ? false : true,
                     child: new IconButton(
                       icon: new Image.asset("assets/images/picture_del.png"),
                       tooltip: 'Increase volume by 10%',
                       onPressed: () {
                         setState(() {
-                          imgPath = "";
-                          widget.takePhoneImageAction(imgPath);
+                          widget.imagePath = "";
+                          widget.takePhoneImageAction(widget.imagePath);
                           setState(() {});
 //                            Map item = picImagesArray[index];
 //                            item["picPath"] = "";

@@ -138,7 +138,7 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
 
 
   Future getListNetCall() async {
-    String urlStr = NetConfig.siteListUrl+"0"+"&keyword="+searchStr;
+    String urlStr = NetConfig.siteListUrl+"parent_id=0"+"&keyword="+searchStr;
     Map<String, dynamic> headers = {};
     Map<String, dynamic> params = {};
 
