@@ -303,6 +303,13 @@ class _FireTroubleListManagementPageState
                                           fontSize: 17)),
                                 ),
                               ),
+
+                              Text(dataList[index].danger_level,
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                      color: prefix0.BLACK_TEXT_COLOR,
+                                      fontWeight: FontWeight.normal,
+                                      fontSize: 17)),
                               Image.asset(
                                 "assets/images/right_arrar.png",
                                 width: 20,
