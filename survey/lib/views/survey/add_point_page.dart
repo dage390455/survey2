@@ -132,8 +132,8 @@ class _AddPointPageState extends State<AddPointPage> {
       // getSiteListNetCall(siteType);
     }
 
-    // getSiteListNetCall(siteType);
-    // getPointDetailNetCall();
+    getSiteListNetCall(siteType);
+    getPointDetailNetCall();
 
     TextController1.text = this.name;
     TextController1.addListener(() {
@@ -188,6 +188,9 @@ class _AddPointPageState extends State<AddPointPage> {
             for (int i = 0; i < resultList.length; i++) {
               Map json = resultList[i] as Map;
               SitePageModel model = SitePageModel.fromJson(json);
+              if (siteId == model.id) {
+                siteName = model.name;
+              }
               if (model != null) {
                 dataList.add(model);
               }
@@ -403,7 +406,7 @@ class _AddPointPageState extends State<AddPointPage> {
 
   updatePointNetCall() async {
     String urlStr =
-        NetConfig.baseUrl + NetConfig.updateProjectUrl + input.projectId;
+        NetConfig.baseUrl + NetConfig.updatePointUrl + input.projectId;
 
     if (name.length == 0) {
       utility.showToast("勘察点名称不能为空");
@@ -1378,3 +1381,5 @@ class _AddPointPageState extends State<AddPointPage> {
             this.isEdit == true ? bottomButton : emptyContainer);
   }
 }
+
+// params:{"data":{"site_id":"1","site_type":"area","name":"cest","site_use":"城乡结合部","contact_list":[{"type":"fire_admin","user_name":"在你面前","mobile":"222555"},{"type":"fire_responsor","user_name":"","mobile":""}],"total_assets":"11.0","resident_count":"22.0"}}

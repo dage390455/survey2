@@ -100,9 +100,9 @@ class _AddProjectPageState extends State<AddProjectPage> {
       }
     }
 
-    if (this.input.site_type.length > 0 && this.input != null) {
-      getNameListNetCall(this.input.site_type);
-    }
+    // if (this.input.site_type.length > 0 && this.input != null) {
+    //   getNameListNetCall(this.input.site_type);
+    // }
 
     if (subList.length > 0) {
       for (int i = 0; i < subList.length; i++) {
@@ -189,6 +189,9 @@ class _AddProjectPageState extends State<AddProjectPage> {
             for (int i = 0; i < resultList.length; i++) {
               Map json = resultList[i] as Map;
               SitePageModel model = SitePageModel.fromJson(json);
+              if (siteId == model.id) {
+                siteName = model.name;
+              }
               if (model != null) {
                 dataList.add(model);
               }

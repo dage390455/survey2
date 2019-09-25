@@ -34,9 +34,11 @@ class NetConfig {
   static const pointListUrl = "/prospect_info/list?project_id=";
   static const deletePointUrl = "/prospect_info/delete/";
   static const pointDetailUrl = "/prospect_info/detail/";
+  static const updatePointUrl = "/prospect_info/update/";
 
   //勘察点任务
-  static const prospectTaskListUrl = "/prospect_task/list?task_type=fire_danger&keyword=";
+  static const prospectTaskListUrl =
+      "/prospect_task/list?task_type=fire_danger&keyword=";
   static const createProspectTaskUrl = "/prospect_task/create";
 //  static const createProspectTaskUrl = "/prospect_task/detail/";
 }
