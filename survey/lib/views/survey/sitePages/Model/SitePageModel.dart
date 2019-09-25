@@ -20,19 +20,14 @@ class SitePageModel {
   List<SitePageModel> buildingList = [];
 
   String id = "";
-
   String status = "";
   String parent_id = "";
   String type = "";
   String name = "";
-
   String province = "";
-
   String city = "";
-
   String district = "";
   double size;
-
   String address = "";
   int belowFloor;
   String location = "";
