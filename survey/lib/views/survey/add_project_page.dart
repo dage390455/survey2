@@ -100,9 +100,9 @@ class _AddProjectPageState extends State<AddProjectPage> {
       }
     }
 
-    if (this.input.site_type.length > 0 && this.input != null) {
-      getNameListNetCall(this.input.site_type);
-    }
+    // if (this.input.site_type.length > 0 && this.input != null) {
+    //   getNameListNetCall(this.input.site_type);
+    // }
 
     if (subList.length > 0) {
       for (int i = 0; i < subList.length; i++) {
@@ -133,7 +133,7 @@ class _AddProjectPageState extends State<AddProjectPage> {
     if (name.length > 0 && projectId.length > 0) {
       this.isEdit = true;
     }
-    getSiteListNetCall();
+    getSiteListNetCall(siteType);
 
     if (isEdit == true) {
       getProjectDetailNetCall();
@@ -164,10 +164,17 @@ class _AddProjectPageState extends State<AddProjectPage> {
     textCList.add(managerTextController2);
   }
 
-  Future getSiteListNetCall() async {
-    String urlStr = NetConfig.siteListUrl + "0";
+  Future getSiteListNetCall(String siteType) async {
+    String urlStr = NetConfig.siteListUrl;
     Map<String, dynamic> headers = {};
     Map<String, dynamic> params = {};
+    if (siteType == "area") {
+      urlStr = urlStr + "parent_id=0" + "&type=" + siteType;
+    } else if (siteType == "building") {
+      urlStr = urlStr + "type=" + siteType;
+    } else {
+      return;
+    }
 
     ResultData resultData = await AppApi.getInstance()
         .getListNetCall(context, true, urlStr, headers, params);
@@ -182,6 +189,9 @@ class _AddProjectPageState extends State<AddProjectPage> {
             for (int i = 0; i < resultList.length; i++) {
               Map json = resultList[i] as Map;
               SitePageModel model = SitePageModel.fromJson(json);
+              if (siteId == model.id) {
+                siteName = model.name;
+              }
               if (model != null) {
                 dataList.add(model);
               }
@@ -225,7 +235,7 @@ class _AddProjectPageState extends State<AddProjectPage> {
         }
         setState(() {});
       } else {
-        utility.showToast("网络请求失败，请检查网络");
+        utility.showToast("网络��求��败，请检查网���");
       }
     }
   }
@@ -657,7 +667,8 @@ class _AddProjectPageState extends State<AddProjectPage> {
             Map<String, dynamic> dic = siteTypeList[int.parse(s)];
             siteTypeName = dic["name"];
             siteType = dic["key"];
-            getNameListNetCall(siteType);
+
+            getSiteListNetCall(siteType);
             siteName = "场所名称";
             setState(() {
               // model.variable_value = optionList[int.parse(s)];

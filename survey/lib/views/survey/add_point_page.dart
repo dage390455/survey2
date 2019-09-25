@@ -102,18 +102,20 @@ class _AddPointPageState extends State<AddPointPage> {
   @override
   void initState() {
     model = this.model;
-    projectId = this.input.projectId;
-    subList = this.input.subList;
-    isEdit = this.isEdit;
+    input = this.input;
+    // projectId = this.input.projectId;
+    // subList = this.input.subList;
+    // isEdit = this.isEdit;
+    // siteType = this.input.site_type;
 
     if (isEdit == true) {
       siteType = model.site_type;
       money = model.total_assets.toDouble();
       peopleNum = model.resident_count.toDouble();
       siteUseName = model.site_use;
+      siteId = model.site_id;
     }
 
-    super.initState();
     if (name.length > 0 && projectId.length > 0) {
       this.isEdit = true;
     }
@@ -123,14 +125,15 @@ class _AddPointPageState extends State<AddPointPage> {
         siteTypeName = dic["name"];
       }
     }
-    getSiteListNetCall();
-    getPointDetailNetCall();
-    if (this.model.site_type.length > 0 && this.model != null) {
-      getNameListNetCall(this.model.site_type);
+
+    if (this.model != null) {
+      pointId = this.model.id;
+      name = this.model.name;
+      // getSiteListNetCall(siteType);
     }
 
-    pointId = this.model.id;
-    name = this.model.name;
+    getSiteListNetCall(siteType);
+    getPointDetailNetCall();
 
     TextController1.text = this.name;
     TextController1.addListener(() {
@@ -156,12 +159,21 @@ class _AddPointPageState extends State<AddPointPage> {
     });
     textCList.add(managerTextController1);
     textCList.add(managerTextController2);
+
+    super.initState();
   }
 
-  Future getSiteListNetCall() async {
-    String urlStr = NetConfig.siteListUrl + "0";
+  Future getSiteListNetCall(String siteType) async {
+    String urlStr = NetConfig.siteListUrl;
     Map<String, dynamic> headers = {};
     Map<String, dynamic> params = {};
+    if (siteType == "area") {
+      urlStr = urlStr + "parent_id=0" + "&type=" + siteType;
+    } else if (siteType == "building") {
+      urlStr = urlStr + "type=" + siteType;
+    } else {
+      return;
+    }
 
     ResultData resultData = await AppApi.getInstance()
         .getListNetCall(context, true, urlStr, headers, params);
@@ -176,6 +188,9 @@ class _AddPointPageState extends State<AddPointPage> {
             for (int i = 0; i < resultList.length; i++) {
               Map json = resultList[i] as Map;
               SitePageModel model = SitePageModel.fromJson(json);
+              if (siteId == model.id) {
+                siteName = model.name;
+              }
               if (model != null) {
                 dataList.add(model);
               }
@@ -220,7 +235,7 @@ class _AddPointPageState extends State<AddPointPage> {
         }
         setState(() {});
       } else {
-        utility.showToast("网络请求失败，请检查网络");
+        utility.showToast("网络请求失败，请检查��络");
       }
     }
   }
@@ -391,7 +406,7 @@ class _AddPointPageState extends State<AddPointPage> {
 
   updatePointNetCall() async {
     String urlStr =
-        NetConfig.baseUrl + NetConfig.updateProjectUrl + input.projectId;
+        NetConfig.baseUrl + NetConfig.updatePointUrl + input.projectId;
 
     if (name.length == 0) {
       utility.showToast("勘察点名称不能为空");
@@ -657,7 +672,7 @@ class _AddPointPageState extends State<AddPointPage> {
             Map<String, dynamic> dic = siteTypeList[int.parse(s)];
             siteTypeName = dic["name"];
             siteType = dic["key"];
-            getNameListNetCall(siteType);
+            getSiteListNetCall(siteType);
             siteName = "场所名称";
             setState(() {
               // model.variable_value = optionList[int.parse(s)];
@@ -988,8 +1003,8 @@ class _AddPointPageState extends State<AddPointPage> {
       ),
     );
 
-    Widget reflust = new RefreshIndicator(
-        displacement: 10.0, child: listView1, onRefresh: getSiteListNetCall);
+    // Widget reflust = new RefreshIndicator(
+    //     displacement: 10.0, child: listView1, onRefresh: getSiteListNetCall);
 
     Widget MainlistView = new ListView.builder(
         physics: new AlwaysScrollableScrollPhysics()
@@ -1292,9 +1307,9 @@ class _AddPointPageState extends State<AddPointPage> {
 
     Column body = Column(children: <Widget>[
       MainlistView,
-      Expanded(
-        child: reflust,
-      ),
+      // Expanded(
+      //   child: reflust,
+      // ),
     ]);
 
     return Scaffold(
@@ -1304,7 +1319,7 @@ class _AddPointPageState extends State<AddPointPage> {
           backgroundColor: Colors.white,
           centerTitle: true,
           title: Text(
-            "新建勘察点",
+            this.isEdit == true ? "勘察点详情" : "新建勘察点",
             style: TextStyle(color: Colors.black),
           ),
           leading: Container(
@@ -1366,3 +1381,5 @@ class _AddPointPageState extends State<AddPointPage> {
             this.isEdit == true ? bottomButton : emptyContainer);
   }
 }
+
+// params:{"data":{"site_id":"1","site_type":"area","name":"cest","site_use":"城乡结合部","contact_list":[{"type":"fire_admin","user_name":"在你面前","mobile":"222555"},{"type":"fire_responsor","user_name":"","mobile":""}],"total_assets":"11.0","resident_count":"22.0"}}
