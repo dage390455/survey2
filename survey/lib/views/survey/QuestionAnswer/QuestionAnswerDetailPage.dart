@@ -6,29 +6,29 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sensoro_survey/generated/customCalendar/lib/controller.dart';
 import 'package:sensoro_survey/net/api/app_api.dart';
 import 'package:sensoro_survey/net/api/net_config.dart';
-import 'package:sensoro_survey/views/survey/QuestionAnswer/QuestionAnswerDetailPage.dart';
 import 'package:sensoro_survey/views/survey/common/data_transfer_manager.dart';
 import 'package:sensoro_survey/views/survey/commonWidegt/SearchView.dart';
 import 'package:sensoro_survey/views/survey/const.dart' as prefix0;
 import 'package:sensoro_survey/views/survey/sitePages/Model/SitePageModel.dart';
 import 'package:sensoro_survey/views/survey/sitePages/buildinglist_page.dart';
 import 'package:sensoro_survey/views/survey/sitePages/creat_site_page.dart';
+import 'package:sensoro_survey/views/survey/sitePages/dynamic_creat_page.dart';
 import 'package:sensoro_survey/views/survey/sitePages/sqflite_page.dart';
 
 import '../const.dart';
-import 'dynamic_creat_page.dart';
 
-class SiteManagementPage extends StatefulWidget {
-  SiteManagementPage({Key key, this.title}) : super(key: key);
+
+class QuestionAnswerDetailPage extends StatefulWidget {
+  QuestionAnswerDetailPage({Key key, this.title}) : super(key: key);
 
 
   final String title;
 
   @override
-  _SiteManagementPageState createState() => _SiteManagementPageState();
+  _QuestionAnswerDetailPageState createState() => _QuestionAnswerDetailPageState();
 }
 
-class _SiteManagementPageState extends State<SiteManagementPage> {
+class _QuestionAnswerDetailPageState extends State<QuestionAnswerDetailPage> {
 
   BasicMessageChannel  _locationBasicMessageChannel =
   BasicMessageChannel("BasicMessageChannelPluginGetCity", StandardMessageCodec());
@@ -66,29 +66,11 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
     }));
 
     if (result != null) {
-//      SitePageModel name = result as SitePageModel;
-//
-//      for (int i = 0; i < dataList.length; i++) {
-//        SitePageModel model = dataList[i];
-//        if (model.sitePageModelId == name.sitePageModelId) {
-//          dataList.removeAt(i);
-//          break;
-//        }
-//      }
-//
-//      dataList.add(name);
-//
-//      // this.name = name;
-//
-//      setState(() {});
-
       getListNetCall();
     }
   }
 
   void _textSql()async {
-
-
     final result = await Navigator.of(context, rootNavigator: true)
         .push(CupertinoPageRoute(builder: (BuildContext context) {
       return new DynamicCreatePage();
@@ -100,41 +82,8 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
       // this.name = name;
       setState(() {});
     }
-
-//    Fluttertoast.showToast(
-//        msg: "This is Center Short Toast",
-//        toastLength: Toast.LENGTH_SHORT,
-//        gravity: ToastGravity.CENTER,
-//        timeInSecForIos: 1,
-//
-//    );
   }
 
-
-
-  void _textSql2()async {
-
-
-    final result = await Navigator.of(context, rootNavigator: true)
-        .push(CupertinoPageRoute(builder: (BuildContext context) {
-      return new QuestionAnswerDetailPage();
-    }));
-
-    if (result != null) {
-      String name = result as String;
-      if (name == "refreshList") {}
-      // this.name = name;
-      setState(() {});
-    }
-
-//    Fluttertoast.showToast(
-//        msg: "This is Center Short Toast",
-//        toastLength: Toast.LENGTH_SHORT,
-//        gravity: ToastGravity.CENTER,
-//        timeInSecForIos: 1,
-//
-//    );
-  }
 
 
   Future getListNetCall() async {
@@ -221,27 +170,9 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
       //   style: TextStyle(
       //       color: BLACK_TEXT_COLOR, fontWeight: FontWeight.bold, fontSize: 16),
       // ),
-      title: Text("区域名称"),
+      title: Text("建筑风险比例"),
       actions: <Widget>[
-        Container(
-          padding: new EdgeInsets.fromLTRB(0, 0, 0, 0),
-          alignment: Alignment.center,
-          child: GestureDetector(
-              onTap: () {
-                // 点击空白页面关闭键盘
-                _textSql2();
-              },
-              child: Padding(
-                padding: new EdgeInsets.fromLTRB(20, 20, 20, 20),
-                child: Text(
-                  "题库",
-                  style: TextStyle(
-                    color: Colors.grey,
-                  ),
-                ),
-              )
-          ),
-        ),
+
         Container(
           padding: new EdgeInsets.fromLTRB(0, 0, 0, 0),
           alignment: Alignment.center,
@@ -253,7 +184,7 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
               child: Padding(
                 padding: new EdgeInsets.fromLTRB(20, 20, 20, 20),
                 child: Text(
-                  "测试",
+                  "保存",
                   style: TextStyle(
                     color: Colors.grey,
                   ),
@@ -331,20 +262,7 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
                             textDirection: TextDirection.ltr,
                             children: <Widget>[
                               //这决定了左对齐
-                              Expanded(
-                                child: Container(
-                                  child: Text(dataList[index].name,
-                                      textAlign: TextAlign.start,
-                                      style: TextStyle(
-                                          color: prefix0.BLACK_TEXT_COLOR,
-                                          fontWeight: FontWeight.normal,
-                                          fontSize: 17)),
-                                ),
-                              ),
-
-                              new SizedBox(
-                                width: 10,
-                              ),
+                             
                             ]),
                       ),
                     ),
@@ -386,45 +304,6 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          new Offstage(
-            offstage: true,
-            child: Container(
-              color: Colors.white,
-              // height: 140, //高度填会自适应
-              padding: const EdgeInsets.only(
-                  top: 3.0, bottom: 3, left: 20, right: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text(
-                    // "$beginTimeStr ~ $endTimeStr",
-                    dateFilterStr.length > 0 ? dateFilterStr : "",
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                        color: prefix0.BLACK_TEXT_COLOR,
-                        fontWeight: FontWeight.normal,
-                        fontSize: 12),
-                  ),
-                  IconButton(
-                    icon: Image.asset(
-                      "assets/images/close_black.png",
-                      color: Colors.black,
-                    ),
-                    onPressed: () {},
-                  ),
-                ],
-              ),
-            ),
-          ),
-
-          Padding(
-            padding: new EdgeInsets.fromLTRB(20, 20, 20, 20),
-            child: new SearchView(
-                hitText: "区域名称",
-                defineText: searchStr,
-                searchAction: (editText) => _searchAction(editText)),
-          ),
-
           //分割线
           Container(
               width: prefix0.screen_width,
@@ -438,36 +317,6 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
       ),
     );
 
-    Widget of = new Offstage(
-      offstage: false,
-      child: Padding(
-        padding: new EdgeInsets.fromLTRB(20, 0, 20, 20),
-        child: GestureDetector(
-          onTap: () {
-            _creatSite(new SitePageModel("","","0","area","","","","",0.0,"",""), true);
-          },
-          child: Container(
-            height: 40,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(3.0), //3像素圆角
-                border: Border.all(color: Colors.grey),
-                boxShadow: [
-                  //阴影
-                  BoxShadow(color: Colors.white, blurRadius: 4.0)
-                ]),
-            child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-              child: Text(
-                "+ 区域",
-                textAlign: TextAlign.start,
-                style: TextStyle(color: Colors.grey),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
 
     return new Scaffold(
       appBar: navBar,
@@ -478,7 +327,6 @@ class _SiteManagementPageState extends State<SiteManagementPage> {
         },
         child: bodyContiner,
       ),
-      bottomSheet: of,
     );
   }
 }
