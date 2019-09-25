@@ -38,5 +38,5 @@ class NetConfig {
   //勘察点任务
   static const prospectTaskListUrl = "/prospect_task/list?task_type=fire_danger&keyword=";
   static const createProspectTaskUrl = "/prospect_task/create";
-  static const createProspectTaskUrl = "/prospect_task/detail/";
+//  static const createProspectTaskUrl = "/prospect_task/detail/";
 }

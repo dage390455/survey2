@@ -1,8 +1,11 @@
 //现场情况
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sensoro_survey/model/component_configure_model.dart';
 import 'package:sensoro_survey/model/electrical_fire_model.dart';
 import 'package:sensoro_survey/model/mutilcheck_model.dart';
@@ -45,6 +48,7 @@ class _State extends State<DynamicCreatePage> {
   static const riskUrl = "variable_value/list?risk_id=4a997a24-83c7-4129-a09f-ede35bff1a20";
   FocusNode blankNode = FocusNode();
   var isCheack = false;
+  String imagePath = "";
   TextEditingController remarkController = TextEditingController();
   List<TestComponentModel> dataList = [];
   @override
@@ -91,6 +95,29 @@ class _State extends State<DynamicCreatePage> {
 
   @override
   Widget build(BuildContext context) {
+
+    _uplodeImage() async {
+      String urlStr = NetConfig.baseUrl + "image_upload/upload";
+
+      String path = imagePath;
+      var name = path.substring(path.lastIndexOf("/") + 1, path.length);
+      FormData formData = new FormData.from({
+        "file": new UploadFileInfo(new File(path), name)
+      });
+      Dio dio = new Dio();
+      dio.options.responseType = ResponseType.plain;
+      dio.options.contentType = ContentType.parse("multipart/form-data");
+      var respone = await dio.post<String>(urlStr, data: formData);
+      if (respone.statusCode == 200) {
+        print(respone.data);
+        Fluttertoast.showToast(
+            msg: "图片上传成功",
+            gravity: ToastGravity.CENTER,
+            textColor: Colors.grey);
+      }
+    }
+
+
     Widget NavBar = AppBar(
       elevation: 1.0,
       centerTitle: true,
@@ -119,10 +146,8 @@ class _State extends State<DynamicCreatePage> {
           alignment: Alignment.center,
           child: GestureDetector(
             onTap: () {
-              // 点击空白页面关闭键盘
-              if (this.isCheack) {
-                Navigator.of(context).pop();
-              }
+              _uplodeImage();
+
             },
             child: Padding(
               padding: new EdgeInsets.fromLTRB(20, 20, 20, 20),
@@ -146,13 +171,21 @@ class _State extends State<DynamicCreatePage> {
 
 
 
+    _searchAction(String text) {
+      imagePath = text;
+
+    }
 
 
     Widget bigContainer = Container(
       color: prefix0.LIGHT_LINE_COLOR,
       padding: new EdgeInsets.fromLTRB(0, 0, 0, 0),
       child:Container(
-        child:  TakePhotoView(),
+        child:  TakePhotoView(
+          defineText: "加图片",
+          takePhoneImageAction:(editText) => _searchAction(editText)) ,
+
+
       )
     );
 
