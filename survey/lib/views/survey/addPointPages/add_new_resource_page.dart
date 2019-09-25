@@ -102,6 +102,8 @@ class _State extends State<AddResourcePage> {
 
         fireResourceModel = FireTroubleModel.fromJson(json);
       }
+      _updateSaveState();
+
       setState(() {});
     }
   }
@@ -292,6 +294,8 @@ class _State extends State<AddResourcePage> {
                                       controller: TextEditingController(
                                           text: fireResourceModel.item_name),
                                       onChanged: (v) {
+                                        _updateSaveState();
+
                                         fireResourceModel.item_name =
                                             v.toString();
                                       },
@@ -423,7 +427,6 @@ class _State extends State<AddResourcePage> {
 
   _updateSaveState() {
     if (fireResourceModel.item_name.length > 0 &&
-        fireResourceModel.danger_level.length > 0 &&
         fireResourceModel.first_type.length > 0) {
       this.isCheack = true;
     } else {
